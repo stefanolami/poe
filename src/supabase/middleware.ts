@@ -42,7 +42,7 @@ export async function updateSession(request: NextRequest) {
 	if (
 		!user &&
 		!request.nextUrl.pathname.startsWith('/auth') &&
-		!request.nextUrl.pathname.startsWith('/chi-siamo') &&
+		!request.nextUrl.pathname.startsWith('/sign-in') &&
 		!request.nextUrl.pathname.startsWith('/servizi') &&
 		!request.nextUrl.pathname.startsWith('/contatti') &&
 		!request.nextUrl.pathname.startsWith('/privacy-cookies') &&
