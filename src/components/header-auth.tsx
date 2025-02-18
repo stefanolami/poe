@@ -1,5 +1,5 @@
 import { signOut } from '@/actions/auth'
-import { hasEnvVars } from '@/utils/supabase/check-env-vars'
+import { hasEnvVars } from '@/supabase/check-env-vars'
 import Link from 'next/link'
 import { Badge } from './ui/badge'
 import { Button } from './ui/button'
