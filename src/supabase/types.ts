@@ -131,6 +131,39 @@ export type Database = {
           },
         ]
       }
+      users: {
+        Row: {
+          created_at: string
+          email: string
+          id: number
+          location: string
+          name: string
+          sector: string
+          type_of_contract: string
+          type_of_vehicle: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: number
+          location: string
+          name: string
+          sector: string
+          type_of_contract: string
+          type_of_vehicle: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: number
+          location?: string
+          name?: string
+          sector?: string
+          type_of_contract?: string
+          type_of_vehicle?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -14,7 +14,6 @@ import {
 	FormMessage,
 } from '@/components/ui/form'
 import { CreateTenderSchema } from '@/lib/tenders.schema'
-import { Textarea } from '@/components/ui/textarea'
 
 export const TendersForm = ({
 	form,
@@ -28,17 +27,17 @@ export const TendersForm = ({
 }) => {
 	const isSubmitting = form.formState.isSubmitting
 
-	useEffect(() => {
+	/* useEffect(() => {
 		if (defaultValues) {
 			form.reset(defaultValues)
 		} else {
-			form.reset({ title: '', content: '' })
+			form.reset()
 		}
-	}, [defaultValues, form])
+	}, [defaultValues, form]) */
 
 	return (
 		<>
-			<h1 className="mb-6">Create Tender</h1>
+			<h1 className="mb-6 text-white">Create Tender</h1>
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
