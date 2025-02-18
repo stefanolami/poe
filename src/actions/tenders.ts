@@ -1,10 +1,8 @@
 'use server'
 
-import { encodedRedirect } from '@/utils/utils'
-import { createClient } from '@/utils/supabase/server'
-import { headers } from 'next/headers'
-import { redirect } from 'next/navigation'
+
 import { CreateTenderSchema } from '@/lib/tenders.schema'
+import { createClient } from '@/supabase/server'
 
 export const createTender = async (formData: CreateTenderSchema) => {
 	const supabase = await createClient()
@@ -23,8 +21,8 @@ export const createTender = async (formData: CreateTenderSchema) => {
 		type_of_contract: [formData.type_of_contract],
 		lots_divided: false,
 		eu_funded: true,
-		opening: new Date(),
-		closing: new Date(),
+		opening: new Date().toISOString(),
+		closing: new Date().toISOString(),
 	}
 
 	const { data, error } = await supabase

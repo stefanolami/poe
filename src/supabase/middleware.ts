@@ -44,12 +44,13 @@ export const updateSession = async (request: NextRequest) => {
 			return NextResponse.redirect(new URL('/sign-in', request.url))
 		}
 
-		if (request.nextUrl.pathname === '/' && !user.error) {
+		/* if (request.nextUrl.pathname === '/' && !user.error) {
 			return NextResponse.redirect(new URL('/protected', request.url))
-		}
+		} */
 
 		return response
 	} catch (e) {
+        console.log(e)
 		// If you are here, a Supabase client could not be created!
 		// This is likely because you have not set up environment variables.
 		// Check out http://localhost:3000 for Next Steps.
