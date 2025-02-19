@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { SubmitHandler } from 'react-hook-form'
 
 import { Input } from '@/components/ui/input'
@@ -18,7 +17,6 @@ import { CreateTenderSchema } from '@/lib/tenders.schema'
 export const TendersForm = ({
 	form,
 	onSubmit,
-	defaultValues,
 }: {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	form: any
