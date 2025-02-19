@@ -27,7 +27,7 @@
 		"**/*.ts",
 		"**/*.tsx",
 		".next/types/**/*.ts",
-		"src/components/emails/email-1.jsx",
+		"src/components/emails/email-1.tsx",
 		"src/actions/email.js"
 	],
 	"exclude": ["node_modules"]

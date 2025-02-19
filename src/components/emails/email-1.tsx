@@ -1,9 +1,7 @@
-import * as React from 'react'
-import { Html, Button } from '@react-email/components'
+import React from 'react'
+import { Html } from '@react-email/components'
 
-export function Email1(props) {
-	const { text } = props
-
+export function Email1({ text }: { text: string }): React.ReactElement {
 	return (
 		<Html lang="en">
 			<div
