@@ -8,7 +8,7 @@ import { createTender } from '@/actions/tenders'
 import { sendEmail } from '@/actions/email'
 import { notify } from '@/actions/notification'
 
-const TendersSection = () => {
+const TendersComponent = () => {
 	const form = useForm<CreateTenderSchema>({
 		resolver: zodResolver(createTenderSchema),
 		defaultValues: {
@@ -67,4 +67,4 @@ const TendersSection = () => {
 	)
 }
 
-export default TendersSection
+export default TendersComponent

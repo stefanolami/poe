@@ -28,7 +28,8 @@
 		"**/*.tsx",
 		".next/types/**/*.ts",
 		"src/components/emails/email-1.tsx",
-		"src/actions/email.js"
+		"src/actions/email.ts",
+		"src/components/loading.jsx"
 	],
 	"exclude": ["node_modules"]
 }
