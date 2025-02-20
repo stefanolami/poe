@@ -1,12 +1,13 @@
 import type { Config } from 'tailwindcss'
 import tailwindcssAnimate from 'tailwindcss-animate'
 
-export default {
+const config: Config = {
 	darkMode: ['class'],
 	content: [
 		'./src/pages/**/*.{js,ts,jsx,tsx,mdx}',
 		'./src/components/**/*.{js,ts,jsx,tsx,mdx}',
 		'./src/app/**/*.{js,ts,jsx,tsx,mdx}',
+		'./src/app/(app)/**/*.{js,ts,jsx,tsx,mdx}',
 	],
 
 	theme: {
@@ -20,6 +21,7 @@ export default {
 				},
 				primary: '#004A6A',
 				'primary-light': '#009EC2',
+				secondary: '#009EC2',
 				grey: '#EAEAEA',
 				popover: {
 					DEFAULT: 'hsl(var(--popover))',
@@ -94,4 +96,6 @@ export default {
 			addUtilities(newUtilities, ['responsive', 'hover'])
 		},
 	],
-} satisfies Config
+}
+
+export default config

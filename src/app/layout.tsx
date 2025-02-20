@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import './globals.css'
 import { RenderMounted } from '@/components/render-mounted'
 import { jose, unna } from '@/app/fonts'
 import { Suspense } from 'react'
 import Loading from '@/components/loading'
+import './globals.css'
 
 export const metadata: Metadata = {
 	title: 'Create Next App',

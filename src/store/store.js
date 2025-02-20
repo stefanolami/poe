@@ -1,8 +1,8 @@
-import { produce } from 'immer'
+/* import { produce } from 'immer' */
 import { create } from 'zustand'
 import { persist, createJSONStorage, devtools } from 'zustand/middleware'
 /* import { immer } from 'zustand/middleware/immer' */
-import selectionData from '../data/selectionData'
+import { selectionData } from '@/data/data'
 /* import { report } from 'process' */
 
 export const useStore = create(
