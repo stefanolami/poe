@@ -11,13 +11,7 @@ const ITEMS = [
 	{ value: 'russia', label: 'Russia ' },
 ]
 
-export default function GeographySelector({
-	missingGeographies,
-	handleContinue,
-}: {
-	missingGeographies: string
-	handleContinue: () => void
-}) {
+export default function GeographySelector() {
 	const geographies = useStore<Geography[]>((state) => state.geographies)
 	const addGeography = useStore((state) => state.addGeography)
 	const removeGeography = useStore((state) => state.removeGeography)
@@ -33,11 +27,11 @@ export default function GeographySelector({
 	}
 
 	return (
-		<div className="text-xs xl:text-2xl w-full">
-			<p className="text-center mt-10 xl:mt-16">
+		<div className="text-xs md:text-base xl:text-2xl w-full">
+			<p className="text-center mt-10 md:mt-0 md:hidden">
 				Please choose the geographies you are interested in:
 			</p>
-			<ul className="flex flex-col items-center justify-center gap-3 xl:gap-4 mx-auto mt-6 xl:mt-10">
+			<ul className="flex flex-col items-start justify-center gap-3 xl:gap-4 mx-auto mt-6 md:mt-0">
 				{ITEMS.map((item, index) => (
 					<li
 						key={index}
@@ -63,17 +57,6 @@ export default function GeographySelector({
 					</li>
 				))}
 			</ul>
-			<div className="my-2 xl:my-16">
-				<p className="text-center text-red-500 h-10 mt-6 xl:mt-0 xl:my-4">
-					{missingGeographies}
-				</p>
-				<button
-					className="mx-auto font-unna font-bold text-base xl:text-4xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 xl:w-96 h-9 xl:h-20"
-					onClick={handleContinue}
-				>
-					Continue
-				</button>
-			</div>
 		</div>
 	)
 }
