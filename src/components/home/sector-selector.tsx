@@ -96,17 +96,19 @@ export default function SectorSelector() {
 				<div ref={geoRef}>
 					{openGeographies && <GeographySelector />}
 				</div>
-				<div className="my-2 xl:my-16 justify-self-end">
-					<p className="text-center text-red-500 h-10 mt-6 xl:mt-0 xl:my-4">
-						{missingGeographies}
-					</p>
-					<button
-						className="mx-auto font-unna font-bold text-base xl:text-3xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 xl:w-52 h-9 xl:h-16"
-						onClick={handleContinue}
-					>
-						Continue
-					</button>
-				</div>
+				{activeSector && (
+					<div className="my-2 xl:my-16 mx-auto">
+						<p className="text-center text-red-500 h-10 mt-6 xl:mt-0 xl:my-4">
+							{missingGeographies}
+						</p>
+						<button
+							className="mx-auto font-unna font-bold text-base xl:text-3xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 xl:w-52 h-9 xl:h-16"
+							onClick={handleContinue}
+						>
+							Continue
+						</button>
+					</div>
+				)}
 			</div>
 
 			{/* BIG */}
@@ -134,11 +136,11 @@ export default function SectorSelector() {
 									Please choose the geographies you are
 									interested in
 								</p>
-								<p className="text-center text-red-500 h-10 mt-6 xl:mt-0 xl:my-4 text-base md:text-lg xl:text-xl">
+								<p className="text-red-500 h-10 my-3 text-right text-base xl:text-xl text-wrap w-64 xl:w-96">
 									{missingGeographies}
 								</p>
 								<button
-									className="ml-auto font-unna font-bold text-base md:text-xl xl:text-3xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 md:w-48 xl:w-52 h-9 md:h-12 xl:h-16"
+									className="ml-auto font-unna font-bold text-base md:text-xl xl:text-3xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 md:w-48 xl:w-52 h-9 md:h-12 xl:h-16 mt-2"
 									onClick={handleContinue}
 								>
 									Continue
@@ -149,11 +151,6 @@ export default function SectorSelector() {
 							{openGeographies && activeSector == 'Aviation' && (
 								<>
 									<GeographySelector />
-									<div className="my-2 xl:my-16 justify-self-end">
-										<p className="text-center text-red-500 h-10 mt-6 xl:mt-0 xl:my-4">
-											{missingGeographies}
-										</p>
-									</div>
 								</>
 							)}
 						</div>
@@ -181,11 +178,11 @@ export default function SectorSelector() {
 									Please choose the geographies you are
 									interested in
 								</p>
-								<p className="text-center text-red-500 h-10 mt-6 xl:mt-0 xl:my-4 text-base md:text-lg xl:text-xl">
+								<p className="text-red-500 h-10 my-3 text-left text-base xl:text-xl text-wrap w-64 xl:w-96">
 									{missingGeographies}
 								</p>
 								<button
-									className="mr-auto font-unna font-bold text-base md:text-xl xl:text-3xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 md:w-48 xl:w-52 h-9 md:h-12 xl:h-16"
+									className="mr-auto font-unna font-bold text-base md:text-xl xl:text-3xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 md:w-48 xl:w-52 h-9 md:h-12 xl:h-16 mt-2"
 									onClick={handleContinue}
 								>
 									Continue
@@ -197,11 +194,6 @@ export default function SectorSelector() {
 								activeSector == 'E-Mobility' && (
 									<>
 										<GeographySelector />
-										<div className="my-2 xl:my-16 justify-self-end">
-											<p className="text-center text-red-500 h-10 mt-6 xl:mt-0 xl:my-4">
-												{missingGeographies}
-											</p>
-										</div>
 									</>
 								)}
 						</div>

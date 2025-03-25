@@ -31,7 +31,7 @@ export default function GeographySelector() {
 			<p className="text-center mt-10 md:mt-0 md:hidden">
 				Please choose the geographies you are interested in:
 			</p>
-			<ul className="flex flex-col items-start justify-center gap-3 xl:gap-4 mx-auto mt-6 md:mt-0">
+			<ul className="flex flex-col items-center md:items-start justify-center gap-3 xl:gap-4 mx-auto mt-6 md:mt-0">
 				{ITEMS.map((item, index) => (
 					<li
 						key={index}
