@@ -41,22 +41,24 @@ export default function Header() {
 				'fixed top-0 w-full bg-transparent text-white z-50 px-6 md:px-10 xl:px-[7%] flex justify-between items-center h-16 xl:h-24 font-unna'
 			}
 		>
-			<div className="flex items-center justify-center w-auto xl:w-[270px] h-full">
-				<Link
-					className="pl-6 md:pl-0 md:py-4 xl:py-7 w-[124px] xl:w-[231px] aspect-[694/186] relative xl:scale-75"
-					href="https://funding-kohl.vercel.app"
-				>
-					<Image
-						src="/logos/funding-white.png"
-						alt="T&P Logo"
-						fill
-						sizes="(max-width: 640px) 40vw, 25vw"
-					/>
-				</Link>
-			</div>
+			<div className="mx-auto w-[90%] max-w-[1200px] flex flex-row items-center justify-between h-full">
+				<div className="flex items-center justify-center w-auto xl:w-[270px] h-full ">
+					<Link
+						className="pl-6 md:pl-0 md:py-4 xl:py-7 w-[124px] xl:w-[231px] aspect-[694/186] relative xl:scale-75"
+						href="https://funding-kohl.vercel.app"
+					>
+						<Image
+							src="/logos/funding-white.png"
+							alt="T&P Logo"
+							fill
+							sizes="(max-width: 640px) 40vw, 25vw"
+						/>
+					</Link>
+				</div>
 
-			<Navbar />
-			<NavMobile />
+				<Navbar />
+				<NavMobile />
+			</div>
 		</motion.header>
 	)
 }

@@ -17,7 +17,7 @@ export const useStore = create(
 					typeOfVehicleContract: [],
 					eVehiclesMaintenance: [],
 					chargingStations: [],
-					chargingStationsMaintenance: [],
+					chargingStationsContract: [],
 					reportEu: false,
 					reportNonEu: false,
 				},
@@ -32,7 +32,7 @@ export const useStore = create(
 				Object.keys(get().data.eMobility).forEach((category) => {
 					if (
 						category !== 'typeOfVehicleContract' &&
-						category !== 'chargingStationsMaintenance' &&
+						category !== 'chargingStationsContract' &&
 						category !== 'reportEu' &&
 						category !== 'reportNonEu'
 					) {
@@ -53,7 +53,7 @@ export const useStore = create(
 				Object.keys(get().data.eMobility).forEach((category) => {
 					if (
 						category !== 'typeOfVehicleContract' &&
-						category !== 'chargingStationsMaintenance' &&
+						category !== 'chargingStationsContract' &&
 						category !== 'reportEu' &&
 						category !== 'reportNonEu'
 					) {
@@ -101,7 +101,7 @@ export const useStore = create(
 					produce((state) => {
 						if (
 							category === 'typeOfVehicleContract' ||
-							category === 'chargingStationsMaintenance'
+							category === 'chargingStationsContract'
 						) {
 							state.data.eMobility[category].push(item)
 						} else {
@@ -171,7 +171,7 @@ export const useStore = create(
 				Object.keys(get().data.eMobility).forEach((category) => {
 					if (
 						category !== 'typeOfVehicleContract' &&
-						category !== 'chargingStationsMaintenance' &&
+						category !== 'chargingStationsContract' &&
 						category !== 'reportEu' &&
 						category !== 'reportNonEu'
 					) {
@@ -193,7 +193,7 @@ export const useStore = create(
 				Object.keys(get().data.eMobility).forEach((category) => {
 					if (
 						category !== 'typeOfVehicleContract' &&
-						category !== 'chargingStationsMaintenance' &&
+						category !== 'chargingStationsContract' &&
 						category !== 'reportEu' &&
 						category !== 'reportNonEu'
 					) {
@@ -220,7 +220,7 @@ export const useStore = create(
 					typeOfVehicleContract: [],
 					/* eVehiclesMaintenance: [], */
 					chargingStations: [],
-					chargingStationsMaintenance: [],
+					chargingStationsContract: [],
 					/* reportEu: false,
 					reportNonEu: false, */
 				}
@@ -248,7 +248,7 @@ export const useStore = create(
 						})
 					} else if (
 						category === 'typeOfVehicleContract' ||
-						category === 'chargingStationsMaintenance'
+						category === 'chargingStationsContract'
 					) {
 						console.log(`processing ${category}`)
 						get().data.eMobility[category].forEach((item) => {

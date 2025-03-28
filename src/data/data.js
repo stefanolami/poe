@@ -311,7 +311,7 @@ export const selectionData = {
 				},
 			},
 		],
-		chargingStationsMaintenance: [
+		chargingStationsContract: [
 			{
 				value: 'exchange',
 				label: 'Exchange of parts and / or upgrading',

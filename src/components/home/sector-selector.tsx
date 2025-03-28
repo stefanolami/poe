@@ -21,14 +21,14 @@ export default function SectorSelector() {
 	const handleClick = (sector: { value: string; label: string }) => {
 		if (sector.label == activeSector) {
 			console.log('same sector')
-			changeSector({})
+			changeSector({ value: '', label: '' })
 			setActiveSector('')
 			setOpenGeographies(false)
 			return
 		} else {
 			console.log('different sector')
 			changeSector(sector)
-			setActiveSector(sector.label)
+			setActiveSector(sector.value)
 			setOpenGeographies(true)
 			setTimeout(() => {
 				geoRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -38,7 +38,7 @@ export default function SectorSelector() {
 
 	const handleContinue = () => {
 		if (geographies.length > 0 && Object.keys(storeSector).length > 0) {
-			router.push(`/selection`)
+			router.push(`/${activeSector}`)
 		} else if (geographies.length === 0) {
 			setMissingGeographies('Please select at least one geography')
 		} else if (Object.keys(storeSector).length === 0) {
@@ -68,19 +68,19 @@ export default function SectorSelector() {
 			{/* MOBILE */}
 			<div className="md:hidden">
 				<div className="flex flex-col xl:flex-row items-center justify-center gap-4 xl:gap-12 mx-auto mt-10 xl:mt-12 3xl:mt-24">
-					{activeSector !== 'Aviation' ? (
+					{activeSector !== 'aviation' ? (
 						<SectorButton
 							text={'E-Mobility'}
 							handler={() =>
 								handleClick({
-									value: 'eMobility',
+									value: 'e-mobility',
 									label: 'E-Mobility',
 								})
 							}
 							activeButton={activeSector}
 						/>
 					) : null}
-					{activeSector !== 'E-Mobility' ? (
+					{activeSector !== 'e-mobility' ? (
 						<SectorButton
 							text={'Aviation'}
 							handler={() =>
@@ -117,12 +117,12 @@ export default function SectorSelector() {
 					{/* LEFT */}
 					<div className="justify-self-end self-start">
 						<div className="justify-self-end">
-							{activeSector !== 'Aviation' && (
+							{activeSector !== 'aviation' && (
 								<SectorButton
 									text="E-Mobility"
 									handler={() =>
 										handleClick({
-											value: 'eMobility',
+											value: 'e-mobility',
 											label: 'E-Mobility',
 										})
 									}
@@ -130,7 +130,7 @@ export default function SectorSelector() {
 								/>
 							)}
 						</div>
-						{activeSector == 'E-Mobility' && (
+						{activeSector == 'e-mobility' && (
 							<div className="my-2 xl:my-4 justify-self-end flex flex-col items-end justify-between">
 								<p className="hidden md:block text-right text-base xl:text-xl text-wrap w-64 xl:w-96 mt-10 md:mt-0">
 									Please choose the geographies you are
@@ -148,7 +148,7 @@ export default function SectorSelector() {
 							</div>
 						)}
 						<div ref={geoRef}>
-							{openGeographies && activeSector == 'Aviation' && (
+							{openGeographies && activeSector == 'aviation' && (
 								<>
 									<GeographySelector />
 								</>
@@ -159,7 +159,7 @@ export default function SectorSelector() {
 					{/* RIGHT */}
 					<div className="justify-self-start self-start">
 						<div className="justify-self-end">
-							{activeSector !== 'E-Mobility' && (
+							{activeSector !== 'e-mobility' && (
 								<SectorButton
 									text="Aviation"
 									handler={() =>
@@ -172,7 +172,7 @@ export default function SectorSelector() {
 								/>
 							)}
 						</div>
-						{activeSector == 'Aviation' && (
+						{activeSector == 'aviation' && (
 							<div className="my-2 xl:my-4 justify-self-end flex flex-col items-end justify-between">
 								<p className="hidden md:block text-left text-base xl:text-xl text-wrap w-64 xl:w-96 mt-10 md:mt-0">
 									Please choose the geographies you are
@@ -191,7 +191,7 @@ export default function SectorSelector() {
 						)}
 						<div ref={geoRef}>
 							{openGeographies &&
-								activeSector == 'E-Mobility' && (
+								activeSector == 'e-mobility' && (
 									<>
 										<GeographySelector />
 									</>
