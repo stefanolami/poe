@@ -31,300 +31,316 @@ export const priceModalData = {
 
 export const selectionData = {
 	eMobility: {
-		typeOfVehicle: [
-			{
-				value: 'cars',
-				label: 'Cars (up to 3,5 tonnes)',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+		typeOfVehicle: {
+			label: 'E-Vehicles',
+			value: 'typeOfVehicle',
+			fieldsLabel: 'Type of vehicle',
+			fields: [
+				{
+					value: 'cars',
+					label: 'Cars (up to 3,5 tonnes)',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
 				},
-			},
-			{
-				value: 'buses',
-				label: 'Buses (all types and sizes)',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '1000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'buses',
+					label: 'Buses (all types and sizes)',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '1000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
 				},
-			},
-			{
-				value: 'trucks',
-				label: 'Trucks (above 3,5 tonnes)',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'trucks',
+					label: 'Trucks (above 3,5 tonnes)',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
 				},
-			},
-			{
-				value: 'planes',
-				label: 'Planes',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'planes',
+					label: 'Planes',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
 				},
-			},
-			{
-				value: 'boats',
-				label: 'Boats',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'boats',
+					label: 'Boats',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
 				},
-			},
-			{
-				value: 'twoWheelers',
-				label: 'Two-wheelers (bicycles)',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'twoWheelers',
+					label: 'Two-wheelers (bicycles)',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
 				},
-			},
-		],
-		typeOfVehicleContract: [
-			{
-				value: 'purchase',
-				label: 'Purchase',
-			},
-			{
-				value: 'leasing',
-				label: 'Leasing / rental agreement',
-			},
-			{
-				value: 'rental',
-				label: 'Rental vehicle including driver',
-			},
-			{
-				value: 'fleetManagement',
-				label: 'Fleet management',
-			},
-			{
-				value: 'dataManagement',
-				label: 'Data management and software service contracts',
-			},
-		],
-		eVehiclesMaintenance: [
-			{
-				value: 'evServices',
-				label: 'EV repair and maintenance services',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+			],
+			contracts: [
+				{
+					value: 'purchase',
+					label: 'Purchase',
 				},
-			},
-			{
-				value: 'diagnosis',
-				label: 'Diagnosis',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'leasing',
+					label: 'Leasing / rental agreement',
 				},
-			},
-			{
-				value: 'exchangePurchase',
-				label: 'Exchange / Purchase',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'rental',
+					label: 'Rental vehicle including driver',
 				},
-			},
-			{
-				value: 'cars',
-				label: 'Cars (up to 3,5 tonnes)',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'fleetManagement',
+					label: 'Fleet management',
 				},
-			},
-			{
-				value: 'buses',
-				label: 'Buses (all types and sizes)',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'dataManagement',
+					label: 'Data management and software service contracts',
 				},
-			},
-			{
-				value: 'trucks',
-				label: 'Trucks (above 3,5 tonnes)',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+			],
+		},
+		/* eVehiclesMaintenance: {
+			label: 'E-Vehicles Maintenance',
+			value: 'eVehiclesMaintenance',
+			fieldsLabel: '',
+			fields: [
+				{
+					value: 'evServices',
+					label: 'EV repair and maintenance services',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
 				},
-			},
-			{
-				value: 'planes',
-				label: 'Planes',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'diagnosis',
+					label: 'Diagnosis',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
 				},
-			},
-			{
-				value: 'boats',
-				label: 'Boats',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'exchangePurchase',
+					label: 'Exchange / Purchase',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
 				},
-			},
-			{
-				value: 'twoWheelers',
-				label: 'Two-wheelers (bicycles)',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'cars',
+					label: 'Cars (up to 3,5 tonnes)',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
 				},
-			},
-		],
-		chargingStations: [
-			{
-				value: 'bikesCars',
-				label: 'Motorbikes and Cars (AC/DC)',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'buses',
+					label: 'Buses (all types and sizes)',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
 				},
-			},
-			{
-				value: 'buses',
-				label: 'Buses (all types and sizes)',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'trucks',
+					label: 'Trucks (above 3,5 tonnes)',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
 				},
-			},
-			{
-				value: 'trucks',
-				label: 'Trucks (above 3,5 tonnes)',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'planes',
+					label: 'Planes',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
 				},
-			},
-			{
-				value: 'planes',
-				label: 'Planes',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'boats',
+					label: 'Boats',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
 				},
-			},
-			{
-				value: 'boats',
-				label: 'Boats',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+				{
+					value: 'twoWheelers',
+					label: 'Two-wheelers (bicycles)',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
 				},
-			},
-			{
-				value: 'twoWheelers',
-				label: 'Two-wheelers (bicycles)',
-				price: {
-					euAdmin: '3000',
-					eu27: '1500',
-					brazil: '2000',
-					turkey: '2000',
-					colombia: '1500',
-					russia: '2500',
+			],
+			contracts: [],
+		}, */
+		chargingStations: {
+			label: 'Charging Stations',
+			value: 'chargingStations',
+			fieldsLabel: 'Type of vehicle',
+			fields: [
+				{
+					value: 'bikesCars',
+					label: 'Motorbikes and Cars (AC/DC)',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
 				},
-			},
-		],
-		chargingStationsContract: [
-			{
-				value: 'exchange',
-				label: 'Exchange of parts and / or upgrading',
-			},
-			{
-				value: 'digitalUpdates',
-				label: 'Digital updates',
-			},
-			{
-				value: 'purchase',
-				label: 'Purchase of spare parts',
-			},
-		],
+				{
+					value: 'buses',
+					label: 'Buses (all types and sizes)',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					value: 'trucks',
+					label: 'Trucks (above 3,5 tonnes)',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					value: 'planes',
+					label: 'Planes',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					value: 'boats',
+					label: 'Boats',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					value: 'twoWheelers',
+					label: 'Two-wheelers (bicycles)',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+			],
+			contracts: [
+				{
+					value: 'exchange',
+					label: 'Exchange of parts and / or upgrading',
+				},
+				{
+					value: 'digitalUpdates',
+					label: 'Digital updates',
+				},
+				{
+					value: 'purchase',
+					label: 'Purchase of spare parts',
+				},
+			],
+		},
 	},
 	language: [
 		{

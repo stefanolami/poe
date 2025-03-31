@@ -38,7 +38,12 @@ export default function SectorSelector() {
 
 	const handleContinue = () => {
 		if (geographies.length > 0 && Object.keys(storeSector).length > 0) {
-			router.push(`/${activeSector}`)
+			if (activeSector === 'aviation') {
+				router.push(`/aviation`)
+			}
+			if (activeSector === 'eMobility') {
+				router.push(`/e-mobility`)
+			}
 		} else if (geographies.length === 0) {
 			setMissingGeographies('Please select at least one geography')
 		} else if (Object.keys(storeSector).length === 0) {
@@ -73,14 +78,14 @@ export default function SectorSelector() {
 							text={'E-Mobility'}
 							handler={() =>
 								handleClick({
-									value: 'e-mobility',
+									value: 'eMobility',
 									label: 'E-Mobility',
 								})
 							}
 							activeButton={activeSector}
 						/>
 					) : null}
-					{activeSector !== 'e-mobility' ? (
+					{activeSector !== 'eMobility' ? (
 						<SectorButton
 							text={'Aviation'}
 							handler={() =>
@@ -122,7 +127,7 @@ export default function SectorSelector() {
 									text="E-Mobility"
 									handler={() =>
 										handleClick({
-											value: 'e-mobility',
+											value: 'eMobility',
 											label: 'E-Mobility',
 										})
 									}
@@ -130,7 +135,7 @@ export default function SectorSelector() {
 								/>
 							)}
 						</div>
-						{activeSector == 'e-mobility' && (
+						{activeSector == 'eMobility' && (
 							<div className="my-2 xl:my-4 justify-self-end flex flex-col items-end justify-between">
 								<p className="hidden md:block text-right text-base xl:text-xl text-wrap w-64 xl:w-96 mt-10 md:mt-0">
 									Please choose the geographies you are
@@ -159,7 +164,7 @@ export default function SectorSelector() {
 					{/* RIGHT */}
 					<div className="justify-self-start self-start">
 						<div className="justify-self-end">
-							{activeSector !== 'e-mobility' && (
+							{activeSector !== 'eMobility' && (
 								<SectorButton
 									text="Aviation"
 									handler={() =>
@@ -190,12 +195,11 @@ export default function SectorSelector() {
 							</div>
 						)}
 						<div ref={geoRef}>
-							{openGeographies &&
-								activeSector == 'e-mobility' && (
-									<>
-										<GeographySelector />
-									</>
-								)}
+							{openGeographies && activeSector == 'eMobility' && (
+								<>
+									<GeographySelector />
+								</>
+							)}
 						</div>
 					</div>
 				</div>

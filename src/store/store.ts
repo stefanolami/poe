@@ -2,75 +2,14 @@ import { create } from 'zustand'
 import { persist, createJSONStorage, devtools } from 'zustand/middleware'
 import { produce } from 'immer'
 import { selectionData } from '@/data/data'
-
-// Interfaces
-interface Price {
-	euAdmin: string
-	eu27: string
-	brazil: string
-	turkey: string
-	colombia: string
-	russia: string
-}
-
-interface SelectableItem {
-	value: string
-	label: string
-	price?: Price
-	geographies?: SelectableItem[]
-}
-
-interface MobilityData {
-	typeOfVehicle: SelectableItem[]
-	typeOfVehicleContract: SelectableItem[]
-	eVehiclesMaintenance: SelectableItem[]
-	chargingStations: SelectableItem[]
-	chargingStationsContract: SelectableItem[]
-	report: SelectableItem[]
-}
-
-interface Sector {
-	value: string
-	label: string
-}
-
-interface StoreState {
-	sector: Sector | Record<string, never>
-	geographies: SelectableItem[]
-	languages: SelectableItem[]
-	data: {
-		eMobility: MobilityData
-	}
-	changeSector: (newSector: Sector) => void
-	addGeography: (newGeography: SelectableItem) => void
-	removeGeography: (geographyToRemove: SelectableItem) => void
-	addSingleGeography: (
-		geography: SelectableItem,
-		category: keyof MobilityData,
-		item: SelectableItem
-	) => void
-	removeSingleGeography: (
-		geographyToRemove: SelectableItem,
-		category: keyof MobilityData,
-		item: SelectableItem
-	) => void
-	addLanguage: (newLanguage: SelectableItem) => void
-	removeLanguage: (languageToRemove: SelectableItem) => void
-	addData: (category: keyof MobilityData, item: SelectableItem) => void
-	removeData: (
-		category: keyof MobilityData,
-		itemToRemove: SelectableItem
-	) => void
-	getSinglePrice: (
-		category: keyof MobilityData,
-		item: SelectableItem
-	) => number
-	getModalSinglePrice: (
-		category: keyof MobilityData,
-		item: SelectableItem
-	) => number
-	getAllAbovePrice: (category: keyof MobilityData) => number
-}
+import {
+	Price,
+	SelectableItem,
+	MobilityData,
+	StoreState,
+	User,
+	UserSelection,
+} from './store.types'
 
 export const useStore = create<StoreState>()(
 	persist(
@@ -203,8 +142,11 @@ export const useStore = create<StoreState>()(
 					selectionData[sectorValue as keyof typeof selectionData]
 
 				return get().geographies.reduce((total, country) => {
-					const categoryData: SelectableItem[] =
-						sectorData[category as keyof typeof sectorData]
+					const categoryData: SelectableItem[] = (
+						sectorData[category as keyof typeof sectorData] as {
+							fields: SelectableItem[]
+						}
+					).fields
 					const itemData = categoryData.find(
 						(x) => x.value === item.value
 					)
@@ -267,6 +209,148 @@ export const useStore = create<StoreState>()(
 				return categoryData.reduce((total, item) => {
 					return total + get().getSinglePrice(category, item)
 				}, 0)
+			},
+			getSubTotalPrice: () => {
+				let total = 0
+
+				// Iterate over the keys of eMobility
+				Object.keys(get().data.eMobility).forEach((category) => {
+					// Ensure category is a valid key of MobilityData
+					if (
+						category !== 'typeOfVehicleContract' &&
+						category !== 'chargingStationsContract' &&
+						category !== 'reportEu' &&
+						category !== 'reportNonEu'
+					) {
+						const items =
+							get().data.eMobility[category as keyof MobilityData]
+						if (Array.isArray(items)) {
+							items.forEach((item) => {
+								total += get().getModalSinglePrice(
+									category as keyof MobilityData,
+									item
+								)
+							})
+						}
+					}
+				})
+
+				// Add fixed prices for reports if applicable
+				const reportItems = get().data.eMobility.report
+				if (reportItems.find((item) => item.value === 'reportEu')) {
+					total += 8000
+				}
+				if (reportItems.find((item) => item.value === 'reportNonEu')) {
+					total += 11000
+				}
+
+				return total
+			},
+			getTotalPrice: () => {
+				let total = 0
+
+				// Iterate over the keys of eMobility
+				Object.keys(get().data.eMobility).forEach((category) => {
+					// Ensure category is a valid key of MobilityData
+					if (
+						category !== 'typeOfVehicleContract' &&
+						category !== 'chargingStationsContract' &&
+						category !== 'reportEu' &&
+						category !== 'reportNonEu'
+					) {
+						const items =
+							get().data.eMobility[category as keyof MobilityData]
+						if (Array.isArray(items)) {
+							items.forEach((item) => {
+								total += get().getModalSinglePrice(
+									category as keyof MobilityData,
+									item
+								)
+							})
+						}
+					}
+				})
+
+				// Add fixed prices for reports if applicable
+				const reportItems = get().data.eMobility.report
+				if (reportItems.find((item) => item.value === 'reportEu')) {
+					total += 8000
+				}
+				if (reportItems.find((item) => item.value === 'reportNonEu')) {
+					total += 11000
+				}
+
+				// Apply language-based increment
+				const languageCount = get().languages.length
+				if (languageCount > 0) {
+					const increment = languageCount * 0.25 // 25% increment per language
+					total *= 1 + increment
+				}
+
+				return total
+			},
+			getUser: (confirmed: boolean): User => {
+				const selection: UserSelection = {
+					typeOfVehicle: [],
+					typeOfVehicleContract: [],
+					chargingStations: [],
+					chargingStationsContract: [],
+					report: [],
+				}
+
+				Object.keys(get().data.eMobility).forEach((category) => {
+					if (
+						category === 'typeOfVehicle' ||
+						category === 'chargingStations'
+					) {
+						const items =
+							get().data.eMobility[category as keyof MobilityData]
+						if (Array.isArray(items)) {
+							items.forEach((item) => {
+								selection[
+									category as
+										| 'typeOfVehicle'
+										| 'chargingStations'
+								].push({
+									name: item.value,
+									geography:
+										item.geographies?.map(
+											(geo) => geo.value
+										) || [],
+								})
+							})
+						}
+					} else if (
+						category === 'typeOfVehicleContract' ||
+						category === 'chargingStationsContract'
+					) {
+						const items =
+							get().data.eMobility[category as keyof MobilityData]
+						if (Array.isArray(items)) {
+							items.forEach((item) => {
+								selection[
+									category as
+										| 'typeOfVehicleContract'
+										| 'chargingStationsContract'
+								].push(item.value)
+							})
+						}
+					}
+				})
+
+				return {
+					sectors: [get().sector?.value || 'unknown'],
+					chosenLanguage:
+						get().languages.length > 0
+							? get()
+									.languages.map((lang) => lang.value)
+									.join(' ')
+							: 'english',
+					email: 'example@email.com',
+					name: 'John Doe',
+					accountConfirmed: confirmed,
+					...selection,
+				}
 			},
 		})),
 		{ name: 'store', storage: createJSONStorage(() => localStorage) }
