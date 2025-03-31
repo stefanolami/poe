@@ -19,6 +19,11 @@ const SelectionSection = ({
 }) => {
 	const { label, fieldsLabel, fields, contracts } = section
 
+	const contractCategory =
+		category === 'typeOfVehicle'
+			? 'typeOfVehicleContract'
+			: 'chargingStationsContract'
+
 	const { storeData, addData, removeData, getSinglePrice, getAllAbovePrice } =
 		useStore(
 			useShallow((state) => ({
@@ -47,10 +52,6 @@ const SelectionSection = ({
 				addData(category, item)
 			}
 		} else {
-			const contractCategory =
-				category === 'typeOfVehicle'
-					? 'typeOfVehicleContract'
-					: 'chargingStationsContract'
 			if (
 				storeData.eMobility[contractCategory].find(
 					(el) => el.value === item.value
@@ -91,10 +92,6 @@ const SelectionSection = ({
 				})
 			}
 		} else {
-			const contractCategory =
-				category === 'typeOfVehicle'
-					? 'typeOfVehicleContract'
-					: 'chargingStationsContract'
 			if (e.target.checked) {
 				contracts.forEach((item) => {
 					if (
@@ -218,8 +215,9 @@ const SelectionSection = ({
 						</div>
 						<span
 							className={
-								storeData.eMobility.typeOfVehicle?.length ===
-								fields.length
+								storeData.eMobility[
+									category as keyof MobilityData
+								].length === fields.length
 									? 'font-bold'
 									: ''
 							}
@@ -259,7 +257,9 @@ const SelectionSection = ({
 												)
 											}
 											checked={
-												storeData.eMobility?.typeOfVehicleContract?.find(
+												storeData.eMobility[
+													contractCategory as keyof MobilityData
+												].find(
 													(element) =>
 														element.value ===
 														item.value
@@ -296,7 +296,7 @@ const SelectionSection = ({
 										}
 										checked={
 											storeData.eMobility[
-												category as keyof MobilityData
+												contractCategory as keyof MobilityData
 											].length === contracts.length
 												? true
 												: false
