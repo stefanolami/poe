@@ -9,6 +9,7 @@ import {
 	StoreState,
 	User,
 	UserSelection,
+	CategoryData,
 } from './store.types'
 
 export const useStore = create<StoreState>()(
@@ -197,8 +198,11 @@ export const useStore = create<StoreState>()(
 
 				const sectorData =
 					selectionData[sectorValue as keyof typeof selectionData]
-				const categoryData: SelectableItem[] =
-					sectorData[category as keyof typeof sectorData]
+				const categoryData = (
+					sectorData[
+						category as keyof typeof sectorData
+					] as CategoryData
+				).fields
 
 				// Ensure categoryData is an array
 				if (!Array.isArray(categoryData)) {
