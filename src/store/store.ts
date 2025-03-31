@@ -35,18 +35,19 @@ export const useStore = create<StoreState>()(
 				}))
 				Object.keys(get().data.eMobility).forEach((category) => {
 					if (
-						[
+						![
 							'typeOfVehicleContract',
 							'chargingStationsContract',
 							'report',
 						].includes(category)
-					)
-						return
-					const key = category as keyof MobilityData
-					get().data.eMobility[key]?.forEach((item) => {
-						get().removeData(key, item)
-						get().addData(key, item)
-					})
+					) {
+						const key = category as keyof MobilityData
+
+						get().data.eMobility[key]?.forEach((item) => {
+							get().removeData(key, item)
+							get().addData(key, item)
+						})
+					}
 				})
 			},
 			removeGeography: (geographyToRemove) => {
@@ -55,6 +56,22 @@ export const useStore = create<StoreState>()(
 						(geo) => geo.value !== geographyToRemove.value
 					),
 				}))
+				Object.keys(get().data.eMobility).forEach((category) => {
+					if (
+						![
+							'typeOfVehicleContract',
+							'chargingStationsContract',
+							'report',
+						].includes(category)
+					) {
+						const key = category as keyof MobilityData
+
+						get().data.eMobility[key]?.forEach((item) => {
+							get().removeData(key, item)
+							get().addData(key, item)
+						})
+					}
+				})
 			},
 			addSingleGeography: (geography, category, item) => {
 				set(
