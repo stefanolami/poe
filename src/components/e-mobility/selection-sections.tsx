@@ -3,6 +3,8 @@
 import { MobilityData, SelectableItem } from '@/store/store.types'
 import { useStore } from '@/store/store'
 import { useShallow } from 'zustand/shallow'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 const SelectionSection = ({
 	section,
@@ -19,22 +21,32 @@ const SelectionSection = ({
 }) => {
 	const { label, fieldsLabel, fields, contracts } = section
 
+	const router = useRouter()
+
 	const contractCategory =
 		category === 'typeOfVehicle'
 			? 'typeOfVehicleContract'
 			: 'chargingStationsContract'
 
-	const { storeData, addData, removeData, getSinglePrice, getAllAbovePrice } =
-		useStore(
-			useShallow((state) => ({
-				storeSector: state.sector,
-				storeData: state.data,
-				addData: state.addData,
-				removeData: state.removeData,
-				getSinglePrice: state.getSinglePrice,
-				getAllAbovePrice: state.getAllAbovePrice,
-			}))
-		)
+	const {
+		storeData,
+		storeSector,
+		geographies,
+		addData,
+		removeData,
+		getSinglePrice,
+		getAllAbovePrice,
+	} = useStore(
+		useShallow((state) => ({
+			storeSector: state.sector,
+			storeData: state.data,
+			geographies: state.geographies,
+			addData: state.addData,
+			removeData: state.removeData,
+			getSinglePrice: state.getSinglePrice,
+			getAllAbovePrice: state.getAllAbovePrice,
+		}))
+	)
 
 	const handleCheckbox = (
 		category: keyof MobilityData,
@@ -115,6 +127,20 @@ const SelectionSection = ({
 			}
 		}
 	}
+
+	useEffect(() => {
+		const timeoutId = setTimeout(() => {
+			if (
+				Object.keys(storeSector).length === 0 ||
+				geographies.length === 0
+			) {
+				router.push(`/`)
+			}
+		}, 2000)
+
+		return () => clearTimeout(timeoutId) // Cleanup function
+		//eslint-disable-next-line
+	}, [storeSector, geographies])
 
 	return (
 		<div className="w-full">

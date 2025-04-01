@@ -149,31 +149,18 @@ export const useStore = create<StoreState>()(
 				)
 			},
 			getSinglePrice: (category, item) => {
-				const sectorValue = get().sector?.value
-
-				// Ensure sectorValue is a valid key in selectionData
-				if (!sectorValue || !(sectorValue in selectionData)) {
-					return 0 // Return 0 if sectorValue is invalid
-				}
-
-				const sectorData =
-					selectionData[sectorValue as keyof typeof selectionData]
-
-				return get().geographies.reduce((total, country) => {
-					const categoryData: SelectableItem[] = (
-						sectorData[category as keyof typeof sectorData] as {
-							fields: SelectableItem[]
-						}
-					).fields
-					const itemData = categoryData.find(
-						(x) => x.value === item.value
+				let total = 0
+				get().geographies.forEach((country) => {
+					total += parseInt(
+						//@ts-expect-error I hate you typescript
+						selectionData[get().sector?.value][
+							category
+						].fields.find(
+							(x: SelectableItem) => x.value === item.value
+						).price[country.value as keyof Price]
 					)
-
-					const price =
-						itemData?.price?.[country.value as keyof Price] || '0'
-
-					return total + parseInt(price, 10)
-				}, 0)
+				})
+				return total
 			},
 			getModalSinglePrice: (category, item) => {
 				const sectorValue = get().sector?.value
