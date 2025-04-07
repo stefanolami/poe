@@ -5,6 +5,7 @@ import GeographyModifier from '../geography-modifier'
 import Hero from '../hero'
 import SelectionSection from './selection-sections'
 import ReportSection from './report-section'
+import LanguageSection from './language-section'
 
 const EmobilityComponent = () => {
 	return (
@@ -41,6 +42,7 @@ const EmobilityComponent = () => {
 								/>
 							)
 					)}
+					<LanguageSection languages={selectionData.language} />
 				</div>
 			</section>
 		</>

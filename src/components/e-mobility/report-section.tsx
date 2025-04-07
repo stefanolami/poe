@@ -23,12 +23,20 @@ const ReportSection = ({
 		}))
 	)
 
-	const handleCheckbox = (item: SelectableItem) => {
-		if (storeData.eMobility.report.find((el) => el.value === item.value)) {
+	const handleCheckbox = (
+		e: React.ChangeEvent<HTMLInputElement>,
+		item: SelectableItem
+	) => {
+		if (e.target.checked) {
+			addData('report', item)
+		} else {
+			removeData('report', item)
+		}
+		/* if (storeData.eMobility.report.find((el) => el.value === item.value)) {
 			removeData('report', item)
 		} else {
 			addData('report', item)
-		}
+		} */
 	}
 
 	return (
@@ -46,7 +54,7 @@ const ReportSection = ({
 							type="checkbox"
 							id="checkbox-report-eu"
 							value="report-eu"
-							onChange={() => handleCheckbox(field)}
+							onChange={(e) => handleCheckbox(e, field)}
 							checked={
 								storeData.eMobility.report.find(
 									(element) => element.value === field.value
@@ -57,7 +65,7 @@ const ReportSection = ({
 							className="custom-checkbox scale-[.8] peer"
 						/>
 						<label
-							className="peer-checked:font-bold"
+							className=""
 							htmlFor="checkbox-report-eu"
 						>
 							{field.label}
