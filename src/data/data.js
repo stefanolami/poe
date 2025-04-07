@@ -341,6 +341,40 @@ export const selectionData = {
 				},
 			],
 		},
+		report: {
+			label: 'Funding & Investment Financing opportunities in the e-mobility sector',
+			value: 'report',
+			fieldsLabel: '',
+			fields: [
+				{
+					value: 'eu',
+					label: 'EU - Quarterly report (with ad hoc alerts for time-sensitive announcements) on European Commission support programme for research & innovation & deployment investment of e-mobility services',
+					price: {
+						euAdmin: '',
+						eu27: '',
+						brazil: '',
+						turkey: '',
+						colombia: '',
+						russia: '',
+						default: '8000',
+					},
+				},
+				{
+					value: 'nonEu',
+					label: 'Non-Eu administrated - Quarterly report (with ad hoc alerts for time-sensitive announcements) on international, regional or national funding or financing programmes of e-mobility services',
+					price: {
+						euAdmin: '',
+						eu27: '',
+						brazil: '',
+						turkey: '',
+						colombia: '',
+						russia: '',
+						default: '11000',
+					},
+				},
+			],
+			contracts: [],
+		},
 	},
 	language: [
 		{

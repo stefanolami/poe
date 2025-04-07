@@ -4,6 +4,7 @@ import { selectionData } from '@/data/data'
 import GeographyModifier from '../geography-modifier'
 import Hero from '../hero'
 import SelectionSection from './selection-sections'
+import ReportSection from './report-section'
 
 const EmobilityComponent = () => {
 	return (
@@ -26,13 +27,19 @@ const EmobilityComponent = () => {
 						Public Procurement Opportunities (Tenders)
 					</div>
 					{Object.entries(selectionData.eMobility).map(
-						([key, value]) => (
-							<SelectionSection
-								key={key}
-								section={value}
-								category={key}
-							/>
-						)
+						([key, value]) =>
+							value.value == 'report' ? (
+								<ReportSection
+									key={key}
+									section={selectionData.eMobility.report}
+								/>
+							) : (
+								<SelectionSection
+									key={key}
+									section={value}
+									category={key}
+								/>
+							)
 					)}
 				</div>
 			</section>

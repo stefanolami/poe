@@ -5,6 +5,7 @@ export interface Price {
 	turkey: string
 	colombia: string
 	russia: string
+	default?: string
 }
 
 export interface SelectableItem {
@@ -20,7 +21,7 @@ export interface CategoryData {
 	fieldsLabel: string
 	fields: SelectableItem[]
 	contractsLabel: string
-	contracts: SelectableItem[]
+	contracts?: SelectableItem[]
 }
 
 export interface MobilityData {
