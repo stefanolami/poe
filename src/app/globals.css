@@ -18,13 +18,13 @@
 	#geo-modifier .custom-checkbox::before {
 		@apply bg-primary;
 	}
-	#price-modal .custom-checkbox {
+	.custom-checkbox.modal-checkbox {
 		@apply border-white;
 	}
-	#price-modal .custom-checkbox:checked {
+	.custom-checkbox.modal-checkbox:checked {
 		@apply bg-white;
 	}
-	#price-modal .custom-checkbox::before {
+	.custom-checkbox.modal-checkbox::before {
 		@apply bg-primary-light;
 	}
 	.text-balance {
