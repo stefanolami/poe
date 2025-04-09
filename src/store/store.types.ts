@@ -75,7 +75,7 @@ export interface StoreState {
 	) => number
 	getAllAbovePrice: (category: keyof MobilityData) => number
 	getSubTotalPrice: (category: keyof MobilityData) => number
-	getTotalPrice: (category: keyof MobilityData) => number
+	getTotalPrice: () => number
 	getUser: (confirmed: boolean) => User
 }
 

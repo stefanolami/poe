@@ -163,34 +163,21 @@ export const useStore = create<StoreState>()(
 				return total
 			},
 			getModalSinglePrice: (category, item) => {
-				const sectorValue = get().sector?.value
-
-				// Ensure sectorValue is a valid key in selectionData
-				if (!sectorValue || !(sectorValue in selectionData)) {
-					return 0 // Return 0 if sectorValue is invalid
-				}
-
-				const sectorData =
-					selectionData[sectorValue as keyof typeof selectionData]
-				const categoryData: SelectableItem[] =
-					sectorData[category as keyof typeof sectorData]
-
-				// Find the item in the category
-				const itemData = categoryData?.find(
-					(x) => x.value === item.value
+				let total = 0
+				const dataItem = get().data.eMobility[category].find(
+					(element) => element.value === item.value
 				)
-
-				// Ensure itemData and its geographies exist
-				if (!itemData || !itemData.geographies) {
-					return 0
+				if (dataItem) {
+					const geographies = item.geographies || []
+					geographies.forEach((country: SelectableItem) => {
+						const price = item.price?.[country.value as keyof Price]
+						if (price) {
+							total += parseInt(price, 10)
+						}
+					})
 				}
 
-				// Calculate the total price for the item's geographies
-				return itemData.geographies.reduce((total, country) => {
-					const price =
-						itemData.price?.[country.value as keyof Price] || '0'
-					return total + parseInt(price, 10)
-				}, 0)
+				return total
 			},
 			getAllAbovePrice: (category) => {
 				const sectorValue = get().sector?.value
@@ -263,8 +250,7 @@ export const useStore = create<StoreState>()(
 					if (
 						category !== 'typeOfVehicleContract' &&
 						category !== 'chargingStationsContract' &&
-						category !== 'reportEu' &&
-						category !== 'reportNonEu'
+						category !== 'report'
 					) {
 						const items =
 							get().data.eMobility[category as keyof MobilityData]

@@ -6,10 +6,11 @@ import Hero from '../hero'
 import SelectionSection from './selection-sections'
 import ReportSection from './report-section'
 import LanguageSection from './language-section'
+import SummaryMobile from './summary-mobile'
 
 const EmobilityComponent = () => {
 	return (
-		<>
+		<div className="relative">
 			<Hero />
 			<section className="mx-auto w-[90%] font-jose mt-12">
 				<div className="mx-auto flex lg:hidden flex-col items-center justify-center gap-2">
@@ -45,7 +46,8 @@ const EmobilityComponent = () => {
 					<LanguageSection languages={selectionData.language} />
 				</div>
 			</section>
-		</>
+			<SummaryMobile />
+		</div>
 	)
 }
 
