@@ -60,17 +60,17 @@ const SummaryMobile = () => {
 				<DrawerTrigger className="w-full flex flex-row justify-between items-center p-2 bg-primary-light">
 					<div className="h-full bg-primary-light flex-1">OPEN</div>
 					<div className="h-full bg-primary-light flex-1">
-						TOTAL EUR {getTotalPrice()}
+						TOTAL € {getTotalPrice()}
 					</div>
 				</DrawerTrigger>
-				<DrawerContent className="bg-primary-light min-h-96 text-white">
+				<DrawerContent className="bg-primary-light text-white">
 					<div className="w-1/3 -mt-4 mx-auto h-[4px] rounded-full bg-white/50"></div>
 					<DrawerHeader>
 						<DrawerTitle className="text-xl">
 							Order Summary
 						</DrawerTitle>
 					</DrawerHeader>
-					<div className="w-5/6 mt-4 mx-auto overflow-y-scroll h-[calc(100vh-200px)] scrollbar-thin scrollbar-webkit">
+					<div className="w-5/6 mt-4 mx-auto overflow-y-scroll max-h-[calc(100dvh-230px)] scrollbar-thin scrollbar-webkit">
 						{Object.keys(storeData.eMobility).map((key, index) => {
 							if (
 								key !== 'typeOfVehicleContract' &&
@@ -194,14 +194,63 @@ const SummaryMobile = () => {
 										</div>
 									)
 								}
+							} else if (key === 'report') {
+								const category =
+									storeData.eMobility[
+										key as keyof MobilityData
+									]
+
+								if (category.length > 0) {
+									return (
+										<div
+											className="mt-2"
+											key={index}
+										>
+											<span className="text-lg">
+												Reports
+											</span>
+											<ul className="pl-1 pr-3">
+												{category.map((item, index) => (
+													<li
+														key={index}
+														className="flex w-full items-center justify-between gap-4 py-2"
+													>
+														<span className="text-white">
+															{item.value == 'eu'
+																? 'EU'
+																: 'Non-EU'}
+														</span>
+														<span className="text-white">
+															€{' '}
+															{
+																item.price
+																	?.default
+															}
+														</span>
+													</li>
+												))}
+											</ul>
+										</div>
+									)
+								}
 							}
 						})}
 						{/* <span className="w-full h-[2px] mt-4 bg-white/50  block"></span> */}
 					</div>
 
-					<DrawerFooter className="w-5/6 my-6 mx-auto flex flex-row items-center justify-between text-xl p-0">
-						<span>TOTAL</span>
-						<span>€ {getTotalPrice()}</span>
+					<DrawerFooter className="w-5/6 my-6 mx-auto text-xl p-0">
+						<div className=" flex flex-row items-center justify-between ">
+							<span>TOTAL</span>
+							<span>€ {getTotalPrice()}</span>
+						</div>
+						<div className="w-full mt-3 grid grid-cols-2 items-center gap-3 mx-auto  font-bold text-sm xl:text-lg text-center text-primary">
+							<button className="bg-white h-9 shadow-md hover:shadow-xl">
+								Send offer by email
+							</button>
+							<button className="bg-white h-9 shadow-md hover:shadow-xl">
+								Order now
+							</button>
+						</div>
 					</DrawerFooter>
 				</DrawerContent>
 			</Drawer>

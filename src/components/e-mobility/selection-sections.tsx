@@ -201,7 +201,7 @@ const SelectionSection = ({
 										? 'font-bold'
 										: ''
 								}
-							>{`EUR ${getSinglePrice(
+							>{`€ ${getSinglePrice(
 								category as keyof MobilityData,
 								item
 							)} / year`}</span>
@@ -247,7 +247,7 @@ const SelectionSection = ({
 									? 'font-bold'
 									: ''
 							}
-						>{`EUR ${getAllAbovePrice(
+						>{`€ ${getAllAbovePrice(
 							category as keyof MobilityData
 						)} / year`}</span>
 					</li>
