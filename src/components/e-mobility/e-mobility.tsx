@@ -14,7 +14,7 @@ const EmobilityComponent = () => {
 			<Hero />
 			<section className="mx-auto w-[90%] font-jose mt-12">
 				<div className="mx-auto flex lg:hidden flex-col items-center justify-center gap-2">
-					<div className="flex justify-center items-center text-white font-unna font-bold text-lg bg-primary-light h-10 w-44">
+					<div className="flex justify-center items-center text-white font-unna font-bold text-lg md:text-xl bg-primary-light h-10 md:h-12 w-44 md:w-56">
 						E-Mobility
 					</div>
 					<GeographyModifier />
@@ -24,8 +24,8 @@ const EmobilityComponent = () => {
 				</div>
 
 				{/* SELECTION */}
-				<div className="w-full">
-					<div className="w-full mt-8 px-5 py-2 xl:py-3 mb-4 bg-primary text-white font-unna text-base xl:text-3xl">
+				<div className="w-full mt-8 md:mt-12">
+					<div className="w-full px-5 py-2 xl:py-3 mb-4 bg-primary text-white font-unna text-base md:text-lg xl:text-3xl">
 						Public Procurement Opportunities (Tenders)
 					</div>
 					{Object.entries(selectionData.eMobility).map(

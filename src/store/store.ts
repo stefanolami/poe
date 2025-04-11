@@ -267,10 +267,10 @@ export const useStore = create<StoreState>()(
 
 				// Add fixed prices for reports if applicable
 				const reportItems = get().data.eMobility.report
-				if (reportItems.find((item) => item.value === 'reportEu')) {
+				if (reportItems.find((item) => item.value === 'eu')) {
 					total += 8000
 				}
-				if (reportItems.find((item) => item.value === 'reportNonEu')) {
+				if (reportItems.find((item) => item.value === 'nonEu')) {
 					total += 11000
 				}
 

@@ -144,11 +144,11 @@ const SelectionSection = ({
 
 	return (
 		<div className="w-full">
-			<div className="w-full px-5 pt-2 pb-1 xl:py-3 bg-secondary text-white font-bold text-sm xl:text-xl">
+			<div className="w-full px-5 pt-2 pb-1 xl:py-3 bg-secondary text-white font-bold text-sm md:text-base lg:text-xl">
 				{label}
 			</div>
-			<div className="px-2 text-xs my-3">
-				<span className="block text-primary font-bold text-xs xl:text-lg">
+			<div className="px-2 text-xs md:text-sm  my-3">
+				<span className="block text-primary font-bold text-xs md:text-base lg:text-lg">
 					{fieldsLabel}
 				</span>
 
@@ -257,10 +257,10 @@ const SelectionSection = ({
 				{storeData.eMobility[category as keyof MobilityData]?.length >
 					0 && (
 					<div className="mt-3">
-						<span className="text-primary block font-bold text-xs xl:text-xl">
+						<span className="text-primary block font-bold text-xs md:text-sm lg:text-xl">
 							Type of Contract
 						</span>
-						<span className="text-primary block text-xs xl:text-lg">
+						<span className="text-primary block text-xs md:text-sm lg:text-lg">
 							(Needs to be selected as soon as any of the above is
 							selected)
 						</span>

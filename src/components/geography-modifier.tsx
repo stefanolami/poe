@@ -48,7 +48,7 @@ export default function GeographyModifier() {
 	return (
 		<div
 			id="geo-modifier"
-			className="text-xs xl:text-2xl w-44 xl:w-96 bg-primary text-white"
+			className="flex items-center text-xs md:text-sm xl:text-2xl w-44 md:w-56 md:h-12 xl:w-96 bg-primary text-white"
 		>
 			<div
 				className="flex w-full items-center justify-center gap-1 h-10 xl:h-20 cursor-pointer"

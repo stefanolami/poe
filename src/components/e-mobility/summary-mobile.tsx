@@ -13,13 +13,13 @@ import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
 import { selectionData } from '@/data/data'
 import { MobilityData, SelectableItem } from '@/store/store.types'
-import Expandable from '../ui/expandable'
+import Expandable from '@/components/ui/expandable'
 
 const SummaryMobile = () => {
 	const {
 		storeData,
 		storeLanguages,
-		geographies,
+		storeGeographies,
 		getTotalPrice,
 		getModalSinglePrice,
 		addSingleGeography,
@@ -28,7 +28,7 @@ const SummaryMobile = () => {
 		useShallow((state) => ({
 			storeData: state.data,
 			storeLanguages: state.languages,
-			geographies: state.geographies,
+			storeGeographies: state.geographies,
 			getTotalPrice: state.getTotalPrice,
 			getModalSinglePrice: state.getModalSinglePrice,
 			addSingleGeography: state.addSingleGeography,
@@ -66,7 +66,7 @@ const SummaryMobile = () => {
 				<DrawerContent className="bg-primary-light text-white">
 					<div className="w-1/3 -mt-4 mx-auto h-[4px] rounded-full bg-white/50"></div>
 					<DrawerHeader>
-						<DrawerTitle className="text-xl">
+						<DrawerTitle className="text-xl text-center">
 							Order Summary
 						</DrawerTitle>
 					</DrawerHeader>
@@ -108,7 +108,7 @@ const SummaryMobile = () => {
 															).toString()}
 														>
 															<ul className="space-y-1 pl-6">
-																{geographies.map(
+																{storeGeographies.map(
 																	(
 																		geo,
 																		index
@@ -235,6 +235,21 @@ const SummaryMobile = () => {
 								}
 							}
 						})}
+						{storeLanguages.length > 0 && (
+							<div className="mt-2">
+								<span className="text-lg">Languages</span>
+								<div className="flex w-full items-end justify-between gap-4 pl-1 pr-3">
+									<span className="text-white text-wrap">
+										{storeLanguages
+											.map((lang) => lang.label)
+											.join(', ')}
+									</span>
+									<span className="text-white text-nowrap">
+										x {storeLanguages.length * 0.25 + 1}
+									</span>
+								</div>
+							</div>
+						)}
 						{/* <span className="w-full h-[2px] mt-4 bg-white/50  block"></span> */}
 					</div>
 
