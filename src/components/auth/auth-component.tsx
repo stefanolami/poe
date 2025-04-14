@@ -47,7 +47,7 @@ export default function AuthComponent() {
 
 		try {
 			await authenticate(email, password)
-			router.push('/tenders')
+			router.push('/admin/dashboard')
 		} catch (error) {
 		} finally {
 			setIsAuthenticating(false)

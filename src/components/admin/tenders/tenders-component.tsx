@@ -45,16 +45,16 @@ const TendersComponent = () => {
 	}
 
 	return (
-		<div>
+		<div className="space-x-2">
 			<button
 				onClick={submitEmail}
-				className="border-2 border-white my-12 mx-auto text-white border-md px-4 py-2 rounded-md"
+				className="my-12 mx-auto text-white bg-primary-light px-4 py-2 rounded-md hover:scale-[1.02] shadow-md hover:shadow-xl"
 			>
 				Send Email
 			</button>
 			<button
 				onClick={() => filterUsers('tender 4')}
-				className="border-2 border-white my-12 mx-auto text-white border-md px-4 py-2 rounded-md"
+				className=" my-12 mx-auto text-white bg-primary-light px-4 py-2 rounded-md  hover:scale-[1.02] shadow-md hover:shadow-xl"
 			>
 				Filter Users
 			</button>

@@ -225,7 +225,7 @@ export const TendersForm = ({
 						disabled={isSubmitting}
 						type="submit"
 						variant="outline"
-						className="bg-transparent text-white"
+						className="bg-transparent text-primary bg-white hover:bg-primary-light"
 					>
 						Submit
 					</Button>

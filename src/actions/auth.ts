@@ -18,3 +18,15 @@ export const authenticate = async (email: string, password: string) => {
 		throw error
 	}
 }
+
+export const logout = async () => {
+	try {
+		const supabase = await createClient()
+
+		const { error } = await supabase.auth.signOut()
+		if (error) throw error
+	} catch (error) {
+		console.log('LOGOUT ERROR', error)
+		throw error
+	}
+}
