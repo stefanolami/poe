@@ -48,13 +48,15 @@ export default function GeographyModifier() {
 	return (
 		<div
 			id="geo-modifier"
-			className="flex items-center text-xs md:text-sm xl:text-2xl w-44 md:w-56 md:h-12 xl:w-96 bg-primary text-white"
+			className="text-xs lg:text-lg w-44 md:w-56 lg:w-72 xl:w-96 bg-primary text-white"
 		>
 			<div
-				className="flex w-full items-center justify-center gap-1 h-10 xl:h-20 cursor-pointer"
+				className="flex w-full items-center justify-center gap-1 h-10 md:h-12 xl:h-20 cursor-pointer"
 				onClick={openMenu}
 			>
-				<span className="font-bold">Change Geographies</span>
+				<span className="font-bold text-xs md:text-sm lg:text-xl">
+					Change Geographies
+				</span>
 				{isOpen ? (
 					<IoMdArrowDropup className="text-white text-2xl" />
 				) : (
@@ -69,7 +71,7 @@ export default function GeographyModifier() {
 				/> */}
 			</div>
 			{isOpen && (
-				<div className="w-full px-3 py-3">
+				<div className="w-full px-3 lg:px-8 py-3 lg:py-5">
 					<ul className="flex flex-col items-center justify-center gap-3 xl:gap-4 mx-auto">
 						{items.map((item, index) => (
 							<li
@@ -103,7 +105,7 @@ export default function GeographyModifier() {
 					</p>
 					<button
 						onClick={handleCLick}
-						className="block mx-auto px-4 py-1 text-primary font-bold bg-white hover:brightness-95 shadow-md hover:shadow-xl"
+						className="block mx-auto px-4 lg:px-6 py-1 lg:py-2 text-primary font-bold bg-white hover:brightness-95 shadow-md hover:shadow-xl"
 					>
 						Close
 					</button>

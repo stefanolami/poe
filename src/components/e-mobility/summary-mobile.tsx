@@ -9,7 +9,6 @@ import {
 	DrawerTrigger,
 } from '@/components/ui/drawer'
 import { useStore } from '@/store/store'
-import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
 import { selectionData } from '@/data/data'
 import { MobilityData, SelectableItem } from '@/store/store.types'
@@ -50,12 +49,8 @@ const SummaryMobile = () => {
 		}
 	}
 
-	useEffect(() => {
-		console.log(getTotalPrice())
-	}, [storeData, storeLanguages, getTotalPrice])
-
 	return (
-		<div className="w-full sticky bottom-0 font-jose text-white">
+		<div className="w-full lg:hidden sticky bottom-0 font-jose text-white">
 			<Drawer>
 				<DrawerTrigger className="w-full flex flex-row justify-between items-center p-2 bg-primary-light">
 					<div className="h-full bg-primary-light flex-1">OPEN</div>

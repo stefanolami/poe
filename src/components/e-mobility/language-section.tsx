@@ -32,20 +32,20 @@ const LanguageSection = ({
 
 	return (
 		<div
-			className="w-full mb-5 md:mb-8"
+			className="w-full"
 			id="language-section"
 		>
 			<div className="w-full px-5 py-2 xl:py-3 bg-primary text-white font-unna text-base md:text-lg text-balance lg:text-3xl">
 				Language
 			</div>
 			<div className="mt-3 px-2 py-2">
-				<span className="text-pretty block text-primary text-xs md:text-sm xl:text-lg">
+				<span className="text-pretty block text-primary text-xs md:text-sm lg:text-lg">
 					All monitoring is furnished in English. The reports can be
 					available in the following languages with an additional{' '}
 					<strong>25 percent</strong> for each country, on top of the
 					total costs:
 				</span>
-				<ul className="mt-3 space-y-1 text-xs md:text-sm">
+				<ul className="mt-3 space-y-1 text-xs md:text-sm lg:text-base">
 					{languages.map((item, index) => (
 						<li
 							key={item.value}

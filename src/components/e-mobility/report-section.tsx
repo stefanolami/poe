@@ -47,7 +47,7 @@ const ReportSection = ({
 			<ul className="mt-3 px-2 py-2 xl:py-5 flex flex-col justify-between items-start gap-3">
 				{fields.map((field, index) => (
 					<li
-						className="w-full flex flex-row items-start justify-between text-xs md:text-sm text-primary"
+						className="w-full flex flex-row items-start justify-between text-xs md:text-sm lg:text-base text-primary"
 						key={index}
 					>
 						<div className="flex flex-row items-start gap-1 justify-start">

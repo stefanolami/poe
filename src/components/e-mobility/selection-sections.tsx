@@ -147,7 +147,7 @@ const SelectionSection = ({
 			<div className="w-full px-5 pt-2 pb-1 xl:py-3 bg-secondary text-white font-bold text-sm md:text-base lg:text-xl">
 				{label}
 			</div>
-			<div className="px-2 text-xs md:text-sm  my-3">
+			<div className="px-2 text-xs md:text-sm lg:text-base  my-3">
 				<span className="block text-primary font-bold text-xs md:text-base lg:text-lg">
 					{fieldsLabel}
 				</span>
