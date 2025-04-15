@@ -1,25 +1,37 @@
 import { z } from 'zod'
 
 export const createTenderSchema = z.object({
-	title: z
+	title: z.string().min(2, { message: 'This field is required' }),
+	contracting_org_name: z
 		.string()
-		.min(3, { message: 'Name must be at least 3 characters long' }),
-	location: z
+		.min(2, { message: 'This field is required' }),
+	contracting_authority: z
 		.string()
-		.min(3, { message: 'Location must be at least 3 characters long' }),
-	description: z
-		.string()
-		.min(3, { message: 'Description must be at least 3 characters long' }),
-	value: z.string().min(1, { message: 'Value must be at least 1' }),
-	contract_type: z.string().min(3, {
-		message: 'Contract type must be at least 3 characters long',
+		.min(2, { message: 'This field is required' }),
+	country: z.string().min(2, { message: 'This field is required' }),
+	description: z.string().min(2, { message: 'This field is required' }),
+	value: z.string().min(1, { message: 'This field is required' }),
+	contract_type: z.enum(['service', 'purchase', 'mixed'], {
+		required_error: 'You must select an option',
+	}),
+	publication_date: z
+		.date()
+		.min(new Date(), { message: 'Publication date must be in the future' }),
+	submission_deadline: z.date().min(new Date(), {
+		message: 'Submission deadline must be in the future',
 	}),
 	submission_language: z.string().min(3, {
 		message: 'Submission language must be at least 3 characters long',
 	}),
-	sector: z
-		.string()
-		.min(3, { message: 'Sector must be at least 3 characters long' }),
+	filters: z.object({
+		sector: z.enum(['e-mobility', 'aviation'], {
+			required_error: 'You must select a sector',
+		}),
+		type_of_vehicle: z.string().optional(), // Initially optional
+	}),
+	/* sector: z.enum(['e-mobility', 'aviation'], {
+		required_error: 'You must select an option',
+	}), */
 	agent: z.string(),
 	type_of_vehicle: z.string().min(3, {
 		message: 'Type of vehicle must be at least 3 characters long',

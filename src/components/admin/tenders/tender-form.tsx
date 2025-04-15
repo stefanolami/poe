@@ -15,6 +15,7 @@ import {
 import { createTenderSchema, CreateTenderSchema } from '@/lib/tenders.schema'
 import { createTender } from '@/actions/tenders'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { DialogContent, DialogTitle } from '@/components/ui/dialog'
 
 export const TendersForm = () => {
 	const form = useForm<CreateTenderSchema>({
@@ -50,8 +51,8 @@ export const TendersForm = () => {
 	}, [defaultValues, form]) */
 
 	return (
-		<>
-			<h1 className="mb-6 text-white">Create Tender</h1>
+		<DialogContent>
+			<DialogTitle className="mb-6 text-white">Create Tender</DialogTitle>
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(submitHandler)}
@@ -247,6 +248,6 @@ export const TendersForm = () => {
 					</Button>
 				</form>
 			</Form>
-		</>
+		</DialogContent>
 	)
 }
