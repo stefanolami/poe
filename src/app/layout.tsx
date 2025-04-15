@@ -18,7 +18,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				className={`${unna.variable} ${jose.variable} antialiased relative pb-24 xl:pb-40 min-h-screen`}
+				className={`${unna.variable} ${jose.variable} antialiased relative`}
 			>
 				<RenderMounted>
 					<Suspense fallback={<Loading />}>{children}</Suspense>

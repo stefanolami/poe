@@ -1,6 +1,6 @@
 'use client'
 
-import { SubmitHandler } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -12,18 +12,34 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/components/ui/form'
-import { CreateTenderSchema } from '@/lib/tenders.schema'
+import { createTenderSchema, CreateTenderSchema } from '@/lib/tenders.schema'
+import { createTender } from '@/actions/tenders'
+import { zodResolver } from '@hookform/resolvers/zod'
 
-export const TendersForm = ({
-	form,
-	onSubmit,
-}: {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	form: any
-	onSubmit: SubmitHandler<CreateTenderSchema>
-	defaultValues: CreateTenderSchema | null
-}) => {
+export const TendersForm = () => {
+	const form = useForm<CreateTenderSchema>({
+		resolver: zodResolver(createTenderSchema),
+		defaultValues: {
+			title: '',
+			location: '',
+			description: '',
+			value: '',
+			contract_type: '',
+			submission_language: '',
+			sector: '',
+			agent: '',
+			type_of_vehicle: '',
+			type_of_contract: '',
+		},
+	})
+
 	const isSubmitting = form.formState.isSubmitting
+
+	const submitHandler: SubmitHandler<CreateTenderSchema> = async (data) => {
+		const response = await createTender(data)
+
+		return response
+	}
 
 	/* useEffect(() => {
 		if (defaultValues) {
@@ -38,7 +54,7 @@ export const TendersForm = ({
 			<h1 className="mb-6 text-white">Create Tender</h1>
 			<Form {...form}>
 				<form
-					onSubmit={form.handleSubmit(onSubmit)}
+					onSubmit={form.handleSubmit(submitHandler)}
 					className="bg-transparent grid grid-cols-2 items-center text-white font-titillium gap-2"
 				>
 					<FormField

@@ -1,6 +1,6 @@
-import Footer from '@/components/footer'
 import '../../globals.css'
-import HeaderAdmin from '@/components/admin/header/header-admin'
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { AppSidebar } from '@/components/admin/app-sidebar'
 
 export default function AdminLayout({
 	children,
@@ -8,11 +8,12 @@ export default function AdminLayout({
 	children: React.ReactNode
 }) {
 	return (
-		<>
-			<HeaderAdmin />
-			<div className="h-16 xl:h-24 bg-primary"></div>
-			<main className="font-jose">{children}</main>
-			<Footer />
-		</>
+		<SidebarProvider>
+			<AppSidebar />
+			<main className="w-full bg-primary">
+				<SidebarTrigger className="text-white" />
+				<div className="w-full pt-8 px-8">{children}</div>
+			</main>
+		</SidebarProvider>
 	)
 }
