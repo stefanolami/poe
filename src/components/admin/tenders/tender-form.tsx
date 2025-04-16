@@ -16,6 +16,7 @@ import { tenderSchema, TenderSchema } from '@/lib/tenders.schema'
 import { createTender } from '@/actions/tenders'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '@/components/ui/textarea'
+import { MultiSelect } from '@/components/ui/multi-select'
 
 export const TenderForm = () => {
 	const form = useForm<TenderSchema>({
@@ -166,13 +167,26 @@ export const TenderForm = () => {
 						name="contract_type"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Contract</FormLabel>
+								<FormLabel>Contract Type</FormLabel>
 								<FormControl>
-									<Input
-										disabled={isSubmitting}
-										placeholder="Contract"
-										{...field}
-										className="bg-transparent"
+									<MultiSelect
+										className="bg-white text-primary hover:bg-white"
+										onValueChange={field.onChange}
+										variant="default"
+										options={[
+											{
+												value: 'service',
+												label: 'Service',
+											},
+											{
+												value: 'purchase',
+												label: 'Purchase',
+											},
+											{
+												value: 'mixed',
+												label: 'Mixed',
+											},
+										]}
 									/>
 								</FormControl>
 								<FormMessage className="text-red-500 text-sm" />
