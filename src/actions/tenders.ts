@@ -1,10 +1,9 @@
 'use server'
 
+/* import { TenderSchema } from '@/lib/tenders.schema'
+import { createClient } from '@/supabase/server' */
 
-import { CreateTenderSchema } from '@/lib/tenders.schema'
-import { createClient } from '@/supabase/server'
-
-export const createTender = async (formData: CreateTenderSchema) => {
+/* export const createTender = async (formData: TenderSchema) => {
 	const supabase = await createClient()
 
 	const newFormData = {
@@ -17,8 +16,8 @@ export const createTender = async (formData: CreateTenderSchema) => {
 		submission_language: formData.submission_language,
 		sector: formData.sector,
 		agent: Number(formData.agent),
-		type_of_vehicle: [formData.type_of_vehicle],
-		type_of_contract: [formData.type_of_contract],
+		type_of_vehicle: [formData.eMobility?.eVehicles.typeOfVehicle],
+		type_of_contract: [formData.eMobility?.eVehicles.typeOfContract],
 		lots_divided: false,
 		eu_funded: true,
 		opening: new Date().toISOString(),
@@ -36,4 +35,4 @@ export const createTender = async (formData: CreateTenderSchema) => {
 	console.log('DATA: ', data)
 
 	return data
-}
+} */

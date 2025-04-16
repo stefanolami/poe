@@ -13,7 +13,7 @@ import {
 	FormMessage,
 } from '@/components/ui/form'
 import { tenderSchema, TenderSchema } from '@/lib/tenders.schema'
-import { createTender } from '@/actions/tenders'
+/* import { createTender } from '@/actions/tenders' */
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '@/components/ui/textarea'
 import { MultiSelect } from '@/components/ui/multi-select'
@@ -38,9 +38,10 @@ export const TenderForm = () => {
 	const isSubmitting = form.formState.isSubmitting
 
 	const submitHandler: SubmitHandler<TenderSchema> = async (data) => {
-		const response = await createTender(data)
+		/* const response = await createTender(data)
 
-		return response
+		return response */
+		console.log(data)
 	}
 
 	/* useEffect(() => {
