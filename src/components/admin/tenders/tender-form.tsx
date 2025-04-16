@@ -17,6 +17,15 @@ import { createTender } from '@/actions/tenders'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '@/components/ui/textarea'
 import { MultiSelect } from '@/components/ui/multi-select'
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from '@/components/ui/popover'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { CalendarIcon } from 'lucide-react'
+import { Calendar } from '@/components/ui/calendar'
+import { cn } from '@/lib/utils'
 
 export const TenderForm = () => {
 	const form = useForm<TenderSchema>({
@@ -190,6 +199,261 @@ export const TenderForm = () => {
 									/>
 								</FormControl>
 								<FormMessage className="text-red-500 text-sm" />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="eu_funded"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>EU Funded</FormLabel>
+								<FormControl>
+									<RadioGroup
+										onValueChange={field.onChange}
+										className="flex flex-row space-y-1"
+									>
+										<FormItem className="flex items-center space-x-3 space-y-0">
+											<FormControl>
+												<RadioGroupItem
+													value="yes"
+													className="bg-white"
+												/>
+											</FormControl>
+											<FormLabel className="font-normal">
+												Yes
+											</FormLabel>
+										</FormItem>
+										<FormItem className="flex items-center space-x-3 space-y-0">
+											<FormControl>
+												<RadioGroupItem
+													value="no"
+													className="bg-white"
+												/>
+											</FormControl>
+											<FormLabel className="font-normal">
+												No
+											</FormLabel>
+										</FormItem>
+									</RadioGroup>
+								</FormControl>
+								<FormMessage className="text-red-500 text-sm" />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="eu_funded_details"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>EU Funded Details *</FormLabel>
+								<FormControl>
+									<Input
+										disabled={isSubmitting}
+										placeholder=""
+										{...field}
+										className="bg-white text-primary"
+									/>
+								</FormControl>
+								<FormMessage className="text-red-500 text-sm" />
+							</FormItem>
+						)}
+					/>
+					<div className="col-span-2 flex items-center justify-between">
+						<FormField
+							control={form.control}
+							name="lots_divided"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Divided in Lots</FormLabel>
+									<FormControl>
+										<RadioGroup
+											onValueChange={field.onChange}
+											className="flex flex-row space-y-1"
+										>
+											<FormItem className="flex items-center space-x-3 space-y-0">
+												<FormControl>
+													<RadioGroupItem
+														value="yes"
+														className="bg-white"
+													/>
+												</FormControl>
+												<FormLabel className="font-normal">
+													Yes
+												</FormLabel>
+											</FormItem>
+											<FormItem className="flex items-center space-x-3 space-y-0">
+												<FormControl>
+													<RadioGroupItem
+														value="no"
+														className="bg-white"
+													/>
+												</FormControl>
+												<FormLabel className="font-normal">
+													No
+												</FormLabel>
+											</FormItem>
+										</RadioGroup>
+									</FormControl>
+									<FormMessage className="text-red-500 text-sm" />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="tenders_for_all_lots"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Tenders for all Lots *
+									</FormLabel>
+									<FormControl>
+										<RadioGroup
+											onValueChange={field.onChange}
+											className="flex flex-row space-y-1"
+										>
+											<FormItem className="flex items-center space-x-3 space-y-0">
+												<FormControl>
+													<RadioGroupItem
+														value="yes"
+														className="bg-white"
+													/>
+												</FormControl>
+												<FormLabel className="font-normal">
+													Yes
+												</FormLabel>
+											</FormItem>
+											<FormItem className="flex items-center space-x-3 space-y-0">
+												<FormControl>
+													<RadioGroupItem
+														value="no"
+														className="bg-white"
+													/>
+												</FormControl>
+												<FormLabel className="font-normal">
+													No
+												</FormLabel>
+											</FormItem>
+										</RadioGroup>
+									</FormControl>
+									<FormMessage className="text-red-500 text-sm" />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="lots_number"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Number of Lots *</FormLabel>
+									<FormControl>
+										<Input
+											disabled={isSubmitting}
+											placeholder=""
+											{...field}
+											className="bg-white text-primary"
+										/>
+									</FormControl>
+									<FormMessage className="text-red-500 text-sm" />
+								</FormItem>
+							)}
+						/>
+					</div>
+					<FormField
+						control={form.control}
+						name="opening"
+						render={({ field }) => (
+							<FormItem className="flex flex-col">
+								<FormLabel>Publication Date</FormLabel>
+								<Popover>
+									<PopoverTrigger asChild>
+										<FormControl>
+											<Button
+												variant={'outline'}
+												className={cn(
+													'pl-3 text-left font-normal  bg-white hover:bg-white text-primary hover:text-primary'
+												)}
+											>
+												{field.value ? (
+													field.value.toLocaleDateString(
+														'it-IT'
+													)
+												) : (
+													<span>Pick a date</span>
+												)}
+												<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+											</Button>
+										</FormControl>
+									</PopoverTrigger>
+									<PopoverContent
+										className="w-auto p-0"
+										align="start"
+									>
+										<Calendar
+											className="bg-white text-primary"
+											mode="single"
+											selected={field.value}
+											onSelect={(date) => {
+												field.onChange(date)
+												console.log(date)
+											}}
+											disabled={(date) =>
+												date < new Date()
+											}
+											initialFocus
+										/>
+									</PopoverContent>
+								</Popover>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="closing"
+						render={({ field }) => (
+							<FormItem className="flex flex-col">
+								<FormLabel>Submission Deadline</FormLabel>
+								<Popover>
+									<PopoverTrigger asChild>
+										<FormControl>
+											<Button
+												variant={'outline'}
+												className={cn(
+													'pl-3 text-left font-normal  bg-white hover:bg-white text-primary hover:text-primary'
+												)}
+											>
+												{field.value ? (
+													field.value.toLocaleDateString(
+														'it-IT'
+													)
+												) : (
+													<span>Pick a date</span>
+												)}
+												<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+											</Button>
+										</FormControl>
+									</PopoverTrigger>
+									<PopoverContent
+										className="w-full p-0"
+										align="start"
+									>
+										<Calendar
+											className="bg-white text-primary"
+											mode="single"
+											selected={field.value}
+											onSelect={(date) => {
+												field.onChange(date)
+												console.log(date)
+											}}
+											disabled={(date) =>
+												date < new Date()
+											}
+											initialFocus
+										/>
+									</PopoverContent>
+								</Popover>
+								<FormMessage />
 							</FormItem>
 						)}
 					/>
