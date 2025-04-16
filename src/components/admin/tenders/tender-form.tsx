@@ -26,12 +26,27 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '@/components/ui/calendar'
 import { cn } from '@/lib/utils'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select'
 
 export const TenderForm = () => {
 	const form = useForm<TenderSchema>({
 		resolver: zodResolver(tenderSchema),
 		defaultValues: {
 			title: '',
+			location: '',
+			contracting_org_name: '',
+			contracting_org_info: '',
+			description: '',
+			value: '',
+			eu_funded_details: '',
+			submission_language: '',
+			lots_number: '',
 		},
 	})
 
@@ -53,14 +68,14 @@ export const TenderForm = () => {
 	}, [defaultValues, form]) */
 
 	return (
-		<div className="w-1/2">
+		<div className="w-1/2 mb-16">
 			<h1 className="text-white font-jose text-2xl mb-10">
 				Create New Tender
 			</h1>
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(submitHandler)}
-					className="bg-transparent grid grid-cols-2 items-center text-white font-jose gap-2"
+					className="bg-transparent grid grid-cols-2 items-center text-white font-jose gap-x-3 gap-y-2"
 				>
 					<FormField
 						control={form.control}
@@ -463,13 +478,13 @@ export const TenderForm = () => {
 						name="submission_language"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Lang</FormLabel>
+								<FormLabel>Submission Language</FormLabel>
 								<FormControl>
 									<Input
 										disabled={isSubmitting}
-										placeholder="Lang"
+										placeholder=""
 										{...field}
-										className="bg-transparent"
+										className="bg-white text-primary"
 									/>
 								</FormControl>
 								<FormMessage className="text-red-500 text-sm" />
@@ -482,19 +497,29 @@ export const TenderForm = () => {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Sector</FormLabel>
-								<FormControl>
-									<Input
-										disabled={isSubmitting}
-										placeholder="Sector"
-										{...field}
-										className="bg-transparent"
-									/>
-								</FormControl>
-								<FormMessage className="text-red-500 text-sm" />
+								<Select
+									onValueChange={field.onChange}
+									defaultValue={field.value}
+								>
+									<FormControl>
+										<SelectTrigger className="bg-white text-primary">
+											<SelectValue placeholder="Select an option" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent className="bg-white text-primary">
+										<SelectItem value="e-mobility">
+											E-Mobility
+										</SelectItem>
+										<SelectItem value="aviation">
+											Aviation
+										</SelectItem>
+									</SelectContent>
+								</Select>
+								<FormMessage />
 							</FormItem>
 						)}
 					/>
-					<FormField
+					{/* <FormField
 						control={form.control}
 						name="agent"
 						render={({ field }) => (
@@ -512,42 +537,6 @@ export const TenderForm = () => {
 							</FormItem>
 						)}
 					/>
-					{/* <FormField
-						control={form.control}
-						name="type_of_vehicle"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Vehicle</FormLabel>
-								<FormControl>
-									<Input
-										disabled={isSubmitting}
-										placeholder="Vehicle"
-										{...field}
-										className="bg-transparent"
-									/>
-								</FormControl>
-								<FormMessage className="text-red-500 text-sm"/>
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="type_of_contract"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Contract</FormLabel>
-								<FormControl>
-									<Input
-										disabled={isSubmitting}
-										placeholder="Contract"
-										{...field}
-										className="bg-transparent"
-									/>
-								</FormControl>
-								<FormMessage className="text-red-500 text-sm"/>
-							</FormItem>
-						)}
-					/> */}
 					<Button
 						disabled={isSubmitting}
 						type="submit"
@@ -555,7 +544,7 @@ export const TenderForm = () => {
 						className="bg-transparent text-primary bg-white hover:bg-primary-light"
 					>
 						Submit
-					</Button>
+					</Button> */}
 				</form>
 			</Form>
 		</div>

@@ -8,7 +8,7 @@ export const tenderSchema = z.object({
 	description: z.string().min(2),
 	value: z.string().min(2),
 	lots_divided: z.boolean(),
-	lots_number: z.number().optional(),
+	lots_number: z.string().optional(),
 	tenders_for_all_lots: z.boolean().optional(),
 	contract_type: z.enum(['service', 'purchase', 'mixed'], {
 		required_error: 'You must select an option',
