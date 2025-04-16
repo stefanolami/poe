@@ -13,10 +13,10 @@ import {
 	FormMessage,
 } from '@/components/ui/form'
 import { tenderSchema, TenderSchema } from '@/lib/tenders.schema'
-/* import { createTender } from '@/actions/tenders' */
+import { createTender } from '@/actions/tenders'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '@/components/ui/textarea'
-import { MultiSelect } from '@/components/ui/multi-select'
+/* import { MultiSelect } from '@/components/ui/multi-select' */
 import {
 	Popover,
 	PopoverContent,
@@ -47,16 +47,18 @@ export const TenderForm = () => {
 			eu_funded_details: '',
 			submission_language: '',
 			lots_number: '',
+			agent: '',
 		},
 	})
 
 	const isSubmitting = form.formState.isSubmitting
 
 	const submitHandler: SubmitHandler<TenderSchema> = async (data) => {
-		/* const response = await createTender(data)
-
-		return response */
+		console.log('submitting...')
 		console.log(data)
+		const response = await createTender(data)
+
+		return response
 	}
 
 	/* useEffect(() => {
@@ -74,7 +76,9 @@ export const TenderForm = () => {
 			</h1>
 			<Form {...form}>
 				<form
-					onSubmit={form.handleSubmit(submitHandler)}
+					onSubmit={form.handleSubmit(submitHandler, (e) => {
+						console.log(e)
+					})}
 					className="bg-transparent grid grid-cols-2 items-center text-white font-jose gap-x-3 gap-y-2"
 				>
 					<FormField
@@ -194,7 +198,7 @@ export const TenderForm = () => {
 							<FormItem>
 								<FormLabel>Contract Type</FormLabel>
 								<FormControl>
-									<MultiSelect
+									{/* <MultiSelect
 										className="bg-white text-primary hover:bg-white"
 										onValueChange={field.onChange}
 										variant="default"
@@ -212,7 +216,25 @@ export const TenderForm = () => {
 												label: 'Mixed',
 											},
 										]}
-									/>
+									/> */}
+									<Select onValueChange={field.onChange}>
+										<FormControl>
+											<SelectTrigger className="bg-white text-primary">
+												<SelectValue placeholder="Select an option" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent className="bg-white text-primary">
+											<SelectItem value="service">
+												Service
+											</SelectItem>
+											<SelectItem value="purchase">
+												Purchase
+											</SelectItem>
+											<SelectItem value="mixed">
+												Mixed
+											</SelectItem>
+										</SelectContent>
+									</Select>
 								</FormControl>
 								<FormMessage className="text-red-500 text-sm" />
 							</FormItem>
@@ -519,6 +541,24 @@ export const TenderForm = () => {
 							</FormItem>
 						)}
 					/>
+					<FormField
+						control={form.control}
+						name="agent"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Agent</FormLabel>
+								<FormControl>
+									<Input
+										disabled={isSubmitting}
+										placeholder=""
+										{...field}
+										className="bg-white text-primary"
+									/>
+								</FormControl>
+								<FormMessage className="text-red-500 text-sm" />
+							</FormItem>
+						)}
+					/>
 					{/* <FormField
 						control={form.control}
 						name="agent"
@@ -536,15 +576,15 @@ export const TenderForm = () => {
 								<FormMessage className="text-red-500 text-sm" />
 							</FormItem>
 						)}
-					/>
+					/> */}
 					<Button
-						disabled={isSubmitting}
+						disabled={false}
 						type="submit"
-						variant="outline"
-						className="bg-transparent text-primary bg-white hover:bg-primary-light"
+						variant="default"
+						className="bg-primary-light text-white hover:bg-primary-light shadow-md hover:shadow-xl hover:scale-[1.02]"
 					>
 						Submit
-					</Button> */}
+					</Button>
 				</form>
 			</Form>
 		</div>

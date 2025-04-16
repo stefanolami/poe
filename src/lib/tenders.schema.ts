@@ -7,13 +7,14 @@ export const tenderSchema = z.object({
 	contracting_org_info: z.string().optional(),
 	description: z.string().min(2),
 	value: z.string().min(2),
-	lots_divided: z.boolean(),
+	lots_divided: z.string(),
 	lots_number: z.string().optional(),
-	tenders_for_all_lots: z.boolean().optional(),
-	contract_type: z.enum(['service', 'purchase', 'mixed'], {
+	tenders_for_all_lots: z.string().optional(),
+	contract_type: z.string(),
+	/* contract_type: z.enum(['service', 'purchase', 'mixed'], {
 		required_error: 'You must select an option',
-	}),
-	eu_funded: z.boolean(),
+	}), */
+	eu_funded: z.string(),
 	eu_funded_details: z.string().optional(),
 	submission_language: z.string().min(2),
 	opening: z
@@ -35,17 +36,8 @@ export const tenderSchema = z.object({
 		.object({
 			eVehicles: z
 				.object({
-					typeOfVehicle: z
-						.enum([
-							'cars',
-							'buses',
-							'trucks',
-							'planes',
-							'boats',
-							'twoWheelers',
-						])
-						.optional(),
-					typeOfContract: z.enum(['purchase', 'lease']),
+					typeOfVehicle: z.array(z.string()).optional(),
+					typeOfContract: z.array(z.string()).optional(),
 				})
 				.refine(
 					(data) => !data.typeOfVehicle || !!data.typeOfContract,
@@ -83,7 +75,7 @@ export const tenderSchema = z.object({
 				),
 		})
 		.optional(),
-	agent: z.number(),
+	agent: z.string(),
 	id: z.number().optional(),
 })
 
