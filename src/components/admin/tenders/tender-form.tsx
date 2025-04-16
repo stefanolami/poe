@@ -12,31 +12,22 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/components/ui/form'
-import { createTenderSchema, CreateTenderSchema } from '@/lib/tenders.schema'
+import { tenderSchema, TenderSchema } from '@/lib/tenders.schema'
 import { createTender } from '@/actions/tenders'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { DialogContent, DialogTitle } from '@/components/ui/dialog'
+import { Textarea } from '@/components/ui/textarea'
 
-export const TendersForm = () => {
-	const form = useForm<CreateTenderSchema>({
-		resolver: zodResolver(createTenderSchema),
+export const TenderForm = () => {
+	const form = useForm<TenderSchema>({
+		resolver: zodResolver(tenderSchema),
 		defaultValues: {
 			title: '',
-			location: '',
-			description: '',
-			value: '',
-			contract_type: '',
-			submission_language: '',
-			sector: '',
-			agent: '',
-			type_of_vehicle: '',
-			type_of_contract: '',
 		},
 	})
 
 	const isSubmitting = form.formState.isSubmitting
 
-	const submitHandler: SubmitHandler<CreateTenderSchema> = async (data) => {
+	const submitHandler: SubmitHandler<TenderSchema> = async (data) => {
 		const response = await createTender(data)
 
 		return response
@@ -51,12 +42,14 @@ export const TendersForm = () => {
 	}, [defaultValues, form]) */
 
 	return (
-		<DialogContent>
-			<DialogTitle className="mb-6 text-white">Create Tender</DialogTitle>
+		<div className="w-1/2">
+			<h1 className="text-white font-jose text-2xl mb-10">
+				Create New Tender
+			</h1>
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(submitHandler)}
-					className="bg-transparent grid grid-cols-2 items-center text-white font-titillium gap-2"
+					className="bg-transparent grid grid-cols-2 items-center text-white font-jose gap-2"
 				>
 					<FormField
 						control={form.control}
@@ -67,12 +60,12 @@ export const TendersForm = () => {
 								<FormControl>
 									<Input
 										disabled={isSubmitting}
-										placeholder="Title"
+										placeholder=""
 										{...field}
-										className="bg-transparent"
+										className="bg-white text-primary"
 									/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage className="text-red-500 text-sm" />
 							</FormItem>
 						)}
 					/>
@@ -85,12 +78,50 @@ export const TendersForm = () => {
 								<FormControl>
 									<Input
 										disabled={isSubmitting}
-										placeholder="Location"
+										placeholder=""
 										{...field}
-										className="bg-transparent"
+										className="bg-white text-primary"
 									/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage className="text-red-500 text-sm" />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="contracting_org_name"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Contracting Organization</FormLabel>
+								<FormControl>
+									<Input
+										disabled={isSubmitting}
+										placeholder=""
+										{...field}
+										className="bg-white text-primary"
+									/>
+								</FormControl>
+								<FormMessage className="text-red-500 text-sm" />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="contracting_org_info"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>
+									Contracting Organization Information *
+								</FormLabel>
+								<FormControl>
+									<Input
+										disabled={isSubmitting}
+										placeholder=""
+										{...field}
+										className="bg-white text-primary"
+									/>
+								</FormControl>
+								<FormMessage className="text-red-500 text-sm" />
 							</FormItem>
 						)}
 					/>
@@ -98,17 +129,17 @@ export const TendersForm = () => {
 						control={form.control}
 						name="description"
 						render={({ field }) => (
-							<FormItem>
+							<FormItem className="col-span-2">
 								<FormLabel>Desc</FormLabel>
 								<FormControl>
-									<Input
+									<Textarea
 										disabled={isSubmitting}
-										placeholder="Desc"
+										placeholder=""
 										{...field}
-										className="bg-transparent"
+										className="bg-white text-primary"
 									/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage className="text-red-500 text-sm" />
 							</FormItem>
 						)}
 					/>
@@ -121,12 +152,12 @@ export const TendersForm = () => {
 								<FormControl>
 									<Input
 										disabled={isSubmitting}
-										placeholder="value"
+										placeholder=""
 										{...field}
-										className="bg-transparent"
+										className="bg-white text-primary"
 									/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage className="text-red-500 text-sm" />
 							</FormItem>
 						)}
 					/>
@@ -144,7 +175,7 @@ export const TendersForm = () => {
 										className="bg-transparent"
 									/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage className="text-red-500 text-sm" />
 							</FormItem>
 						)}
 					/>
@@ -162,7 +193,7 @@ export const TendersForm = () => {
 										className="bg-transparent"
 									/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage className="text-red-500 text-sm" />
 							</FormItem>
 						)}
 					/>
@@ -180,7 +211,7 @@ export const TendersForm = () => {
 										className="bg-transparent"
 									/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage className="text-red-500 text-sm" />
 							</FormItem>
 						)}
 					/>
@@ -198,11 +229,11 @@ export const TendersForm = () => {
 										className="bg-transparent"
 									/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage className="text-red-500 text-sm" />
 							</FormItem>
 						)}
 					/>
-					<FormField
+					{/* <FormField
 						control={form.control}
 						name="type_of_vehicle"
 						render={({ field }) => (
@@ -216,7 +247,7 @@ export const TendersForm = () => {
 										className="bg-transparent"
 									/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage className="text-red-500 text-sm"/>
 							</FormItem>
 						)}
 					/>
@@ -234,10 +265,10 @@ export const TendersForm = () => {
 										className="bg-transparent"
 									/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage className="text-red-500 text-sm"/>
 							</FormItem>
 						)}
-					/>
+					/> */}
 					<Button
 						disabled={isSubmitting}
 						type="submit"
@@ -248,6 +279,6 @@ export const TendersForm = () => {
 					</Button>
 				</form>
 			</Form>
-		</DialogContent>
+		</div>
 	)
 }

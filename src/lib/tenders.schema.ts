@@ -1,12 +1,12 @@
 import { z } from 'zod'
 
 export const tenderSchema = z.object({
-	title: z.string(),
-	contracting_org_name: z.string(),
+	title: z.string().min(2),
+	location: z.string().min(2),
+	contracting_org_name: z.string().min(2),
 	contracting_org_info: z.string().optional(),
-	location: z.string(),
-	description: z.string(),
-	value: z.string(),
+	description: z.string().min(2),
+	value: z.string().min(2),
 	lots_divided: z.boolean(),
 	lots_number: z.number().optional(),
 	tenders_for_all_lots: z.boolean().optional(),
@@ -15,19 +15,19 @@ export const tenderSchema = z.object({
 	}),
 	eu_funded: z.boolean(),
 	eu_funded_details: z.string().optional(),
-	submission_language: z.string(),
+	submission_language: z.string().min(2),
 	opening: z
 		.date()
 		.min(new Date(), { message: 'Publication date must be in the future' }),
 	closing: z.date().min(new Date(), {
 		message: 'Submission deadline must be in the future',
 	}),
-	filters: z.object({
+	/* filters: z.object({
 		sector: z.enum(['e-mobility', 'aviation'], {
 			required_error: 'You must select a sector',
 		}),
 		type_of_vehicle: z.string().optional(), // Initially optional
-	}),
+	}), */
 	sector: z.enum(['e-mobility', 'aviation'], {
 		required_error: 'You must select an option',
 	}),

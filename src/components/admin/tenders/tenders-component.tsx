@@ -1,5 +1,4 @@
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
-/* import { TendersForm } from './tender-form' */
+import Link from 'next/link'
 
 /* import { TendersForm } from './tender-form'
 import { sendEmail } from '@/actions/email'
@@ -22,12 +21,11 @@ const TendersComponent = () => {
 	return (
 		<div>
 			<h1 className="text-white font-jose text-2xl mb-10">Tenders</h1>
-			<Dialog>
-				<DialogTrigger className="bg-primary-light text-white font-jose text-base px-4 py-2 shadow-md hover:scale-[1.02] hover:shadow-xl">
+			<Link href={'/admin/tenders/create'}>
+				<button className="bg-primary-light text-white font-jose text-base px-4 py-2 shadow-md hover:scale-[1.02] hover:shadow-xl">
 					Create New
-				</DialogTrigger>
-				{/* <TendersForm /> */}
-			</Dialog>
+				</button>
+			</Link>
 		</div>
 	)
 }
