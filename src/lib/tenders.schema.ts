@@ -1,27 +1,26 @@
 import { z } from 'zod'
 
-export const createTenderSchema = z.object({
-	title: z.string().min(2, { message: 'This field is required' }),
-	contracting_org_name: z
-		.string()
-		.min(2, { message: 'This field is required' }),
-	contracting_authority: z
-		.string()
-		.min(2, { message: 'This field is required' }),
-	country: z.string().min(2, { message: 'This field is required' }),
-	description: z.string().min(2, { message: 'This field is required' }),
-	value: z.string().min(1, { message: 'This field is required' }),
+export const tenderSchema = z.object({
+	title: z.string(),
+	contracting_org_name: z.string(),
+	contracting_org_info: z.string().optional(),
+	location: z.string(),
+	description: z.string(),
+	value: z.string(),
+	lots_divided: z.boolean(),
+	lots_number: z.number().optional(),
+	tenders_for_all_lots: z.boolean().optional(),
 	contract_type: z.enum(['service', 'purchase', 'mixed'], {
 		required_error: 'You must select an option',
 	}),
-	publication_date: z
+	eu_funded: z.boolean(),
+	eu_funded_details: z.string().optional(),
+	submission_language: z.string(),
+	opening: z
 		.date()
 		.min(new Date(), { message: 'Publication date must be in the future' }),
-	submission_deadline: z.date().min(new Date(), {
+	closing: z.date().min(new Date(), {
 		message: 'Submission deadline must be in the future',
-	}),
-	submission_language: z.string().min(3, {
-		message: 'Submission language must be at least 3 characters long',
 	}),
 	filters: z.object({
 		sector: z.enum(['e-mobility', 'aviation'], {
@@ -29,20 +28,66 @@ export const createTenderSchema = z.object({
 		}),
 		type_of_vehicle: z.string().optional(), // Initially optional
 	}),
-	/* sector: z.enum(['e-mobility', 'aviation'], {
+	sector: z.enum(['e-mobility', 'aviation'], {
 		required_error: 'You must select an option',
-	}), */
-	agent: z.string(),
-	type_of_vehicle: z.string().min(3, {
-		message: 'Type of vehicle must be at least 3 characters long',
 	}),
-	type_of_contract: z.string().min(3, {
-		message: 'Type of contract must be at least 3 characters long',
-	}),
+	eMobility: z
+		.object({
+			eVehicles: z
+				.object({
+					typeOfVehicle: z
+						.enum([
+							'cars',
+							'buses',
+							'trucks',
+							'planes',
+							'boats',
+							'twoWheelers',
+						])
+						.optional(),
+					typeOfContract: z.enum(['purchase', 'lease']),
+				})
+				.refine(
+					(data) => !data.typeOfVehicle || !!data.typeOfContract,
+					{
+						message:
+							'Type of Contract is required when Type of Vehicle is selected',
+						path: ['typeOfContract'], // Points to the field with the error
+					}
+				),
+			chargingStations: z
+				.object({
+					typeOfVehicle: z
+						.enum([
+							'cars',
+							'buses',
+							'trucks',
+							'planes',
+							'boats',
+							'twoWheelers',
+						])
+						.optional(),
+					typeOfContract: z.enum([
+						'exchange',
+						'digitalUpdates',
+						'purchase',
+					]),
+				})
+				.refine(
+					(data) => !data.typeOfVehicle || !!data.typeOfContract,
+					{
+						message:
+							'Type of Contract is required when Type of Vehicle is selected',
+						path: ['typeOfContract'], // Points to the field with the error
+					}
+				),
+		})
+		.optional(),
+	agent: z.number(),
 	id: z.number().optional(),
 })
 
-export type CreateTenderSchema = z.infer<typeof createTenderSchema>
+export type TenderSchema = z.infer<typeof tenderSchema>
 
 export const createCategorySchemaServer = z.object({
 	imageUrl: z.string().min(1, { message: 'Image is required' }),
