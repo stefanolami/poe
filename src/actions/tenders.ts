@@ -16,8 +16,6 @@ export const createTender = async (formData: TenderSchema) => {
 		submission_language: formData.submission_language,
 		sector: formData.sector,
 		agent: Number(formData.agent),
-		type_of_vehicle: formData.eMobility?.eVehicles.typeOfVehicle,
-		type_of_contract: formData.eMobility?.eVehicles.typeOfContract,
 		lots_divided: formData.lots_divided === 'yes' ? true : false,
 		lots_number: Number(formData.lots_number) || null,
 		tenders_for_all_lots:
@@ -26,6 +24,11 @@ export const createTender = async (formData: TenderSchema) => {
 		eu_funded_details: formData.eu_funded_details || null,
 		opening: formData.opening.toISOString(),
 		closing: formData.closing.toISOString(),
+		type_of_vehicle: formData.eMobility?.eVehicles.typeOfVehicle,
+		type_of_contract_vehicles: formData.eMobility?.eVehicles.typeOfContract,
+		charging_stations: formData.eMobility?.chargingStations.typeOfVehicle,
+		type_of_contract_charging_stations:
+			formData.eMobility?.chargingStations.typeOfContract,
 	}
 
 	const { data, error } = await supabase

@@ -49,21 +49,8 @@ export const tenderSchema = z.object({
 				),
 			chargingStations: z
 				.object({
-					typeOfVehicle: z
-						.enum([
-							'cars',
-							'buses',
-							'trucks',
-							'planes',
-							'boats',
-							'twoWheelers',
-						])
-						.optional(),
-					typeOfContract: z.enum([
-						'exchange',
-						'digitalUpdates',
-						'purchase',
-					]),
+					typeOfVehicle: z.array(z.string()).optional(),
+					typeOfContract: z.array(z.string()).optional(),
 				})
 				.refine(
 					(data) => !data.typeOfVehicle || !!data.typeOfContract,
