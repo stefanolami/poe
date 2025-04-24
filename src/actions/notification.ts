@@ -15,22 +15,24 @@ export async function notify(title: string) {
 	if (error || !tender)
 		throw new Error('Error fetching tender: ' + error.message || '')
 
-	const { data, error: filterError } = await supabase
-		.from('users')
-		.select('email')
-		.eq('type_of_vehicle', tender.type_of_vehicle[0])
+	if (tender.type_of_vehicle) {
+		const { data, error: filterError } = await supabase
+			.from('users')
+			.select('email')
+			.eq('type_of_vehicle', tender.type_of_vehicle[0])
 
-	if (filterError)
-		throw new Error('Error fetching users: ' + filterError.message)
-	if (!data) {
-		console.log('No users found')
-		return
+		if (filterError)
+			throw new Error('Error fetching users: ' + filterError.message)
+		if (!data) {
+			console.log('No users found')
+			return
+		}
+
+		data.forEach(async (user: { email: string }) => {
+			const emailResponse = await sendEmail(user.email, 'New Tender')
+			console.log(emailResponse)
+		})
+
+		return data
 	}
-
-	data.forEach(async (user: { email: string }) => {
-		const emailResponse = await sendEmail(user.email, 'New Tender')
-		console.log(emailResponse)
-	})
-
-	return data
 }
