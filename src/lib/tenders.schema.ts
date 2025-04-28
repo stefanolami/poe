@@ -1,12 +1,22 @@
 import { z } from 'zod'
 
 export const tenderSchema = z.object({
-	title: z.string().min(2),
-	location: z.string().min(2),
-	contracting_org_name: z.string().min(2),
+	title: z.string().min(2, {
+		message: 'Required',
+	}),
+	location: z.string().min(2, {
+		message: 'Required',
+	}),
+	contracting_org_name: z.string().min(2, {
+		message: 'Required',
+	}),
 	contracting_org_info: z.string().optional(),
-	description: z.string().min(2),
-	value: z.string().min(2),
+	description: z.string().min(2, {
+		message: 'Required',
+	}),
+	value: z.string().min(2, {
+		message: 'Required',
+	}),
 	lots_divided: z.string(),
 	lots_number: z.string().optional(),
 	tenders_for_all_lots: z.string().optional(),
@@ -16,7 +26,9 @@ export const tenderSchema = z.object({
 	}), */
 	eu_funded: z.string(),
 	eu_funded_details: z.string().optional(),
-	submission_language: z.string().min(2),
+	submission_language: z.string().min(2, {
+		message: 'Required',
+	}),
 	opening: z
 		.date()
 		.min(new Date(), { message: 'Publication date must be in the future' }),
@@ -62,7 +74,9 @@ export const tenderSchema = z.object({
 				),
 		})
 		.optional(),
-	agent: z.string(),
+	agent: z.string().min(1, {
+		message: 'Required',
+	}),
 	id: z.number().optional(),
 })
 

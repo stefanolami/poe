@@ -34,6 +34,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import TenderFormEmobility from './tender-form-emobility'
+import { useToast } from '@/hooks/use-toast'
 
 const SECTORS = [
 	{
@@ -47,6 +48,8 @@ const SECTORS = [
 ]
 
 export const TenderForm = () => {
+	const { toast } = useToast()
+
 	const form = useForm<TenderSchema>({
 		resolver: zodResolver(tenderSchema),
 		defaultValues: {
@@ -66,11 +69,37 @@ export const TenderForm = () => {
 	const isSubmitting = form.formState.isSubmitting
 
 	const submitHandler: SubmitHandler<TenderSchema> = async (data) => {
-		console.log('submitting...')
-		console.log(data)
-		const response = await createTender(data)
+		try {
+			const response = await createTender(data)
 
-		return response
+			if (response) {
+				toast({
+					title: 'Tender Created',
+					description: 'Tender created successfully',
+					variant: 'default',
+				})
+			}
+
+			console.log(response)
+
+			return response
+		} catch (error) {
+			if (error instanceof Error) {
+				toast({
+					title: 'Error',
+					description: error.message,
+					variant: 'destructive',
+				})
+				console.error(error.message)
+			} else {
+				toast({
+					title: 'Error',
+					description: 'An unexpected error occurred',
+					variant: 'destructive',
+				})
+				console.error(error)
+			}
+		}
 	}
 
 	/* useEffect(() => {

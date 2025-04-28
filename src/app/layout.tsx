@@ -4,6 +4,7 @@ import { jose, unna } from '@/app/fonts'
 import { Suspense } from 'react'
 import Loading from '@/components/loading'
 import './globals.css'
+import { Toaster } from '@/components/ui/toaster'
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -23,6 +24,7 @@ export default function RootLayout({
 				<RenderMounted>
 					<Suspense fallback={<Loading />}>{children}</Suspense>
 				</RenderMounted>
+				<Toaster />
 			</body>
 		</html>
 	)

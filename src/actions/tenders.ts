@@ -34,12 +34,33 @@ export const createTender = async (formData: TenderSchema) => {
 	const { data, error } = await supabase
 		.from('tenders_e_mobility')
 		.insert(newFormData)
+		.select()
 
 	if (error) {
 		throw new Error(error.message)
 	}
 
-	console.log('DATA: ', data)
-
 	return data
+}
+
+export const getTenders = async () => {
+	const supabase = await createClient()
+
+	const { data, error } = await supabase
+		.from('tenders_e_mobility')
+		.select('*')
+		.order('created_at', { ascending: false })
+
+	if (error) {
+		throw new Error(error.message)
+	}
+
+	const formattedData = data.map((tender) => ({
+		id: tender.id,
+		title: tender.title,
+		location: tender.location[0],
+		value: tender.value,
+	}))
+
+	return formattedData
 }
