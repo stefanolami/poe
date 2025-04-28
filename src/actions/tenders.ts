@@ -64,3 +64,19 @@ export const getTenders = async () => {
 
 	return formattedData
 }
+
+export const getTender = async (id: number) => {
+	const supabase = await createClient()
+
+	const { data, error } = await supabase
+		.from('tenders_e_mobility')
+		.select('*')
+		.eq('id', id)
+		.single()
+
+	if (error) {
+		throw new Error(error.message)
+	}
+
+	return data
+}

@@ -35,6 +35,7 @@ import {
 } from '@/components/ui/select'
 import TenderFormEmobility from './tender-form-emobility'
 import { useToast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
 
 const SECTORS = [
 	{
@@ -49,6 +50,8 @@ const SECTORS = [
 
 export const TenderForm = () => {
 	const { toast } = useToast()
+
+	const router = useRouter()
 
 	const form = useForm<TenderSchema>({
 		resolver: zodResolver(tenderSchema),
@@ -78,6 +81,9 @@ export const TenderForm = () => {
 					description: 'Tender created successfully',
 					variant: 'default',
 				})
+				setTimeout(() => {
+					router.push('/admin/tenders')
+				}, 1000)
 			}
 
 			console.log(response)

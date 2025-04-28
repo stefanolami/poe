@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/table'
 
 import { TendersTablePagination } from './tenders-table-pagination'
+import Link from 'next/link'
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[]
@@ -40,7 +41,7 @@ export function DataTable<TData, TValue>({
 	console.log(pageCountArray)
 
 	return (
-		<div className="flex flex-col items-end justify-between text-white h-full">
+		<div className="flex-1 flex flex-col items-end justify-between text-white">
 			<Table className="mb-8">
 				<TableHeader>
 					{table.getHeaderGroups().map((headerGroup) => (
@@ -67,20 +68,28 @@ export function DataTable<TData, TValue>({
 				<TableBody>
 					{table.getRowModel().rows?.length ? (
 						table.getRowModel().rows.map((row) => (
-							<TableRow
+							<Link
 								key={row.id}
-								data-state={row.getIsSelected() && 'selected'}
-								className="hover:bg-primary-light cursor-pointer"
+								// @ts-expect-error id not found by TS
+								href={`/admin/tenders/${row.original.id}`}
+								legacyBehavior
 							>
-								{row.getVisibleCells().map((cell) => (
-									<TableCell key={cell.id}>
-										{flexRender(
-											cell.column.columnDef.cell,
-											cell.getContext()
-										)}
-									</TableCell>
-								))}
-							</TableRow>
+								<TableRow
+									data-state={
+										row.getIsSelected() && 'selected'
+									}
+									className="hover:bg-primary-light cursor-pointer"
+								>
+									{row.getVisibleCells().map((cell) => (
+										<TableCell key={cell.id}>
+											{flexRender(
+												cell.column.columnDef.cell,
+												cell.getContext()
+											)}
+										</TableCell>
+									))}
+								</TableRow>
+							</Link>
 						))
 					) : (
 						<TableRow>

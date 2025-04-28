@@ -25,7 +25,7 @@ const TendersComponent = async () => {
 	console.log(data)
 
 	return (
-		<div className="">
+		<div className="min-h-[calc(100vh-80px)] bg-primary">
 			<div className="flex flex-row items-center justify-between gap-16 mb-8">
 				<h1 className="text-white font-jose text-2xl">Tenders</h1>
 				<Link href={'/admin/tenders/create'}>
