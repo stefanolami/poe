@@ -13,6 +13,7 @@ import { useShallow } from 'zustand/shallow'
 import { selectionData } from '@/data/data'
 import { MobilityData, SelectableItem } from '@/store/store.types'
 import Expandable from '@/components/ui/expandable'
+import Link from 'next/link'
 
 const SummaryMobile = () => {
 	const {
@@ -257,9 +258,11 @@ const SummaryMobile = () => {
 							<button className="bg-white h-9 shadow-md hover:shadow-xl">
 								Send offer by email
 							</button>
-							<button className="bg-white h-9 shadow-md hover:shadow-xl">
-								Order now
-							</button>
+							<Link href="/create-account">
+								<button className="bg-white h-9 shadow-md hover:shadow-xl w-full">
+									Continue
+								</button>
+							</Link>
 						</div>
 					</DrawerFooter>
 				</DrawerContent>

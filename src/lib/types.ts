@@ -1,3 +1,6 @@
+import { z } from 'zod'
+import { createAccountSchema } from './zod-schemas'
+
 export type Geography = {
 	value: string
 	label: string
@@ -33,3 +36,5 @@ export interface PriceModalDataType {
 		twoWheelers: boolean
 	}
 }
+
+export type CreateAccountType = z.infer<typeof createAccountSchema>

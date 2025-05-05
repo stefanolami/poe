@@ -42,6 +42,10 @@ export interface StoreState {
 	sector: Sector | Record<string, never>
 	geographies: SelectableItem[]
 	languages: SelectableItem[]
+	clientSession: {
+		id: number
+		email: string
+	}
 	data: {
 		eMobility: MobilityData
 	}
@@ -77,6 +81,8 @@ export interface StoreState {
 	getSubTotalPrice: (category: keyof MobilityData) => number
 	getTotalPrice: () => number
 	getUser: (confirmed: boolean) => User
+	createClientSession: (id: number, email: string) => void
+	removeClientSession: () => void
 }
 
 export interface User {

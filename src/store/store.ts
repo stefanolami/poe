@@ -18,6 +18,7 @@ export const useStore = create<StoreState>()(
 			sector: {},
 			geographies: [],
 			languages: [],
+			clientSession: {},
 			data: {
 				eMobility: {
 					typeOfVehicle: [],
@@ -345,6 +346,24 @@ export const useStore = create<StoreState>()(
 					accountConfirmed: confirmed,
 					...selection,
 				}
+			},
+			createClientSession: (id: number, email: string) => {
+				set(
+					produce((state: StoreState) => {
+						state.clientSession.id = id
+						state.clientSession.email = email
+					})
+				)
+			},
+			removeClientSession: () => {
+				set(
+					produce((state: StoreState) => {
+						state.clientSession = {
+							id: 0,
+							email: '',
+						}
+					})
+				)
 			},
 		})),
 		{ name: 'store', storage: createJSONStorage(() => localStorage) }

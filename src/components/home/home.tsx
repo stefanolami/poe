@@ -4,7 +4,7 @@ import SectorSelector from './sector-selector'
 
 const HomeComponent = () => {
 	return (
-		<div className="mb-24 xl:mb-20">
+		<div className="mb-24 xl:mb-20 relative">
 			<Hero />
 			<p className="text-center text-primary text-xs md:text-base xl:text-2xl m-5 xl:mt-16 3xl:mt-24 font-normal w-4/5 md:w-3/4 xl:w-2/3 max-w-screen-lg mx-auto">
 				POE is a dynamic, real-time alert system designed to connect

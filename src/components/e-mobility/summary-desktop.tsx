@@ -6,6 +6,7 @@ import { useShallow } from 'zustand/shallow'
 import { MobilityData, SelectableItem } from '@/store/store.types'
 import Expandable from '@/components/ui/expandable'
 import { removeParenthesesContent } from '@/lib/utils'
+import Link from 'next/link'
 
 const SummaryDesktop = () => {
 	const {
@@ -236,9 +237,11 @@ const SummaryDesktop = () => {
 							<button className="bg-white h-9 shadow-md hover:shadow-xl">
 								Send offer by email
 							</button>
-							<button className="bg-white h-9 shadow-md hover:shadow-xl">
-								Order now
-							</button>
+							<Link href="/create-account">
+								<button className="bg-white h-9 shadow-md hover:shadow-xl">
+									Continue
+								</button>
+							</Link>
 						</div>
 					)}
 				</div>

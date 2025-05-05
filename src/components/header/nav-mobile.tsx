@@ -63,7 +63,12 @@ export default function NavMobile() {
 	}, [active])
 
 	return (
-		<div className="md:hidden flex flex-row font-unna text-lg">
+		<div className="md:hidden flex flex-row items-center justify-end font-unna text-lg">
+			<Link href="/login">
+				<button className="bg-primary-light text-white font-jose px-5 py-[6px] shadow-md hover:scale-[1.02] hover:shadow-xl text-sm mr-3">
+					Login
+				</button>
+			</Link>
 			{/* <MobileLocaleSwitcher /> */}
 			<MotionConfig
 				transition={{

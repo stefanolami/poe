@@ -108,6 +108,7 @@ export default function Navbar() {
 					}
 				})}
 			</nav>
+
 			{/* <DesktopLocaleSwitcher /> */}
 		</div>
 	)
