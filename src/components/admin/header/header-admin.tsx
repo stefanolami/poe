@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import Image from 'next/image'
-import { logout } from '@/actions/auth'
+import { signOut } from '@/actions/auth'
 import { useRouter } from 'next/navigation'
 import AdminTabs from '../admin-tabs'
 
@@ -25,7 +25,7 @@ export default function HeaderAdmin() {
 	})
 
 	const handleLogout = async () => {
-		await logout()
+		await signOut()
 		router.push('/auth')
 		console.log('logging out...')
 	}

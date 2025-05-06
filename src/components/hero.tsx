@@ -1,5 +1,7 @@
+'use client'
+
 import Image from 'next/image'
-import ClientsLoginComponent from './clients-login-component'
+import UsersLoginSection from './users-login-section'
 
 export default function Hero() {
 	return (
@@ -11,7 +13,9 @@ export default function Hero() {
 					alt="POE hero logo"
 				/>
 			</div>
-			<ClientsLoginComponent />
+			<div className="hidden lg:block absolute right-10 -top-20">
+				<UsersLoginSection />
+			</div>
 		</div>
 	)
 }

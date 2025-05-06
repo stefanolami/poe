@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 /* import MobileLocaleSwitcher from './MobileLocaleSwitcher' */
 import { FiChevronDown } from 'react-icons/fi'
+import UsersLoginSection from '../users-login-section'
 
 const LINKS = [
 	{
@@ -64,11 +65,6 @@ export default function NavMobile() {
 
 	return (
 		<div className="md:hidden flex flex-row items-center justify-end font-unna text-lg">
-			<Link href="/login">
-				<button className="bg-primary-light text-white font-jose px-5 py-[6px] shadow-md hover:scale-[1.02] hover:shadow-xl text-sm mr-3">
-					Login
-				</button>
-			</Link>
 			{/* <MobileLocaleSwitcher /> */}
 			<MotionConfig
 				transition={{
@@ -350,6 +346,7 @@ export default function NavMobile() {
 								{messages.contact}
 							</Link> */}
 						</nav>
+						<UsersLoginSection />
 					</motion.div>
 				</motion.div>
 			</MotionConfig>
