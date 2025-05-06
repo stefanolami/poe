@@ -1,7 +1,7 @@
 import { TenderForm } from '@/components/admin/tenders/tender-form'
 import React from 'react'
 
-const CreateTenderPage = () => {
+const CreateGrantPage = () => {
 	return (
 		<div className="w-full">
 			<TenderForm />
@@ -9,4 +9,4 @@ const CreateTenderPage = () => {
 	)
 }
 
-export default CreateTenderPage
+export default CreateGrantPage

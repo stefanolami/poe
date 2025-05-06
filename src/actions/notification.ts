@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/supabase/server'
+/* import { createClient } from '@/supabase/server'
 import { sendEmail } from './email'
 
 export async function notify(title: string) {
@@ -35,4 +35,4 @@ export async function notify(title: string) {
 
 		return data
 	}
-}
+} */
