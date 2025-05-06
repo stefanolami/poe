@@ -2,7 +2,7 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { authenticate } from '@/actions/auth'
+import { authenticate, getUserRole } from '@/actions/auth'
 import { Button } from '@/components/ui/button'
 import {
 	Form,
@@ -13,6 +13,7 @@ import {
 	FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { LoginType } from '@/lib/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -27,7 +28,7 @@ const loginSchema = z.object({
 })
 
 export default function AuthComponent() {
-	const form = useForm<z.infer<typeof loginSchema>>({
+	const form = useForm<LoginType>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
 			email: '',
@@ -39,15 +40,18 @@ export default function AuthComponent() {
 
 	const router = useRouter()
 
-	const onSubmit = async ({
-		email,
-		password,
-	}: z.infer<typeof loginSchema>) => {
+	const onSubmit = async ({ email, password }: LoginType) => {
 		setIsAuthenticating(true)
 
 		try {
 			await authenticate(email, password)
-			router.push('/admin/dashboard')
+			const userRole = await getUserRole()
+			if (userRole === 'client') {
+				router.push('/')
+			}
+			if (userRole === 'admin') {
+				router.push('/admin/dashboard')
+			}
 		} catch (error) {
 		} finally {
 			setIsAuthenticating(false)
@@ -55,7 +59,7 @@ export default function AuthComponent() {
 	}
 
 	return (
-		<div className="flex h-svh items-center justify-center bg-primo-scuro text-white">
+		<div className="flex items-center justify-center">
 			<div className="mx-auto grid w-[350px] gap-6">
 				<Form {...form}>
 					<form
@@ -73,7 +77,7 @@ export default function AuthComponent() {
 											id="email"
 											type="email"
 											placeholder=""
-											className="text-white"
+											className="text-black"
 											{...field}
 											disabled={isAuthenticating}
 										/>
@@ -98,7 +102,7 @@ export default function AuthComponent() {
 											id="password"
 											type="password"
 											{...field}
-											className="text-white "
+											className="text-black"
 										/>
 									</FormControl>{' '}
 									<FormMessage />
@@ -108,7 +112,7 @@ export default function AuthComponent() {
 						<Button
 							disabled={isAuthenticating}
 							type="submit"
-							className="bg-primary/50 text-primo border-2 border-white font-bold text-lg px-10 py-5 mx-auto flex shadow-lg hover:shadow-xl w-full"
+							className="bg-primary text-white border-2 border-white font-bold text-lg px-10 py-5 mx-auto flex shadow-lg hover:shadow-xl w-full"
 						>
 							Login
 						</Button>

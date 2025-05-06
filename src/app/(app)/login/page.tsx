@@ -1,8 +1,12 @@
-import LoginComponent from '@/components/login/login-component'
+import AuthComponent from '@/components/auth/auth-component'
 import React from 'react'
 
-const LoginPage = () => {
-	return <LoginComponent />
+const AuthPage = () => {
+	return (
+		<div className="w-full flex items-center justify-center">
+			<AuthComponent />
+		</div>
+	)
 }
 
-export default LoginPage
+export default AuthPage

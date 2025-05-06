@@ -7,13 +7,14 @@ export const authenticate = async (email: string, password: string) => {
 	try {
 		const supabase = await createClient()
 
-		const { error } = await supabase.auth.signInWithPassword({
+		const { data, error } = await supabase.auth.signInWithPassword({
 			email,
 			password,
 		})
 		console.log(email, password)
 		console.log('Authenticated')
 		if (error) throw error
+		return data
 	} catch (error) {
 		console.log('AUTH ERROR', error)
 		throw error
@@ -160,7 +161,7 @@ export const getUserRole = async () => {
 		const {
 			data: { user },
 		} = await supabase.auth.getUser()
-		console.log('GET USER', user)
+		//console.log('GET USER', user)
 		if (!user) return null
 
 		const { data: profile } = await supabase
@@ -168,7 +169,7 @@ export const getUserRole = async () => {
 			.select('*')
 			.eq('user_id', user.id)
 			.single()
-		console.log('GET USER PROFILE', profile)
+		//console.log('GET USER PROFILE', profile)
 
 		return profile?.role ?? null
 	} catch (error) {

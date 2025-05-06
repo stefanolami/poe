@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { createAccountSchema } from './zod-schemas'
+import { createAccountSchema, loginSchema } from './zod-schemas'
 
 export type Geography = {
 	value: string
@@ -38,3 +38,5 @@ export interface PriceModalDataType {
 }
 
 export type CreateAccountType = z.infer<typeof createAccountSchema>
+
+export type LoginType = z.infer<typeof loginSchema>

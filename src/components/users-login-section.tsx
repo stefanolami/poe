@@ -1,6 +1,7 @@
 import { getUserRole, signOut } from '@/actions/auth'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import { ImSpinner6 } from 'react-icons/im'
 
 const UsersLoginSection = () => {
 	const [role, setRole] = useState<'client' | 'admin' | null>(null)
@@ -35,7 +36,14 @@ const UsersLoginSection = () => {
 	}
 
 	if (loading) {
-		return <div>Loading...</div>
+		return (
+			<button className="flex items-center justify-center bg-primary-light text-white font-jose w-36 lg:w-28 px-5 py-[6px] shadow-md hover:scale-[1.02] hover:shadow-xl text-sm lg:text-base">
+				<ImSpinner6
+					className="animate-spin text-white"
+					size={20}
+				/>
+			</button>
+		)
 	}
 
 	return (
@@ -57,7 +65,7 @@ const UsersLoginSection = () => {
 			)}
 			{role === 'admin' && (
 				<div className="grid grid-cols-1 grid-rows-2 lg:grid-cols-2 lg:grid-rows-1 gap-3 mt-6 lg:mt-0 mx-auto">
-					<Link href="/account">
+					<Link href="/admin/dashboard">
 						<button className="bg-primary-light text-white font-jose w-36 lg:w-28 px-5 py-[6px] shadow-md hover:scale-[1.02] hover:shadow-xl text-sm lg:text-base">
 							Dashboard
 						</button>
