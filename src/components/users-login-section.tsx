@@ -1,35 +1,60 @@
+'use client'
+
 import { getUserRole, signOut } from '@/actions/auth'
+import { useStore } from '@/store/store'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { ImSpinner6 } from 'react-icons/im'
+import { useShallow } from 'zustand/shallow'
 
 const UsersLoginSection = () => {
 	const [role, setRole] = useState<'client' | 'admin' | null>(null)
 	const [loading, setLoading] = useState(true)
 
-	useEffect(() => {
-		const fetchUserRole = async () => {
-			try {
-				const userRole = await getUserRole()
-				setRole(
-					userRole === 'client' || userRole === 'admin'
-						? userRole
-						: null
-				)
-			} catch (error) {
-				console.error('Failed to fetch user role:', error)
-			} finally {
-				setLoading(false)
-			}
-		}
+	const { storeUserRole, storeSetUserRole, storeRemoveUserRole } = useStore(
+		useShallow((state) => ({
+			storeUserRole: state.userRole,
+			storeSetUserRole: state.setUserRole,
+			storeRemoveUserRole: state.removeUserRole,
+		}))
+	)
 
-		fetchUserRole()
-	}, [])
+	useEffect(() => {
+		if (storeUserRole) {
+			setRole(storeUserRole)
+			console.log('User role from store:', storeUserRole)
+			setLoading(false)
+		} else {
+			const fetchUserRole = async () => {
+				try {
+					const userRole = await getUserRole()
+					/* setRole(
+						userRole === 'client' || userRole === 'admin'
+							? userRole
+							: null
+					) */
+					storeSetUserRole(
+						userRole === 'client' || userRole === 'admin'
+							? userRole
+							: null
+					)
+					console.log('Fetched user role:', userRole)
+				} catch (error) {
+					console.error('Failed to fetch user role:', error)
+				} finally {
+					setLoading(false)
+				}
+			}
+
+			fetchUserRole()
+		}
+	}, [storeUserRole, storeSetUserRole])
 
 	const handleLogout = async () => {
 		try {
 			await signOut()
 			setRole(null)
+			storeRemoveUserRole()
 		} catch (error) {
 			console.error('Logout failed:', error)
 		}

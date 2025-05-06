@@ -18,20 +18,11 @@ import {
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { LuEyeClosed, LuEye } from 'react-icons/lu'
-/* import { createClientAccount } from '@/actions/clientsAccount'
-import { useShallow } from 'zustand/shallow'
-import { useStore } from '@/store/store' */
 import { clientSignUp } from '@/actions/auth'
 
 const CreateAccountForm = () => {
 	const [isView, setIsView] = useState(false)
 	const [isViewConfirm, setIsViewConfirm] = useState(false)
-
-	/* const { storeCreateClientSession } = useStore(
-		useShallow((state) => ({
-			storeCreateClientSession: state.createClientSession,
-		}))
-	) */
 
 	const { toast } = useToast()
 

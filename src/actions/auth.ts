@@ -11,7 +11,6 @@ export const authenticate = async (email: string, password: string) => {
 			email,
 			password,
 		})
-		console.log(email, password)
 		console.log('Authenticated')
 		if (error) throw error
 		return data
@@ -32,57 +31,6 @@ export const signOut = async () => {
 		throw error
 	}
 }
-
-/* export const clientSignUp = async (data: CreateAccountType) => {
-	try {
-		const supabase = await createClient()
-
-		const { data: authData, error: authError } = await supabase.auth.signUp(
-			{
-				email: data.email,
-				password: data.password,
-			}
-		)
-
-		if (authError) throw authError
-		console.log('Auth account created successfully', authData)
-
-		const userId = authData.user?.id
-
-		await supabase.auth.signInWithPassword({
-			email: data.email,
-			password: data.password,
-		})
-
-		if (userId) {
-			const { error: clientError } = await supabase
-				.from('clients')
-				.insert({
-					name: data.name,
-					family_name: data.familyName,
-					org_name: data.orgName,
-					email: data.email,
-					user_id: userId,
-				})
-
-			if (clientError) throw clientError
-			console.log('Client account created successfully')
-
-			const { error: profileError } = await supabase
-				.from('users_profiles')
-				.insert({
-					user_id: userId,
-					role: 'client',
-				})
-			if (profileError) throw profileError
-			console.log('User profile created successfully')
-			return authData
-		}
-	} catch (error) {
-		console.log('SIGNUP ERROR', error)
-		throw error
-	}
-} */
 
 export const clientSignUp = async (data: CreateAccountType) => {
 	try {

@@ -18,7 +18,7 @@ export const useStore = create<StoreState>()(
 			sector: {},
 			geographies: [],
 			languages: [],
-			clientSession: {},
+			userRole: null,
 			data: {
 				eMobility: {
 					typeOfVehicle: [],
@@ -347,21 +347,17 @@ export const useStore = create<StoreState>()(
 					...selection,
 				}
 			},
-			createClientSession: (id: number, email: string) => {
+			setUserRole: (role: 'client' | 'admin' | null) => {
 				set(
 					produce((state: StoreState) => {
-						state.clientSession.id = id
-						state.clientSession.email = email
+						state.userRole = role
 					})
 				)
 			},
-			removeClientSession: () => {
+			removeUserRole: () => {
 				set(
 					produce((state: StoreState) => {
-						state.clientSession = {
-							id: 0,
-							email: '',
-						}
+						state.userRole = null
 					})
 				)
 			},
