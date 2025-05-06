@@ -1,3 +1,4 @@
+import { getUserRole } from '@/actions/auth'
 import { createServerClient } from '@supabase/ssr'
 import { type NextRequest, NextResponse } from 'next/server'
 
@@ -38,10 +39,18 @@ export const updateSession = async (request: NextRequest) => {
 		// This will refresh session if expired - required for Server Components
 		// https://supabase.com/docs/guides/auth/server-side/nextjs
 		const user = await supabase.auth.getUser()
+		const userRole = await getUserRole()
 
 		// protected routes
 		if (request.nextUrl.pathname.startsWith('/admin') && user.error) {
-			return NextResponse.redirect(new URL('/auth', request.url))
+			return NextResponse.redirect(new URL('/login', request.url))
+		}
+
+		if (
+			request.nextUrl.pathname.startsWith('/admin') &&
+			userRole !== 'admin'
+		) {
+			return NextResponse.redirect(new URL('/', request.url))
 		}
 
 		/* if (request.nextUrl.pathname === '/' && !user.error) {
