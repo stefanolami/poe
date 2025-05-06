@@ -45,39 +45,27 @@ export type Database = {
           email: string
           family_name: string
           id: number
-          location: string | null
           name: string
           org_name: string | null
-          password: string
-          sector: string | null
-          type_of_contract: string | null
-          type_of_vehicle: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string
           email: string
           family_name: string
           id?: number
-          location?: string | null
           name: string
           org_name?: string | null
-          password: string
-          sector?: string | null
-          type_of_contract?: string | null
-          type_of_vehicle?: string | null
+          user_id?: string
         }
         Update: {
           created_at?: string
           email?: string
           family_name?: string
           id?: number
-          location?: string | null
           name?: string
           org_name?: string | null
-          password?: string
-          sector?: string | null
-          type_of_contract?: string | null
-          type_of_vehicle?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -166,6 +154,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      users_profiles: {
+        Row: {
+          created_at: string
+          id: number
+          role: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          role: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
       }
     }
     Views: {

@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import Link from 'next/link'
+import ClientsLoginComponent from './clients-login-component'
 
 export default function Hero() {
 	return (
@@ -11,14 +11,7 @@ export default function Hero() {
 					alt="POE hero logo"
 				/>
 			</div>
-			<Link
-				href="/login"
-				className="absolute z-10 right-10 -top-16 hidden lg:block"
-			>
-				<button className="bg-primary-light text-white font-jose px-10 py-3 shadow-md hover:scale-[1.02] hover:shadow-xl text-lg">
-					Login
-				</button>
-			</Link>
+			<ClientsLoginComponent />
 		</div>
 	)
 }

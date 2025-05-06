@@ -238,7 +238,7 @@ const SummaryDesktop = () => {
 								Send offer by email
 							</button>
 							<Link href="/create-account">
-								<button className="bg-white h-9 shadow-md hover:shadow-xl">
+								<button className="bg-white h-9 shadow-md hover:shadow-xl w-full">
 									Continue
 								</button>
 							</Link>
