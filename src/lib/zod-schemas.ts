@@ -51,5 +51,5 @@ export const createGrantSchema = z
 	})
 	.refine((data) => data.call_title || data.grant_programme, {
 		message: 'Either Call Title or Grant Programme must be provided',
-		path: ['call_title'], // You can point to either field
+		path: ['call_title'],
 	})

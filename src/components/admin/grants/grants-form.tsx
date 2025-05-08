@@ -12,12 +12,10 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/components/ui/form'
-import { tenderSchema, TenderSchema } from '@/lib/tenders.schema'
-import { createTender } from '@/actions/tenders'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Textarea } from '@/components/ui/textarea'
-/* import { MultiSelect } from '@/components/ui/multi-select' */
-import {
+//import { Textarea } from '@/components/ui/textarea'
+import { MultiSelect } from '@/components/ui/multi-select'
+/* import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
@@ -35,9 +33,12 @@ import {
 } from '@/components/ui/select'
 import TenderFormEmobility from './grants-form-emobility'
 import { useToast } from '@/hooks/use-toast'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation' */
+import { CreateGrantType } from '@/lib/types'
+import { createGrantSchema } from '@/lib/zod-schemas'
+import { geographiesArray } from '@/data/data'
 
-const SECTORS = [
+/* const SECTORS = [
 	{
 		value: 'e-mobility',
 		label: 'E-Mobility',
@@ -46,33 +47,35 @@ const SECTORS = [
 		value: 'aviation',
 		label: 'Aviation',
 	},
-]
+] */
 
 export const GrantsForm = () => {
-	const { toast } = useToast()
+	//const { toast } = useToast()
 
-	const router = useRouter()
+	//const router = useRouter()
 
-	const form = useForm<TenderSchema>({
-		resolver: zodResolver(tenderSchema),
+	const form = useForm<CreateGrantType>({
+		resolver: zodResolver(createGrantSchema),
 		defaultValues: {
-			title: '',
-			location: '',
-			contracting_org_name: '',
-			contracting_org_info: '',
-			description: '',
+			call_title: '',
+			grant_programme: '',
 			value: '',
-			eu_funded_details: '',
-			submission_language: '',
-			lots_number: '',
-			agent: '',
+			alert_purpose: '',
+			instrument_type: '',
+			awarding_authority: '',
+			reference_number: '',
+			deadline: [],
+			in_brief: '',
+			further_details: [],
+			tailored_assessment: [],
 		},
 	})
 
 	const isSubmitting = form.formState.isSubmitting
 
-	const submitHandler: SubmitHandler<TenderSchema> = async (data) => {
-		try {
+	const submitHandler: SubmitHandler<CreateGrantType> = async (data) => {
+		console.log(data)
+		/* try {
 			const response = await createTender(data)
 
 			if (response) {
@@ -105,7 +108,7 @@ export const GrantsForm = () => {
 				})
 				console.error(error)
 			}
-		}
+		} */
 	}
 
 	/* useEffect(() => {
@@ -119,13 +122,13 @@ export const GrantsForm = () => {
 	return (
 		<div className="w-full mb-16">
 			<div className="grid grid-cols-2 items-start gap-4 text-white font-jose text-2xl mb-16">
-				<h1 className="">Create New Tender</h1>
-				<h1>
+				<h1 className="">Create New Grant</h1>
+				{/* <h1>
 					{
 						SECTORS.find((s) => s.value == form.watch('sector'))
 							?.label
 					}
-				</h1>
+				</h1> */}
 			</div>
 			<Form {...form}>
 				<form
@@ -138,89 +141,50 @@ export const GrantsForm = () => {
 						<div className="grid grid-cols-2 items-center text-white font-jose gap-x-3 gap-y-2">
 							<FormField
 								control={form.control}
-								name="title"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Title</FormLabel>
-										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												{...field}
-												className="bg-white text-primary"
-											/>
-										</FormControl>
-										<FormMessage className="text-red-500 text-sm" />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="location"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Location</FormLabel>
-										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												{...field}
-												className="bg-white text-primary"
-											/>
-										</FormControl>
-										<FormMessage className="text-red-500 text-sm" />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="contracting_org_name"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>
-											Contracting Organization
-										</FormLabel>
-										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												{...field}
-												className="bg-white text-primary"
-											/>
-										</FormControl>
-										<FormMessage className="text-red-500 text-sm" />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="contracting_org_info"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>
-											Contracting Organization Information
-											*
-										</FormLabel>
-										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												{...field}
-												className="bg-white text-primary"
-											/>
-										</FormControl>
-										<FormMessage className="text-red-500 text-sm" />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="description"
+								name="geography"
 								render={({ field }) => (
 									<FormItem className="col-span-2">
-										<FormLabel>Desc</FormLabel>
+										<FormLabel>Geography</FormLabel>
 										<FormControl>
-											<Textarea
+											<MultiSelect
+												className="bg-white text-primary hover:bg-white"
+												onValueChange={field.onChange}
+												variant="default"
+												selectAll={false}
+												searchable
+												options={geographiesArray}
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="call_title"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Call Title</FormLabel>
+										<FormControl>
+											<Input
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm text-nowrap" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="grant_programme"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Grant Programme</FormLabel>
+										<FormControl>
+											<Input
 												disabled={isSubmitting}
 												placeholder=""
 												{...field}
@@ -251,56 +215,79 @@ export const GrantsForm = () => {
 							/>
 							<FormField
 								control={form.control}
-								name="contract_type"
+								name="alert_purpose"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Contract Type</FormLabel>
+										<FormLabel>Alert Purpose</FormLabel>
 										<FormControl>
-											{/* <MultiSelect
-										className="bg-white text-primary hover:bg-white"
-										onValueChange={field.onChange}
-										variant="default"
-										options={[
-											{
-												value: 'service',
-												label: 'Service',
-											},
-											{
-												value: 'purchase',
-												label: 'Purchase',
-											},
-											{
-												value: 'mixed',
-												label: 'Mixed',
-											},
-										]}
-									/> */}
-											<Select
-												onValueChange={field.onChange}
-											>
-												<FormControl>
-													<SelectTrigger className="bg-white text-primary">
-														<SelectValue placeholder="Select an option" />
-													</SelectTrigger>
-												</FormControl>
-												<SelectContent className="bg-white text-primary font-jose">
-													<SelectItem value="service">
-														Service
-													</SelectItem>
-													<SelectItem value="purchase">
-														Purchase
-													</SelectItem>
-													<SelectItem value="mixed">
-														Mixed
-													</SelectItem>
-												</SelectContent>
-											</Select>
+											<Input
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary"
+											/>
 										</FormControl>
 										<FormMessage className="text-red-500 text-sm" />
 									</FormItem>
 								)}
 							/>
 							<FormField
+								control={form.control}
+								name="instrument_type"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Instrument Type</FormLabel>
+										<FormControl>
+											<Input
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="awarding_authority"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>
+											Awarding Authority
+										</FormLabel>
+										<FormControl>
+											<Input
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="reference_number"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Reference Number</FormLabel>
+										<FormControl>
+											<Input
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
+							{/* <FormField
 								control={form.control}
 								name="submission_language"
 								render={({ field }) => (
@@ -635,11 +622,11 @@ export const GrantsForm = () => {
 										<FormMessage className="text-red-500 text-sm" />
 									</FormItem>
 								)}
-							/>
+							/> */}
 						</div>
-						{form.watch('sector') === 'e-mobility' ? (
+						{/* {form.watch('sector') === 'e-mobility' ? (
 							<TenderFormEmobility form={form} />
-						) : null}
+						) : null} */}
 					</div>
 					<Button
 						disabled={false}

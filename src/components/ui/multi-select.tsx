@@ -19,7 +19,9 @@ import {
 } from '@/components/ui/popover'
 import {
 	Command,
+	CommandEmpty,
 	CommandGroup,
+	CommandInput,
 	CommandItem,
 	CommandList,
 	CommandSeparator,
@@ -114,6 +116,7 @@ interface MultiSelectProps
 	 */
 	className?: string
 	selectAll?: boolean
+	searchable?: boolean
 }
 
 export const MultiSelect = React.forwardRef<
@@ -126,6 +129,7 @@ export const MultiSelect = React.forwardRef<
 			onValueChange,
 			variant,
 			selectAll = true,
+			searchable = false,
 			defaultValue = [],
 			placeholder = 'Select options',
 			animation = 0,
@@ -143,7 +147,7 @@ export const MultiSelect = React.forwardRef<
 		const [isPopoverOpen, setIsPopoverOpen] = React.useState(false)
 		const [isAnimating, setIsAnimating] = React.useState(false)
 
-		/* const handleInputKeyDown = (
+		const handleInputKeyDown = (
 			event: React.KeyboardEvent<HTMLInputElement>
 		) => {
 			if (event.key === 'Enter') {
@@ -157,7 +161,7 @@ export const MultiSelect = React.forwardRef<
 				setSelectedValues(newSelectedValues)
 				onValueChange(newSelectedValues)
 			}
-		} */
+		}
 
 		const toggleOption = (option: string) => {
 			const newSelectedValues = selectedValues.includes(option)
@@ -302,13 +306,18 @@ export const MultiSelect = React.forwardRef<
 					onEscapeKeyDown={() => setIsPopoverOpen(false)}
 				>
 					<Command>
-						{/* <CommandInput
-							placeholder="Search..."
-							onKeyDown={handleInputKeyDown}
-							className="bg-white text-primary"
-						/> */}
+						{searchable && (
+							<CommandInput
+								placeholder="Search..."
+								onKeyDown={handleInputKeyDown}
+								className="bg-white text-primary"
+							/>
+						)}
+
 						<CommandList>
-							{/* <CommandEmpty>No results found.</CommandEmpty> */}
+							{searchable && (
+								<CommandEmpty>No results found.</CommandEmpty>
+							)}
 							<CommandGroup>
 								{selectAll && (
 									<CommandItem
