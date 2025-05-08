@@ -20,7 +20,7 @@ interface DataTablePaginationProps<TData> {
 	pageCountArray: number[]
 }
 
-export function TendersTablePagination<TData>({
+export function TablePagination<TData>({
 	table,
 	pageCountArray,
 }: DataTablePaginationProps<TData>) {

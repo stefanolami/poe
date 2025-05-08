@@ -1,5 +1,5 @@
-import TendersComponent from '@/components/admin/tenders/tenders-component'
+import GrantsComponent from '@/components/admin/grants/grants-component'
 
 export default function GrantsPage() {
-	return <TendersComponent />
+	return <GrantsComponent />
 }
