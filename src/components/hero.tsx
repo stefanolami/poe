@@ -13,7 +13,7 @@ export default function Hero() {
 					alt="POE hero logo"
 				/>
 			</div>
-			<div className="hidden lg:block absolute right-10 -top-20">
+			<div className="hidden md:block absolute right-10 -top-16 xl:-top-245">
 				<UsersLoginSection />
 			</div>
 		</div>
