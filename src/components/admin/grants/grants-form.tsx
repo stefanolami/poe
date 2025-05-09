@@ -15,25 +15,26 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 //import { Textarea } from '@/components/ui/textarea'
 import { MultiSelect } from '@/components/ui/multi-select'
-/* import {
+import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
 } from '@/components/ui/popover'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+//import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { CalendarIcon } from 'lucide-react'
+import { FaTrashAlt } from 'react-icons/fa'
 import { Calendar } from '@/components/ui/calendar'
-import { cn } from '@/lib/utils'
-import {
+//import { cn } from '@/lib/utils'
+/* import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/components/ui/select'
-import TenderFormEmobility from './grants-form-emobility'
-import { useToast } from '@/hooks/use-toast'
-import { useRouter } from 'next/navigation' */
+} from '@/components/ui/select' */
+//import TenderFormEmobility from './grants-form-emobility'
+//import { useToast } from '@/hooks/use-toast'
+//import { useRouter } from 'next/navigation'
 import { CreateGrantType } from '@/lib/types'
 import { createGrantSchema } from '@/lib/zod-schemas'
 import { geographiesArray } from '@/data/data'
@@ -64,7 +65,7 @@ export const GrantsForm = () => {
 			instrument_type: '',
 			awarding_authority: '',
 			reference_number: '',
-			deadline: [],
+			deadline: [['', '', '']],
 			in_brief: '',
 			further_details: [],
 			tailored_assessment: [],
@@ -74,7 +75,7 @@ export const GrantsForm = () => {
 	const isSubmitting = form.formState.isSubmitting
 
 	const submitHandler: SubmitHandler<CreateGrantType> = async (data) => {
-		console.log(data)
+		console.log('DATA', data)
 		/* try {
 			const response = await createTender(data)
 
@@ -132,9 +133,9 @@ export const GrantsForm = () => {
 			</div>
 			<Form {...form}>
 				<form
-					onSubmit={form.handleSubmit(submitHandler, (e) => {
+					onSubmit={form.handleSubmit(submitHandler, (e) =>
 						console.log(e)
-					})}
+					)}
 					className=""
 				>
 					<div className="grid grid-cols-2 gap-4">
@@ -143,16 +144,34 @@ export const GrantsForm = () => {
 								control={form.control}
 								name="geography"
 								render={({ field }) => (
-									<FormItem className="col-span-2">
+									<FormItem>
 										<FormLabel>Geography</FormLabel>
 										<FormControl>
 											<MultiSelect
-												className="bg-white text-primary hover:bg-white"
+												className="bg-white text-primary hover:bg-white h-9"
 												onValueChange={field.onChange}
 												variant="default"
 												selectAll={false}
 												searchable
 												options={geographiesArray}
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="value"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Value</FormLabel>
+										<FormControl>
+											<Input
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary"
 											/>
 										</FormControl>
 										<FormMessage className="text-red-500 text-sm" />
@@ -183,24 +202,6 @@ export const GrantsForm = () => {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Grant Programme</FormLabel>
-										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												{...field}
-												className="bg-white text-primary"
-											/>
-										</FormControl>
-										<FormMessage className="text-red-500 text-sm" />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="value"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Value</FormLabel>
 										<FormControl>
 											<Input
 												disabled={isSubmitting}
@@ -284,6 +285,194 @@ export const GrantsForm = () => {
 											/>
 										</FormControl>
 										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="deadline"
+								render={({ field }) => (
+									<FormItem className="col-span-2">
+										<FormLabel>Deadline</FormLabel>
+										<FormControl>
+											<div className="space-y-4">
+												{/* Render each deadline row */}
+												{(
+													field.value as [
+														string,
+														string,
+														string,
+													][]
+												).map(
+													(
+														deadline: [
+															string,
+															string,
+															string,
+														],
+														index: number
+													) => (
+														<div
+															className="flex flex-row justify-start items-center gap-6"
+															key={index}
+														>
+															<div className="grid grid-cols-3 gap-4 items-center">
+																{/* Date Picker */}
+																<Popover>
+																	<PopoverTrigger
+																		asChild
+																	>
+																		<Button
+																			variant="outline"
+																			className="pl-3 text-left font-normal bg-white hover:bg-white text-primary hover:text-primary"
+																		>
+																			{deadline[0] ? (
+																				new Date(
+																					deadline[0]
+																				).toLocaleDateString(
+																					'it-IT'
+																				)
+																			) : (
+																				<span>
+																					Date
+																				</span>
+																			)}
+																			<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+																		</Button>
+																	</PopoverTrigger>
+																	<PopoverContent
+																		className="w-auto p-0"
+																		align="start"
+																	>
+																		<Calendar
+																			className="bg-white text-primary"
+																			mode="single"
+																			selected={
+																				deadline[0]
+																					? new Date(
+																							deadline[0]
+																						)
+																					: undefined
+																			}
+																			onSelect={(
+																				newDate
+																			) => {
+																				const updatedDeadlines =
+																					[
+																						...field.value,
+																					]
+																				updatedDeadlines[
+																					index
+																				][0] =
+																					newDate
+																						? newDate.toISOString()
+																						: ''
+																				field.onChange(
+																					updatedDeadlines
+																				)
+																			}}
+																			disabled={(
+																				date
+																			) =>
+																				date <
+																				new Date()
+																			}
+																			initialFocus
+																		/>
+																	</PopoverContent>
+																</Popover>
+
+																{/* Time Zone Input */}
+																<Input
+																	placeholder="Time"
+																	value={
+																		deadline[1]
+																	}
+																	onChange={(
+																		e
+																	) => {
+																		const updatedDeadlines =
+																			[
+																				...field.value,
+																			]
+																		updatedDeadlines[
+																			index
+																		][1] =
+																			e.target.value
+																		field.onChange(
+																			updatedDeadlines
+																		)
+																	}}
+																	className="bg-white text-primary"
+																/>
+
+																{/* Notes Input */}
+																<Input
+																	placeholder="Notes"
+																	value={
+																		deadline[2]
+																	}
+																	onChange={(
+																		e
+																	) => {
+																		const updatedDeadlines =
+																			[
+																				...field.value,
+																			]
+																		updatedDeadlines[
+																			index
+																		][2] =
+																			e.target.value
+																		field.onChange(
+																			updatedDeadlines
+																		)
+																	}}
+																	className="bg-white text-primary"
+																/>
+															</div>
+															{/* Remove Deadline */}
+															<Button
+																variant="destructive"
+																type="button"
+																onClick={() => {
+																	const updatedDeadlines =
+																		field.value.filter(
+																			(
+																				_,
+																				i: number
+																			) =>
+																				i !==
+																				index
+																		)
+																	field.onChange(
+																		updatedDeadlines
+																	)
+																}}
+																className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+															>
+																<FaTrashAlt className="h-4 w-4" />
+															</Button>
+														</div>
+													)
+												)}
+
+												{/* Add Deadline */}
+												<Button
+													variant="default"
+													type="button"
+													onClick={() =>
+														field.onChange([
+															...field.value,
+															['', '', ''],
+														])
+													}
+													className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+												>
+													Add Deadline
+												</Button>
+											</div>
+										</FormControl>
+										<FormMessage />
 									</FormItem>
 								)}
 							/>

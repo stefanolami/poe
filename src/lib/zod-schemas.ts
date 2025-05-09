@@ -30,7 +30,7 @@ export const createGrantSchema = z
 		instrument_type: z.string().optional(),
 		awarding_authority: z.string().min(2, 'Awarding authority is required'),
 		reference_number: z.string().optional(),
-		deadline: z.array(z.array(z.string().min(2, 'Deadline is required'))),
+		deadline: z.array(z.array(z.string())),
 		in_brief: z.string().min(2, 'In brief is required'),
 		value: z.string(),
 		further_details: z
@@ -53,3 +53,11 @@ export const createGrantSchema = z
 		message: 'Either Call Title or Grant Programme must be provided',
 		path: ['call_title'],
 	})
+	.refine(
+		(data) =>
+			JSON.stringify(data.deadline) !== JSON.stringify([['', '', '']]),
+		{
+			message: 'Deadline is required',
+			path: ['deadline'],
+		}
+	)

@@ -133,7 +133,7 @@ export const MultiSelect = React.forwardRef<
 			defaultValue = [],
 			placeholder = 'Select options',
 			animation = 0,
-			maxCount = 3,
+			maxCount = 1,
 			modalPopover = false,
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			asChild = false,
