@@ -56,7 +56,7 @@ export type Database = {
           id?: number
           name: string
           org_name?: string | null
-          user_id?: string
+          user_id: string
         }
         Update: {
           created_at?: string
@@ -68,6 +68,92 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      consultants: {
+        Row: {
+          created_at: string
+          email: string
+          id: number
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: number
+          name: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      grants: {
+        Row: {
+          alert_purpose: string
+          amendments: string[] | null
+          awarding_authority: string
+          call_title: string | null
+          consultant: number | null
+          created_at: string
+          deadline: string[]
+          further_details: Json[] | null
+          geography: string[]
+          grant_programme: string | null
+          id: number
+          in_brief: string
+          instrument_type: string | null
+          reference_number: string | null
+          tailored_assessment: Json[] | null
+          value: string
+        }
+        Insert: {
+          alert_purpose: string
+          amendments?: string[] | null
+          awarding_authority: string
+          call_title?: string | null
+          consultant?: number | null
+          created_at?: string
+          deadline: string[]
+          further_details?: Json[] | null
+          geography: string[]
+          grant_programme?: string | null
+          id?: number
+          in_brief: string
+          instrument_type?: string | null
+          reference_number?: string | null
+          tailored_assessment?: Json[] | null
+          value: string
+        }
+        Update: {
+          alert_purpose?: string
+          amendments?: string[] | null
+          awarding_authority?: string
+          call_title?: string | null
+          consultant?: number | null
+          created_at?: string
+          deadline?: string[]
+          further_details?: Json[] | null
+          geography?: string[]
+          grant_programme?: string | null
+          id?: number
+          in_brief?: string
+          instrument_type?: string | null
+          reference_number?: string | null
+          tailored_assessment?: Json[] | null
+          value?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "grants_consultant_fkey"
+            columns: ["consultant"]
+            isOneToOne: false
+            referencedRelation: "consultants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tenders_e_mobility: {
         Row: {

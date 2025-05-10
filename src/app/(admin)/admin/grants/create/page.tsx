@@ -1,10 +1,12 @@
+import { getConsultants } from '@/actions/consultants'
 import { GrantsForm } from '@/components/admin/grants/grants-form'
 import React from 'react'
 
-const CreateGrantPage = () => {
+const CreateGrantPage = async () => {
+	const consultants = await getConsultants()
 	return (
 		<div className="w-full">
-			<GrantsForm />
+			<GrantsForm consultants={consultants} />
 		</div>
 	)
 }

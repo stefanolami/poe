@@ -38,8 +38,13 @@ export const createGrantSchema = z
 				z.tuple([
 					z.string().optional(),
 					z.string().optional(),
+					z.string().optional(),
 					z
-						.instanceof(File, { message: 'Must be a valid file' })
+						.array(
+							z.instanceof(File, {
+								message: 'Must be a valid file',
+							})
+						)
 						.optional(),
 				])
 			)
@@ -47,7 +52,7 @@ export const createGrantSchema = z
 		tailored_assessment: z
 			.array(z.tuple([z.number(), z.string(), z.string()]))
 			.optional(),
-		consultant: z.number().optional(),
+		consultant: z.string().optional(),
 	})
 	.refine((data) => data.call_title || data.grant_programme, {
 		message: 'Either Call Title or Grant Programme must be provided',

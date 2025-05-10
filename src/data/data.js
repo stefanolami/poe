@@ -425,6 +425,7 @@ export const geographiesArray = [
 	{ label: 'BY - Belarus', value: 'BY' },
 	{ label: 'BE - Belgium', value: 'BE' },
 	{ label: 'BA - Bosnia and Herzegovina', value: 'BA' },
+	{ label: 'BR - Brazil', value: 'BR' },
 	{ label: 'BG - Bulgaria', value: 'BG' },
 	{ label: 'HR - Croatia', value: 'HR' },
 	{ label: 'CY - Cyprus', value: 'CY' },
@@ -468,5 +469,4 @@ export const geographiesArray = [
 	{ label: 'UA - Ukraine', value: 'UA' },
 	{ label: 'GB - United Kingdom', value: 'GB' },
 	{ label: 'VA - Vatican City', value: 'VA' },
-	{ label: 'BR - Brazil', value: 'BR' },
 ]
