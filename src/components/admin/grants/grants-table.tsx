@@ -75,7 +75,7 @@ export function DataTable<TData, TValue>({
 								onClick={() =>
 									router.push(
 										//@ts-expect-error id not found by TS
-										`/admin/tenders/${row.original.id}`
+										`/admin/grants/${row.original.id}`
 									)
 								}
 								data-state={row.getIsSelected() && 'selected'}

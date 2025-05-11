@@ -13,7 +13,6 @@ import {
 	FormMessage,
 } from '@/components/ui/form'
 import { zodResolver } from '@hookform/resolvers/zod'
-//import { Textarea } from '@/components/ui/textarea'
 import { MultiSelect } from '@/components/ui/multi-select'
 //import { cn } from '@/lib/utils'
 /* import {
@@ -24,8 +23,8 @@ import { MultiSelect } from '@/components/ui/multi-select'
 	SelectValue,
 } from '@/components/ui/select' */
 //import TenderFormEmobility from './grants-form-emobility'
-//import { useToast } from '@/hooks/use-toast'
-//import { useRouter } from 'next/navigation'
+import { useToast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
 import { CreateGrantType } from '@/lib/types'
 import { createGrantSchema } from '@/lib/zod-schemas'
 import { geographiesArray } from '@/data/data'
@@ -33,6 +32,7 @@ import { Textarea } from '@/components/ui/textarea'
 import GrantsDeadline from './form-fields/grants-deadline'
 import GrantsFurtherDetails from './form-fields/grants-further-details'
 import GrantsConsultant from './form-fields/grants-consultant'
+import { createGrant } from '@/actions/grants'
 
 /* const SECTORS = [
 	{
@@ -53,9 +53,9 @@ export const GrantsForm = ({
 		name: string
 	}[]
 }) => {
-	//const { toast } = useToast()
+	const { toast } = useToast()
 
-	//const router = useRouter()
+	const router = useRouter()
 
 	const form = useForm<CreateGrantType>({
 		resolver: zodResolver(createGrantSchema),
@@ -78,17 +78,17 @@ export const GrantsForm = ({
 
 	const submitHandler: SubmitHandler<CreateGrantType> = async (data) => {
 		console.log('DATA', data)
-		/* try {
-			const response = await createTender(data)
+		try {
+			const response = await createGrant(data)
 
 			if (response) {
 				toast({
-					title: 'Tender Created',
-					description: 'Tender created successfully',
+					title: 'Success!',
+					description: 'Grant created successfully',
 					variant: 'default',
 				})
 				setTimeout(() => {
-					router.push('/admin/tenders')
+					router.push('/admin/grants')
 				}, 1000)
 			}
 
@@ -111,7 +111,7 @@ export const GrantsForm = ({
 				})
 				console.error(error)
 			}
-		} */
+		}
 	}
 
 	/* useEffect(() => {

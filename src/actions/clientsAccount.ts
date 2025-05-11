@@ -1,4 +1,4 @@
-'use server'
+/* 'use server'
 
 import { CreateAccountType } from '@/lib/types'
 import { createClient } from '@/supabase/server'
@@ -46,3 +46,4 @@ export const getClientAccount = async (id: number) => {
 		throw error
 	}
 }
+ */

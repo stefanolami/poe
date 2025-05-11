@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { columns } from './grants-columns'
 import { DataTable } from './grants-table'
-import { getTenders } from '@/actions/tenders'
+import { getGrants } from '@/actions/grants'
 
 /* import { TendersForm } from './tender-form'
 import { sendEmail } from '@/actions/email'
@@ -21,7 +21,7 @@ const GrantsComponent = async () => {
 		console.log(users)
 	} */
 
-	const data = await getTenders()
+	const data = await getGrants()
 	console.log(data)
 
 	return (
