@@ -37,7 +37,7 @@ const SectorButton = ({
 
 	return (
 		<motion.button
-			className="relative flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 md:w-64 xl:w-96 h-9 md:h-14 xl:h-20"
+			className="relative flex flex-col items-center justify-center bg-secondary hover:brightness-95 shadow-md hover:shadow-xl overflow-hidden text-white w-40 md:w-64 xl:w-96 h-9 md:h-14 xl:h-20"
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 			onClick={() => handler()}
@@ -49,6 +49,15 @@ const SectorButton = ({
 			>
 				{text}
 			</motion.span>
+			{text === 'Aviation' && (
+				<motion.span
+					className="absolute -bottom-[2px] md:bottom-0 z-10 font-unna font-bold text-[10px] md:text-sm lg:text-sm xl:text-lg"
+					animate={controlsText}
+					initial={{ x: 0 }}
+				>
+					Coming Soon
+				</motion.span>
+			)}
 			<motion.span
 				className="absolute right-4 md:text-3xl xl:text-5xl"
 				animate={controlsArrow}
