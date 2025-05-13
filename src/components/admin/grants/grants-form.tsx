@@ -15,14 +15,13 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MultiSelect } from '@/components/ui/multi-select'
 //import { cn } from '@/lib/utils'
-/* import {
+import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/components/ui/select' */
-//import TenderFormEmobility from './grants-form-emobility'
+} from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
 import { CreateGrantType } from '@/lib/types'
@@ -33,8 +32,9 @@ import GrantsDeadline from './form-fields/grants-deadline'
 import GrantsFurtherDetails from './form-fields/grants-further-details'
 import GrantsConsultant from './form-fields/grants-consultant'
 import { createGrant } from '@/actions/grants'
+import GrantsFormEmobility from './grants-form-emobility'
 
-/* const SECTORS = [
+const SECTORS = [
 	{
 		value: 'e-mobility',
 		label: 'E-Mobility',
@@ -43,7 +43,7 @@ import { createGrant } from '@/actions/grants'
 		value: 'aviation',
 		label: 'Aviation',
 	},
-] */
+]
 
 export const GrantsForm = ({
 	consultants,
@@ -126,12 +126,12 @@ export const GrantsForm = ({
 		<div className="w-full mb-16">
 			<div className="grid grid-cols-2 items-start gap-4 text-white font-jose text-2xl mb-16">
 				<h1 className="">Create New Grant</h1>
-				{/* <h1>
+				<h1>
 					{
 						SECTORS.find((s) => s.value == form.watch('sector'))
 							?.label
 					}
-				</h1> */}
+				</h1>
 			</div>
 			<Form {...form}>
 				<form
@@ -164,19 +164,29 @@ export const GrantsForm = ({
 							/>
 							<FormField
 								control={form.control}
-								name="value"
+								name="sector"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Value</FormLabel>
-										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												{...field}
-												className="bg-white text-primary"
-											/>
-										</FormControl>
-										<FormMessage className="text-red-500 text-sm" />
+										<FormLabel>Sector</FormLabel>
+										<Select
+											onValueChange={field.onChange}
+											defaultValue={field.value}
+										>
+											<FormControl>
+												<SelectTrigger className="bg-white text-primary">
+													<SelectValue placeholder="Select an option" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent className="bg-white text-primary font-jose">
+												<SelectItem value="e-mobility">
+													E-Mobility
+												</SelectItem>
+												<SelectItem value="aviation">
+													Aviation
+												</SelectItem>
+											</SelectContent>
+										</Select>
+										<FormMessage />
 									</FormItem>
 								)}
 							/>
@@ -204,6 +214,24 @@ export const GrantsForm = ({
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Grant Programme</FormLabel>
+										<FormControl>
+											<Input
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="value"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Value</FormLabel>
 										<FormControl>
 											<Input
 												disabled={isSubmitting}
@@ -272,6 +300,10 @@ export const GrantsForm = ({
 									</FormItem>
 								)}
 							/>
+							<GrantsConsultant
+								form={form}
+								consultants={consultants}
+							/>
 							<FormField
 								control={form.control}
 								name="reference_number"
@@ -295,7 +327,7 @@ export const GrantsForm = ({
 								name="in_brief"
 								render={({ field }) => (
 									<FormItem className="col-span-2">
-										<FormLabel>Desc</FormLabel>
+										<FormLabel>In Brief</FormLabel>
 										<FormControl>
 											<Textarea
 												disabled={isSubmitting}
@@ -310,350 +342,10 @@ export const GrantsForm = ({
 							/>
 							<GrantsDeadline form={form} />
 							<GrantsFurtherDetails form={form} />
-							<GrantsConsultant
-								form={form}
-								consultants={consultants}
-							/>
-							{/* <FormField
-								control={form.control}
-								name="submission_language"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>
-											Submission Language
-										</FormLabel>
-										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												{...field}
-												className="bg-white text-primary"
-											/>
-										</FormControl>
-										<FormMessage className="text-red-500 text-sm" />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="sector"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Sector</FormLabel>
-										<Select
-											onValueChange={field.onChange}
-											defaultValue={field.value}
-										>
-											<FormControl>
-												<SelectTrigger className="bg-white text-primary">
-													<SelectValue placeholder="Select an option" />
-												</SelectTrigger>
-											</FormControl>
-											<SelectContent className="bg-white text-primary font-jose">
-												<SelectItem value="e-mobility">
-													E-Mobility
-												</SelectItem>
-												<SelectItem value="aviation">
-													Aviation
-												</SelectItem>
-											</SelectContent>
-										</Select>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="eu_funded"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>EU Funded</FormLabel>
-										<FormControl>
-											<RadioGroup
-												onValueChange={field.onChange}
-												className="flex flex-row space-y-1"
-											>
-												<FormItem className="flex items-center space-x-3 space-y-0">
-													<FormControl>
-														<RadioGroupItem
-															value="yes"
-															className="bg-white"
-														/>
-													</FormControl>
-													<FormLabel className="font-normal">
-														Yes
-													</FormLabel>
-												</FormItem>
-												<FormItem className="flex items-center space-x-3 space-y-0">
-													<FormControl>
-														<RadioGroupItem
-															value="no"
-															className="bg-white"
-														/>
-													</FormControl>
-													<FormLabel className="font-normal">
-														No
-													</FormLabel>
-												</FormItem>
-											</RadioGroup>
-										</FormControl>
-										<FormMessage className="text-red-500 text-sm" />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="eu_funded_details"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>
-											EU Funded Details *
-										</FormLabel>
-										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												{...field}
-												className="bg-white text-primary"
-											/>
-										</FormControl>
-										<FormMessage className="text-red-500 text-sm" />
-									</FormItem>
-								)}
-							/>
-							<div className="col-span-2 flex items-center justify-between">
-								<FormField
-									control={form.control}
-									name="lots_divided"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>
-												Divided in Lots
-											</FormLabel>
-											<FormControl>
-												<RadioGroup
-													onValueChange={
-														field.onChange
-													}
-													className="flex flex-row space-y-1"
-												>
-													<FormItem className="flex items-center space-x-3 space-y-0">
-														<FormControl>
-															<RadioGroupItem
-																value="yes"
-																className="bg-white"
-															/>
-														</FormControl>
-														<FormLabel className="font-normal">
-															Yes
-														</FormLabel>
-													</FormItem>
-													<FormItem className="flex items-center space-x-3 space-y-0">
-														<FormControl>
-															<RadioGroupItem
-																value="no"
-																className="bg-white"
-															/>
-														</FormControl>
-														<FormLabel className="font-normal">
-															No
-														</FormLabel>
-													</FormItem>
-												</RadioGroup>
-											</FormControl>
-											<FormMessage className="text-red-500 text-sm" />
-										</FormItem>
-									)}
-								/>
-								<FormField
-									control={form.control}
-									name="tenders_for_all_lots"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>
-												Tenders for all Lots *
-											</FormLabel>
-											<FormControl>
-												<RadioGroup
-													onValueChange={
-														field.onChange
-													}
-													className="flex flex-row space-y-1"
-												>
-													<FormItem className="flex items-center space-x-3 space-y-0">
-														<FormControl>
-															<RadioGroupItem
-																value="yes"
-																className="bg-white"
-															/>
-														</FormControl>
-														<FormLabel className="font-normal">
-															Yes
-														</FormLabel>
-													</FormItem>
-													<FormItem className="flex items-center space-x-3 space-y-0">
-														<FormControl>
-															<RadioGroupItem
-																value="no"
-																className="bg-white"
-															/>
-														</FormControl>
-														<FormLabel className="font-normal">
-															No
-														</FormLabel>
-													</FormItem>
-												</RadioGroup>
-											</FormControl>
-											<FormMessage className="text-red-500 text-sm" />
-										</FormItem>
-									)}
-								/>
-								<FormField
-									control={form.control}
-									name="lots_number"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>
-												Number of Lots *
-											</FormLabel>
-											<FormControl>
-												<Input
-													disabled={isSubmitting}
-													placeholder=""
-													{...field}
-													className="bg-white text-primary"
-												/>
-											</FormControl>
-											<FormMessage className="text-red-500 text-sm" />
-										</FormItem>
-									)}
-								/>
-							</div>
-							<FormField
-								control={form.control}
-								name="opening"
-								render={({ field }) => (
-									<FormItem className="flex flex-col">
-										<FormLabel>Publication Date</FormLabel>
-										<Popover>
-											<PopoverTrigger asChild>
-												<FormControl>
-													<Button
-														variant={'outline'}
-														className={cn(
-															'pl-3 text-left font-normal  bg-white hover:bg-white text-primary hover:text-primary'
-														)}
-													>
-														{field.value ? (
-															field.value.toLocaleDateString(
-																'it-IT'
-															)
-														) : (
-															<span>
-																Pick a date
-															</span>
-														)}
-														<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-													</Button>
-												</FormControl>
-											</PopoverTrigger>
-											<PopoverContent
-												className="w-auto p-0"
-												align="start"
-											>
-												<Calendar
-													className="bg-white text-primary"
-													mode="single"
-													selected={field.value}
-													onSelect={(date) => {
-														field.onChange(date)
-														console.log(date)
-													}}
-													disabled={(date) =>
-														date < new Date()
-													}
-													initialFocus
-												/>
-											</PopoverContent>
-										</Popover>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="closing"
-								render={({ field }) => (
-									<FormItem className="flex flex-col">
-										<FormLabel>
-											Submission Deadline
-										</FormLabel>
-										<Popover>
-											<PopoverTrigger asChild>
-												<FormControl>
-													<Button
-														variant={'outline'}
-														className={cn(
-															'pl-3 text-left font-normal  bg-white hover:bg-white text-primary hover:text-primary'
-														)}
-													>
-														{field.value ? (
-															field.value.toLocaleDateString(
-																'it-IT'
-															)
-														) : (
-															<span>
-																Pick a date
-															</span>
-														)}
-														<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-													</Button>
-												</FormControl>
-											</PopoverTrigger>
-											<PopoverContent
-												className="w-full p-0"
-												align="start"
-											>
-												<Calendar
-													className="bg-white text-primary"
-													mode="single"
-													selected={field.value}
-													onSelect={(date) => {
-														field.onChange(date)
-														console.log(date)
-													}}
-													disabled={(date) =>
-														date < new Date()
-													}
-												/>
-											</PopoverContent>
-										</Popover>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="agent"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Agent</FormLabel>
-										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												{...field}
-												className="bg-white text-primary"
-											/>
-										</FormControl>
-										<FormMessage className="text-red-500 text-sm" />
-									</FormItem>
-								)}
-							/> */}
 						</div>
-						{/* {form.watch('sector') === 'e-mobility' ? (
-							<TenderFormEmobility form={form} />
-						) : null} */}
+						{form.watch('sector') === 'e-mobility' ? (
+							<GrantsFormEmobility form={form} />
+						) : null}
 					</div>
 					<Button
 						disabled={false}

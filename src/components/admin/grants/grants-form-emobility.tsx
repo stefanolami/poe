@@ -8,19 +8,19 @@ import {
 	FormMessage,
 } from '@/components/ui/form'
 import { MultiSelect } from '@/components/ui/multi-select'
-import { TenderSchema } from '@/lib/tenders.schema'
+import { CreateGrantType } from '@/lib/types'
 import { UseFormReturn } from 'react-hook-form'
 
 const GrantsFormEmobility = ({
 	form,
 }: {
-	form: UseFormReturn<TenderSchema>
+	form: UseFormReturn<CreateGrantType>
 }) => {
 	return (
 		<div className="font-jose text-white grid grid-cols-2 gap-x-3 gap-y-2 grid-rows-2 items-start h-fit">
 			<FormField
 				control={form.control}
-				name="eMobility.eVehicles.typeOfVehicle"
+				name="vehicles_type"
 				render={({ field }) => (
 					<FormItem>
 						<FormLabel>Type of Vehicle</FormLabel>
@@ -64,7 +64,7 @@ const GrantsFormEmobility = ({
 			/>
 			<FormField
 				control={form.control}
-				name="eMobility.eVehicles.typeOfContract"
+				name="vehicles_contract"
 				render={({ field }) => (
 					<FormItem>
 						<FormLabel>Type of Contract (Vehicles)</FormLabel>
@@ -104,7 +104,7 @@ const GrantsFormEmobility = ({
 			/>
 			<FormField
 				control={form.control}
-				name="eMobility.chargingStations.typeOfVehicle"
+				name="charging_stations_type"
 				render={({ field }) => (
 					<FormItem>
 						<FormLabel>Type of Charging Station</FormLabel>
@@ -148,7 +148,7 @@ const GrantsFormEmobility = ({
 			/>
 			<FormField
 				control={form.control}
-				name="eMobility.chargingStations.typeOfContract"
+				name="charging_stations_contract"
 				render={({ field }) => (
 					<FormItem>
 						<FormLabel>

@@ -53,6 +53,11 @@ export const createGrantSchema = z
 			.array(z.tuple([z.number(), z.string(), z.string()]))
 			.optional(),
 		consultant: z.string().optional(),
+		sector: z.string().min(2, 'Sector is required'),
+		vehicles_type: z.array(z.string()).optional(),
+		vehicles_contract: z.array(z.string()).optional(),
+		charging_stations_type: z.array(z.string()).optional(),
+		charging_stations_contract: z.array(z.string()).optional(),
 	})
 	.refine((data) => data.call_title || data.grant_programme, {
 		message: 'Either Call Title or Grant Programme must be provided',

@@ -7,6 +7,9 @@ export const createGrant = async (formData: CreateGrantType) => {
 	const supabase = await createClient()
 
 	const flatDeadline = formData.deadline.map((element) => element.join(' '))
+	const flatFurtherDetails = formData.further_details?.map((element) =>
+		element.join(' ')
+	)
 
 	const formattedData = {
 		geography: formData.geography,
@@ -17,9 +20,15 @@ export const createGrant = async (formData: CreateGrantType) => {
 		awarding_authority: formData.awarding_authority,
 		reference_number: formData.reference_number,
 		deadline: flatDeadline,
+		further_details: flatFurtherDetails,
 		in_brief: formData.in_brief,
 		value: formData.value,
 		consultant: Number(formData.consultant),
+		sector: formData.sector,
+		vehicles_type: formData.vehicles_type,
+		vehicles_contract: formData.vehicles_contract,
+		charging_stations_type: formData.charging_stations_type,
+		charging_stations_contract: formData.charging_stations_contract,
 	}
 
 	const { data, error } = await supabase
