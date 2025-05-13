@@ -18,7 +18,9 @@ import {
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { LuEyeClosed, LuEye } from 'react-icons/lu'
-import { clientSignUp } from '@/actions/auth'
+import { clientSignUp } from '@/actions/clients'
+import { useStore } from '@/store/store'
+import { useShallow } from 'zustand/shallow'
 
 const CreateAccountForm = () => {
 	const [isView, setIsView] = useState(false)
@@ -27,6 +29,14 @@ const CreateAccountForm = () => {
 	const { toast } = useToast()
 
 	const router = useRouter()
+
+	const { storeSector, storeData, storeGeographies } = useStore(
+		useShallow((state) => ({
+			storeSector: state.sector,
+			storeData: state.data,
+			storeGeographies: state.geographies,
+		}))
+	)
 
 	const form = useForm<CreateAccountType>({
 		resolver: zodResolver(createAccountSchema),
@@ -45,8 +55,27 @@ const CreateAccountForm = () => {
 	const submitHandler: SubmitHandler<CreateAccountType> = async (
 		data: CreateAccountType
 	) => {
+		const fullData = {
+			...data,
+			sector: storeSector.value,
+			geography: storeGeographies.map((item) => item.value),
+			vehicles_type: storeData.eMobility.typeOfVehicle?.map(
+				(item) => item.value
+			),
+			vehicles_contract: storeData.eMobility.typeOfVehicleContract?.map(
+				(item) => item.value
+			),
+			charging_stations_type: storeData.eMobility.chargingStations?.map(
+				(item) => item.value
+			),
+			charging_stations_contract:
+				storeData.eMobility.chargingStationsContract?.map(
+					(item) => item.value
+				),
+		}
+
 		try {
-			const response = await clientSignUp(data)
+			const response = await clientSignUp(fullData)
 
 			if (response) {
 				toast({

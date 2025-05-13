@@ -41,31 +41,49 @@ export type Database = {
       }
       clients: {
         Row: {
+          charging_stations_contract: string[] | null
+          charging_stations_type: string[] | null
           created_at: string
           email: string
           family_name: string
+          geography: string[] | null
           id: number
           name: string
           org_name: string | null
+          sector: string | null
           user_id: string
+          vehicles_contract: string[] | null
+          vehicles_type: string[] | null
         }
         Insert: {
+          charging_stations_contract?: string[] | null
+          charging_stations_type?: string[] | null
           created_at?: string
           email: string
           family_name: string
+          geography?: string[] | null
           id?: number
           name: string
           org_name?: string | null
+          sector?: string | null
           user_id: string
+          vehicles_contract?: string[] | null
+          vehicles_type?: string[] | null
         }
         Update: {
+          charging_stations_contract?: string[] | null
+          charging_stations_type?: string[] | null
           created_at?: string
           email?: string
           family_name?: string
+          geography?: string[] | null
           id?: number
           name?: string
           org_name?: string | null
+          sector?: string | null
           user_id?: string
+          vehicles_contract?: string[] | null
+          vehicles_type?: string[] | null
         }
         Relationships: []
       }
@@ -96,6 +114,8 @@ export type Database = {
           amendments: string[] | null
           awarding_authority: string
           call_title: string | null
+          charging_stations_contract: string[] | null
+          charging_stations_type: string[] | null
           consultant: number | null
           created_at: string
           deadline: string[]
@@ -106,14 +126,19 @@ export type Database = {
           in_brief: string
           instrument_type: string | null
           reference_number: string | null
+          sector: string | null
           tailored_assessment: Json[] | null
           value: string
+          vehicles_contract: string[] | null
+          vehicles_type: string[] | null
         }
         Insert: {
           alert_purpose: string
           amendments?: string[] | null
           awarding_authority: string
           call_title?: string | null
+          charging_stations_contract?: string[] | null
+          charging_stations_type?: string[] | null
           consultant?: number | null
           created_at?: string
           deadline: string[]
@@ -124,14 +149,19 @@ export type Database = {
           in_brief: string
           instrument_type?: string | null
           reference_number?: string | null
+          sector?: string | null
           tailored_assessment?: Json[] | null
           value: string
+          vehicles_contract?: string[] | null
+          vehicles_type?: string[] | null
         }
         Update: {
           alert_purpose?: string
           amendments?: string[] | null
           awarding_authority?: string
           call_title?: string | null
+          charging_stations_contract?: string[] | null
+          charging_stations_type?: string[] | null
           consultant?: number | null
           created_at?: string
           deadline?: string[]
@@ -142,8 +172,11 @@ export type Database = {
           in_brief?: string
           instrument_type?: string | null
           reference_number?: string | null
+          sector?: string | null
           tailored_assessment?: Json[] | null
           value?: string
+          vehicles_contract?: string[] | null
+          vehicles_type?: string[] | null
         }
         Relationships: [
           {
