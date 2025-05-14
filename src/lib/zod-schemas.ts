@@ -19,7 +19,7 @@ export const createAccountSchema = z
 	})
 	.refine((data) => data.password === data.confirmPassword, {
 		message: 'Passwords must match',
-		path: ['confirmPassword'], // Points to the confirmPassword field
+		path: ['confirmPassword'],
 	})
 
 export const loginSchema = z.object({

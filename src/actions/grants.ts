@@ -57,6 +57,7 @@ export const getGrants = async () => {
 
 	const formattedData = data.map((grant) => ({
 		id: grant.id,
+		sent: grant.sent,
 		geography: grant.geography.join(', '),
 		call_title: grant.call_title,
 		grant_programme: grant.grant_programme,

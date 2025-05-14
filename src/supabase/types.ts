@@ -127,6 +127,7 @@ export type Database = {
           instrument_type: string | null
           reference_number: string | null
           sector: string | null
+          sent: boolean
           tailored_assessment: Json[] | null
           value: string
           vehicles_contract: string[] | null
@@ -150,6 +151,7 @@ export type Database = {
           instrument_type?: string | null
           reference_number?: string | null
           sector?: string | null
+          sent?: boolean
           tailored_assessment?: Json[] | null
           value: string
           vehicles_contract?: string[] | null
@@ -173,6 +175,7 @@ export type Database = {
           instrument_type?: string | null
           reference_number?: string | null
           sector?: string | null
+          sent?: boolean
           tailored_assessment?: Json[] | null
           value?: string
           vehicles_contract?: string[] | null

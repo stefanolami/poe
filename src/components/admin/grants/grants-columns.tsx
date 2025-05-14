@@ -6,6 +6,7 @@ import { ColumnDef } from '@tanstack/react-table'
 // You can use a Zod schema here if you want.
 export type Grant = {
 	id: number
+	sent: boolean
 	geography: string
 	call_title: string | null
 	grant_programme: string | null
@@ -17,7 +18,10 @@ export const columns: ColumnDef<Grant>[] = [
 		accessorKey: 'call_title',
 		header: 'Call Title',
 	},
-
+	{
+		accessorKey: 'sent',
+		header: 'Sent',
+	},
 	{
 		accessorKey: 'grant_programme',
 		header: 'Grant Programme',
