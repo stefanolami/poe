@@ -18,9 +18,9 @@ import {
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { LuEyeClosed, LuEye } from 'react-icons/lu'
-import { clientSignUp } from '@/actions/clients'
 import { useStore } from '@/store/store'
 import { useShallow } from 'zustand/shallow'
+import { signUpClient } from '@/actions/auth'
 
 const CreateAccountForm = () => {
 	const [isView, setIsView] = useState(false)
@@ -75,7 +75,7 @@ const CreateAccountForm = () => {
 		}
 
 		try {
-			const response = await clientSignUp(fullData)
+			const response = await signUpClient(fullData)
 
 			if (response) {
 				toast({

@@ -46,6 +46,7 @@ export default function AuthComponent() {
 		try {
 			await authenticate(email, password)
 			const userRole = await getUserRole()
+			console.log('USER ROLE', userRole)
 			if (userRole === 'client') {
 				router.push('/')
 			}

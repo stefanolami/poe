@@ -48,7 +48,7 @@ export default function Header() {
 						href="https://funding-kohl.vercel.app"
 					>
 						<Image
-							src="/logos/funding-white.png"
+							src="/logos/consulting-white.png"
 							alt="T&P Logo"
 							fill
 							sizes="(max-width: 640px) 40vw, 25vw"
