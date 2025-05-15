@@ -1,6 +1,7 @@
 'use server'
 
-import { createClient } from '@/supabase/server'
+import { CreateAccountType } from '@/lib/types'
+import { createAdminClient, createClient } from '@/supabase/server'
 
 export const authenticate = async (email: string, password: string) => {
 	try {
@@ -34,23 +35,86 @@ export const signOut = async () => {
 export const getUserRole = async () => {
 	try {
 		const supabase = await createClient()
-
 		const {
 			data: { user },
 		} = await supabase.auth.getUser()
-		//console.log('GET USER', user)
 		if (!user) return null
 
-		const { data: profile } = await supabase
-			.from('users_profiles')
-			.select('*')
-			.eq('user_id', user.id)
-			.single()
-		//console.log('GET USER PROFILE', profile)
-
-		return profile?.role ?? null
+		return user.user_metadata?.user_role ?? null
 	} catch (error) {
 		console.log('GET USER ROLE ERROR', error)
 		throw error
+	}
+}
+
+export const signUpClient = async (data: CreateAccountType) => {
+	try {
+		const supabase = await createClient()
+
+		// Sign up user
+		const { data: authData, error } = await supabase.auth.signUp({
+			email: data.email,
+			password: data.password,
+		})
+		if (error) throw error
+
+		const userId = authData.user?.id
+		if (!userId) throw new Error('User ID not found after sign up')
+
+		const adminSupabase = await createAdminClient()
+
+		// Add user role
+		const { data: userData, error: adminError } =
+			await adminSupabase.auth.admin.updateUserById(userId, {
+				user_metadata: { user_role: 'client' },
+			})
+
+		if (adminError) {
+			console.error('Admin API error:', adminError)
+			throw new Error('Failed to set custom claims')
+		}
+		console.log('User role updated successfully:', userData)
+
+		// Sign in the user
+		const { error: signInError } = await supabase.auth.signInWithPassword({
+			email: data.email,
+			password: data.password,
+		})
+		if (signInError) {
+			throw new Error(`Sign-in failed: ${signInError.message}`)
+		}
+
+		// Create client record
+		const { data: clientData, error: clientError } = await supabase
+			.from('clients')
+			.insert({
+				name: data.name,
+				family_name: data.familyName,
+				org_name: data.orgName,
+				email: data.email,
+				user_id: userId,
+				sector: data.sector,
+				geography: data.geography,
+				vehicles_type: data.vehicles_type,
+				vehicles_contract: data.vehicles_contract,
+				charging_stations_type: data.charging_stations_type,
+				charging_stations_contract: data.charging_stations_contract,
+			})
+			.select()
+			.single()
+		if (clientError) {
+			throw new Error(`Client creation failed: ${clientError.message}`)
+		}
+		console.log('Client account created successfully')
+
+		return clientData
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error('SIGNUP ERROR:', error.message)
+			throw error
+		} else {
+			console.error('Unexpected SIGNUP ERROR:', error)
+			throw new Error('An unexpected error occurred during signup')
+		}
 	}
 }
