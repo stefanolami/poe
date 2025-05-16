@@ -1,4 +1,4 @@
-import CreateAccountComponent from '@/components/create-account/create-account-component'
+import CreateAccountComponent from '@/components/account/create-account-component'
 
 const CreateAccountPage = () => {
 	return <CreateAccountComponent />

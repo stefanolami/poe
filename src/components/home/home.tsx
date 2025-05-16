@@ -6,14 +6,43 @@ const HomeComponent = () => {
 	return (
 		<div className="mb-24 xl:mb-20 relative">
 			<Hero />
-			<p className="text-center text-primary text-xs md:text-base xl:text-2xl m-5 xl:mt-16 3xl:mt-24 font-normal w-4/5 md:w-3/4 xl:w-2/3 max-w-screen-lg mx-auto">
-				POE is a dynamic, real-time alert system designed to connect
-				stakeholders—businesses, NGOs, and individuals—with public
-				funding, public financing, and public tender opportunities. POE
-				serves as an essential tool for those looking to sell products
-				or services locally, regionally, or globally, ensuring they
-				never miss an opportunity to engage in publicly funded projects.
-			</p>
+			<div className="space-y-2 text-left text-primary text-xs md:text-base xl:text-xl m-5 md:my-16 xl:my-24 font-normal w-4/5 md:w-3/4 xl:w-2/3 max-w-screen-lg mx-auto">
+				<p>
+					POE is a real-time alert system connecting you to local,
+					regional and global publicly-supported funding, financial &
+					business opportunities:
+				</p>
+				<ul className="list-disc list-outside pl-5">
+					<li>
+						<strong>Public Grants</strong> - non-repayable pockets
+						designed for developing and implementing your innovative
+						projects, or supporting the implementation of government
+						policy-driven ambitions with your products, services &
+						knowledge.
+					</li>
+					<li>
+						<strong>Public Investment Financing</strong> - typically
+						low-risk, repayable loans to support the development of
+						your ambitions locally and globally.
+					</li>
+					<li>
+						<strong>Public Procurement</strong> - business
+						opportunities to sell your products, services and
+						knowledge to government or government-driven
+						infrastructure.
+					</li>
+				</ul>
+				<p>
+					These opportunities are identified by our global teams of
+					experts who have direct access to the decision-makers, have
+					local knowledge, speak the local language and have the
+					sectoral expertise. Do not be surprised if you will know
+					about opportunities before they are officially published.
+					And, looking beyond, our experts can ensure a most
+					competitive proposal, and/or help you implement your project
+					from cradle-to-cradle.{' '}
+				</p>
+			</div>
 			<SectorSelector />
 		</div>
 	)

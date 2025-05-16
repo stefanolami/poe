@@ -111,8 +111,8 @@ const CreateAccountForm = () => {
 	}
 
 	return (
-		<div className="w-4/5 mx-auto">
-			<h2>Create Account</h2>
+		<div className="mt-10 lg:mt-0">
+			<h2 className="text-lg md:text-xl mb-3">Create Account</h2>
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(submitHandler, (e) => {
@@ -125,16 +125,18 @@ const CreateAccountForm = () => {
 						name="name"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Name</FormLabel>
+								<FormLabel className="text-sm md:text-base">
+									Name
+								</FormLabel>
 								<FormControl>
 									<Input
 										disabled={isSubmitting}
 										placeholder=""
 										{...field}
-										className="bg-white text-primary"
+										className="bg-white text-primary text-sm md:text-base"
 									/>
 								</FormControl>
-								<FormMessage className="text-red-500 text-sm" />
+								<FormMessage className="text-red-500 text-sm md:text-base" />
 							</FormItem>
 						)}
 					/>
@@ -143,16 +145,18 @@ const CreateAccountForm = () => {
 						name="familyName"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Family Name</FormLabel>
+								<FormLabel className="text-sm md:text-base">
+									Family Name
+								</FormLabel>
 								<FormControl>
 									<Input
 										disabled={isSubmitting}
 										placeholder=""
 										{...field}
-										className="bg-white text-primary"
+										className="bg-white text-primary text-sm md:text-base"
 									/>
 								</FormControl>
-								<FormMessage className="text-red-500 text-sm" />
+								<FormMessage className="text-red-500 text-sm md:text-base" />
 							</FormItem>
 						)}
 					/>
@@ -161,16 +165,18 @@ const CreateAccountForm = () => {
 						name="orgName"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Organization Name</FormLabel>
+								<FormLabel className="text-sm md:text-base">
+									Organization Name
+								</FormLabel>
 								<FormControl>
 									<Input
 										disabled={isSubmitting}
 										placeholder=""
 										{...field}
-										className="bg-white text-primary"
+										className="bg-white text-primary text-sm md:text-base"
 									/>
 								</FormControl>
-								<FormMessage className="text-red-500 text-sm" />
+								<FormMessage className="text-red-500 text-sm md:text-base" />
 							</FormItem>
 						)}
 					/>
@@ -179,16 +185,18 @@ const CreateAccountForm = () => {
 						name="email"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Email</FormLabel>
+								<FormLabel className="text-sm md:text-base">
+									Email
+								</FormLabel>
 								<FormControl>
 									<Input
 										disabled={isSubmitting}
 										placeholder=""
 										{...field}
-										className="bg-white text-primary"
+										className="bg-white text-primary text-sm md:text-base"
 									/>
 								</FormControl>
-								<FormMessage className="text-red-500 text-sm" />
+								<FormMessage className="text-red-500 text-sm md:text-base" />
 							</FormItem>
 						)}
 					/>
@@ -197,14 +205,16 @@ const CreateAccountForm = () => {
 						name="password"
 						render={({ field }) => (
 							<FormItem className="relative">
-								<FormLabel>Password</FormLabel>
+								<FormLabel className="text-sm md:text-base">
+									Password
+								</FormLabel>
 								<FormControl>
 									<Input
 										disabled={isSubmitting}
 										placeholder=""
 										type={isView ? 'text' : 'password'}
 										{...field}
-										className="bg-white text-primary"
+										className="bg-white text-primary text-sm md:text-base"
 									/>
 								</FormControl>
 								{isView ? (
@@ -220,7 +230,7 @@ const CreateAccountForm = () => {
 										onClick={() => setIsView(!isView)}
 									/>
 								)}
-								<FormMessage className="text-red-500 text-sm" />
+								<FormMessage className="text-red-500 text-sm md:text-base" />
 							</FormItem>
 						)}
 					/>
@@ -229,7 +239,9 @@ const CreateAccountForm = () => {
 						name="confirmPassword"
 						render={({ field }) => (
 							<FormItem className="relative">
-								<FormLabel>Confirm Password</FormLabel>
+								<FormLabel className="text-sm md:text-base">
+									Confirm Password
+								</FormLabel>
 								<FormControl>
 									<Input
 										disabled={isSubmitting}
@@ -238,7 +250,7 @@ const CreateAccountForm = () => {
 											isViewConfirm ? 'text' : 'password'
 										}
 										{...field}
-										className="bg-white text-primary"
+										className="bg-white text-primary text-sm md:text-base"
 									/>
 								</FormControl>
 								{isViewConfirm ? (
@@ -256,7 +268,7 @@ const CreateAccountForm = () => {
 										}
 									/>
 								)}
-								<FormMessage className="text-red-500 text-sm" />
+								<FormMessage className="text-red-500 text-sm md:text-base" />
 							</FormItem>
 						)}
 					/>
@@ -265,9 +277,9 @@ const CreateAccountForm = () => {
 						disabled={false}
 						type="submit"
 						variant="default"
-						className="bg-primary-light text-white hover:bg-primary-light shadow-md hover:shadow-xl hover:scale-[1.02] mt-8 px-12 py-2"
+						className="text-sm md:text-base lg:text-lg bg-primary-light text-white hover:bg-primary-light shadow-md hover:shadow-xl hover:scale-[1.02] mt-8 px-12 py-2"
 					>
-						Save
+						Sign Up
 					</Button>
 				</form>
 			</Form>

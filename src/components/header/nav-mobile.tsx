@@ -9,45 +9,45 @@ import UsersLoginSection from '../users-login-section'
 
 const LINKS = [
 	{
-		name: 'YOUR ACCESS',
-		url: '/your-access',
-	},
-	{
 		name: 'WHO WE ARE',
-		url: '/who-we-are',
+		url: '/',
 		sublinks: [
 			{
 				name: 'ABOUT US',
-				url: '/about-us',
+				url: '/',
 			},
 			{
 				name: 'OUR TEAM',
-				url: '/our-team',
+				url: '/',
 			},
 		],
 	},
 	{
 		name: 'SERVICES',
-		url: '/services',
+		url: '/',
+	},
+	{
+		name: 'SECTORS',
+		url: '/',
 	},
 	{
 		name: 'WHY US',
-		url: '/why-us',
+		url: '/',
 		sublinks: [
 			{
 				name: 'OVERVIEW',
-				url: '/overview',
+				url: '/',
 			},
 
 			{
 				name: 'CLIENT CODEX',
-				url: '/client-codex',
+				url: '/',
 			},
 		],
 	},
 	{
 		name: 'CONTACT',
-		url: '/contact',
+		url: '/',
 	},
 ]
 
@@ -228,7 +228,7 @@ export default function NavMobile() {
 																		false
 																	)
 																}
-																href={`https://funding-kohl.vercel.app/en${sublink.url}`}
+																href={`${sublink.url}`}
 																key={index}
 															>
 																{sublink.name}
@@ -243,7 +243,7 @@ export default function NavMobile() {
 										<Link
 											key={index}
 											onClick={() => setActive(false)}
-											href={`https://funding-kohl.vercel.app/en${link.url}`}
+											href={`${link.url}`}
 										>
 											{link.name}
 										</Link>

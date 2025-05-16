@@ -5,45 +5,45 @@ import { usePathname } from 'next/navigation'
 
 const LINKS = [
 	{
-		name: 'YOUR ACCESS',
-		url: '/your-access',
-	},
-	{
 		name: 'WHO WE ARE',
-		url: '/who-we-are',
+		url: '/',
 		sublinks: [
 			{
 				name: 'ABOUT US',
-				url: '/about-us',
+				url: '/',
 			},
 			{
 				name: 'OUR TEAM',
-				url: '/our-team',
+				url: '/',
 			},
 		],
 	},
 	{
 		name: 'SERVICES',
-		url: '/services',
+		url: '/',
+	},
+	{
+		name: 'SECTORS',
+		url: '/',
 	},
 	{
 		name: 'WHY US',
-		url: '/why-us',
+		url: '/',
 		sublinks: [
 			{
 				name: 'OVERVIEW',
-				url: '/overview',
+				url: '/',
 			},
 
 			{
 				name: 'CLIENT CODEX',
-				url: '/client-codex',
+				url: '/',
 			},
 		],
 	},
 	{
 		name: 'CONTACT',
-		url: '/contact',
+		url: '/',
 	},
 ]
 
@@ -60,17 +60,17 @@ export default function Navbar() {
 				className="grid grid-cols-6 text-center uppercase h-full *:px-4 text-base"
 			>
 				<Link
-					className={`relative hover:bg-primary-light
+					className={`relative hover:bg-primary-light active-link
 						${path == '/' ? 'active-link' : ''}`}
-					href="/poe"
+					href="/"
 				>
 					POE
 				</Link>
-				{LINKS.map((link) => {
+				{LINKS.map((link, index) => {
 					if (link.sublinks) {
 						return (
 							<div
-								key={link.url}
+								key={index}
 								className="group relative flex items-center justify-center cursor-pointer"
 							>
 								<span
@@ -81,11 +81,11 @@ export default function Navbar() {
 									{link.name}
 								</span>
 								<div className="hidden group-hover:flex flex-col items-center justify-center gap-1 w-full absolute top-full">
-									{link.sublinks.map((sublink) => (
+									{link.sublinks.map((sublink, index) => (
 										<Link
-											href={`https://funding-kohl.vercel.app/en${sublink.url}`}
+											href={`${sublink.url}`}
 											className="desktop-nav-li w-full h-full bg-primary py-3 hover:scale-110 hover:shadow-xl mt-1 hover:bg-primary-light"
-											key={sublink.url}
+											key={index}
 										>
 											{sublink.name}
 										</Link>
@@ -96,11 +96,11 @@ export default function Navbar() {
 					} else {
 						return (
 							<Link
-								key={link.url}
+								key={index}
 								className={`relative hover:bg-primary-light
 						${path == '/contact' ? 'active-link' : ''}
 						`}
-								href={`https://funding-kohl.vercel.app/en${link.url}`}
+								href={`${link.url}`}
 							>
 								{link.name}
 							</Link>

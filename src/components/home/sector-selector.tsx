@@ -107,7 +107,7 @@ export default function SectorSelector() {
 							{missingGeographies}
 						</p>
 						<button
-							className="mx-auto font-unna font-bold text-base xl:text-3xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 xl:w-52 h-9 xl:h-16"
+							className="mx-auto font-unna font-bold text-base xl:text-3xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 xl:w-52 h-9 xl:h-16 shadow-md hover:shadow-xl"
 							onClick={handleContinue}
 						>
 							Continue
@@ -145,7 +145,7 @@ export default function SectorSelector() {
 									{missingGeographies}
 								</p>
 								<button
-									className="ml-auto font-unna font-bold text-base md:text-xl xl:text-3xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 md:w-48 xl:w-52 h-9 md:h-12 xl:h-16 mt-2"
+									className="ml-auto font-unna font-bold text-base md:text-xl xl:text-3xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 md:w-48 xl:w-52 h-9 md:h-12 xl:h-16 mt-2 shadow-md hover:shadow-xl"
 									onClick={handleContinue}
 								>
 									Continue
@@ -187,7 +187,7 @@ export default function SectorSelector() {
 									{missingGeographies}
 								</p>
 								<button
-									className="mr-auto font-unna font-bold text-base md:text-xl xl:text-3xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 md:w-48 xl:w-52 h-9 md:h-12 xl:h-16 mt-2"
+									className="mr-auto font-unna font-bold text-base md:text-xl xl:text-3xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 md:w-48 xl:w-52 h-9 md:h-12 xl:h-16 mt-2 shadow-md hover:shadow-xl"
 									onClick={handleContinue}
 								>
 									Continue
