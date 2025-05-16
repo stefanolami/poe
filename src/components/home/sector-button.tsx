@@ -9,7 +9,7 @@ const SectorButton = ({
 	activeButton,
 }: {
 	text: string
-	handler: () => void
+	handler?: () => void
 	activeButton: string
 }) => {
 	const controlsText = useAnimation()
@@ -40,7 +40,7 @@ const SectorButton = ({
 			className="relative flex flex-col items-center justify-center bg-secondary hover:brightness-95 shadow-md hover:shadow-xl overflow-hidden text-white w-40 md:w-64 xl:w-96 h-9 md:h-14 xl:h-20"
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
-			onClick={() => handler()}
+			onClick={() => handler && handler()}
 		>
 			<motion.span
 				className="relative z-10 font-unna font-bold text-base md:text-2xl xl:text-4xl"

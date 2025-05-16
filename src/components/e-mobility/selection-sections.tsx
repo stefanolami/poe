@@ -261,8 +261,8 @@ const SelectionSection = ({
 							Type of Contract
 						</span>
 						<span className="text-primary block text-xs md:text-sm lg:text-lg">
-							(Needs to be selected as soon as any of the above is
-							selected)
+							(Needs to be selected as soon as any of the above
+							are selected)
 						</span>
 						<ul className="space-y-1 mt-3">
 							{contracts.map((item, index) => (

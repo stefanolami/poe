@@ -71,7 +71,7 @@ export default function SectorSelector() {
 	return (
 		<div>
 			{/* MOBILE */}
-			<div className="md:hidden">
+			<div className="md:hidden text-primary">
 				<div className="flex flex-col xl:flex-row items-center justify-center gap-4 xl:gap-12 mx-auto mt-10 xl:mt-12 3xl:mt-24">
 					{activeSector !== 'aviation' ? (
 						<SectorButton
@@ -136,10 +136,10 @@ export default function SectorSelector() {
 							)}
 						</div>
 						{activeSector == 'eMobility' && (
-							<div className="my-2 xl:my-4 justify-self-end flex flex-col items-end justify-between">
+							<div className="my-2 xl:my-4 justify-self-end flex flex-col items-end justify-between text-primary">
 								<p className="hidden md:block text-right text-base xl:text-xl text-wrap w-64 xl:w-96 mt-10 md:mt-0">
-									Please choose the geographies you are
-									interested in
+									Get started by choosing the geographies you
+									are interested in
 								</p>
 								<p className="text-red-500 h-10 my-3 text-right text-base xl:text-xl text-wrap w-64 xl:w-96">
 									{missingGeographies}
@@ -167,21 +167,15 @@ export default function SectorSelector() {
 							{activeSector !== 'eMobility' && (
 								<SectorButton
 									text="Aviation"
-									handler={() =>
-										handleClick({
-											value: 'aviation',
-											label: 'Aviation',
-										})
-									}
 									activeButton={activeSector}
 								/>
 							)}
 						</div>
 						{activeSector == 'aviation' && (
-							<div className="my-2 xl:my-4 justify-self-end flex flex-col items-end justify-between">
+							<div className="my-2 xl:my-4 justify-self-end flex flex-col items-end justify-between text-primary">
 								<p className="hidden md:block text-left text-base xl:text-xl text-wrap w-64 xl:w-96 mt-10 md:mt-0">
-									Please choose the geographies you are
-									interested in
+									Get started by choosing the geographies you
+									are interested in
 								</p>
 								<p className="text-red-500 h-10 my-3 text-left text-base xl:text-xl text-wrap w-64 xl:w-96">
 									{missingGeographies}

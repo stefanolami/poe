@@ -31,108 +31,145 @@ export const priceModalData = {
 
 export const selectionData = {
 	eMobility: {
-		typeOfVehicle: {
-			label: 'E-Vehicles',
-			value: 'typeOfVehicle',
-			fieldsLabel: 'Type of vehicle',
-			fields: [
-				{
-					value: 'cars',
-					label: 'Cars (up to 3,5 tonnes)',
-					price: {
-						euAdmin: '3000',
-						eu27: '1500',
-						brazil: '2000',
-						turkey: '2000',
-						colombia: '1500',
-						russia: '2500',
+		ppo: {
+			typeOfVehicle: {
+				label: 'Electric Vehicles',
+				value: 'typeOfVehicle',
+				fieldsLabel: 'Type of vehicle',
+				fields: [
+					{
+						value: 'cars',
+						label: 'Cars (up to 3,5 tonnes)',
+						price: {
+							euAdmin: '3000',
+							eu27: '1500',
+							brazil: '2000',
+							turkey: '2000',
+							colombia: '1500',
+							russia: '2500',
+						},
 					},
-				},
-				{
-					value: 'buses',
-					label: 'Buses (all types and sizes)',
-					price: {
-						euAdmin: '3000',
-						eu27: '1500',
-						brazil: '1000',
-						turkey: '2000',
-						colombia: '1500',
-						russia: '2500',
+					{
+						value: 'buses',
+						label: 'Buses (all types and sizes)',
+						price: {
+							euAdmin: '3000',
+							eu27: '1500',
+							brazil: '1000',
+							turkey: '2000',
+							colombia: '1500',
+							russia: '2500',
+						},
 					},
-				},
-				{
-					value: 'trucks',
-					label: 'Trucks (above 3,5 tonnes)',
-					price: {
-						euAdmin: '3000',
-						eu27: '1500',
-						brazil: '2000',
-						turkey: '2000',
-						colombia: '1500',
-						russia: '2500',
+					{
+						value: 'trucks',
+						label: 'Trucks (above 3,5 tonnes)',
+						price: {
+							euAdmin: '3000',
+							eu27: '1500',
+							brazil: '2000',
+							turkey: '2000',
+							colombia: '1500',
+							russia: '2500',
+						},
 					},
-				},
-				{
-					value: 'planes',
-					label: 'Planes',
-					price: {
-						euAdmin: '3000',
-						eu27: '1500',
-						brazil: '2000',
-						turkey: '2000',
-						colombia: '1500',
-						russia: '2500',
+					{
+						value: 'planes',
+						label: 'Planes',
+						price: {
+							euAdmin: '3000',
+							eu27: '1500',
+							brazil: '2000',
+							turkey: '2000',
+							colombia: '1500',
+							russia: '2500',
+						},
 					},
-				},
-				{
-					value: 'boats',
-					label: 'Boats',
-					price: {
-						euAdmin: '3000',
-						eu27: '1500',
-						brazil: '2000',
-						turkey: '2000',
-						colombia: '1500',
-						russia: '2500',
+					{
+						value: 'boats',
+						label: 'Boats',
+						price: {
+							euAdmin: '3000',
+							eu27: '1500',
+							brazil: '2000',
+							turkey: '2000',
+							colombia: '1500',
+							russia: '2500',
+						},
 					},
-				},
-				{
-					value: 'twoWheelers',
-					label: 'Two-wheelers (bicycles)',
-					price: {
-						euAdmin: '3000',
-						eu27: '1500',
-						brazil: '2000',
-						turkey: '2000',
-						colombia: '1500',
-						russia: '2500',
+					{
+						value: 'rail',
+						label: 'Rail',
+						price: {
+							euAdmin: '3000',
+							eu27: '1500',
+							brazil: '2000',
+							turkey: '2000',
+							colombia: '1500',
+							russia: '2500',
+						},
 					},
-				},
-			],
-			contracts: [
-				{
-					value: 'purchase',
-					label: 'Purchase',
-				},
-				{
-					value: 'leasing',
-					label: 'Leasing / rental agreement',
-				},
-				{
-					value: 'rental',
-					label: 'Rental vehicle including driver',
-				},
-				{
-					value: 'fleetManagement',
-					label: 'Fleet management',
-				},
-				{
-					value: 'dataManagement',
-					label: 'Data management and software service contracts',
-				},
-			],
-		},
-		/* eVehiclesMaintenance: {
+					{
+						value: 'twoThreeWheelers',
+						label: '2-3 wheelers (motorbikes & scooters)',
+						price: {
+							euAdmin: '3000',
+							eu27: '1500',
+							brazil: '2000',
+							turkey: '2000',
+							colombia: '1500',
+							russia: '2500',
+						},
+					},
+					{
+						value: 'threeWheelers',
+						label: '3 wheelers (rickshaws for persons or cargo)',
+						price: {
+							euAdmin: '3000',
+							eu27: '1500',
+							brazil: '2000',
+							turkey: '2000',
+							colombia: '1500',
+							russia: '2500',
+						},
+					},
+					{
+						value: 'twoWheelers',
+						label: '2 wheelers (bicycles)',
+						price: {
+							euAdmin: '3000',
+							eu27: '1500',
+							brazil: '2000',
+							turkey: '2000',
+							colombia: '1500',
+							russia: '2500',
+						},
+					},
+				],
+				contracts: [
+					{
+						value: 'purchase',
+						label: 'Purchase',
+					},
+					{
+						value: 'leasing',
+						label: 'Leasing / rental agreement',
+					},
+					{
+						value: 'rental',
+						label: 'Rental vehicle including driver',
+					},
+					{
+						value: 'fleetManagement',
+						label: 'Fleet management',
+					},
+					{
+						value: 'dataManagement',
+						label: 'Data management and software service contracts',
+					},
+				],
+			},
+			/* eVehiclesMaintenance: {
 			label: 'E-Vehicles Maintenance',
 			value: 'eVehiclesMaintenance',
 			fieldsLabel: '',
@@ -248,100 +285,185 @@ export const selectionData = {
 			],
 			contracts: [],
 		}, */
-		chargingStations: {
-			label: 'Charging Stations',
-			value: 'chargingStations',
-			fieldsLabel: 'Type of vehicle',
-			fields: [
-				{
-					value: 'bikesCars',
-					label: 'Motorbikes and Cars (AC/DC)',
-					price: {
-						euAdmin: '3000',
-						eu27: '1500',
-						brazil: '2000',
-						turkey: '2000',
-						colombia: '1500',
-						russia: '2500',
+			chargingStations: {
+				label: 'Charging Stations',
+				value: 'chargingStations',
+				fieldsLabel: 'Type of vehicle',
+				fields: [
+					{
+						value: 'bikesCars',
+						label: 'Motorbikes and Cars (AC/DC)',
+						price: {
+							euAdmin: '3000',
+							eu27: '1500',
+							brazil: '2000',
+							turkey: '2000',
+							colombia: '1500',
+							russia: '2500',
+						},
 					},
-				},
-				{
-					value: 'buses',
-					label: 'Buses (all types and sizes)',
-					price: {
-						euAdmin: '3000',
-						eu27: '1500',
-						brazil: '2000',
-						turkey: '2000',
-						colombia: '1500',
-						russia: '2500',
+					{
+						value: 'buses',
+						label: 'Buses (all types and sizes)',
+						price: {
+							euAdmin: '3000',
+							eu27: '1500',
+							brazil: '2000',
+							turkey: '2000',
+							colombia: '1500',
+							russia: '2500',
+						},
 					},
-				},
-				{
-					value: 'trucks',
-					label: 'Trucks (above 3,5 tonnes)',
-					price: {
-						euAdmin: '3000',
-						eu27: '1500',
-						brazil: '2000',
-						turkey: '2000',
-						colombia: '1500',
-						russia: '2500',
+					{
+						value: 'trucks',
+						label: 'Trucks (above 3,5 tonnes)',
+						price: {
+							euAdmin: '3000',
+							eu27: '1500',
+							brazil: '2000',
+							turkey: '2000',
+							colombia: '1500',
+							russia: '2500',
+						},
 					},
-				},
-				{
-					value: 'planes',
-					label: 'Planes',
-					price: {
-						euAdmin: '3000',
-						eu27: '1500',
-						brazil: '2000',
-						turkey: '2000',
-						colombia: '1500',
-						russia: '2500',
+					{
+						value: 'planesDrones',
+						label: 'Planes and Drones',
+						price: {
+							euAdmin: '3000',
+							eu27: '1500',
+							brazil: '2000',
+							turkey: '2000',
+							colombia: '1500',
+							russia: '2500',
+						},
 					},
-				},
-				{
-					value: 'boats',
-					label: 'Boats',
-					price: {
-						euAdmin: '3000',
-						eu27: '1500',
-						brazil: '2000',
-						turkey: '2000',
-						colombia: '1500',
-						russia: '2500',
+					{
+						value: 'boatsShips',
+						label: 'Boats and Ships',
+						price: {
+							euAdmin: '3000',
+							eu27: '1500',
+							brazil: '2000',
+							turkey: '2000',
+							colombia: '1500',
+							russia: '2500',
+						},
 					},
-				},
-				{
-					value: 'twoWheelers',
-					label: 'Two-wheelers (bicycles)',
-					price: {
-						euAdmin: '3000',
-						eu27: '1500',
-						brazil: '2000',
-						turkey: '2000',
-						colombia: '1500',
-						russia: '2500',
+					{
+						value: 'rail',
+						label: 'Rail',
+						price: {
+							euAdmin: '3000',
+							eu27: '1500',
+							brazil: '2000',
+							turkey: '2000',
+							colombia: '1500',
+							russia: '2500',
+						},
 					},
-				},
-			],
-			contracts: [
-				{
-					value: 'exchange',
-					label: 'Exchange of parts and / or upgrading',
-				},
-				{
-					value: 'digitalUpdates',
-					label: 'Digital updates',
-				},
-				{
-					value: 'purchase',
-					label: 'Purchase of spare parts',
-				},
-			],
+					{
+						value: 'twoWheelers',
+						label: 'Two-wheelers (bicycles)',
+						price: {
+							euAdmin: '3000',
+							eu27: '1500',
+							brazil: '2000',
+							turkey: '2000',
+							colombia: '1500',
+							russia: '2500',
+						},
+					},
+				],
+				contracts: [
+					{
+						value: 'exchange',
+						label: 'Exchange of parts and / or upgrading',
+					},
+					{
+						value: 'digitalUpdates',
+						label: 'Digital updates',
+					},
+					{
+						value: 'purchase',
+						label: 'Purchase of spare parts',
+					},
+				],
+			},
 		},
-		report: {
+		ifo: {
+			pif: {
+				label: 'Public Investment Financing',
+				subTitle:
+					'Low-risk, repayable loans from financing organisations supported by public means.',
+				fields: [
+					{
+						label: 'Public investment financing opportunities handbook on state-driven financing, availabilities, accession criteria and processes depending on the geographies you have selected. Updated every end of year’s quarter.',
+						value: 'pif',
+					},
+				],
+			},
+			grants: {
+				label: 'Public Grants',
+				subTitle:
+					'Non-repayable funds for project development and implementation at all TRL & CRL levels (apart from public procurement).',
+				fields: [
+					{
+						label: 'Support for infrastructure deployment in accordance with the policies of the geography. At first, you will receive a full report on the current state of affairs in opportunities and a handbook on the various relevant grant pockets. Thereafter, you will receive ad hoc alerts on developments as well as relevant updates to the handbook. Please chose your sector(s) of interest.',
+						value: 'grants1',
+						subFields: [
+							{
+								label: 'Road Transport (2-/3-/4- wheelers)',
+								value: '234Wheelers',
+							},
+							{
+								label: 'Road Transport (HDVs)',
+								value: 'hdvs',
+							},
+							{
+								label: 'Maritime',
+								value: 'maritime',
+							},
+							{
+								label: 'Aviation (including airports and drones)',
+								value: 'aviation',
+							},
+							{
+								label: 'Rail',
+								value: 'rail',
+							},
+						],
+					},
+					{
+						label: 'Innovation-driven projects for charging infrastructure eco-system – from grid to vehicle. At first, you will receive a full report on the current state of affairs in opportunities and a handbook on the various relevant grant pockets. Thereafter, you will receive ad hoc alerts on developments as well as relevant updates to the handbook. Please chose your sector(s) of interest.',
+						value: 'grants2',
+						subFields: [
+							{
+								label: 'Road Transport (2-/3-/4- wheelers)',
+								value: '234Wheelers',
+							},
+							{
+								label: 'Road Transport (HDVs)',
+								value: 'hdvs',
+							},
+							{
+								label: 'Maritime',
+								value: 'maritime',
+							},
+							{
+								label: 'Aviation (including airports and drones)',
+								value: 'aviation',
+							},
+							{
+								label: 'Rail',
+								value: 'rail',
+							},
+						],
+					},
+				],
+			},
+		},
+		/* report: {
 			label: 'Funding & Investment Financing opportunities in the e-mobility sector',
 			value: 'report',
 			fieldsLabel: '',
@@ -374,9 +496,9 @@ export const selectionData = {
 				},
 			],
 			contracts: [],
-		},
+		}, */
 	},
-	language: [
+	/* language: [
 		{
 			value: 'german',
 			label: 'German',
@@ -413,7 +535,7 @@ export const selectionData = {
 			value: 'netherlands',
 			label: 'Netherlands',
 		},
-	],
+	], */
 }
 
 export const geographiesArray = [
@@ -469,4 +591,79 @@ export const geographiesArray = [
 	{ label: 'UA - Ukraine', value: 'UA' },
 	{ label: 'GB - United Kingdom', value: 'GB' },
 	{ label: 'VA - Vatican City', value: 'VA' },
+]
+
+export const geographiesArrayFrontend = [
+	{
+		label: 'EU-Administered',
+		value: 'euAdmin',
+	},
+	{
+		label: 'EU-27',
+		value: 'eu27',
+		countries: [
+			{ label: 'Albania', value: 'AL' },
+			{ label: 'Andorra', value: 'AD' },
+			{ label: 'Armenia', value: 'AM' },
+			{ label: 'Austria', value: 'AT' },
+			{ label: 'Azerbaijan', value: 'AZ' },
+			{ label: 'Belarus', value: 'BY' },
+			{ label: 'Belgium', value: 'BE' },
+			{ label: 'Bosnia and Herzegovina', value: 'BA' },
+			{ label: 'Bulgaria', value: 'BG' },
+			{ label: 'Croatia', value: 'HR' },
+			{ label: 'Cyprus', value: 'CY' },
+			{ label: 'Czech Republic', value: 'CZ' },
+			{ label: 'Denmark', value: 'DK' },
+			{ label: 'Estonia', value: 'EE' },
+			{ label: 'Finland', value: 'FI' },
+			{ label: 'France', value: 'FR' },
+			{ label: 'Georgia', value: 'GE' },
+			{ label: 'Germany', value: 'DE' },
+			{ label: 'Greece', value: 'GR' },
+			{ label: 'Hungary', value: 'HU' },
+			{ label: 'Iceland', value: 'IS' },
+			{ label: 'Ireland', value: 'IE' },
+			{ label: 'Italy', value: 'IT' },
+			{ label: 'Kazakhstan', value: 'KZ' },
+			{ label: 'Kosovo', value: 'XK' },
+			{ label: 'Latvia', value: 'LV' },
+			{ label: 'Liechtenstein', value: 'LI' },
+			{ label: 'Lithuania', value: 'LT' },
+			{ label: 'Luxembourg', value: 'LU' },
+			{ label: 'Malta', value: 'MT' },
+			{ label: 'Moldova', value: 'MD' },
+			{ label: 'Monaco', value: 'MC' },
+			{ label: 'Montenegro', value: 'ME' },
+			{ label: 'Netherlands', value: 'NL' },
+			{ label: 'North Macedonia', value: 'MK' },
+			{ label: 'Norway', value: 'NO' },
+			{ label: 'Poland', value: 'PL' },
+			{ label: 'Portugal', value: 'PT' },
+			{ label: 'Romania', value: 'RO' },
+			{ label: 'Russia', value: 'RU' },
+			{ label: 'San Marino', value: 'SM' },
+			{ label: 'Serbia', value: 'RS' },
+			{ label: 'Slovakia', value: 'SK' },
+			{ label: 'Slovenia', value: 'SI' },
+			{ label: 'Spain', value: 'ES' },
+			{ label: 'Sweden', value: 'SE' },
+			{ label: 'Turkey', value: 'TR' },
+			{ label: 'Ukraine', value: 'UA' },
+			{ label: 'Vatican City', value: 'VA' },
+		],
+	},
+	{
+		label: 'Other European Countries',
+		value: 'otherEu',
+		countries: [
+			{ label: 'Norway', value: 'NO' },
+			{ label: 'Switzerland', value: 'CH' },
+			{ label: 'United Kingdom', value: 'GB' },
+		],
+	},
+	{
+		label: 'Brazil',
+		value: 'BR',
+	},
 ]

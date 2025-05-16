@@ -1,15 +1,8 @@
 'use client'
 import { useStore } from '@/store/store'
 import { Geography } from '@/lib/types'
-
-const ITEMS = [
-	{ value: 'euAdmin', label: 'EU Administrated' },
-	{ value: 'eu27', label: 'EU27, Island, Norway, UK, Switzerland ' },
-	{ value: 'brazil', label: 'Brazil' },
-	{ value: 'turkey', label: 'Turkey ' },
-	{ value: 'colombia', label: 'Colombia ' },
-	{ value: 'russia', label: 'Russia ' },
-]
+import { geographiesArrayFrontend } from '@/data/data'
+import ExpandableGeography from '../ui/expandableGeography'
 
 export default function GeographySelector() {
 	const geographies = useStore<Geography[]>((state) => state.geographies)
@@ -27,12 +20,89 @@ export default function GeographySelector() {
 	}
 
 	return (
-		<div className="text-xs md:text-base xl:text-2xl w-full">
+		<div className="text-xs md:text-base xl:text-2xl w-full text-primary">
 			<p className="text-center mt-10 md:mt-0 md:hidden">
-				Please choose the geographies you are interested in:
+				Get started by choosing the geographies you are interested in
 			</p>
 			<ul className="flex flex-col items-center md:items-start justify-center gap-3 xl:gap-4 mx-auto mt-6 md:mt-0">
-				{ITEMS.map((item, index) => (
+				{geographiesArrayFrontend.map((item, index) => {
+					if (item.countries) {
+						return (
+							<li key={index}>
+								<ExpandableGeography title={item.label}>
+									{/* <ul className="flex flex-col items-center md:items-start justify-center gap-3 xl:gap-4 mx-auto mt-6 md:mt-0"> */}
+									<ul className="grid grid-cols-2">
+										{item.countries.map(
+											(country, index) => {
+												return (
+													<li
+														key={index}
+														className="flex flex-row items-center gap-2 xl:gap-3 w-[242px] xl:w-[470px]"
+													>
+														<input
+															type="checkbox"
+															id={`checkbox-${index}`}
+															value={
+																country.value
+															} // Use a unique value for each item
+															checked={
+																geographies.find(
+																	(geo) =>
+																		country.value ==
+																		geo.value
+																)
+																	? true
+																	: false
+															} // Set checked state
+															onChange={() =>
+																handleGeographies(
+																	country
+																)
+															}
+															className="custom-checkbox"
+														/>
+														<label
+															htmlFor={`checkbox-${index}`}
+														>
+															{country.label}
+														</label>
+													</li>
+												)
+											}
+										)}
+									</ul>
+								</ExpandableGeography>
+							</li>
+						)
+					} else {
+						return (
+							<li
+								key={index}
+								className="flex flex-row items-center gap-2 xl:gap-3 w-[242px] xl:w-[470px]"
+							>
+								<input
+									type="checkbox"
+									id={`checkbox-${index}`}
+									value={item.value} // Use a unique value for each item
+									checked={
+										geographies.find(
+											(geo) => item.value == geo.value
+										)
+											? true
+											: false
+									} // Set checked state
+									onChange={() => handleGeographies(item)}
+									className="custom-checkbox"
+								/>
+								<label htmlFor={`checkbox-${index}`}>
+									{item.label}
+								</label>
+							</li>
+						)
+					}
+				})}
+				{/* {geographiesArrayFrontend.map((item, index) => (
+					
 					<li
 						key={index}
 						className="flex flex-row items-center gap-2 xl:gap-3 w-[242px] xl:w-[470px]"
@@ -55,7 +125,7 @@ export default function GeographySelector() {
 							{item.label}
 						</label>
 					</li>
-				))}
+				))} */}
 			</ul>
 		</div>
 	)

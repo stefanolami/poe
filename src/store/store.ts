@@ -154,7 +154,7 @@ export const useStore = create<StoreState>()(
 				get().geographies.forEach((country) => {
 					total += parseInt(
 						//@ts-expect-error I hate you typescript
-						selectionData[get().sector?.value][
+						selectionData[get().sector?.value].ppo[
 							category
 						].fields.find(
 							(x: SelectableItem) => x.value === item.value
@@ -191,8 +191,8 @@ export const useStore = create<StoreState>()(
 				const sectorData =
 					selectionData[sectorValue as keyof typeof selectionData]
 				const categoryData = (
-					sectorData[
-						category as keyof typeof sectorData
+					sectorData.ppo[
+						category as keyof typeof sectorData.ppo
 					] as CategoryData
 				).fields
 

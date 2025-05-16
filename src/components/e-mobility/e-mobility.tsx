@@ -4,8 +4,8 @@ import { selectionData } from '@/data/data'
 import GeographyModifier from '../geography-modifier'
 import Hero from '../hero'
 import SelectionSection from './selection-sections'
-import ReportSection from './report-section'
-import LanguageSection from './language-section'
+//import ReportSection from './report-section'
+//import LanguageSection from './language-section'
 import SummaryMobile from './summary-mobile'
 import SummaryDesktop from './summary-desktop'
 
@@ -28,24 +28,25 @@ const EmobilityComponent = () => {
 				<div className="w-full mt-8 md:mt-12 lg:mt-6 mb-5 md:mb-8 lg:flex flex-row items-start justify-between lg:gap-4">
 					<div className="">
 						<div className="w-full px-5 py-2 xl:py-3 mb-4 bg-primary text-white font-unna text-base md:text-lg lg:text-2xl xl:text-3xl">
-							Public Procurement Opportunities (Tenders)
+							Public Procurement Opportunities
+							<span className="block text-xs md:text-sm lg:text-base xl:text-lg">
+								Business opportunities to sell your products,
+								services and knowledge to government and
+								government-driven bodies. Contracts identified
+								start as low as EUR 10,000 and go to the tens of
+								millions.
+							</span>
 						</div>
-						{Object.entries(selectionData.eMobility).map(
-							([key, value]) =>
-								value.value == 'report' ? (
-									<ReportSection
-										key={key}
-										section={selectionData.eMobility.report}
-									/>
-								) : (
-									<SelectionSection
-										key={key}
-										section={value}
-										category={key}
-									/>
-								)
+						{Object.entries(selectionData.eMobility.ppo).map(
+							([key, value]) => (
+								<SelectionSection
+									key={key}
+									section={value}
+									category={key}
+								/>
+							)
 						)}
-						<LanguageSection languages={selectionData.language} />
+						{/* <LanguageSection languages={selectionData.language} /> */}
 					</div>
 					<div className="hidden lg:block lg:sticky top-10 self-start">
 						<GeographyModifier />
