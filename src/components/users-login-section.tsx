@@ -10,7 +10,7 @@ import { useShallow } from 'zustand/shallow'
 const UsersLoginSection = ({
 	setActive,
 }: {
-	setActive: (active: boolean) => void
+	setActive?: (active: boolean) => void
 }) => {
 	const [role, setRole] = useState<'client' | 'admin' | null>(null)
 	const [loading, setLoading] = useState(true)
@@ -59,7 +59,7 @@ const UsersLoginSection = ({
 			await signOut()
 			setRole(null)
 			storeRemoveUserRole()
-			setActive(false)
+			if (setActive) setActive(false)
 		} catch (error) {
 			console.error('Logout failed:', error)
 		}
@@ -79,42 +79,30 @@ const UsersLoginSection = ({
 	return (
 		<>
 			{role === 'client' && (
-				<>
-					<div className="lg:hidden grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-3 mt-6 lg:mt-0 mx-auto">
-						<Link href="/account">
-							<button
-								className="bg-primary-light text-white font-jose w-36 md:w-24 lg:w-28 py-[6px] shadow-md hover:scale-[1.02] hover:shadow-xl text-sm lg:text-base"
-								onClick={() => setActive(false)}
-							>
-								Account
-							</button>
-						</Link>
+				<div className="grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-3 mt-6 lg:mt-0 mx-auto">
+					<Link href="/account">
 						<button
 							className="bg-primary-light text-white font-jose w-36 md:w-24 lg:w-28 py-[6px] shadow-md hover:scale-[1.02] hover:shadow-xl text-sm lg:text-base"
-							onClick={handleLogout}
+							onClick={() => setActive && setActive(false)}
 						>
-							Logout
+							Account
 						</button>
-					</div>
-					<div className="hidden lg:grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-3 mt-6 lg:mt-0 mx-auto">
-						<Link href="/account">
-							<button className="bg-primary-light text-white font-jose w-36 md:w-24 lg:w-28 py-[6px] shadow-md hover:scale-[1.02] hover:shadow-xl text-sm lg:text-base">
-								Account
-							</button>
-						</Link>
-						<button
-							className="bg-primary-light text-white font-jose w-36 md:w-24 lg:w-28 py-[6px] shadow-md hover:scale-[1.02] hover:shadow-xl text-sm lg:text-base"
-							onClick={handleLogout}
-						>
-							Logout
-						</button>
-					</div>
-				</>
+					</Link>
+					<button
+						className="bg-primary-light text-white font-jose w-36 md:w-24 lg:w-28 py-[6px] shadow-md hover:scale-[1.02] hover:shadow-xl text-sm lg:text-base"
+						onClick={handleLogout}
+					>
+						Logout
+					</button>
+				</div>
 			)}
 			{role === 'admin' && (
 				<div className="grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-3 mt-6 lg:mt-0 mx-auto">
 					<Link href="/admin/dashboard">
-						<button className="bg-primary-light text-white font-jose w-36 md:w-24 lg:w-28  py-[6px] shadow-md hover:scale-[1.02] hover:shadow-xl text-sm lg:text-base">
+						<button
+							className="bg-primary-light text-white font-jose w-36 md:w-24 lg:w-28  py-[6px] shadow-md hover:scale-[1.02] hover:shadow-xl text-sm lg:text-base"
+							onClick={() => setActive && setActive(false)}
+						>
 							Dashboard
 						</button>
 					</Link>
