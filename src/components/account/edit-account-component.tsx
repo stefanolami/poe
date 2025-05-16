@@ -1,9 +1,9 @@
 import React from 'react'
-import AccountSummary from './account-summary'
-import AccountView from './account-view'
 import { ClientDataType } from '@/lib/types'
+import EditAccountForm from './edit-account-form'
+import AccountSummary from './account-summary'
 
-const AccountComponent = async ({
+const EditAccountComponent = async ({
 	clientData,
 }: {
 	clientData: ClientDataType
@@ -11,9 +11,9 @@ const AccountComponent = async ({
 	return (
 		<div className="w-4/5 mx-auto max-w-[500px] lg:grid grid-cols-2 lg:max-w-[1000px] lg:gap-20 text-primary">
 			<AccountSummary />
-			<AccountView clientData={clientData} />
+			<EditAccountForm clientData={clientData} />
 		</div>
 	)
 }
 
-export default AccountComponent
+export default EditAccountComponent

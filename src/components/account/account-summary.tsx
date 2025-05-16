@@ -22,9 +22,11 @@ const AccountSummary = () => {
 		)
 	return (
 		<div className="lg:order-2">
-			<h2 className="text-lg md:text-xl lg:text-2xl">Your Plan</h2>
+			<h2 className="text-lg md:text-xl lg:text-3xl mb-4 lg:mb-10">
+				Your Plan
+			</h2>
 			<div className="my-4">
-				<span className="text-base md:text-lg">
+				<span className="text-base md:text-lg lg:text-xl">
 					{storeGeographies.length > 1 ? 'Geographies' : 'Geography'}
 				</span>
 				<ul className="mt-2 space-y-1 list-disc list-inside pl-1">
@@ -59,7 +61,7 @@ const AccountSummary = () => {
 									className="mt-2 space-y-2"
 									key={index}
 								>
-									<span className="text-base md:text-lg">
+									<span className="text-base md:text-lg lg:text-xl">
 										{category.label}
 									</span>
 									<ul className="text-sm md:text-base space-y-1 lg:space-y-2 list-disc list-inside pl-1">
@@ -154,6 +156,7 @@ const AccountSummary = () => {
 					<span>€ {getTotalPrice()}/year</span>
 				</div>
 			</div>
+			<span className="w-full bg-primary h-[1px] my-8 block lg:hidden"></span>
 		</div>
 	)
 }

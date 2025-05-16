@@ -1,7 +1,7 @@
 'use server'
 
-import { CreateAccountType } from '@/lib/types'
-import { createClient } from '@/supabase/server'
+import { CreateAccountType, UpdateAccountType } from '@/lib/types'
+import { createAdminClient, createClient } from '@/supabase/server'
 
 export const clientSignUp = async (data: CreateAccountType) => {
 	try {
@@ -75,6 +75,94 @@ export const clientSignUp = async (data: CreateAccountType) => {
 		} else {
 			console.error('Unexpected SIGNUP ERROR:', error)
 			throw new Error('An unexpected error occurred during signup')
+		}
+	}
+}
+
+export const clientUpdate = async (
+	data: UpdateAccountType,
+	id: number,
+	updateEmail: boolean
+) => {
+	try {
+		const supabase = await createClient()
+
+		console.log('Updating client with id:', id)
+
+		const { data: clientData, error: clientError } = await supabase
+			.from('clients')
+			.update({
+				name: data.name,
+				family_name: data.familyName,
+				org_name: data.orgName,
+				email: data.email,
+			})
+			.eq('id', id)
+			.select()
+			.single()
+
+		if (clientError) {
+			throw new Error(
+				`Client account update failed: ${clientError.message}`
+			)
+		}
+
+		const adminSupabase = await createAdminClient()
+
+		if (updateEmail) {
+			const { error: emailError } = await adminSupabase.auth.updateUser({
+				email: data.email,
+			})
+			if (emailError) {
+				throw new Error(`Email update failed: ${emailError.message}`)
+			}
+			console.log('Email updated successfully')
+		}
+
+		return clientData
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error('CLIENT UPDATE ERROR:', error.message)
+			throw error
+		} else {
+			console.error('Unexpected CLIENT UPDATE ERROR:', error)
+			throw new Error(
+				'An unexpected error occurred while updating client data'
+			)
+		}
+	}
+}
+
+export const getClient = async () => {
+	try {
+		const supabase = await createClient()
+
+		const {
+			data: { user },
+		} = await supabase.auth.getUser()
+		if (!user) {
+			throw new Error('User not found')
+		}
+		const { data, error } = await supabase
+			.from('clients')
+			.select('*')
+			.eq('user_id', user.id)
+			.single()
+
+		if (error) {
+			throw new Error(`Failed to fetch client data: ${error.message}`)
+		}
+
+		return data
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error('GET CLIENT ERROR:', error.message)
+			throw error
+		} else {
+			console.error('Unexpected GET CLIENT ERROR:', error)
+			throw new Error(
+				'An unexpected error occurred while fetching client data'
+			)
 		}
 	}
 }

@@ -22,6 +22,13 @@ export const createAccountSchema = z
 		path: ['confirmPassword'],
 	})
 
+export const updateAccountSchema = z.object({
+	name: z.string().min(1, 'Name is required'),
+	familyName: z.string().min(1, 'Family name is required'),
+	orgName: z.string().optional(),
+	email: z.string().email('Invalid email address'),
+})
+
 export const loginSchema = z.object({
 	email: z.string().email('Invalid email address'),
 	password: z.string().min(6, 'Password must be at least 6 characters long'),

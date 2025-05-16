@@ -1,11 +1,11 @@
 'use client'
 
 import { useToast } from '@/hooks/use-toast'
-import { CreateAccountType } from '@/lib/types'
-import { createAccountSchema } from '@/lib/zod-schemas'
+import { ClientDataType, UpdateAccountType } from '@/lib/types'
+import { updateAccountSchema } from '@/lib/zod-schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+//import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import {
 	Form,
@@ -17,74 +17,59 @@ import {
 } from '../ui/form'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
-import { LuEyeClosed, LuEye } from 'react-icons/lu'
-import { useStore } from '@/store/store'
-import { useShallow } from 'zustand/shallow'
-import { signUpClient } from '@/actions/auth'
+//import { LuEyeClosed, LuEye } from 'react-icons/lu'
+/* import { useStore } from '@/store/store'
+import { useShallow } from 'zustand/shallow' */
+import { clientUpdate } from '@/actions/clients'
 
-const CreateAccountForm = () => {
-	const [isView, setIsView] = useState(false)
-	const [isViewConfirm, setIsViewConfirm] = useState(false)
+const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
+	//const [isView, setIsView] = useState(false)
+	//const [isViewConfirm, setIsViewConfirm] = useState(false)
 
 	const { toast } = useToast()
 
 	const router = useRouter()
 
-	const { storeSector, storeData, storeGeographies } = useStore(
+	/* const { storeSector, storeData, storeGeographies } = useStore(
 		useShallow((state) => ({
 			storeSector: state.sector,
 			storeData: state.data,
 			storeGeographies: state.geographies,
 		}))
-	)
+	) */
 
-	const form = useForm<CreateAccountType>({
-		resolver: zodResolver(createAccountSchema),
+	const form = useForm<UpdateAccountType>({
+		resolver: zodResolver(updateAccountSchema),
 		defaultValues: {
-			name: '',
-			familyName: '',
-			orgName: '',
-			email: '',
-			password: '',
-			confirmPassword: '',
+			name: clientData.name,
+			familyName: clientData.family_name,
+			orgName: clientData.org_name ?? undefined,
+			email: clientData.email,
 		},
 	})
 
 	const isSubmitting = form.formState.isSubmitting
 
-	const submitHandler: SubmitHandler<CreateAccountType> = async (
-		data: CreateAccountType
+	const submitHandler: SubmitHandler<UpdateAccountType> = async (
+		data: UpdateAccountType
 	) => {
-		const fullData = {
-			...data,
-			sector: storeSector.value,
-			geography: storeGeographies.map((item) => item.value),
-			vehicles_type: storeData.eMobility.typeOfVehicle?.map(
-				(item) => item.value
-			),
-			vehicles_contract: storeData.eMobility.typeOfVehicleContract?.map(
-				(item) => item.value
-			),
-			charging_stations_type: storeData.eMobility.chargingStations?.map(
-				(item) => item.value
-			),
-			charging_stations_contract:
-				storeData.eMobility.chargingStationsContract?.map(
-					(item) => item.value
-				),
-		}
+		const updateEmail = data.email !== clientData.email
 
 		try {
-			const response = await signUpClient(fullData)
+			const response = await clientUpdate(
+				data,
+				clientData.id,
+				updateEmail
+			)
 
 			if (response) {
 				toast({
 					title: 'Thank You!',
-					description: 'Account created successfully',
+					description: 'Account updated successfully',
 					variant: 'default',
 				})
 				setTimeout(() => {
-					router.push('/')
+					router.back()
 				}, 1000)
 			}
 
@@ -95,7 +80,7 @@ const CreateAccountForm = () => {
 			if (error instanceof Error) {
 				toast({
 					title: 'Error',
-					description: 'An error occurred while creating the account',
+					description: 'An error occurred while updating the account',
 					variant: 'destructive',
 				})
 				console.error(error.message)
@@ -113,7 +98,7 @@ const CreateAccountForm = () => {
 	return (
 		<div className="mt-10 lg:mt-0">
 			<h2 className="text-lg md:text-xl lg:text-3xl mb-4 lg:mb-10">
-				Create Account
+				Edit Account
 			</h2>
 			<Form {...form}>
 				<form
@@ -202,7 +187,7 @@ const CreateAccountForm = () => {
 							</FormItem>
 						)}
 					/>
-					<FormField
+					{/* <FormField
 						control={form.control}
 						name="password"
 						render={({ field }) => (
@@ -273,7 +258,7 @@ const CreateAccountForm = () => {
 								<FormMessage className="text-red-500 text-sm md:text-base" />
 							</FormItem>
 						)}
-					/>
+					/> */}
 
 					<Button
 						disabled={false}
@@ -281,7 +266,7 @@ const CreateAccountForm = () => {
 						variant="default"
 						className="text-sm md:text-base lg:text-lg bg-primary-light text-white hover:bg-primary-light shadow-md hover:shadow-xl hover:scale-[1.02] mt-8 px-12 py-2"
 					>
-						Sign Up
+						Save
 					</Button>
 				</form>
 			</Form>
@@ -289,4 +274,4 @@ const CreateAccountForm = () => {
 	)
 }
 
-export default CreateAccountForm
+export default EditAccountForm

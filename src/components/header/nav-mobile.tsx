@@ -346,7 +346,7 @@ export default function NavMobile() {
 								{messages.contact}
 							</Link> */}
 						</nav>
-						<UsersLoginSection />
+						<UsersLoginSection setActive={setActive} />
 					</motion.div>
 				</motion.div>
 			</MotionConfig>
