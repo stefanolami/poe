@@ -49,8 +49,8 @@ const AccountSummary = () => {
 						key !== 'report'
 					) {
 						const category =
-							selectionData.eMobility[
-								key as keyof typeof selectionData.eMobility
+							selectionData.eMobility.ppo[
+								key as keyof typeof selectionData.eMobility.ppo
 							]
 						if (
 							storeData.eMobility[key as keyof MobilityData]
