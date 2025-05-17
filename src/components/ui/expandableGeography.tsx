@@ -35,9 +35,9 @@ const ExpandableGeography = ({
 							},
 						}}
 					>
-						<FiChevronDown className="text-3xl text-primary" />
+						<FiChevronDown className="text-lg lg:text-3xl text-primary" />
 					</motion.span>
-					<span className="ml-[6px]">{title}</span>
+					<span className="ml-1 lg:ml-[6px]">{title}</span>
 				</div>
 			</button>
 			<motion.div

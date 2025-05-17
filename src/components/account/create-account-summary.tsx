@@ -156,7 +156,7 @@ const CreateAccountSummary = () => {
 					<span>€ {getTotalPrice()}/year</span>
 				</div>
 			</div>
-			<span className="w-full bg-primary h-[1px] my-8 block"></span>
+			<span className="w-full bg-primary h-[1px] my-8 block lg:hidden"></span>
 		</div>
 	)
 }

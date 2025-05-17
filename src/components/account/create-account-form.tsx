@@ -221,14 +221,14 @@ const CreateAccountForm = () => {
 								</FormControl>
 								{isView ? (
 									<LuEye
-										className="absolute right-2 top-8 z-10 cursor-pointer text-gray-500"
+										className="absolute right-2 top-[34px] lg:top-[38px] z-10 cursor-pointer text-gray-500"
 										onClick={() => {
 											setIsView(!isView)
 										}}
 									/>
 								) : (
 									<LuEyeClosed
-										className="absolute right-2 top-8 z-10 cursor-pointer text-gray-500"
+										className="absolute right-2 top-[34px] lg:top-[38px] z-10 cursor-pointer text-gray-500"
 										onClick={() => setIsView(!isView)}
 									/>
 								)}
@@ -257,14 +257,14 @@ const CreateAccountForm = () => {
 								</FormControl>
 								{isViewConfirm ? (
 									<LuEye
-										className="absolute right-2 top-8 z-10 cursor-pointer text-gray-500"
+										className="absolute right-2 top-[34px] lg:top-[38px] z-10 cursor-pointer text-gray-500"
 										onClick={() => {
 											setIsViewConfirm(!isViewConfirm)
 										}}
 									/>
 								) : (
 									<LuEyeClosed
-										className="absolute right-2 top-8 z-10 cursor-pointer text-gray-500"
+										className="absolute right-2 top-[34px] lg:top-[38px] z-10 cursor-pointer text-gray-500"
 										onClick={() =>
 											setIsViewConfirm(!isViewConfirm)
 										}

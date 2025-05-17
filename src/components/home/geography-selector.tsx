@@ -24,14 +24,14 @@ export default function GeographySelector() {
 			<p className="text-center mt-10 md:mt-0 md:hidden">
 				Get started by choosing the geographies you are interested in
 			</p>
-			<ul className="flex flex-col items-center md:items-start justify-center gap-3 xl:gap-4 mx-auto mt-6 md:mt-0">
+			<ul className="flex flex-col items-center md:items-start justify-center gap-1 xl:gap-4 mx-auto mt-6 md:mt-0">
 				{geographiesArrayFrontend.map((item, index) => {
 					if (item.countries) {
 						return (
 							<li key={index}>
 								<ExpandableGeography title={item.label}>
 									{/* <ul className="flex flex-col items-center md:items-start justify-center gap-3 xl:gap-4 mx-auto mt-6 md:mt-0"> */}
-									<ul className="grid grid-cols-2">
+									<ul className="lg:grid lg:grid-cols-2">
 										{item.countries.map(
 											(country, index) => {
 												return (
@@ -81,6 +81,7 @@ export default function GeographySelector() {
 								className="flex flex-row items-center gap-2 xl:gap-3 w-[242px] xl:w-[470px]"
 							>
 								<input
+									disabled={item.value == 'BR'}
 									type="checkbox"
 									id={`checkbox-${index}`}
 									value={item.value} // Use a unique value for each item
@@ -92,9 +93,16 @@ export default function GeographySelector() {
 											: false
 									} // Set checked state
 									onChange={() => handleGeographies(item)}
-									className="custom-checkbox"
+									className="custom-checkbox disabled:bg-gray-200 disabled:border-gray-300 disabled:cursor-not-allowed"
 								/>
-								<label htmlFor={`checkbox-${index}`}>
+								<label
+									className={
+										item.value == 'BR'
+											? 'cursor-not-allowed'
+											: ''
+									}
+									htmlFor={`checkbox-${index}`}
+								>
 									{item.label}
 								</label>
 							</li>

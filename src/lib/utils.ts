@@ -12,6 +12,7 @@ export function categoryValueToLabel(category: string) {
 }
 
 export function removeParenthesesContent(string: string) {
+	if (!string.includes('(')) return string
 	const index = string.indexOf('(')
 	return string.slice(0, index).trim()
 }

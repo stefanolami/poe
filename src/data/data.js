@@ -663,7 +663,7 @@ export const geographiesArrayFrontend = [
 		],
 	},
 	{
-		label: 'Brazil',
+		label: 'Brazil (Coming Soon)',
 		value: 'BR',
 	},
 ]
