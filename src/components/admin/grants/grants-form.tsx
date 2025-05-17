@@ -33,6 +33,8 @@ import GrantsFurtherDetails from './form-fields/grants-further-details'
 import GrantsConsultant from './form-fields/grants-consultant'
 import { createGrant } from '@/actions/grants'
 import GrantsFormEmobility from './grants-form-emobility'
+import { FaFolderOpen } from 'react-icons/fa'
+import { IoClose } from 'react-icons/io5'
 
 const SECTORS = [
 	{
@@ -146,15 +148,16 @@ export const GrantsForm = ({
 								control={form.control}
 								name="geography"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className="col-span-2">
 										<FormLabel>Geography</FormLabel>
 										<FormControl>
 											<MultiSelect
-												className="bg-white text-primary hover:bg-white h-9"
+												className="bg-white text-primary hover:bg-white"
 												onValueChange={field.onChange}
 												variant="default"
 												selectAll={false}
 												searchable
+												maxCount={10}
 												options={geographiesArray}
 											/>
 										</FormControl>
@@ -192,6 +195,24 @@ export const GrantsForm = ({
 							/>
 							<FormField
 								control={form.control}
+								name="value"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Value</FormLabel>
+										<FormControl>
+											<Input
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
 								name="call_title"
 								render={({ field }) => (
 									<FormItem>
@@ -214,24 +235,6 @@ export const GrantsForm = ({
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Grant Programme</FormLabel>
-										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												{...field}
-												className="bg-white text-primary"
-											/>
-										</FormControl>
-										<FormMessage className="text-red-500 text-sm" />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="value"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Value</FormLabel>
 										<FormControl>
 											<Input
 												disabled={isSubmitting}
@@ -300,10 +303,6 @@ export const GrantsForm = ({
 									</FormItem>
 								)}
 							/>
-							<GrantsConsultant
-								form={form}
-								consultants={consultants}
-							/>
 							<FormField
 								control={form.control}
 								name="reference_number"
@@ -321,6 +320,10 @@ export const GrantsForm = ({
 										<FormMessage className="text-red-500 text-sm" />
 									</FormItem>
 								)}
+							/>
+							<GrantsConsultant
+								form={form}
+								consultants={consultants}
 							/>
 							<FormField
 								control={form.control}
@@ -342,6 +345,71 @@ export const GrantsForm = ({
 							/>
 							<GrantsDeadline form={form} />
 							<GrantsFurtherDetails form={form} />
+							<FormField
+								control={form.control}
+								name="files"
+								render={({ field }) => (
+									<FormItem className="col-span-2">
+										<FormLabel>Files</FormLabel>
+										<FormControl>
+											<div className="flex items-center gap-2">
+												<span className="truncate block text-sm text-primary bg-white pl-3 pr-7 py-[7px] border-gray-200 min-w-[120px] w-full relative">
+													{field.value &&
+													field.value.length > 0
+														? field.value
+																.map(
+																	(
+																		file: File
+																	) =>
+																		file.name
+																)
+																.join(', ')
+														: 'No files chosen'}
+													{field.value &&
+														field.value.length >
+															0 && (
+															<button
+																type="button"
+																onClick={() =>
+																	field.onChange(
+																		[]
+																	)
+																}
+																className="text-primary scale-150 absolute top-[10px] right-2"
+																title="Clear files"
+															>
+																<IoClose />
+															</button>
+														)}
+												</span>
+
+												<label className="inline-flex items-center cursor-pointer">
+													<input
+														type="file"
+														multiple
+														className="hidden"
+														onChange={(e) => {
+															field.onChange(
+																e.target.files
+																	? Array.from(
+																			e
+																				.target
+																				.files
+																		)
+																	: []
+															)
+														}}
+													/>
+													<span className="bg-white/5 hover:bg-white/5 px-2 py-2 shadow-md hover:shadow-xl text-white flex items-center justify-center transition-colors duration-150">
+														<FaFolderOpen className="w-5 h-5" />
+													</span>
+												</label>
+											</div>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 						</div>
 						{form.watch('sector') === 'e-mobility' ? (
 							<GrantsFormEmobility form={form} />

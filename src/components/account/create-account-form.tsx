@@ -279,7 +279,7 @@ const CreateAccountForm = () => {
 						disabled={false}
 						type="submit"
 						variant="default"
-						className="text-sm md:text-base lg:text-lg bg-primary-light text-white hover:bg-primary-light shadow-md hover:shadow-xl hover:scale-[1.02] mt-8 px-12 py-2"
+						className="text-sm md:text-base lg:text-lg bg-primary-light text-white hover:bg-primary-light shadow-md hover:shadow-xl hover:scale-[1.02] mt-8 px-6 py-2"
 					>
 						Create Account
 					</Button>

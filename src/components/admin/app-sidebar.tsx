@@ -11,6 +11,7 @@ import {
 	SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import Image from 'next/image'
+import Link from 'next/link'
 
 // Menu items.
 const items = [
@@ -30,7 +31,7 @@ const items = [
 		icon: Inbox,
 	},
 	{
-		title: 'Public Procurement Tenders',
+		title: 'Procurement Tenders',
 		url: '/admin/tenders',
 		icon: Inbox,
 	},
@@ -54,13 +55,18 @@ export function AppSidebar() {
 		>
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel className="w-1/2 aspect-[695/184] relative mb-8">
-						<Image
-							src={'/logos/funding-white.png'}
-							alt="Logo"
-							fill
-							className=""
-						/>
+					<SidebarGroupLabel className="mb-8 mt-2">
+						<Link
+							href="/"
+							className="w-2/3 aspect-[116/24] relative "
+						>
+							<Image
+								src={'/logos/poe-white.png'}
+								alt="Logo"
+								fill
+								className=""
+							/>
+						</Link>
 					</SidebarGroupLabel>
 					<SidebarGroupContent>
 						<SidebarMenu>

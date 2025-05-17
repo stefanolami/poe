@@ -46,20 +46,12 @@ export const createGrantSchema = z
 		deadline: z.array(z.array(z.string())),
 		in_brief: z.string().min(2, 'In brief is required'),
 		value: z.string(),
-		further_details: z
+		further_details: z.array(z.array(z.string())).optional(),
+		files: z
 			.array(
-				z.tuple([
-					z.string().optional(),
-					z.string().optional(),
-					z.string().optional(),
-					z
-						.array(
-							z.instanceof(File, {
-								message: 'Must be a valid file',
-							})
-						)
-						.optional(),
-				])
+				z.instanceof(File, {
+					message: 'Must be a valid file',
+				})
 			)
 			.optional(),
 		tailored_assessment: z
@@ -67,10 +59,8 @@ export const createGrantSchema = z
 			.optional(),
 		consultant: z.string().optional(),
 		sector: z.string().min(2, 'Sector is required'),
-		vehicles_type: z.array(z.string()).optional(),
-		vehicles_contract: z.array(z.string()).optional(),
-		charging_stations_type: z.array(z.string()).optional(),
-		charging_stations_contract: z.array(z.string()).optional(),
+		deployment: z.array(z.string()).optional(),
+		project: z.array(z.string()).optional(),
 	})
 	.refine((data) => data.call_title || data.grant_programme, {
 		message: 'Either Call Title or Grant Programme must be provided',

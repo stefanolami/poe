@@ -13,12 +13,12 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from '@/components/ui/popover'
+import { Textarea } from '@/components/ui/textarea'
 import { CreateGrantType } from '@/lib/types'
 import { CalendarIcon } from 'lucide-react'
 import React from 'react'
 import { UseFormReturn } from 'react-hook-form'
-import { FaFolderOpen, FaTrashAlt } from 'react-icons/fa'
-import { IoClose } from 'react-icons/io5'
+import { FaTrashAlt } from 'react-icons/fa'
 
 const GrantsFurtherDetails = ({
 	form,
@@ -39,14 +39,13 @@ const GrantsFurtherDetails = ({
 									string,
 									string,
 									string,
-									File[]?,
 								][]
 							).map((detail, index) => (
 								<div
-									className="flex flex-row justify-start items-center gap-6"
+									className="flex flex-row justify-start items-start gap-6"
 									key={index}
 								>
-									<div className="grid grid-cols-5 gap-4 items-center">
+									<div className="grid grid-cols-2 grid-rows-3 w-full gap-4 items-start">
 										<Popover>
 											<PopoverTrigger asChild>
 												<Button
@@ -114,7 +113,7 @@ const GrantsFurtherDetails = ({
 											}}
 											className="bg-white text-primary"
 										/>
-										<Input
+										<Textarea
 											placeholder="Notes"
 											value={detail[2] || ''}
 											onChange={(e) => {
@@ -125,7 +124,7 @@ const GrantsFurtherDetails = ({
 													e.target.value
 												field.onChange(updated)
 											}}
-											className="bg-white text-primary"
+											className="bg-white text-primary col-span-2 row-span-2 h-full"
 										/>
 										{/* <input
 																type="file"
@@ -155,71 +154,6 @@ const GrantsFurtherDetails = ({
 																}}
 																className="bg-white text-primary"
 															/> */}
-										<div className="relative flex items-center gap-2 col-span-2">
-											{/* Display selected file names or placeholder */}
-											<span className="truncate block text-sm text-primary bg-white pl-3 pr-7 py-[7px] border-gray-200 min-w-[120px] w-full">
-												{detail[3] &&
-												detail[3].length > 0
-													? detail[3]
-															.map(
-																(file) =>
-																	file.name
-															)
-															.join(', ')
-													: 'No files chosen'}
-											</span>
-											{detail[3] &&
-												detail[3].length > 0 && (
-													<button
-														type="button"
-														onClick={() => {
-															const updated = [
-																...(field.value ??
-																	[]),
-															]
-															updated[index][3] =
-																[]
-															field.onChange(
-																updated
-															)
-														}}
-														className="absolute right-12 text-primary text-xl"
-														title="Clear files"
-														style={{
-															top: '50%',
-															transform:
-																'translateY(-50%)',
-														}}
-													>
-														<IoClose />
-													</button>
-												)}
-											{/* Styled file input */}
-											<label className="inline-flex items-center cursor-pointer">
-												<input
-													type="file"
-													multiple
-													className="hidden"
-													onChange={(e) => {
-														const updated = [
-															...(field.value ??
-																[]),
-														]
-														updated[index][3] = e
-															.target.files
-															? Array.from(
-																	e.target
-																		.files
-																)
-															: []
-														field.onChange(updated)
-													}}
-												/>
-												<span className="bg-white/5 hover:bg-white/5 px-2 py-2 shadow-md hover:shadow-xl text-white flex items-center justify-center transition-colors duration-150">
-													<FaFolderOpen className="w-5 h-5" />
-												</span>
-											</label>
-										</div>
 									</div>
 									<Button
 										variant="destructive"
@@ -248,7 +182,7 @@ const GrantsFurtherDetails = ({
 								onClick={() =>
 									field.onChange([
 										...(field.value ?? []),
-										['', '', '', []], // default empty row
+										['', '', ''], // default empty row
 									])
 								}
 								className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"

@@ -20,10 +20,10 @@ const GrantsFormEmobility = ({
 		<div className="font-jose text-white grid grid-cols-2 gap-x-3 gap-y-2 grid-rows-2 items-start h-fit">
 			<FormField
 				control={form.control}
-				name="vehicles_type"
+				name="deployment"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Type of Vehicle</FormLabel>
+						<FormLabel>Deployment</FormLabel>
 						<FormControl>
 							<MultiSelect
 								className="bg-white text-primary hover:bg-white"
@@ -32,28 +32,24 @@ const GrantsFormEmobility = ({
 								selectAll={false}
 								options={[
 									{
-										value: 'cars',
-										label: 'Cars',
+										value: '234Wheelers',
+										label: 'Road Transport (2-/3-/4- wheelers)',
 									},
 									{
-										value: 'buses',
-										label: 'Buses',
+										value: 'hdvs',
+										label: 'Road Transport (HDVs)',
 									},
 									{
-										value: 'trucks',
-										label: 'Trucks',
+										value: 'maritime',
+										label: 'Maritime',
 									},
 									{
-										value: 'planes',
-										label: 'Planes',
+										value: 'aviation',
+										label: 'Aviation',
 									},
 									{
-										value: 'boats',
-										label: 'Boats',
-									},
-									{
-										value: 'twoWheelers',
-										label: 'Two Wheelers',
+										value: 'rail',
+										label: 'Rail',
 									},
 								]}
 							/>
@@ -64,10 +60,10 @@ const GrantsFormEmobility = ({
 			/>
 			<FormField
 				control={form.control}
-				name="vehicles_contract"
+				name="project"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Type of Contract (Vehicles)</FormLabel>
+						<FormLabel>Project</FormLabel>
 						<FormControl>
 							<MultiSelect
 								className="bg-white text-primary hover:bg-white"
@@ -76,102 +72,24 @@ const GrantsFormEmobility = ({
 								selectAll={false}
 								options={[
 									{
-										value: 'purchase',
-										label: 'Purchase',
+										value: '234Wheelers',
+										label: 'Road Transport (2-/3-/4- wheelers)',
 									},
 									{
-										value: 'leasing',
-										label: 'Leasing',
+										value: 'hdvs',
+										label: 'Road Transport (HDVs)',
 									},
 									{
-										value: 'rental',
-										label: 'Rental',
+										value: 'maritime',
+										label: 'Maritime',
 									},
 									{
-										value: 'fleetManagement',
-										label: 'Fleet Management',
+										value: 'aviation',
+										label: 'Aviation',
 									},
 									{
-										value: 'dataManagement',
-										label: 'Data Management',
-									},
-								]}
-							/>
-						</FormControl>
-						<FormMessage className="text-red-500 text-sm" />
-					</FormItem>
-				)}
-			/>
-			<FormField
-				control={form.control}
-				name="charging_stations_type"
-				render={({ field }) => (
-					<FormItem>
-						<FormLabel>Type of Charging Station</FormLabel>
-						<FormControl>
-							<MultiSelect
-								className="bg-white text-primary hover:bg-white"
-								onValueChange={field.onChange}
-								variant="default"
-								selectAll={false}
-								options={[
-									{
-										value: 'cars',
-										label: 'Cars',
-									},
-									{
-										value: 'buses',
-										label: 'Buses',
-									},
-									{
-										value: 'trucks',
-										label: 'Trucks',
-									},
-									{
-										value: 'planes',
-										label: 'Planes',
-									},
-									{
-										value: 'boats',
-										label: 'Boats',
-									},
-									{
-										value: 'twoWheelers',
-										label: 'Two Wheelers',
-									},
-								]}
-							/>
-						</FormControl>
-						<FormMessage className="text-red-500 text-sm" />
-					</FormItem>
-				)}
-			/>
-			<FormField
-				control={form.control}
-				name="charging_stations_contract"
-				render={({ field }) => (
-					<FormItem>
-						<FormLabel>
-							Type of Contract (Charging Stations)
-						</FormLabel>
-						<FormControl>
-							<MultiSelect
-								className="bg-white text-primary hover:bg-white"
-								onValueChange={field.onChange}
-								variant="default"
-								selectAll={false}
-								options={[
-									{
-										value: 'exchange',
-										label: 'Exchange',
-									},
-									{
-										value: 'digitalUpdates',
-										label: 'Digital Updates',
-									},
-									{
-										value: 'purchase',
-										label: 'Purchase',
+										value: 'rail',
+										label: 'Rail',
 									},
 								]}
 							/>

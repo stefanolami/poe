@@ -11,6 +11,26 @@ export const createGrant = async (formData: CreateGrantType) => {
 		element.join(' ')
 	)
 
+	const { files } = formData
+
+	let uploadedFilePaths: string[] = []
+
+	if (files && files.length > 0) {
+		const uploadPromises = files.map(async (file: File) => {
+			// Use the file name as the path (optionally add a folder prefix if needed)
+			const filePath = `/grants/${file.name}`
+			const { error } = await supabase.storage
+				.from('documents')
+				.upload(filePath, file, {
+					cacheControl: '3600',
+					upsert: false,
+				})
+			if (error) throw new Error(`File upload failed: ${error.message}`)
+			return filePath
+		})
+		uploadedFilePaths = await Promise.all(uploadPromises)
+	}
+
 	const formattedData = {
 		geography: formData.geography,
 		call_title: formData.call_title,
@@ -25,10 +45,9 @@ export const createGrant = async (formData: CreateGrantType) => {
 		value: formData.value,
 		consultant: Number(formData.consultant),
 		sector: formData.sector,
-		vehicles_type: formData.vehicles_type,
-		vehicles_contract: formData.vehicles_contract,
-		charging_stations_type: formData.charging_stations_type,
-		charging_stations_contract: formData.charging_stations_contract,
+		deployment: formData.deployment,
+		project: formData.project,
+		files: uploadedFilePaths,
 	}
 
 	const { data, error } = await supabase

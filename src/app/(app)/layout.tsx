@@ -7,7 +7,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 		<>
 			<Header />
 			<div className="h-16 xl:h-24"></div>
-			<main className="font-jose min-h-[calc(100dvh-160px)] lg:min-h-screen-[calc(100vh-256px)] pt-10 md:py-16 lg:py-20 xl:py-24">
+			<main className="font-jose min-h-[calc(100dvh-160px)] lg:min-h-screen-[calc(100vh-256px)] pt-10 md:pt-16 lg:py-20 xl:py-24">
 				{children}
 			</main>
 			<Footer />

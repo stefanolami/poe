@@ -13,7 +13,7 @@ const EmobilityComponent = () => {
 	return (
 		<div className="relative">
 			<Hero />
-			<section className="mx-auto w-[90%] max-w-[1200px] font-jose mt-12 lg:mt-28">
+			<section className="mx-auto w-[90%] max-w-[1200px] font-jose my-12 lg:mt-28">
 				<div className="mx-auto flex lg:hidden flex-col items-center justify-center gap-2">
 					<div className="flex justify-center items-center text-white font-unna font-bold text-lg md:text-xl bg-primary-light h-10 md:h-12 w-44 md:w-56">
 						E-Mobility

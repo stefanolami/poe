@@ -114,72 +114,72 @@ export type Database = {
           amendments: string[] | null
           awarding_authority: string
           call_title: string | null
-          charging_stations_contract: string[] | null
-          charging_stations_type: string[] | null
           consultant: number | null
           created_at: string
           deadline: string[]
-          further_details: Json[] | null
+          deployment: string[] | null
+          files: string[] | null
+          filtered_clients: number[] | null
+          further_details: string[] | null
           geography: string[]
           grant_programme: string | null
           id: number
           in_brief: string
           instrument_type: string | null
+          project: string[] | null
           reference_number: string | null
           sector: string | null
           sent: boolean
           tailored_assessment: Json[] | null
           value: string
-          vehicles_contract: string[] | null
-          vehicles_type: string[] | null
         }
         Insert: {
           alert_purpose: string
           amendments?: string[] | null
           awarding_authority: string
           call_title?: string | null
-          charging_stations_contract?: string[] | null
-          charging_stations_type?: string[] | null
           consultant?: number | null
           created_at?: string
           deadline: string[]
-          further_details?: Json[] | null
+          deployment?: string[] | null
+          files?: string[] | null
+          filtered_clients?: number[] | null
+          further_details?: string[] | null
           geography: string[]
           grant_programme?: string | null
           id?: number
           in_brief: string
           instrument_type?: string | null
+          project?: string[] | null
           reference_number?: string | null
           sector?: string | null
           sent?: boolean
           tailored_assessment?: Json[] | null
           value: string
-          vehicles_contract?: string[] | null
-          vehicles_type?: string[] | null
         }
         Update: {
           alert_purpose?: string
           amendments?: string[] | null
           awarding_authority?: string
           call_title?: string | null
-          charging_stations_contract?: string[] | null
-          charging_stations_type?: string[] | null
           consultant?: number | null
           created_at?: string
           deadline?: string[]
-          further_details?: Json[] | null
+          deployment?: string[] | null
+          files?: string[] | null
+          filtered_clients?: number[] | null
+          further_details?: string[] | null
           geography?: string[]
           grant_programme?: string | null
           id?: number
           in_brief?: string
           instrument_type?: string | null
+          project?: string[] | null
           reference_number?: string | null
           sector?: string | null
           sent?: boolean
           tailored_assessment?: Json[] | null
           value?: string
-          vehicles_contract?: string[] | null
-          vehicles_type?: string[] | null
         }
         Relationships: [
           {
