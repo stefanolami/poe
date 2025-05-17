@@ -37,7 +37,7 @@ const GrantsSection = ({
 		category: keyof MobilityData
 	) => {
 		if (
-			storeData.eMobility[category].find((el) => el.value === item.value)
+			storeData.eMobility[category]?.find((el) => el.value === item.value)
 		) {
 			removeData(category, item)
 		} else {
@@ -68,7 +68,7 @@ const GrantsSection = ({
 								checked={
 									storeData.eMobility[
 										category as keyof MobilityData
-									].find(
+									]?.find(
 										(element) =>
 											element.value === item.value
 									)
@@ -88,7 +88,7 @@ const GrantsSection = ({
 							className={
 								storeData.eMobility[
 									category as keyof MobilityData
-								].find(
+								]?.find(
 									(element) => element.value === item.value
 								)
 									? 'font-bold'

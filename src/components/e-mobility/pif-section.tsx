@@ -29,7 +29,7 @@ const PifSection = ({ section }: { section: SectionType }) => {
 		e: React.ChangeEvent<HTMLInputElement>,
 		item: SelectableItem
 	) => {
-		if (storeData.eMobility.pif.find((el) => el.value === item.value)) {
+		if (storeData.eMobility.pif?.find((el) => el.value === item.value)) {
 			removeData('pif', item)
 		} else {
 			addData('pif', item)

@@ -55,7 +55,7 @@ const TendersSection = ({
 	) => {
 		if (!isContract) {
 			if (
-				storeData.eMobility[category].find(
+				storeData.eMobility[category]?.find(
 					(el) => el.value === item.value
 				)
 			) {
@@ -65,7 +65,7 @@ const TendersSection = ({
 			}
 		} else {
 			if (
-				storeData.eMobility[contractCategory].find(
+				storeData.eMobility[contractCategory]?.find(
 					(el) => el.value === item.value
 				)
 			) {
@@ -85,7 +85,7 @@ const TendersSection = ({
 			if (e.target.checked) {
 				fields.forEach((item) => {
 					if (
-						!storeData.eMobility[category].find(
+						!storeData.eMobility[category]?.find(
 							(el: SelectableItem) => el.value === item.value
 						)
 					) {
@@ -95,7 +95,7 @@ const TendersSection = ({
 			} else {
 				fields.forEach((item) => {
 					if (
-						storeData.eMobility[category].find(
+						storeData.eMobility[category]?.find(
 							(el: SelectableItem) => el.value === item.value
 						)
 					) {
@@ -107,7 +107,7 @@ const TendersSection = ({
 			if (e.target.checked) {
 				contracts?.forEach((item) => {
 					if (
-						!storeData.eMobility[contractCategory].find(
+						!storeData.eMobility[contractCategory]?.find(
 							(el: SelectableItem) => el.value === item.value
 						)
 					) {
@@ -117,7 +117,7 @@ const TendersSection = ({
 			} else {
 				contracts?.forEach((item) => {
 					if (
-						storeData.eMobility[contractCategory].find(
+						storeData.eMobility[contractCategory]?.find(
 							(el: SelectableItem) => el.value === item.value
 						)
 					) {
@@ -174,7 +174,7 @@ const TendersSection = ({
 									checked={
 										storeData.eMobility[
 											category as keyof MobilityData
-										].find(
+										]?.find(
 											(element) =>
 												element.value === item.value
 										)
@@ -194,7 +194,7 @@ const TendersSection = ({
 								className={
 									storeData.eMobility[
 										category as keyof MobilityData
-									].find(
+									]?.find(
 										(element) =>
 											element.value === item.value
 									)
@@ -285,7 +285,7 @@ const TendersSection = ({
 											checked={
 												storeData.eMobility[
 													contractCategory as keyof MobilityData
-												].find(
+												]?.find(
 													(element) =>
 														element.value ===
 														item.value
