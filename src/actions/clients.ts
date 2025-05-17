@@ -1,9 +1,9 @@
 'use server'
 
-import { CreateAccountType, UpdateAccountType } from '@/lib/types'
+import { UpdateAccountType } from '@/lib/types'
 import { createAdminClient, createClient } from '@/supabase/server'
 
-export const clientSignUp = async (data: CreateAccountType) => {
+/* export const clientSignUp = async (data: CreateAccountType) => {
 	try {
 		const supabase = await createClient()
 
@@ -77,7 +77,7 @@ export const clientSignUp = async (data: CreateAccountType) => {
 			throw new Error('An unexpected error occurred during signup')
 		}
 	}
-}
+} */
 
 export const clientUpdate = async (
 	data: UpdateAccountType,

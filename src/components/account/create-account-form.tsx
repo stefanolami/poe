@@ -72,6 +72,11 @@ const CreateAccountForm = () => {
 				storeData.eMobility.chargingStationsContract?.map(
 					(item) => item.value
 				),
+			pif: storeData.eMobility.pif?.map((item) => item.value),
+			deployment: storeData.eMobility.deployment?.map(
+				(item) => item.value
+			),
+			project: storeData.eMobility.project?.map((item) => item.value),
 		}
 
 		try {

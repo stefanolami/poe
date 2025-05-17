@@ -99,6 +99,9 @@ export const signUpClient = async (data: CreateAccountType) => {
 				vehicles_contract: data.vehicles_contract,
 				charging_stations_type: data.charging_stations_type,
 				charging_stations_contract: data.charging_stations_contract,
+				pif: data.pif,
+				deployment: data.deployment,
+				project: data.project,
 			})
 			.select()
 			.single()

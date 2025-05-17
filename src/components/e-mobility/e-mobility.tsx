@@ -26,7 +26,7 @@ const EmobilityComponent = () => {
 
 				{/* SELECTION */}
 				<div className="w-full mt-8 md:mt-12 lg:mt-6 mb-5 md:mb-8 lg:flex flex-row items-start justify-between lg:gap-4">
-					<div className="">
+					<div className="flex-1">
 						<div className="w-full px-5 py-2 xl:py-3 mb-4 bg-primary text-white font-unna text-base md:text-lg lg:text-2xl xl:text-3xl">
 							Public Procurement Opportunities
 							<span className="block text-xs md:text-sm lg:text-base xl:text-lg">
@@ -88,7 +88,7 @@ const EmobilityComponent = () => {
 						</div>
 						{/* <LanguageSection languages={selectionData.language} /> */}
 					</div>
-					<div className="hidden lg:block lg:sticky top-10 self-start">
+					<div className="hidden lg:block lg:sticky top-10 self-start w-[400px]">
 						<GeographyModifier />
 						<SummaryDesktop />
 					</div>

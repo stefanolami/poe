@@ -15,6 +15,9 @@ export const createAccountSchema = z
 		vehicles_contract: z.array(z.string()).optional(),
 		charging_stations_type: z.array(z.string()).optional(),
 		charging_stations_contract: z.array(z.string()).optional(),
+		pif: z.array(z.string()).optional(),
+		deployment: z.array(z.string()).optional(),
+		project: z.array(z.string()).optional(),
 		geography: z.array(z.string()).optional(),
 	})
 	.refine((data) => data.password === data.confirmPassword, {

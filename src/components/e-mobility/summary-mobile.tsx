@@ -14,6 +14,7 @@ import { selectionData } from '@/data/data'
 import { MobilityData, SelectableItem } from '@/store/store.types'
 import Expandable from '@/components/ui/expandable'
 import Link from 'next/link'
+import { removeParenthesesContent } from '@/lib/utils'
 
 const SummaryMobile = () => {
 	const {
@@ -75,8 +76,9 @@ const SummaryMobile = () => {
 							if (
 								key !== 'typeOfVehicleContract' &&
 								key !== 'chargingStationsContract' &&
-								key !== 'eVehiclesMaintenance' &&
-								key !== 'report'
+								key !== 'pif' &&
+								key !== 'deployment' &&
+								key !== 'project'
 							) {
 								const category =
 									selectionData.eMobility[
@@ -101,7 +103,9 @@ const SummaryMobile = () => {
 												].map((item, index) => (
 													<li key={index}>
 														<Expandable
-															title={item.label}
+															title={removeParenthesesContent(
+																item.label
+															)}
 															price={getModalSinglePrice(
 																key as keyof MobilityData,
 																item
@@ -194,39 +198,244 @@ const SummaryMobile = () => {
 										</div>
 									)
 								}
-							} else if (key === 'report') {
+							} else if (key === 'pif') {
 								const category =
-									storeData.eMobility[
-										key as keyof MobilityData
+									selectionData.eMobility[
+										key as keyof typeof selectionData.eMobility
 									]
 
-								if (category.length > 0) {
+								if (
+									storeData.eMobility[
+										key as keyof MobilityData
+									].length > 0
+								) {
+									return (
+										<div
+											className="mt-2"
+											key={index}
+										>
+											<ul className="pl-1 pr-3 w-full">
+												{storeData.eMobility[
+													key as keyof MobilityData
+												].map((item, index) => (
+													<li
+														key={index}
+														className="w-full py-2"
+													>
+														<Expandable
+															title={removeParenthesesContent(
+																item.label
+															)}
+															price={getModalSinglePrice(
+																key as keyof MobilityData,
+																item
+															).toString()}
+														>
+															<ul className="space-y-1 pl-6">
+																{storeGeographies.map(
+																	(
+																		geo,
+																		index
+																	) => (
+																		<li
+																			key={
+																				index
+																			}
+																			className="flex flex-row justify-between w-full"
+																		>
+																			<div className="flex flex-row justify-start items-center gap-1 text-white text-sm">
+																				<input
+																					type="checkbox"
+																					id={`checkbox-${category}-${item.value}-${geo.value}`}
+																					value={
+																						geo.value
+																					}
+																					onChange={(
+																						e
+																					) =>
+																						handleGeography(
+																							e,
+																							geo,
+																							key as keyof MobilityData,
+																							item
+																						)
+																					}
+																					checked={
+																						storeData.eMobility[
+																							key as keyof MobilityData
+																						]
+																							?.find(
+																								(
+																									el
+																								) =>
+																									el.value ==
+																									item.value
+																							)
+																							?.geographies?.find(
+																								(
+																									element
+																								) =>
+																									element.value ===
+																									geo.value
+																							)
+																							? true
+																							: false
+																					}
+																					className="custom-checkbox modal-checkbox scale-[.8] peer"
+																				/>
+																				<label
+																					className=""
+																					htmlFor={`checkbox-${category}-${item.value}-${geo.value}`}
+																				>
+																					{
+																						geo.label
+																					}
+																				</label>
+																			</div>
+																			<span className="text-white text-sm">
+																				€{' '}
+																				{
+																					category.fields.find(
+																						(
+																							x: SelectableItem
+																						) =>
+																							x.value ===
+																							item.value
+																					)
+																						?.price[
+																						geo.value as keyof SelectableItem['price']
+																					]
+																				}
+																			</span>
+																		</li>
+																	)
+																)}
+															</ul>
+														</Expandable>
+													</li>
+												))}
+											</ul>
+										</div>
+									)
+								}
+							} else if (
+								key === 'deployment' ||
+								key === 'project'
+							) {
+								const category =
+									selectionData.eMobility[
+										key as keyof typeof selectionData.eMobility
+									]
+								if (
+									storeData.eMobility[
+										key as keyof MobilityData
+									].length > 0
+								) {
 									return (
 										<div
 											className="mt-2"
 											key={index}
 										>
 											<span className="text-lg">
-												Reports
+												{key == 'deployment'
+													? 'Deployment Grants'
+													: 'Project Grants'}
 											</span>
 											<ul className="pl-1 pr-3">
-												{category.map((item, index) => (
-													<li
-														key={index}
-														className="flex w-full items-center justify-between gap-4 py-2"
-													>
-														<span className="text-white">
-															{item.value == 'eu'
-																? 'EU'
-																: 'Non-EU'}
-														</span>
-														<span className="text-white">
-															€{' '}
-															{
-																item.price
-																	?.default
-															}
-														</span>
+												{storeData.eMobility[
+													key as keyof MobilityData
+												].map((item, index) => (
+													<li key={index}>
+														<Expandable
+															title={removeParenthesesContent(
+																item.label
+															)}
+															price={getModalSinglePrice(
+																key as keyof MobilityData,
+																item
+															).toString()}
+														>
+															<ul className="space-y-1 pl-6">
+																{storeGeographies.map(
+																	(
+																		geo,
+																		index
+																	) => (
+																		<li
+																			key={
+																				index
+																			}
+																			className="flex flex-row justify-between w-full"
+																		>
+																			<div className="flex flex-row justify-start items-center gap-1 text-white text-sm">
+																				<input
+																					type="checkbox"
+																					id={`checkbox-${category}-${item.value}-${geo.value}`}
+																					value={
+																						geo.value
+																					}
+																					onChange={(
+																						e
+																					) =>
+																						handleGeography(
+																							e,
+																							geo,
+																							key as keyof MobilityData,
+																							item
+																						)
+																					}
+																					checked={
+																						storeData.eMobility[
+																							key as keyof MobilityData
+																						]
+																							?.find(
+																								(
+																									el
+																								) =>
+																									el.value ==
+																									item.value
+																							)
+																							?.geographies?.find(
+																								(
+																									element
+																								) =>
+																									element.value ===
+																									geo.value
+																							)
+																							? true
+																							: false
+																					}
+																					className="custom-checkbox modal-checkbox scale-[.8] peer"
+																				/>
+																				<label
+																					className=""
+																					htmlFor={`checkbox-${category}-${item.value}-${geo.value}`}
+																				>
+																					{
+																						geo.label
+																					}
+																				</label>
+																			</div>
+																			<span className="text-white text-sm">
+																				€{' '}
+																				{
+																					category.fields.find(
+																						(
+																							x: SelectableItem
+																						) =>
+																							x.value ===
+																							item.value
+																					)
+																						?.price[
+																						geo.value as keyof SelectableItem['price']
+																					]
+																				}
+																			</span>
+																		</li>
+																	)
+																)}
+															</ul>
+														</Expandable>
 													</li>
 												))}
 											</ul>

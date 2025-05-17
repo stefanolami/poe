@@ -62,7 +62,11 @@ const AccountSummary = () => {
 									key={index}
 								>
 									<span className="text-base md:text-lg lg:text-xl">
-										{category.label}
+										{key == 'deployment'
+											? 'Deployment Grants'
+											: key == 'project'
+												? 'Project Grants'
+												: category.label}
 									</span>
 									<ul className="text-sm md:text-base space-y-1 lg:space-y-2 list-disc list-inside pl-1">
 										{storeData.eMobility[
