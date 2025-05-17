@@ -59,19 +59,17 @@ const CreateAccountForm = () => {
 			...data,
 			sector: storeSector.value,
 			geography: storeGeographies.map((item) => item.value),
-			vehicles_type: storeData.eMobility.ppo.typeOfVehicle?.map(
+			vehicles_type: storeData.eMobility.typeOfVehicle?.map(
 				(item) => item.value
 			),
-			vehicles_contract:
-				storeData.eMobility.ppo.typeOfVehicleContract?.map(
-					(item) => item.value
-				),
-			charging_stations_type:
-				storeData.eMobility.ppo.chargingStations?.map(
-					(item) => item.value
-				),
+			vehicles_contract: storeData.eMobility.typeOfVehicleContract?.map(
+				(item) => item.value
+			),
+			charging_stations_type: storeData.eMobility.chargingStations?.map(
+				(item) => item.value
+			),
 			charging_stations_contract:
-				storeData.eMobility.ppo.chargingStationsContract?.map(
+				storeData.eMobility.chargingStationsContract?.map(
 					(item) => item.value
 				),
 		}
