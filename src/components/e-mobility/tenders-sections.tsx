@@ -6,16 +6,16 @@ import { useShallow } from 'zustand/shallow'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
-const SelectionSection = ({
+const TendersSection = ({
 	section,
 	category,
 }: {
 	section: {
 		label: string
 		value: string
-		fieldsLabel: string
+		fieldsLabel?: string
 		fields: SelectableItem[]
-		contracts: SelectableItem[]
+		contracts?: SelectableItem[]
 	}
 	category: string
 }) => {
@@ -105,7 +105,7 @@ const SelectionSection = ({
 			}
 		} else {
 			if (e.target.checked) {
-				contracts.forEach((item) => {
+				contracts?.forEach((item) => {
 					if (
 						!storeData.eMobility[contractCategory].find(
 							(el: SelectableItem) => el.value === item.value
@@ -115,7 +115,7 @@ const SelectionSection = ({
 					}
 				})
 			} else {
-				contracts.forEach((item) => {
+				contracts?.forEach((item) => {
 					if (
 						storeData.eMobility[contractCategory].find(
 							(el: SelectableItem) => el.value === item.value
@@ -265,7 +265,7 @@ const SelectionSection = ({
 							are selected)
 						</span>
 						<ul className="space-y-1 mt-3">
-							{contracts.map((item, index) => (
+							{contracts?.map((item, index) => (
 								<li
 									key={item.value}
 									className="flex flex-row items-center justify-between text-primary"
@@ -323,7 +323,7 @@ const SelectionSection = ({
 										checked={
 											storeData.eMobility[
 												contractCategory as keyof MobilityData
-											].length === contracts.length
+											].length === contracts?.length
 												? true
 												: false
 										}
@@ -342,4 +342,4 @@ const SelectionSection = ({
 	)
 }
 
-export default SelectionSection
+export default TendersSection

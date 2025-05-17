@@ -59,17 +59,19 @@ const CreateAccountForm = () => {
 			...data,
 			sector: storeSector.value,
 			geography: storeGeographies.map((item) => item.value),
-			vehicles_type: storeData.eMobility.typeOfVehicle?.map(
+			vehicles_type: storeData.eMobility.ppo.typeOfVehicle?.map(
 				(item) => item.value
 			),
-			vehicles_contract: storeData.eMobility.typeOfVehicleContract?.map(
-				(item) => item.value
-			),
-			charging_stations_type: storeData.eMobility.chargingStations?.map(
-				(item) => item.value
-			),
+			vehicles_contract:
+				storeData.eMobility.ppo.typeOfVehicleContract?.map(
+					(item) => item.value
+				),
+			charging_stations_type:
+				storeData.eMobility.ppo.chargingStations?.map(
+					(item) => item.value
+				),
 			charging_stations_contract:
-				storeData.eMobility.chargingStationsContract?.map(
+				storeData.eMobility.ppo.chargingStationsContract?.map(
 					(item) => item.value
 				),
 		}
@@ -281,7 +283,7 @@ const CreateAccountForm = () => {
 						variant="default"
 						className="text-sm md:text-base lg:text-lg bg-primary-light text-white hover:bg-primary-light shadow-md hover:shadow-xl hover:scale-[1.02] mt-8 px-12 py-2"
 					>
-						Sign Up
+						Create Account
 					</Button>
 				</form>
 			</Form>

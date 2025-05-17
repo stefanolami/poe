@@ -3,11 +3,11 @@
 import { selectionData } from '@/data/data'
 import GeographyModifier from '../geography-modifier'
 import Hero from '../hero'
-import SelectionSection from './selection-sections'
-//import ReportSection from './report-section'
-//import LanguageSection from './language-section'
 import SummaryMobile from './summary-mobile'
 import SummaryDesktop from './summary-desktop'
+import TendersSection from './tenders-sections'
+import PifSection from './pif-section'
+import GrantsSection from './grants-section'
 
 const EmobilityComponent = () => {
 	return (
@@ -37,15 +37,55 @@ const EmobilityComponent = () => {
 								millions.
 							</span>
 						</div>
-						{Object.entries(selectionData.eMobility.ppo).map(
-							([key, value]) => (
-								<SelectionSection
-									key={key}
-									section={value}
-									category={key}
-								/>
-							)
+						{Object.entries(selectionData.eMobility).map(
+							([key, value]) => {
+								if (
+									key == 'typeOfVehicle' ||
+									key == 'chargingStations'
+								) {
+									return (
+										<TendersSection
+											key={key}
+											section={value}
+											category={key}
+										/>
+									)
+								} else if (key == 'pif') {
+									return (
+										<PifSection
+											key={key}
+											section={value}
+										/>
+									)
+								}
+							}
 						)}
+						<div className="w-full mt-8">
+							<div className="w-full px-5 py-2 xl:py-3 mb-4 bg-primary text-white font-unna text-base md:text-lg lg:text-2xl xl:text-3xl">
+								Public Grants
+								<span className="block text-xs md:text-sm lg:text-base xl:text-lg">
+									Non-repayable funds for project development
+									and implementation at all TRL & CRL levels
+									(apart from public procurement).
+								</span>
+							</div>
+							{Object.entries(selectionData.eMobility).map(
+								([key, value]) => {
+									if (
+										key == 'deployment' ||
+										key == 'project'
+									) {
+										return (
+											<GrantsSection
+												key={key}
+												section={value}
+												category={key}
+											/>
+										)
+									}
+								}
+							)}
+						</div>
 						{/* <LanguageSection languages={selectionData.language} /> */}
 					</div>
 					<div className="hidden lg:block lg:sticky top-10 self-start">

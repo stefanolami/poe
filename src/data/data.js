@@ -31,185 +31,11 @@ export const priceModalData = {
 
 export const selectionData = {
 	eMobility: {
-		ppo: {
-			typeOfVehicle: {
-				label: 'Electric Vehicles',
-				value: 'typeOfVehicle',
-				fieldsLabel: 'Type of vehicle',
-				fields: [
-					{
-						value: 'cars',
-						label: 'Cars (up to 3,5 tonnes)',
-						price: {
-							euAdmin: '3000',
-							eu27: '1500',
-							brazil: '2000',
-							turkey: '2000',
-							colombia: '1500',
-							russia: '2500',
-						},
-					},
-					{
-						value: 'buses',
-						label: 'Buses (all types and sizes)',
-						price: {
-							euAdmin: '3000',
-							eu27: '1500',
-							brazil: '1000',
-							turkey: '2000',
-							colombia: '1500',
-							russia: '2500',
-						},
-					},
-					{
-						value: 'trucks',
-						label: 'Trucks (above 3,5 tonnes)',
-						price: {
-							euAdmin: '3000',
-							eu27: '1500',
-							brazil: '2000',
-							turkey: '2000',
-							colombia: '1500',
-							russia: '2500',
-						},
-					},
-					{
-						value: 'planes',
-						label: 'Planes',
-						price: {
-							euAdmin: '3000',
-							eu27: '1500',
-							brazil: '2000',
-							turkey: '2000',
-							colombia: '1500',
-							russia: '2500',
-						},
-					},
-					{
-						value: 'boats',
-						label: 'Boats',
-						price: {
-							euAdmin: '3000',
-							eu27: '1500',
-							brazil: '2000',
-							turkey: '2000',
-							colombia: '1500',
-							russia: '2500',
-						},
-					},
-					{
-						value: 'rail',
-						label: 'Rail',
-						price: {
-							euAdmin: '3000',
-							eu27: '1500',
-							brazil: '2000',
-							turkey: '2000',
-							colombia: '1500',
-							russia: '2500',
-						},
-					},
-					{
-						value: 'twoThreeWheelers',
-						label: '2-3 wheelers (motorbikes & scooters)',
-						price: {
-							euAdmin: '3000',
-							eu27: '1500',
-							brazil: '2000',
-							turkey: '2000',
-							colombia: '1500',
-							russia: '2500',
-						},
-					},
-					{
-						value: 'threeWheelers',
-						label: '3 wheelers (rickshaws for persons or cargo)',
-						price: {
-							euAdmin: '3000',
-							eu27: '1500',
-							brazil: '2000',
-							turkey: '2000',
-							colombia: '1500',
-							russia: '2500',
-						},
-					},
-					{
-						value: 'twoWheelers',
-						label: '2 wheelers (bicycles)',
-						price: {
-							euAdmin: '3000',
-							eu27: '1500',
-							brazil: '2000',
-							turkey: '2000',
-							colombia: '1500',
-							russia: '2500',
-						},
-					},
-				],
-				contracts: [
-					{
-						value: 'purchase',
-						label: 'Purchase',
-					},
-					{
-						value: 'leasing',
-						label: 'Leasing / rental agreement',
-					},
-					{
-						value: 'rental',
-						label: 'Rental vehicle including driver',
-					},
-					{
-						value: 'fleetManagement',
-						label: 'Fleet management',
-					},
-					{
-						value: 'dataManagement',
-						label: 'Data management and software service contracts',
-					},
-				],
-			},
-			/* eVehiclesMaintenance: {
-			label: 'E-Vehicles Maintenance',
-			value: 'eVehiclesMaintenance',
-			fieldsLabel: '',
+		typeOfVehicle: {
+			label: 'Electric Vehicles',
+			value: 'typeOfVehicle',
+			fieldsLabel: 'Type of vehicle',
 			fields: [
-				{
-					value: 'evServices',
-					label: 'EV repair and maintenance services',
-					price: {
-						euAdmin: '3000',
-						eu27: '1500',
-						brazil: '2000',
-						turkey: '2000',
-						colombia: '1500',
-						russia: '2500',
-					},
-				},
-				{
-					value: 'diagnosis',
-					label: 'Diagnosis',
-					price: {
-						euAdmin: '3000',
-						eu27: '1500',
-						brazil: '2000',
-						turkey: '2000',
-						colombia: '1500',
-						russia: '2500',
-					},
-				},
-				{
-					value: 'exchangePurchase',
-					label: 'Exchange / Purchase',
-					price: {
-						euAdmin: '3000',
-						eu27: '1500',
-						brazil: '2000',
-						turkey: '2000',
-						colombia: '1500',
-						russia: '2500',
-					},
-				},
 				{
 					value: 'cars',
 					label: 'Cars (up to 3,5 tonnes)',
@@ -228,7 +54,7 @@ export const selectionData = {
 					price: {
 						euAdmin: '3000',
 						eu27: '1500',
-						brazil: '2000',
+						brazil: '1000',
 						turkey: '2000',
 						colombia: '1500',
 						russia: '2500',
@@ -271,8 +97,44 @@ export const selectionData = {
 					},
 				},
 				{
+					value: 'rail',
+					label: 'Rail',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					value: 'twoThreeWheelers',
+					label: '2-3 wheelers (motorbikes & scooters)',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					value: 'threeWheelers',
+					label: '3 wheelers (rickshaws for persons or cargo)',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
 					value: 'twoWheelers',
-					label: 'Two-wheelers (bicycles)',
+					label: '2 wheelers (bicycles)',
 					price: {
 						euAdmin: '3000',
 						eu27: '1500',
@@ -283,221 +145,345 @@ export const selectionData = {
 					},
 				},
 			],
-			contracts: [],
-		}, */
-			chargingStations: {
-				label: 'Charging Stations',
-				value: 'chargingStations',
-				fieldsLabel: 'Type of vehicle',
-				fields: [
-					{
-						value: 'bikesCars',
-						label: 'Motorbikes and Cars (AC/DC)',
-						price: {
-							euAdmin: '3000',
-							eu27: '1500',
-							brazil: '2000',
-							turkey: '2000',
-							colombia: '1500',
-							russia: '2500',
-						},
-					},
-					{
-						value: 'buses',
-						label: 'Buses (all types and sizes)',
-						price: {
-							euAdmin: '3000',
-							eu27: '1500',
-							brazil: '2000',
-							turkey: '2000',
-							colombia: '1500',
-							russia: '2500',
-						},
-					},
-					{
-						value: 'trucks',
-						label: 'Trucks (above 3,5 tonnes)',
-						price: {
-							euAdmin: '3000',
-							eu27: '1500',
-							brazil: '2000',
-							turkey: '2000',
-							colombia: '1500',
-							russia: '2500',
-						},
-					},
-					{
-						value: 'planesDrones',
-						label: 'Planes and Drones',
-						price: {
-							euAdmin: '3000',
-							eu27: '1500',
-							brazil: '2000',
-							turkey: '2000',
-							colombia: '1500',
-							russia: '2500',
-						},
-					},
-					{
-						value: 'boatsShips',
-						label: 'Boats and Ships',
-						price: {
-							euAdmin: '3000',
-							eu27: '1500',
-							brazil: '2000',
-							turkey: '2000',
-							colombia: '1500',
-							russia: '2500',
-						},
-					},
-					{
-						value: 'rail',
-						label: 'Rail',
-						price: {
-							euAdmin: '3000',
-							eu27: '1500',
-							brazil: '2000',
-							turkey: '2000',
-							colombia: '1500',
-							russia: '2500',
-						},
-					},
-					{
-						value: 'twoWheelers',
-						label: 'Two-wheelers (bicycles)',
-						price: {
-							euAdmin: '3000',
-							eu27: '1500',
-							brazil: '2000',
-							turkey: '2000',
-							colombia: '1500',
-							russia: '2500',
-						},
-					},
-				],
-				contracts: [
-					{
-						value: 'exchange',
-						label: 'Exchange of parts and / or upgrading',
-					},
-					{
-						value: 'digitalUpdates',
-						label: 'Digital updates',
-					},
-					{
-						value: 'purchase',
-						label: 'Purchase of spare parts',
-					},
-				],
-			},
+			contracts: [
+				{
+					value: 'purchase',
+					label: 'Purchase',
+				},
+				{
+					value: 'leasing',
+					label: 'Leasing / rental agreement',
+				},
+				{
+					value: 'rental',
+					label: 'Rental vehicle including driver',
+				},
+				{
+					value: 'fleetManagement',
+					label: 'Fleet management',
+				},
+				{
+					value: 'dataManagement',
+					label: 'Data management and software service contracts',
+				},
+			],
 		},
-		ifo: {
-			pif: {
-				label: 'Public Investment Financing',
-				subTitle:
-					'Low-risk, repayable loans from financing organisations supported by public means.',
-				fields: [
-					{
-						label: 'Public investment financing opportunities handbook on state-driven financing, availabilities, accession criteria and processes depending on the geographies you have selected. Updated every end of year’s quarter.',
-						value: 'pif',
-					},
-				],
-			},
-			grants: {
-				label: 'Public Grants',
-				subTitle:
-					'Non-repayable funds for project development and implementation at all TRL & CRL levels (apart from public procurement).',
-				fields: [
-					{
-						label: 'Support for infrastructure deployment in accordance with the policies of the geography. At first, you will receive a full report on the current state of affairs in opportunities and a handbook on the various relevant grant pockets. Thereafter, you will receive ad hoc alerts on developments as well as relevant updates to the handbook. Please chose your sector(s) of interest.',
-						value: 'grants1',
-						subFields: [
-							{
-								label: 'Road Transport (2-/3-/4- wheelers)',
-								value: '234Wheelers',
-							},
-							{
-								label: 'Road Transport (HDVs)',
-								value: 'hdvs',
-							},
-							{
-								label: 'Maritime',
-								value: 'maritime',
-							},
-							{
-								label: 'Aviation (including airports and drones)',
-								value: 'aviation',
-							},
-							{
-								label: 'Rail',
-								value: 'rail',
-							},
-						],
-					},
-					{
-						label: 'Innovation-driven projects for charging infrastructure eco-system – from grid to vehicle. At first, you will receive a full report on the current state of affairs in opportunities and a handbook on the various relevant grant pockets. Thereafter, you will receive ad hoc alerts on developments as well as relevant updates to the handbook. Please chose your sector(s) of interest.',
-						value: 'grants2',
-						subFields: [
-							{
-								label: 'Road Transport (2-/3-/4- wheelers)',
-								value: '234Wheelers',
-							},
-							{
-								label: 'Road Transport (HDVs)',
-								value: 'hdvs',
-							},
-							{
-								label: 'Maritime',
-								value: 'maritime',
-							},
-							{
-								label: 'Aviation (including airports and drones)',
-								value: 'aviation',
-							},
-							{
-								label: 'Rail',
-								value: 'rail',
-							},
-						],
-					},
-				],
-			},
-		},
-		/* report: {
-			label: 'Funding & Investment Financing opportunities in the e-mobility sector',
-			value: 'report',
-			fieldsLabel: '',
+		chargingStations: {
+			label: 'Charging Stations',
+			value: 'chargingStations',
+			fieldsLabel: 'Type of vehicle',
 			fields: [
 				{
-					value: 'eu',
-					label: 'EU - Quarterly report (with ad hoc alerts for time-sensitive announcements) on European Commission support programme for research & innovation & deployment investment of e-mobility services',
+					value: 'bikesCars',
+					label: 'Motorbikes and Cars (AC/DC)',
 					price: {
-						euAdmin: '',
-						eu27: '',
-						brazil: '',
-						turkey: '',
-						colombia: '',
-						russia: '',
-						default: '8000',
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
 					},
 				},
 				{
-					value: 'nonEu',
-					label: 'Non-Eu administrated - Quarterly report (with ad hoc alerts for time-sensitive announcements) on international, regional or national funding or financing programmes of e-mobility services',
+					value: 'buses',
+					label: 'Buses (all types and sizes)',
 					price: {
-						euAdmin: '',
-						eu27: '',
-						brazil: '',
-						turkey: '',
-						colombia: '',
-						russia: '',
-						default: '11000',
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					value: 'trucks',
+					label: 'Trucks (above 3,5 tonnes)',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					value: 'planesDrones',
+					label: 'Planes and Drones',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					value: 'boatsShips',
+					label: 'Boats and Ships',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					value: 'rail',
+					label: 'Rail',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					value: 'twoWheelers',
+					label: '2 wheelers (bicycles)',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
 					},
 				},
 			],
-			contracts: [],
+			contracts: [
+				{
+					value: 'exchange',
+					label: 'Exchange of parts and / or upgrading',
+				},
+				{
+					value: 'digitalUpdates',
+					label: 'Digital updates',
+				},
+				{
+					value: 'purchase',
+					label: 'Purchase of spare parts',
+				},
+			],
+		},
+		pif: {
+			label: 'Public Investment Financing',
+			value: 'pif',
+			fields: [
+				{
+					label: 'Public investment financing opportunities handbook on state-driven financing, availabilities, accession criteria and processes depending on the geographies you have selected. Updated every end of year’s quarter.',
+					value: 'pif',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+			],
+		},
+		deployment: {
+			label: 'Support for infrastructure deployment in accordance with the policies of the geography. At first, you will receive a full report on the current state of affairs in opportunities and a handbook on the various relevant grant pockets. Thereafter, you will receive ad hoc alerts on developments as well as relevant updates to the handbook. Please chose your sector(s) of interest.',
+			value: 'deployment',
+			fields: [
+				{
+					label: 'Road Transport (2-/3-/4- wheelers)',
+					value: '234Wheelers',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					label: 'Road Transport (HDVs)',
+					value: 'hdvs',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					label: 'Maritime',
+					value: 'maritime',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					label: 'Aviation (including airports and drones)',
+					value: 'aviation',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					label: 'Rail',
+					value: 'rail',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+			],
+		},
+		project: {
+			label: 'Innovation-driven projects for charging infrastructure eco-system – from grid to vehicle. At first, you will receive a full report on the current state of affairs in opportunities and a handbook on the various relevant grant pockets. Thereafter, you will receive ad hoc alerts on developments as well as relevant updates to the handbook. Please chose your sector(s) of interest.',
+			value: 'project',
+			fields: [
+				{
+					label: 'Road Transport (2-/3-/4- wheelers)',
+					value: '234Wheelers',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					label: 'Road Transport (HDVs)',
+					value: 'hdvs',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					label: 'Maritime',
+					value: 'maritime',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					label: 'Aviation (including airports and drones)',
+					value: 'aviation',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+				{
+					label: 'Rail',
+					value: 'rail',
+					price: {
+						euAdmin: '3000',
+						eu27: '1500',
+						brazil: '2000',
+						turkey: '2000',
+						colombia: '1500',
+						russia: '2500',
+					},
+				},
+			],
+		},
+		/* grants: {
+			label: 'Public Grants',
+			subTitle:
+				'Non-repayable funds for project development and implementation at all TRL & CRL levels (apart from public procurement).',
+			fields: [
+				{
+					label: 'Support for infrastructure deployment in accordance with the policies of the geography. At first, you will receive a full report on the current state of affairs in opportunities and a handbook on the various relevant grant pockets. Thereafter, you will receive ad hoc alerts on developments as well as relevant updates to the handbook. Please chose your sector(s) of interest.',
+					value: 'deployment',
+					subFields: [
+						{
+							label: 'Road Transport (2-/3-/4- wheelers)',
+							value: '234Wheelers',
+						},
+						{
+							label: 'Road Transport (HDVs)',
+							value: 'hdvs',
+						},
+						{
+							label: 'Maritime',
+							value: 'maritime',
+						},
+						{
+							label: 'Aviation (including airports and drones)',
+							value: 'aviation',
+						},
+						{
+							label: 'Rail',
+							value: 'rail',
+						},
+					],
+				},
+				{
+					label: 'Innovation-driven projects for charging infrastructure eco-system – from grid to vehicle. At first, you will receive a full report on the current state of affairs in opportunities and a handbook on the various relevant grant pockets. Thereafter, you will receive ad hoc alerts on developments as well as relevant updates to the handbook. Please chose your sector(s) of interest.',
+					value: 'project',
+					subFields: [
+						{
+							label: 'Road Transport (2-/3-/4- wheelers)',
+							value: '234Wheelers',
+						},
+						{
+							label: 'Road Transport (HDVs)',
+							value: 'hdvs',
+						},
+						{
+							label: 'Maritime',
+							value: 'maritime',
+						},
+						{
+							label: 'Aviation (including airports and drones)',
+							value: 'aviation',
+						},
+						{
+							label: 'Rail',
+							value: 'rail',
+						},
+					],
+				},
+			],
 		}, */
 	},
+
 	/* language: [
 		{
 			value: 'german',

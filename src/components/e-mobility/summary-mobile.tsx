@@ -54,7 +54,11 @@ const SummaryMobile = () => {
 		<div className="w-full lg:hidden sticky bottom-0 font-jose text-white">
 			<Drawer>
 				<DrawerTrigger className="w-full flex flex-row justify-between items-center p-2 bg-primary-light">
-					<div className="h-full bg-primary-light flex-1">OPEN</div>
+					<div className="flex-1 flex items-center justify-center">
+						<div className="flex items-center bg-primary px-2 shadow-md">
+							<span className="block mt-1">SUMMARY</span>
+						</div>
+					</div>
 					<div className="h-full bg-primary-light flex-1">
 						TOTAL € {getTotalPrice()}
 					</div>
@@ -75,8 +79,8 @@ const SummaryMobile = () => {
 								key !== 'report'
 							) {
 								const category =
-									selectionData.eMobility.ppo[
-										key as keyof typeof selectionData.eMobility.ppo
+									selectionData.eMobility[
+										key as keyof typeof selectionData.eMobility
 									]
 								if (
 									storeData.eMobility[

@@ -60,8 +60,8 @@ const SummaryDesktop = () => {
 							key !== 'report'
 						) {
 							const category =
-								selectionData.eMobility.ppo[
-									key as keyof typeof selectionData.eMobility.ppo
+								selectionData.eMobility[
+									key as keyof typeof selectionData.eMobility
 								]
 							if (
 								storeData.eMobility[key as keyof MobilityData]

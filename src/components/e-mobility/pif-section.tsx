@@ -2,17 +2,19 @@ import { useStore } from '@/store/store'
 import { SelectableItem } from '@/store/store.types'
 import { useShallow } from 'zustand/shallow'
 
-const ReportSection = ({
-	section,
-}: {
-	section: {
-		label: string
-		value: string
-		fieldsLabel: string
-		fields: SelectableItem[]
-		contracts: SelectableItem[]
-	}
-}) => {
+type FieldType = {
+	label: string
+	value: string
+	subFields?: SelectableItem[]
+}
+
+type SectionType = {
+	label: string
+	value: string
+	fields: FieldType[]
+}
+
+const PifSection = ({ section }: { section: SectionType }) => {
 	const { label, fields } = section
 
 	const { storeData, addData, removeData } = useStore(
@@ -27,22 +29,21 @@ const ReportSection = ({
 		e: React.ChangeEvent<HTMLInputElement>,
 		item: SelectableItem
 	) => {
-		if (e.target.checked) {
-			addData('report', item)
+		if (storeData.eMobility.pif.find((el) => el.value === item.value)) {
+			removeData('pif', item)
 		} else {
-			removeData('report', item)
+			addData('pif', item)
 		}
-		/* if (storeData.eMobility.report.find((el) => el.value === item.value)) {
-			removeData('report', item)
-		} else {
-			addData('report', item)
-		} */
 	}
 
 	return (
 		<div className="w-full mt-8">
-			<div className="w-full px-5 py-2 xl:py-3 bg-primary text-white font-unna text-base md:text-lg text-balance lg:text-3xl">
+			<div className="w-full px-5 py-2 xl:py-3 mb-4 bg-primary text-white font-unna text-base md:text-lg lg:text-2xl xl:text-3xl">
 				{label}
+				<span className="block text-xs md:text-sm lg:text-base xl:text-lg">
+					Low-risk, repayable loans from financing organisations
+					supported by public means.
+				</span>
 			</div>
 			<ul className="mt-3 px-2 py-2 xl:py-5 flex flex-col justify-between items-start gap-3">
 				{fields.map((field, index) => (
@@ -56,14 +57,7 @@ const ReportSection = ({
 								id="checkbox-report-eu"
 								value="report-eu"
 								onChange={(e) => handleCheckbox(e, field)}
-								checked={
-									storeData.eMobility.report.find(
-										(element) =>
-											element.value === field.value
-									)
-										? true
-										: false
-								}
+								checked={storeData.eMobility.pif.length > 0}
 								className="custom-checkbox scale-[.8] peer"
 							/>
 							<label
@@ -73,9 +67,11 @@ const ReportSection = ({
 								{field.label}
 							</label>
 						</div>
+
+						{/* 
 						<span className="block text-nowrap">
 							EUR {field.price?.default} / year
-						</span>
+						</span> */}
 					</li>
 				))}
 			</ul>
@@ -83,4 +79,4 @@ const ReportSection = ({
 	)
 }
 
-export default ReportSection
+export default PifSection

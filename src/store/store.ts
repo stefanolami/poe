@@ -23,10 +23,11 @@ export const useStore = create<StoreState>()(
 				eMobility: {
 					typeOfVehicle: [],
 					typeOfVehicleContract: [],
-					eVehiclesMaintenance: [],
 					chargingStations: [],
 					chargingStationsContract: [],
-					report: [],
+					pif: [],
+					deployment: [],
+					project: [],
 				},
 			},
 			changeSector: (newSector) => set(() => ({ sector: newSector })),
@@ -154,7 +155,7 @@ export const useStore = create<StoreState>()(
 				get().geographies.forEach((country) => {
 					total += parseInt(
 						//@ts-expect-error I hate you typescript
-						selectionData[get().sector?.value].ppo[
+						selectionData[get().sector?.value][
 							category
 						].fields.find(
 							(x: SelectableItem) => x.value === item.value
@@ -191,8 +192,8 @@ export const useStore = create<StoreState>()(
 				const sectorData =
 					selectionData[sectorValue as keyof typeof selectionData]
 				const categoryData = (
-					sectorData.ppo[
-						category as keyof typeof sectorData.ppo
+					sectorData[
+						category as keyof typeof sectorData
 					] as CategoryData
 				).fields
 
@@ -231,15 +232,6 @@ export const useStore = create<StoreState>()(
 					}
 				})
 
-				// Add fixed prices for reports if applicable
-				const reportItems = get().data.eMobility.report
-				if (reportItems.find((item) => item.value === 'reportEu')) {
-					total += 8000
-				}
-				if (reportItems.find((item) => item.value === 'reportNonEu')) {
-					total += 11000
-				}
-
 				return total
 			},
 			getTotalPrice: () => {
@@ -266,14 +258,14 @@ export const useStore = create<StoreState>()(
 					}
 				})
 
-				// Add fixed prices for reports if applicable
+				/* // Add fixed prices for reports if applicable
 				const reportItems = get().data.eMobility.report
 				if (reportItems.find((item) => item.value === 'eu')) {
 					total += 8000
 				}
 				if (reportItems.find((item) => item.value === 'nonEu')) {
 					total += 11000
-				}
+				} */
 
 				// Apply language-based increment
 				const languageCount = get().languages.length

@@ -27,10 +27,11 @@ export interface CategoryData {
 export interface MobilityData {
 	typeOfVehicle: SelectableItem[]
 	typeOfVehicleContract: SelectableItem[]
-	eVehiclesMaintenance: SelectableItem[]
 	chargingStations: SelectableItem[]
 	chargingStationsContract: SelectableItem[]
-	report: SelectableItem[]
+	pif: SelectableItem[]
+	deployment: SelectableItem[]
+	project: SelectableItem[]
 }
 
 export interface Sector {
