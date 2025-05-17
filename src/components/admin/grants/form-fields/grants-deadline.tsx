@@ -13,6 +13,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from '@/components/ui/popover'
+import { Textarea } from '@/components/ui/textarea'
 import { CreateGrantType } from '@/lib/types'
 import { CalendarIcon } from 'lucide-react'
 import React from 'react'
@@ -28,7 +29,7 @@ const GrantsDeadline = ({ form }: { form: UseFormReturn<CreateGrantType> }) => {
 				<FormItem className="col-span-2">
 					<FormLabel>Deadline</FormLabel>
 					<FormControl>
-						<div className="space-y-4">
+						<div className="space-y-4 w-full">
 							{/* Render each deadline row */}
 							{(field.value as [string, string, string][]).map(
 								(
@@ -36,10 +37,10 @@ const GrantsDeadline = ({ form }: { form: UseFormReturn<CreateGrantType> }) => {
 									index: number
 								) => (
 									<div
-										className="flex flex-row justify-start items-center gap-6"
+										className="flex flex-row justify-start items-start gap-6 w-full"
 										key={index}
 									>
-										<div className="grid grid-cols-3 gap-4 items-center">
+										<div className="grid grid-cols-2 grid-rows-3 gap-4 items-center w-full">
 											{/* Date Picker */}
 											<Popover>
 												<PopoverTrigger asChild>
@@ -111,7 +112,7 @@ const GrantsDeadline = ({ form }: { form: UseFormReturn<CreateGrantType> }) => {
 											/>
 
 											{/* Notes Input */}
-											<Input
+											<Textarea
 												placeholder="Notes"
 												value={deadline[2]}
 												onChange={(e) => {
@@ -124,7 +125,7 @@ const GrantsDeadline = ({ form }: { form: UseFormReturn<CreateGrantType> }) => {
 														updatedDeadlines
 													)
 												}}
-												className="bg-white text-primary"
+												className="bg-white text-primary col-span-2 row-span-2 h-full"
 											/>
 										</div>
 										{/* Remove Deadline */}
