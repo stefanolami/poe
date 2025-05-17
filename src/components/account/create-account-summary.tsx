@@ -61,9 +61,9 @@ const CreateAccountSummary = () => {
 								>
 									<span className="text-base md:text-lg lg:text-xl">
 										{key == 'deployment'
-											? 'Deployment Grants'
+											? 'Grants Deployment'
 											: key == 'project'
-												? 'Project Grants'
+												? 'Grants Innovative Projects'
 												: category.label}
 									</span>
 									<ul className="text-sm md:text-base space-y-1 lg:space-y-2 list-disc list-inside pl-1">

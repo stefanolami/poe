@@ -338,8 +338,8 @@ const SummaryMobile = () => {
 										>
 											<span className="text-lg">
 												{key == 'deployment'
-													? 'Deployment Grants'
-													: 'Project Grants'}
+													? 'Grants Deployment'
+													: 'Grants Innovative Projects'}
 											</span>
 											<ul className="pl-1 pr-3">
 												{storeData.eMobility[
