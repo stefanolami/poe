@@ -2,6 +2,7 @@
 
 import { CreateGrantType } from '@/lib/types'
 import { createClient } from '@/supabase/server'
+import { sendEmail } from './email'
 
 export const createGrant = async (formData: CreateGrantType) => {
 	const supabase = await createClient()
@@ -58,6 +59,13 @@ export const createGrant = async (formData: CreateGrantType) => {
 	if (error) {
 		throw new Error(error.message)
 	}
+
+	const emailResponse = await sendEmail(
+		'stefano@groupontap.com',
+		formattedData.call_title,
+		formattedData.in_brief
+	)
+	console.log('EMAIL RESPONSE', emailResponse)
 
 	return data
 }

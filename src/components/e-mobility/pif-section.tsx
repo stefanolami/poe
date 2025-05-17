@@ -57,7 +57,7 @@ const PifSection = ({ section }: { section: SectionType }) => {
 								id="checkbox-report-eu"
 								value="report-eu"
 								onChange={(e) => handleCheckbox(e, field)}
-								checked={storeData.eMobility.pif.length > 0}
+								checked={storeData.eMobility.pif?.length > 0}
 								className="custom-checkbox scale-[.8] peer"
 							/>
 							<label
