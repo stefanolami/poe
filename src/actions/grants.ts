@@ -61,7 +61,7 @@ export const createGrant = async (formData: CreateGrantType) => {
 	}
 
 	const emailResponse = await sendEmail(
-		'stefano@groupontap.com',
+		'stefanolami90@gmail.com',
 		formattedData.call_title,
 		formattedData.in_brief
 	)

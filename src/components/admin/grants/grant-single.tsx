@@ -1,17 +1,29 @@
-import { getGrant } from '@/actions/grants'
+'use client'
+
+import { sendEmail } from '@/actions/email'
 import React from 'react'
 
-const GrantSingle = async ({ id }: { id: string }) => {
-	const grant = await getGrant(Number(id))
-
-	if (!grant) {
-		return <div>Tender not found</div>
+const GrantSingle = ({
+	grant,
+}: {
+	//eslint-disable-next-line
+	grant: any
+}) => {
+	const handleEmail = async () => {
+		const emailResponse = await sendEmail(
+			'stefanolami90@gmail.com',
+			grant.call_title,
+			grant.in_brief
+		)
+		console.log('EMAIL RESPONSE', emailResponse)
 	}
-
 	return (
-		<div className="text-white">
-			{grant.call_title ? grant.call_title : grant.grant_programme}
-		</div>
+		<>
+			<div className="text-white">
+				{grant.call_title ? grant.call_title : grant.grant_programme}
+			</div>
+			<button onClick={handleEmail}>Send Email</button>
+		</>
 	)
 }
 
