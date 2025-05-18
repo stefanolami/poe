@@ -435,7 +435,7 @@ export const GrantsForm = ({
 						) : null}
 					</div>
 					<Button
-						disabled={false}
+						disabled={isSubmitting}
 						type="submit"
 						variant="default"
 						className="bg-primary-light text-white hover:bg-primary-light shadow-md hover:shadow-xl hover:scale-[1.02] mt-8 px-12 py-2"

@@ -55,6 +55,7 @@ const CreateAccountForm = () => {
 	const submitHandler: SubmitHandler<CreateAccountType> = async (
 		data: CreateAccountType
 	) => {
+		console.log('formatting data', data)
 		const fullData = {
 			...data,
 			sector: storeSector.value,
@@ -80,6 +81,7 @@ const CreateAccountForm = () => {
 		}
 
 		try {
+			console.log('fullData', fullData)
 			const response = await signUpClient(fullData)
 
 			if (response) {

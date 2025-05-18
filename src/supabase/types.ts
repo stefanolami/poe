@@ -48,7 +48,7 @@ export type Database = {
           deployment: string[] | null
           email: string
           family_name: string
-          geography: string[]
+          geography: string[] | null
           id: number
           name: string
           org_name: string | null
@@ -67,7 +67,7 @@ export type Database = {
           deployment?: string[] | null
           email: string
           family_name: string
-          geography: string[]
+          geography?: string[] | null
           id?: number
           name: string
           org_name?: string | null
@@ -86,7 +86,7 @@ export type Database = {
           deployment?: string[] | null
           email?: string
           family_name?: string
-          geography?: string[]
+          geography?: string[] | null
           id?: number
           name?: string
           org_name?: string | null
@@ -146,6 +146,7 @@ export type Database = {
           id: number
           in_brief: string
           instrument_type: string | null
+          matched_clients: number[] | null
           programme_purpose: string | null
           project: string[] | null
           reference_number: string | null
@@ -171,6 +172,7 @@ export type Database = {
           id?: number
           in_brief: string
           instrument_type?: string | null
+          matched_clients?: number[] | null
           programme_purpose?: string | null
           project?: string[] | null
           reference_number?: string | null
@@ -196,6 +198,7 @@ export type Database = {
           id?: number
           in_brief?: string
           instrument_type?: string | null
+          matched_clients?: number[] | null
           programme_purpose?: string | null
           project?: string[] | null
           reference_number?: string | null

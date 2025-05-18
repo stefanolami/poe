@@ -18,7 +18,7 @@ export const createAccountSchema = z
 		pif: z.array(z.string()).optional(),
 		deployment: z.array(z.string()).optional(),
 		project: z.array(z.string()).optional(),
-		geography: z.array(z.string()),
+		geography: z.array(z.string()).optional(),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
 		message: 'Passwords must match',

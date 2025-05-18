@@ -1,11 +1,19 @@
 'use server'
 
-import { CreateGrantType } from '@/lib/types'
+import { CreateGrantType /* FormattedGrantType */ } from '@/lib/types'
 import { createClient } from '@/supabase/server'
-import { sendEmail } from './email'
+import {} from /* sendEmail */ './email'
 
 export const createGrant = async (formData: CreateGrantType) => {
 	const supabase = await createClient()
+
+	const matchingClients = await matchGrant({
+		geography: formData.geography,
+		deployment: formData.deployment,
+		project: formData.project,
+	})
+
+	const matchingClientsIds = matchingClients.map((client) => client.id)
 
 	const flatDeadline = formData.deadline.map((element) => element.join('///'))
 	const flatFurtherDetails = formData.further_details?.map((element) =>
@@ -50,6 +58,7 @@ export const createGrant = async (formData: CreateGrantType) => {
 		deployment: formData.deployment,
 		project: formData.project,
 		files: uploadedFilePaths,
+		matched_clients: matchingClientsIds,
 	}
 
 	const { data, error } = await supabase
@@ -61,7 +70,7 @@ export const createGrant = async (formData: CreateGrantType) => {
 		throw new Error(error.message)
 	}
 
-	const emailSubject = formattedData.call_title
+	/* const emailSubject = formattedData.call_title
 		? formattedData.call_title
 		: formattedData.grant_programme
 
@@ -96,7 +105,9 @@ export const createGrant = async (formData: CreateGrantType) => {
 		emailSubject,
 		formattedData
 	)
-	console.log('EMAIL RESPONSE', emailResponse)
+	console.log('EMAIL RESPONSE', emailResponse) */
+
+	console.log('Matching clients:', matchingClients)
 
 	return data
 }
@@ -139,4 +150,44 @@ export const getGrant = async (id: number) => {
 	}
 
 	return data
+}
+
+export const matchGrant = async ({
+	geography,
+	deployment,
+	project,
+}: {
+	geography: string[]
+	deployment?: string[]
+	project?: string[]
+}) => {
+	const supabase = await createClient()
+
+	// Step 1: Fetch clients that overlap in geography
+	const { data: geoClients, error } = await supabase
+		.from('clients')
+		.select('*')
+		.overlaps('geography', geography)
+
+	if (error) {
+		throw new Error('Error fetching clients: ' + error.message)
+	}
+
+	console.log('GEO CLIENTS', geoClients)
+
+	// Step 2: Filter those clients for deployment/project overlap (if arrays provided)
+	const filteredClients = (geoClients ?? []).filter((client) => {
+		const deploymentMatch =
+			deployment && deployment.length > 0
+				? client.deployment?.some((d: string) => deployment.includes(d))
+				: false
+		const projectMatch =
+			project && project.length > 0
+				? client.project?.some((p: string) => project.includes(p))
+				: false
+		// Must match geography AND (deployment OR project)
+		return deploymentMatch || projectMatch
+	})
+
+	return filteredClients
 }
