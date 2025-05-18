@@ -66,6 +66,7 @@ export const GrantsForm = ({
 			grant_programme: '',
 			value: '',
 			alert_purpose: '',
+			programme_purpose: '',
 			instrument_type: '',
 			awarding_authority: '',
 			reference_number: '',

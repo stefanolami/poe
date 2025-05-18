@@ -65,3 +65,24 @@ export type ClientDataType = {
 	vehicles_contract: string[] | null
 	vehicles_type: string[] | null
 }
+
+export type FormattedGrantType = {
+	geography: string[]
+	value: string
+	alert_purpose: string
+	awarding_authority: string
+	deadline: string[]
+	in_brief: string
+	sector: string
+	call_title?: string | undefined
+	grant_programme?: string | undefined
+	programme_purpose?: string | undefined
+	instrument_type?: string | undefined
+	reference_number?: string | undefined
+	further_details?: string[] | undefined
+	files?: string[] | undefined
+	tailored_assessment?: [number, string, string][] | undefined
+	consultant?: string | undefined
+	deployment?: string[] | undefined
+	project?: string[] | undefined
+}

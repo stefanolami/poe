@@ -1,4 +1,5 @@
-import { CreateGrantType } from '@/lib/types'
+import { FormattedGrantType } from '@/lib/types'
+import { formatDeadline, formatGeography } from '@/lib/utils'
 import {
 	Body,
 	Container,
@@ -11,7 +12,7 @@ import {
 	Img,
 } from '@react-email/components'
 
-const EmailTest = ({ grant }: { grant: CreateGrantType }) => {
+const GrantsEmail = ({ grant }: { grant: FormattedGrantType }) => {
 	console.log(grant)
 
 	const {
@@ -19,6 +20,7 @@ const EmailTest = ({ grant }: { grant: CreateGrantType }) => {
 		call_title,
 		grant_programme,
 		alert_purpose,
+		programme_purpose,
 		instrument_type,
 		awarding_authority,
 		reference_number,
@@ -82,7 +84,9 @@ const EmailTest = ({ grant }: { grant: CreateGrantType }) => {
 						<Text style={fieldTitle}>
 							<strong>GEOGRAPHY</strong>
 						</Text>
-						<Text style={fieldText}>{geography}</Text>
+						<Text style={fieldText}>
+							{formatGeography(geography)}
+						</Text>
 
 						{call_title && (
 							<>
@@ -120,10 +124,16 @@ const EmailTest = ({ grant }: { grant: CreateGrantType }) => {
 							</>
 						)}
 
-						<Text style={fieldTitle}>
-							<strong>PROGRAMME PURPOSE</strong>
-						</Text>
-						<Text style={fieldText}>Lorem Ipsum</Text>
+						{programme_purpose && (
+							<>
+								<Text style={fieldTitle}>
+									<strong>ALERT PURPOSE</strong>
+								</Text>
+								<Text style={fieldText}>
+									{programme_purpose}
+								</Text>
+							</>
+						)}
 
 						{instrument_type && (
 							<>
@@ -168,7 +178,7 @@ const EmailTest = ({ grant }: { grant: CreateGrantType }) => {
 								key={index}
 								style={fieldText}
 							>
-								{date}
+								{formatDeadline(date)}
 							</Text>
 						))}
 					</Section>
@@ -184,7 +194,7 @@ const EmailTest = ({ grant }: { grant: CreateGrantType }) => {
 
 					<Divider />
 
-					{further_details && (
+					{further_details && further_details.length > 0 && (
 						<>
 							<Section style={section}>
 								<Text style={fieldTitle}>
@@ -192,14 +202,53 @@ const EmailTest = ({ grant }: { grant: CreateGrantType }) => {
 										LINKS / RESOURCES / FURTHER DETAILS
 									</strong>
 								</Text>
-								{further_details.map((detail, index) => (
-									<Text
-										key={index}
-										style={fieldText}
-									>
-										{detail}
-									</Text>
-								))}
+								{further_details.map((details, index) => {
+									const detail = details.split('///')
+									return (
+										<Text
+											key={index}
+											style={fieldText}
+										>
+											{new Date(
+												detail[0]
+											).toLocaleDateString('en-GB', {
+												day: '2-digit',
+												month: '2-digit',
+												year: 'numeric',
+											})}
+											{' - '}
+											<Link href={detail[1]}>
+												{detail[1]}
+											</Link>
+											{' - '}
+											{detail[2]}
+										</Text>
+									)
+								})}
+								{/* {grant.files && grant.files.length > 0 && (
+									<Section>
+										<Text style={fieldTitle}>
+											<strong>ATTACHMENTS</strong>
+										</Text>
+										<ul>
+											{grant.files.map(
+												(filePath, idx) => {
+													// Generate the public URL for each file
+													const url = `https://wgbitmetlwsyukgoortd.supabase.co/storage/v1/object/public/documents${filePath}`
+													return (
+														<li key={idx}>
+															<a href={url}>
+																{filePath
+																	.split('/')
+																	.pop()}
+															</a>
+														</li>
+													)
+												}
+											)}
+										</ul>
+									</Section>
+								)} */}
 							</Section>
 
 							<Divider />
@@ -257,7 +306,7 @@ const EmailTest = ({ grant }: { grant: CreateGrantType }) => {
 	)
 }
 
-export default EmailTest
+export default GrantsEmail
 
 const Divider = () => {
 	return (
@@ -289,4 +338,5 @@ const fieldTitle = {
 
 const fieldText = {
 	fontSize: '16px',
+	display: 'block',
 }

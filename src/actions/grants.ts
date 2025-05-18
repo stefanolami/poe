@@ -7,9 +7,9 @@ import { sendEmail } from './email'
 export const createGrant = async (formData: CreateGrantType) => {
 	const supabase = await createClient()
 
-	const flatDeadline = formData.deadline.map((element) => element.join(' '))
+	const flatDeadline = formData.deadline.map((element) => element.join('///'))
 	const flatFurtherDetails = formData.further_details?.map((element) =>
-		element.join(' ')
+		element.join('///')
 	)
 
 	const { files } = formData
@@ -64,6 +64,32 @@ export const createGrant = async (formData: CreateGrantType) => {
 	const emailSubject = formattedData.call_title
 		? formattedData.call_title
 		: formattedData.grant_programme
+
+	if (uploadedFilePaths.length > 0) {
+		const attachments = await Promise.all(
+			(uploadedFilePaths || []).map(async (filePath) => {
+				const { data, error } = await supabase.storage
+					.from('documents')
+					.download(filePath.replace('/grants/', 'grants/'))
+
+				if (error) return null
+
+				const buffer = await data.arrayBuffer()
+				return {
+					filename: filePath.split('/').pop(),
+					content: Buffer.from(buffer),
+				}
+			})
+		)
+		const emailResponse = await sendEmail(
+			'stefanolami90@gmail.com',
+			emailSubject,
+			formattedData,
+			attachments
+		)
+		console.log('EMAIL RESPONSE', emailResponse)
+		return data
+	}
 
 	const emailResponse = await sendEmail(
 		'stefanolami90@gmail.com',

@@ -2,15 +2,25 @@
 
 import { Resend } from 'resend'
 //import Email1 from '@/components/emails/email-1'
-import EmailTest from '@/components/emails/email-test'
+import GrantsEmail from '@/components/emails/grants-email'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-export async function sendEmail(to, subject, grant) {
-	return await resend.emails.send({
-		from: 'Stefano <stefanolami90@stefanolami.com>',
-		to,
-		subject,
-		react: <EmailTest grant={grant} />,
-	})
+export async function sendEmail(to, subject, grant, attachments) {
+	if (attachments) {
+		return await resend.emails.send({
+			from: 'POE <stefanolami90@stefanolami.com>',
+			to,
+			subject,
+			react: <GrantsEmail grant={grant} />,
+			attachments: attachments.filter(Boolean),
+		})
+	} else {
+		return await resend.emails.send({
+			from: 'POE <stefanolami90@stefanolami.com>',
+			to,
+			subject,
+			react: <GrantsEmail grant={grant} />,
+		})
+	}
 }
