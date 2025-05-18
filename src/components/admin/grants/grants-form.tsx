@@ -160,6 +160,7 @@ export const GrantsForm = ({
 												searchable
 												maxCount={10}
 												options={geographiesArray}
+												disabled={isSubmitting}
 											/>
 										</FormControl>
 										<FormMessage className="text-red-500 text-sm" />
@@ -175,6 +176,7 @@ export const GrantsForm = ({
 										<Select
 											onValueChange={field.onChange}
 											defaultValue={field.value}
+											disabled={isSubmitting}
 										>
 											<FormControl>
 												<SelectTrigger className="bg-white text-primary">
@@ -343,6 +345,7 @@ export const GrantsForm = ({
 							<GrantsConsultant
 								form={form}
 								consultants={consultants}
+								isSubmitting={isSubmitting}
 							/>
 							<FormField
 								control={form.control}
@@ -362,8 +365,14 @@ export const GrantsForm = ({
 									</FormItem>
 								)}
 							/>
-							<GrantsDeadline form={form} />
-							<GrantsFurtherDetails form={form} />
+							<GrantsDeadline
+								form={form}
+								isSubmitting={isSubmitting}
+							/>
+							<GrantsFurtherDetails
+								form={form}
+								isSubmitting={isSubmitting}
+							/>
 							<FormField
 								control={form.control}
 								name="files"
@@ -404,6 +413,7 @@ export const GrantsForm = ({
 
 												<label className="inline-flex items-center cursor-pointer">
 													<input
+														disabled={isSubmitting}
 														type="file"
 														multiple
 														className="hidden"

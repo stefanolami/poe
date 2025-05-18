@@ -22,8 +22,10 @@ import { FaTrashAlt } from 'react-icons/fa'
 
 const GrantsFurtherDetails = ({
 	form,
+	isSubmitting,
 }: {
 	form: UseFormReturn<CreateGrantType>
+	isSubmitting: boolean
 }) => {
 	return (
 		<FormField
@@ -51,6 +53,7 @@ const GrantsFurtherDetails = ({
 												<Button
 													variant="outline"
 													className="pl-3 text-left font-normal bg-white hover:bg-white text-primary hover:text-primary"
+													disabled={isSubmitting}
 												>
 													{detail[0] ? (
 														new Date(
@@ -101,6 +104,7 @@ const GrantsFurtherDetails = ({
 											</PopoverContent>
 										</Popover>
 										<Input
+											disabled={isSubmitting}
 											placeholder="Links"
 											value={detail[1] || ''}
 											onChange={(e) => {
@@ -114,6 +118,7 @@ const GrantsFurtherDetails = ({
 											className="bg-white text-primary"
 										/>
 										<Textarea
+											disabled={isSubmitting}
 											placeholder="Notes"
 											value={detail[2] || ''}
 											onChange={(e) => {

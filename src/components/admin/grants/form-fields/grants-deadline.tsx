@@ -20,7 +20,13 @@ import React from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { FaTrashAlt } from 'react-icons/fa'
 
-const GrantsDeadline = ({ form }: { form: UseFormReturn<CreateGrantType> }) => {
+const GrantsDeadline = ({
+	form,
+	isSubmitting,
+}: {
+	form: UseFormReturn<CreateGrantType>
+	isSubmitting: boolean
+}) => {
 	return (
 		<FormField
 			control={form.control}
@@ -47,6 +53,7 @@ const GrantsDeadline = ({ form }: { form: UseFormReturn<CreateGrantType> }) => {
 													<Button
 														variant="outline"
 														className="pl-3 text-left font-normal bg-white hover:bg-white text-primary hover:text-primary"
+														disabled={isSubmitting}
 													>
 														{deadline[0] ? (
 															new Date(
@@ -96,6 +103,7 @@ const GrantsDeadline = ({ form }: { form: UseFormReturn<CreateGrantType> }) => {
 
 											{/* Time Zone Input */}
 											<Input
+												disabled={isSubmitting}
 												placeholder="Time"
 												value={deadline[1]}
 												onChange={(e) => {
@@ -113,6 +121,7 @@ const GrantsDeadline = ({ form }: { form: UseFormReturn<CreateGrantType> }) => {
 
 											{/* Notes Input */}
 											<Textarea
+												disabled={isSubmitting}
 												placeholder="Notes"
 												value={deadline[2]}
 												onChange={(e) => {

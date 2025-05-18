@@ -109,18 +109,21 @@ export type Database = {
       }
       consultants: {
         Row: {
+          clients: number[] | null
           created_at: string
           email: string
           id: number
           name: string
         }
         Insert: {
+          clients?: number[] | null
           created_at?: string
           email: string
           id?: number
           name: string
         }
         Update: {
+          clients?: number[] | null
           created_at?: string
           email?: string
           id?: number

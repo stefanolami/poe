@@ -19,12 +19,14 @@ import { UseFormReturn } from 'react-hook-form'
 const GrantsConsultant = ({
 	form,
 	consultants,
+	isSubmitting,
 }: {
 	form: UseFormReturn<CreateGrantType>
 	consultants: {
 		id: number
 		name: string
 	}[]
+	isSubmitting: boolean
 }) => {
 	return (
 		<FormField
@@ -34,7 +36,10 @@ const GrantsConsultant = ({
 				<FormItem>
 					<FormLabel>Consultant</FormLabel>
 					<FormControl>
-						<Select onValueChange={field.onChange}>
+						<Select
+							disabled={isSubmitting}
+							onValueChange={field.onChange}
+						>
 							<FormControl>
 								<SelectTrigger className="bg-white text-primary">
 									<SelectValue placeholder="Select an option" />
