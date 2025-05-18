@@ -37,6 +37,7 @@ export const createGrant = async (formData: CreateGrantType) => {
 		call_title: formData.call_title,
 		grant_programme: formData.grant_programme,
 		alert_purpose: formData.alert_purpose,
+		programme_purpose: formData.programme_purpose,
 		instrument_type: formData.instrument_type,
 		awarding_authority: formData.awarding_authority,
 		reference_number: formData.reference_number,
@@ -60,10 +61,14 @@ export const createGrant = async (formData: CreateGrantType) => {
 		throw new Error(error.message)
 	}
 
+	const emailSubject = formattedData.call_title
+		? formattedData.call_title
+		: formattedData.grant_programme
+
 	const emailResponse = await sendEmail(
 		'stefanolami90@gmail.com',
-		formattedData.call_title,
-		formattedData.in_brief
+		emailSubject,
+		formattedData
 	)
 	console.log('EMAIL RESPONSE', emailResponse)
 

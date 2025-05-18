@@ -43,13 +43,17 @@ export type Database = {
         Row: {
           charging_stations_contract: string[] | null
           charging_stations_type: string[] | null
+          consultant: number | null
           created_at: string
+          deployment: string[] | null
           email: string
           family_name: string
-          geography: string[] | null
+          geography: string[]
           id: number
           name: string
           org_name: string | null
+          pif: string[] | null
+          project: string[] | null
           sector: string | null
           user_id: string
           vehicles_contract: string[] | null
@@ -58,13 +62,17 @@ export type Database = {
         Insert: {
           charging_stations_contract?: string[] | null
           charging_stations_type?: string[] | null
+          consultant?: number | null
           created_at?: string
+          deployment?: string[] | null
           email: string
           family_name: string
-          geography?: string[] | null
+          geography: string[]
           id?: number
           name: string
           org_name?: string | null
+          pif?: string[] | null
+          project?: string[] | null
           sector?: string | null
           user_id: string
           vehicles_contract?: string[] | null
@@ -73,19 +81,31 @@ export type Database = {
         Update: {
           charging_stations_contract?: string[] | null
           charging_stations_type?: string[] | null
+          consultant?: number | null
           created_at?: string
+          deployment?: string[] | null
           email?: string
           family_name?: string
-          geography?: string[] | null
+          geography?: string[]
           id?: number
           name?: string
           org_name?: string | null
+          pif?: string[] | null
+          project?: string[] | null
           sector?: string | null
           user_id?: string
           vehicles_contract?: string[] | null
           vehicles_type?: string[] | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "clients_consultant_fkey"
+            columns: ["consultant"]
+            isOneToOne: false
+            referencedRelation: "consultants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       consultants: {
         Row: {
@@ -126,6 +146,7 @@ export type Database = {
           id: number
           in_brief: string
           instrument_type: string | null
+          programme_purpose: string | null
           project: string[] | null
           reference_number: string | null
           sector: string | null
@@ -150,6 +171,7 @@ export type Database = {
           id?: number
           in_brief: string
           instrument_type?: string | null
+          programme_purpose?: string | null
           project?: string[] | null
           reference_number?: string | null
           sector?: string | null
@@ -174,6 +196,7 @@ export type Database = {
           id?: number
           in_brief?: string
           instrument_type?: string | null
+          programme_purpose?: string | null
           project?: string[] | null
           reference_number?: string | null
           sector?: string | null

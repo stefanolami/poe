@@ -267,6 +267,24 @@ export const GrantsForm = ({
 							/>
 							<FormField
 								control={form.control}
+								name="programme_purpose"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Programme Purpose</FormLabel>
+										<FormControl>
+											<Input
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
 								name="instrument_type"
 								render={({ field }) => (
 									<FormItem>

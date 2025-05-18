@@ -84,25 +84,27 @@ export const signUpClient = async (data: CreateAccountType) => {
 			throw new Error(`Sign-in failed: ${signInError.message}`)
 		}
 
+		const clientInsertData = {
+			name: data.name,
+			family_name: data.familyName,
+			org_name: data.orgName ?? null,
+			email: data.email,
+			user_id: userId,
+			sector: data.sector ?? null,
+			geography: data.geography,
+			vehicles_type: data.vehicles_type ?? [],
+			vehicles_contract: data.vehicles_contract ?? [],
+			charging_stations_type: data.charging_stations_type ?? [],
+			charging_stations_contract: data.charging_stations_contract ?? [],
+			pif: data.pif ?? [],
+			deployment: data.deployment ?? [],
+			project: data.project ?? [],
+		}
+
 		// Create client record
 		const { data: clientData, error: clientError } = await supabase
 			.from('clients')
-			.insert({
-				name: data.name,
-				family_name: data.familyName,
-				org_name: data.orgName,
-				email: data.email,
-				user_id: userId,
-				sector: data.sector,
-				geography: data.geography,
-				vehicles_type: data.vehicles_type,
-				vehicles_contract: data.vehicles_contract,
-				charging_stations_type: data.charging_stations_type,
-				charging_stations_contract: data.charging_stations_contract,
-				pif: data.pif,
-				deployment: data.deployment,
-				project: data.project,
-			})
+			.insert(clientInsertData)
 			.select()
 			.single()
 		if (clientError) {

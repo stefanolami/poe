@@ -18,7 +18,7 @@ export const createAccountSchema = z
 		pif: z.array(z.string()).optional(),
 		deployment: z.array(z.string()).optional(),
 		project: z.array(z.string()).optional(),
-		geography: z.array(z.string()).optional(),
+		geography: z.array(z.string()),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
 		message: 'Passwords must match',
@@ -43,6 +43,7 @@ export const createGrantSchema = z
 		call_title: z.string().optional(),
 		grant_programme: z.string().optional(),
 		alert_purpose: z.string().min(2, 'Alert purpose is required'),
+		programme_purpose: z.string().optional(),
 		instrument_type: z.string().optional(),
 		awarding_authority: z.string().min(2, 'Awarding authority is required'),
 		reference_number: z.string().optional(),

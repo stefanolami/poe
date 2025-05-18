@@ -22,7 +22,7 @@ const ExpandableGeography = ({
 		>
 			<button
 				onClick={() => setOpen((pv) => !pv)}
-				className="flex w-full items-center justify-between gap-4 py-2"
+				className="flex w-full items-center justify-between gap-4"
 			>
 				<div className="flex flex-row items-center justify-start gap-2">
 					<motion.span
@@ -34,10 +34,11 @@ const ExpandableGeography = ({
 								rotate: '0deg',
 							},
 						}}
+						className="lg:-ml-[5px]"
 					>
 						<FiChevronDown className="text-lg lg:text-3xl text-primary" />
 					</motion.span>
-					<span className="ml-1 lg:ml-[6px]">{title}</span>
+					<span className="ml-[2px] lg:-ml-[5px]">{title}</span>
 				</div>
 			</button>
 			<motion.div

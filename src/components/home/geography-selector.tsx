@@ -31,13 +31,13 @@ export default function GeographySelector() {
 							<li key={index}>
 								<ExpandableGeography title={item.label}>
 									{/* <ul className="flex flex-col items-center md:items-start justify-center gap-3 xl:gap-4 mx-auto mt-6 md:mt-0"> */}
-									<ul className="lg:grid lg:grid-cols-2">
+									<ul className="lg:grid lg:grid-cols-2 space-y-1">
 										{item.countries.map(
 											(country, index) => {
 												return (
 													<li
 														key={index}
-														className="flex flex-row items-center gap-2 xl:gap-3 w-[242px] xl:w-[470px]"
+														className="flex flex-row items-center gap-2 xl:gap-3 w-[242px] xl:w-[470px] pl-7"
 													>
 														<input
 															type="checkbox"
