@@ -9,7 +9,7 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 export async function sendEmail(to, subject, grant, attachments) {
 	if (attachments) {
 		return await resend.emails.send({
-			from: 'POE <stefanolami90@stefanolami.com>',
+			from: 'POE <alerts@poeontap.com>',
 			to,
 			subject,
 			react: <GrantsEmail grant={grant} />,
@@ -17,7 +17,7 @@ export async function sendEmail(to, subject, grant, attachments) {
 		})
 	} else {
 		return await resend.emails.send({
-			from: 'POE <stefanolami90@stefanolami.com>',
+			from: 'POE <alerts@poeontap.com>',
 			to,
 			subject,
 			react: <GrantsEmail grant={grant} />,
