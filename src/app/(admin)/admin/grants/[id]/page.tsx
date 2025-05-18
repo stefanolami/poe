@@ -1,5 +1,6 @@
 import { getGrant } from '@/actions/grants'
-import GrantSingle from '@/components/admin/grants/grant-single'
+import GrantSingle from '@/components/admin/grants/grant/grant-single'
+import { notFound } from 'next/navigation'
 import React from 'react'
 
 const GrantPage = async ({ params }: { params: Promise<{ id: string }> }) => {
@@ -8,7 +9,7 @@ const GrantPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 	const grant = await getGrant(Number(id))
 
 	if (!grant) {
-		return <div>Tender not found</div>
+		throw notFound()
 	}
 
 	return <GrantSingle grant={grant} />
