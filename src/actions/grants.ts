@@ -299,9 +299,7 @@ export const sendGrantAlert = async (grantId: number) => {
 		throw new Error(clientsError?.message || 'No clients found')
 	}
 
-	const emailSubject = grantData.call_title
-		? grantData.call_title
-		: grantData.grant_programme
+	const emailSubject = `POE Alert - Grant - ${grantData.call_title || grantData.grant_programme}`
 
 	let attachments: ({
 		filename: string | undefined

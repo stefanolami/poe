@@ -75,8 +75,8 @@ const GrantsEmailTailoredCharin = ({
 						/> */}
 						<Img
 							src={`https://www.poeontap.com/logos/charin.png`}
-							width="41"
-							height="32"
+							width="82"
+							height="64"
 							alt="Charin's Logo"
 						/>
 						<Heading
@@ -91,7 +91,7 @@ const GrantsEmailTailoredCharin = ({
 								marginTop: '50px',
 							}}
 						>
-							Lorem Ipsum dolor sit amet Lorem Ipsum
+							{call_title || grant_programme}
 						</Heading>
 					</Section>
 

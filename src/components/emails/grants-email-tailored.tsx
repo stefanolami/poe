@@ -85,7 +85,7 @@ const GrantsEmailTailored = ({
 								marginTop: '50px',
 							}}
 						>
-							Lorem Ipsum dolor sit amet Lorem Ipsum
+							{call_title || grant_programme}
 						</Heading>
 					</Section>
 

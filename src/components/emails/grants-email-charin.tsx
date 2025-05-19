@@ -77,8 +77,8 @@ const GrantsEmailCharin = ({ grant }: { grant: FormattedGrantType }) => {
 						</Section> */}
 						<Img
 							src={`https://www.poeontap.com/logos/charin.png`}
-							width="41"
-							height="32"
+							width="82"
+							height="64"
 							alt="Charin's Logo"
 						/>
 						<Heading
@@ -93,7 +93,7 @@ const GrantsEmailCharin = ({ grant }: { grant: FormattedGrantType }) => {
 								marginTop: '50px',
 							}}
 						>
-							Lorem Ipsum dolor sit amet Lorem Ipsum
+							{call_title || grant_programme}
 						</Heading>
 					</Section>
 
