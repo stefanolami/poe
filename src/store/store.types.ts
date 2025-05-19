@@ -12,9 +12,9 @@ export interface SelectableItem {
 export interface CategoryData {
 	label: string
 	value: string
-	fieldsLabel: string
+	fieldsLabel?: string
 	fields: SelectableItem[]
-	contractsLabel: string
+	contractsLabel?: string
 	contracts?: SelectableItem[]
 }
 
