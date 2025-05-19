@@ -1,11 +1,5 @@
-export interface Price {
-	euAdmin: string
-	eu27: string
-	brazil: string
-	turkey: string
-	colombia: string
-	russia: string
-	default?: string
+export type Price = {
+	[countryCode: string]: string
 }
 
 export interface SelectableItem {
