@@ -12,7 +12,13 @@ import {
 	Img,
 } from '@react-email/components'
 
-const GrantsEmail = ({ grant }: { grant: FormattedGrantType }) => {
+const GrantsEmailTailored = ({
+	grant,
+	assessment,
+}: {
+	grant: FormattedGrantType
+	assessment: { client: string; relevance: string; next_steps: string }
+}) => {
 	const {
 		geography,
 		call_title,
@@ -252,6 +258,27 @@ const GrantsEmail = ({ grant }: { grant: FormattedGrantType }) => {
 						</>
 					)}
 
+					{assessment && (
+						<>
+							<Section style={section}>
+								<Text style={fieldTitle}>
+									<strong>RELEVANCE</strong>
+								</Text>
+								<Text style={fieldText}>
+									{assessment.relevance}
+								</Text>
+								<Text style={fieldTitle}>
+									<strong>NEXT STEPS</strong>
+								</Text>
+								<Text style={fieldText}>
+									{assessment.next_steps}
+								</Text>
+							</Section>
+
+							<Divider />
+						</>
+					)}
+
 					<Section style={section}>
 						<Text style={fieldText}>
 							<strong>
@@ -282,7 +309,7 @@ const GrantsEmail = ({ grant }: { grant: FormattedGrantType }) => {
 	)
 }
 
-export default GrantsEmail
+export default GrantsEmailTailored
 
 const Divider = () => {
 	return (

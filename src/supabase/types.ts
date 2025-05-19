@@ -114,6 +114,7 @@ export type Database = {
           email: string
           id: number
           name: string
+          user_id: string
         }
         Insert: {
           clients?: number[] | null
@@ -121,6 +122,7 @@ export type Database = {
           email: string
           id?: number
           name: string
+          user_id: string
         }
         Update: {
           clients?: number[] | null
@@ -128,6 +130,7 @@ export type Database = {
           email?: string
           id?: number
           name?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -153,7 +156,7 @@ export type Database = {
           programme_purpose: string | null
           project: string[] | null
           reference_number: string | null
-          sector: string | null
+          sector: string
           sent: boolean
           tailored_assessment: Json[] | null
           value: string
@@ -179,7 +182,7 @@ export type Database = {
           programme_purpose?: string | null
           project?: string[] | null
           reference_number?: string | null
-          sector?: string | null
+          sector: string
           sent?: boolean
           tailored_assessment?: Json[] | null
           value: string
@@ -205,7 +208,7 @@ export type Database = {
           programme_purpose?: string | null
           project?: string[] | null
           reference_number?: string | null
-          sector?: string | null
+          sector?: string
           sent?: boolean
           tailored_assessment?: Json[] | null
           value?: string

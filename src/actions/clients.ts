@@ -166,3 +166,56 @@ export const getClient = async () => {
 		}
 	}
 }
+
+export const getClientsByConsultantId = async () => {
+	try {
+		const supabase = await createClient()
+
+		const {
+			data: { user },
+		} = await supabase.auth.getUser()
+		if (!user) return null
+
+		const userId = user.id
+
+		const { data: consultantData, error: consultantError } = await supabase
+			.from('consultants')
+			.select('clients')
+			.eq('user_id', userId)
+			.single()
+
+		if (consultantError) {
+			throw new Error(
+				`Failed to fetch clients: ${consultantError?.message}`
+			)
+		}
+
+		if (!consultantData || !consultantData.clients) {
+			return null
+		}
+
+		const { data, error } = await supabase
+			.from('clients')
+			.select('*')
+			.in('id', consultantData.clients)
+
+		if (error) {
+			throw new Error(`Failed to fetch clients: ${error.message}`)
+		}
+
+		return data
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error('GET CLIENTS BY CONSULTANT ID ERROR:', error.message)
+			throw error
+		} else {
+			console.error(
+				'Unexpected GET CLIENTS BY CONSULTANT ID ERROR:',
+				error
+			)
+			throw new Error(
+				'An unexpected error occurred while fetching clients'
+			)
+		}
+	}
+}

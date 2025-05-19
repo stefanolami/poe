@@ -2,7 +2,7 @@
 
 import { CreateGrantType /* FormattedGrantType */ } from '@/lib/types'
 import { createClient } from '@/supabase/server'
-import {} from /* sendEmail */ './email'
+import { sendGrant, sendGrantTailored } from /* sendEmail */ './email'
 
 export const createGrant = async (formData: CreateGrantType) => {
 	const supabase = await createClient()
@@ -158,8 +158,8 @@ export const matchGrant = async ({
 	project,
 }: {
 	geography: string[]
-	deployment?: string[]
-	project?: string[]
+	deployment?: string[] | null
+	project?: string[] | null
 }) => {
 	const supabase = await createClient()
 
@@ -190,4 +190,192 @@ export const matchGrant = async ({
 	})
 
 	return filteredClients
+}
+
+export const addGrantsTailoredAssessments = async (
+	grantId: number,
+	assessments: [string, string, string][]
+) => {
+	const supabase = await createClient()
+
+	console.log('assessments', assessments, grantId)
+
+	const assessmentsObjectArray = assessments.map((assessment) => ({
+		client: assessment[0],
+		relevance: assessment[1],
+		next_steps: assessment[2],
+	}))
+
+	const { data: existingData, error: existingError } = await supabase
+		.from('grants')
+		.select('tailored_assessment')
+		.eq('id', grantId)
+		.single()
+
+	if (existingError) {
+		throw new Error(existingError.message)
+	}
+
+	const safeAssessments: {
+		client: string
+		relevance: string
+		next_steps: string
+	}[] = Array.isArray(existingData?.tailored_assessment)
+		? //eslint-disable-next-line
+			(existingData.tailored_assessment as any[]).filter(
+				(
+					item
+				): item is {
+					client: string
+					relevance: string
+					next_steps: string
+				} =>
+					!!item &&
+					typeof item === 'object' &&
+					'client' in item &&
+					'relevance' in item &&
+					'next_steps' in item
+			)
+		: []
+
+	// Add only new assessments (by client)
+	const updatedAssessments = [...safeAssessments]
+	for (const assessment of assessmentsObjectArray) {
+		const exists = safeAssessments.some(
+			(item) => item.client === assessment.client
+		)
+		if (!exists) {
+			updatedAssessments.push(assessment)
+		}
+	}
+	const { data, error } = await supabase
+		.from('grants')
+		.update({
+			tailored_assessment: updatedAssessments,
+		})
+		.eq('id', grantId)
+		.select('*')
+
+	if (error) {
+		throw new Error(error.message)
+	}
+
+	console.log('ass DATA', data)
+
+	return data
+}
+
+export const sendGrantAlert = async (grantId: number) => {
+	const supabase = await createClient()
+
+	const { data: grantData, error } = await supabase
+		.from('grants')
+		.select('*')
+		.eq('id', grantId)
+		.single()
+
+	if (error) {
+		throw new Error(error.message)
+	}
+
+	const matchedClients = await matchGrant(grantData)
+
+	if (!matchedClients || matchedClients.length === 0)
+		return new Error('No matched clients found')
+
+	const matchedClientsIds = matchedClients.map((client) => client.id)
+
+	const { data: clientsData, error: clientsError } = await supabase
+		.from('clients')
+		.select('*')
+		.in('id', matchedClientsIds)
+
+	if (clientsError || !clientsData || clientsData.length === 0) {
+		throw new Error(clientsError?.message || 'No clients found')
+	}
+
+	const emailSubject = grantData.call_title
+		? grantData.call_title
+		: grantData.grant_programme
+
+	let attachments: ({
+		filename: string | undefined
+		content: Buffer<ArrayBuffer>
+	} | null)[]
+
+	if (grantData.files && grantData.files.length > 0) {
+		attachments = await Promise.all(
+			(grantData.files || []).map(async (filePath) => {
+				const { data, error } = await supabase.storage
+					.from('documents')
+					.download(filePath.replace('/grants/', 'grants/'))
+
+				if (error) return null
+
+				const buffer = await data.arrayBuffer()
+				return {
+					filename: filePath.split('/').pop(),
+					content: Buffer.from(buffer),
+				}
+			})
+		)
+	}
+
+	const clientsEmails = clientsData.map((client) => client.email)
+	console.log('CLIENTS EMAILS', clientsEmails)
+	const assessments = grantData.tailored_assessment as {
+		client: string
+		relevance: string
+		next_steps: string
+	}[]
+	const tailoredEmails = assessments.map((assessment) => assessment.client)
+	console.log('TAILORED EMAILS', tailoredEmails)
+
+	function sleep(ms: number) {
+		return new Promise((resolve) => setTimeout(resolve, ms))
+	}
+
+	try {
+		clientsEmails.forEach(async (email) => {
+			if (!tailoredEmails.includes(email)) {
+				// Send tailored email
+				await sendGrant(email, emailSubject, grantData, attachments)
+				console.log('EMAIL SENT', email)
+				await sleep(2300)
+			} else {
+				const assessment = assessments.find(
+					(assessment) => assessment.client === email
+				)
+				// Send normal email
+				await sendGrantTailored(
+					email,
+					emailSubject,
+					grantData,
+					assessment,
+					attachments
+				)
+				console.log('EMAIL SENT TAILORED', email)
+				await sleep(2300)
+			}
+		})
+	} catch (error) {
+		console.error('Error sending email:', error)
+	}
+
+	/* const responseArray = clientsEmails.map( async (email) => {
+		if (!tailoredEmails.includes(email)) {
+			const response = await sendGrant
+	}) */
+
+	/* // Send email alert to all clients associated with the grant
+	const emailResponse = await sendEmail(
+		'stefanolami90@gmail.com',
+		'New Grant Alert',
+		`A new grant has been created: ${data.call_title}`,
+		data.clients.map((client) => client.email)
+	)
+
+	console.log('EMAIL RESPONSE', emailResponse) */
+
+	return grantData
 }

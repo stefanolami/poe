@@ -78,3 +78,9 @@ export const createGrantSchema = z
 			path: ['deadline'],
 		}
 	)
+
+export const createGrantsTailoredAssessmentSchema = z.object({
+	tailored_assessment: z
+		.array(z.tuple([z.string(), z.string(), z.string()]))
+		.optional(),
+})

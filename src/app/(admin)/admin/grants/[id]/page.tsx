@@ -1,3 +1,4 @@
+import { getClientsByConsultantId } from '@/actions/clients'
 import { getGrant } from '@/actions/grants'
 import GrantSingle from '@/components/admin/grants/grant/grant-single'
 import { notFound } from 'next/navigation'
@@ -12,7 +13,21 @@ const GrantPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 		throw notFound()
 	}
 
-	return <GrantSingle grant={grant} />
+	const clients = await getClientsByConsultantId()
+
+	const formattedClients = clients?.map((client) => ({
+		id: client.id,
+		name: client.name,
+		email: client.email,
+		family_name: client.family_name,
+	}))
+
+	return (
+		<GrantSingle
+			grant={grant}
+			clients={formattedClients}
+		/>
+	)
 }
 
 export default GrantPage

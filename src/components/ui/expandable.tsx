@@ -26,7 +26,7 @@ const Expandable = ({
 				onClick={() => setOpen((pv) => !pv)}
 				className="flex w-full items-center justify-between gap-4 py-2"
 			>
-				<div className="flex flex-row items-center justify-start gap-2">
+				<div className="flex flex-row items-center justify-start">
 					<motion.span
 						variants={{
 							open: {
