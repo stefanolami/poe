@@ -49,12 +49,13 @@ const GrantsEmailCharin = ({ grant }: { grant: FormattedGrantType }) => {
 				</style>
 			</Head>
 			<Body>
-				<Container style={{ width: '600px' }}>
+				<Container style={{ width: '600px', margin: '0 auto' }}>
 					<Section
 						style={{
 							backgroundColor: '#6AA5B9',
 							padding: '16px',
 							paddingBottom: '0px',
+							width: '100%',
 						}}
 					>
 						{/* <Section>
@@ -321,6 +322,7 @@ const section = {
 	backgroundColor: '#fff',
 	color: '#00374B',
 	padding: '16px',
+	width: '100%',
 }
 
 const fieldTitle = {

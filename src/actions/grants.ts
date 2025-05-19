@@ -326,20 +326,22 @@ export const sendGrantAlert = async (grantId: number) => {
 
 	const clientsEmails = clientsData.map((client) => client.email)
 	console.log('CLIENTS EMAILS', clientsEmails)
-	const assessments = grantData.tailored_assessment as {
-		client: string
-		relevance: string
-		next_steps: string
-	}[]
-	const tailoredEmails = assessments.map((assessment) => assessment.client)
+	const assessments = grantData.tailored_assessment as
+		| {
+				client: string
+				relevance: string
+				next_steps: string
+		  }[]
+		| []
+	const tailoredEmails = assessments?.map((assessment) => assessment.client)
 	console.log('TAILORED EMAILS', tailoredEmails)
 
 	// Split emails into tailored and normal
 	const tailoredRecipients = clientsEmails.filter((email) =>
-		tailoredEmails.includes(email)
+		tailoredEmails?.includes(email)
 	)
 	const normalRecipients = clientsEmails.filter(
-		(email) => !tailoredEmails.includes(email)
+		(email) => !tailoredEmails?.includes(email)
 	)
 
 	// For tailored, match each email to its assessment
