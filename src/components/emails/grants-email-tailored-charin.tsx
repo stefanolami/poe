@@ -12,7 +12,7 @@ import {
 	Img,
 } from '@react-email/components'
 
-const GrantsEmailTailored = ({
+const GrantsEmailTailoredCharin = ({
 	grant,
 	assessment,
 }: {
@@ -56,7 +56,7 @@ const GrantsEmailTailored = ({
 				<Container style={{ width: '600px' }}>
 					<Section
 						style={{
-							backgroundColor: '#009EC2',
+							backgroundColor: '#6AA5B9',
 							padding: '16px',
 							paddingBottom: '0px',
 						}}
@@ -67,11 +67,17 @@ const GrantsEmailTailored = ({
 							height="32"
 							alt="Consulting's Logo"
 						/> */}
-						<Img
+						{/* <Img
 							src={`https://www.poeontap.com/logos/poe-white.png`}
 							width="151"
 							height="32"
 							alt="POE's Logo"
+						/> */}
+						<Img
+							src={`https://www.poeontap.com/logos/charin.png`}
+							width="41"
+							height="32"
+							alt="Charin's Logo"
 						/>
 						<Heading
 							as="h1"
@@ -315,13 +321,13 @@ const GrantsEmailTailored = ({
 	)
 }
 
-export default GrantsEmailTailored
+export default GrantsEmailTailoredCharin
 
 const Divider = () => {
 	return (
 		<div
 			style={{
-				backgroundColor: '#009EC2',
+				backgroundColor: '#aad278',
 				height: '5px',
 				width: '100%',
 				margin: '0 auto',
@@ -332,7 +338,7 @@ const Divider = () => {
 
 const section = {
 	backgroundColor: '#fff',
-	color: '#004A6A',
+	color: '#00374B',
 	padding: '16px',
 }
 
@@ -342,7 +348,7 @@ const fieldTitle = {
 	fontWeight: 500,
 	fontSize: '14px',
 	fontFamily: 'Josefin Sans',
-	color: '#009EC2',
+	color: '#6AA5B9',
 }
 
 const fieldText = {

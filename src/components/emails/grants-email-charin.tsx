@@ -10,15 +10,11 @@ import {
 	Section,
 	Text,
 	Img,
+	//Row,
+	//Column,
 } from '@react-email/components'
 
-const GrantsEmailTailored = ({
-	grant,
-	assessment,
-}: {
-	grant: FormattedGrantType
-	assessment: { client: string; relevance: string; next_steps: string }
-}) => {
+const GrantsEmailCharin = ({ grant }: { grant: FormattedGrantType }) => {
 	const {
 		geography,
 		call_title,
@@ -56,22 +52,34 @@ const GrantsEmailTailored = ({
 				<Container style={{ width: '600px' }}>
 					<Section
 						style={{
-							backgroundColor: '#009EC2',
+							backgroundColor: '#6AA5B9',
 							padding: '16px',
 							paddingBottom: '0px',
 						}}
 					>
-						{/* <Img
-							src={`https://www.poeontap.com/logos/consulting-white.png`}
-							width="122"
-							height="32"
-							alt="Consulting's Logo"
-						/> */}
+						{/* <Section>
+							<Row className="flex justify-start items-center gap-2 flex-row">
+								<Column>
+									<Img
+										src={`https://www.poeontap.com/logos/consulting-white.png`}
+										width="122"
+										height="32"
+										alt="Consulting's Logo"
+									/>
+									<Img
+										src={`https://www.poeontap.com/logos/poe-white.png`}
+										width="151"
+										height="32"
+										alt="POE's Logo"
+									/>
+								</Column>
+							</Row>
+						</Section> */}
 						<Img
-							src={`https://www.poeontap.com/logos/poe-white.png`}
-							width="151"
+							src={`https://www.poeontap.com/logos/charin.png`}
+							width="41"
 							height="32"
-							alt="POE's Logo"
+							alt="Charin's Logo"
 						/>
 						<Heading
 							as="h1"
@@ -264,27 +272,6 @@ const GrantsEmailTailored = ({
 						</>
 					)}
 
-					{assessment && (
-						<>
-							<Section style={section}>
-								<Text style={fieldTitle}>
-									<strong>RELEVANCE</strong>
-								</Text>
-								<Text style={fieldText}>
-									{assessment.relevance}
-								</Text>
-								<Text style={fieldTitle}>
-									<strong>NEXT STEPS</strong>
-								</Text>
-								<Text style={fieldText}>
-									{assessment.next_steps}
-								</Text>
-							</Section>
-
-							<Divider />
-						</>
-					)}
-
 					<Section style={section}>
 						<Text style={fieldText}>
 							<strong>
@@ -315,13 +302,13 @@ const GrantsEmailTailored = ({
 	)
 }
 
-export default GrantsEmailTailored
+export default GrantsEmailCharin
 
 const Divider = () => {
 	return (
 		<div
 			style={{
-				backgroundColor: '#009EC2',
+				backgroundColor: '#aad278',
 				height: '5px',
 				width: '100%',
 				margin: '0 auto',
@@ -332,7 +319,7 @@ const Divider = () => {
 
 const section = {
 	backgroundColor: '#fff',
-	color: '#004A6A',
+	color: '#00374B',
 	padding: '16px',
 }
 
@@ -342,7 +329,7 @@ const fieldTitle = {
 	fontWeight: 500,
 	fontSize: '14px',
 	fontFamily: 'Josefin Sans',
-	color: '#009EC2',
+	color: '#6AA5B9',
 }
 
 const fieldText = {

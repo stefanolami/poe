@@ -2,7 +2,12 @@
 
 import { CreateGrantType /* FormattedGrantType */ } from '@/lib/types'
 import { createClient } from '@/supabase/server'
-import { sendGrant, sendGrantTailored } from /* sendEmail */ './email'
+import {
+	//sendGrant,
+	sendGrantBatch,
+	//sendGrantTailored,
+	sendGrantTailoredBatch,
+} from /* sendEmail */ './email'
 
 export const createGrant = async (formData: CreateGrantType) => {
 	const supabase = await createClient()
@@ -301,7 +306,7 @@ export const sendGrantAlert = async (grantId: number) => {
 	let attachments: ({
 		filename: string | undefined
 		content: Buffer<ArrayBuffer>
-	} | null)[]
+	} | null)[] = []
 
 	if (grantData.files && grantData.files.length > 0) {
 		attachments = await Promise.all(
@@ -331,9 +336,48 @@ export const sendGrantAlert = async (grantId: number) => {
 	const tailoredEmails = assessments.map((assessment) => assessment.client)
 	console.log('TAILORED EMAILS', tailoredEmails)
 
+	// Split emails into tailored and normal
+	const tailoredRecipients = clientsEmails.filter((email) =>
+		tailoredEmails.includes(email)
+	)
+	const normalRecipients = clientsEmails.filter(
+		(email) => !tailoredEmails.includes(email)
+	)
+
+	// For tailored, match each email to its assessment
+	const tailoredAssessments = tailoredRecipients.map(
+		(email) => assessments.find((a) => a.client === email) || {}
+	)
+
 	function sleep(ms: number) {
 		return new Promise((resolve) => setTimeout(resolve, ms))
 	}
+
+	// Send in parallel (or sequentially if you need to respect rate limits)
+	await Promise.all([
+		normalRecipients.length > 0
+			? sendGrantBatch(
+					normalRecipients,
+					emailSubject,
+					grantData,
+					attachments
+				)
+			: Promise.resolve(),
+		normalRecipients.length > 0 && tailoredRecipients.length > 0
+			? await sleep(3000)
+			: Promise.resolve(),
+		tailoredRecipients.length > 0
+			? sendGrantTailoredBatch(
+					tailoredRecipients,
+					emailSubject,
+					grantData,
+					tailoredAssessments,
+					attachments
+				)
+			: Promise.resolve(),
+	])
+
+	/* 
 
 	try {
 		clientsEmails.forEach(async (email) => {
@@ -360,7 +404,7 @@ export const sendGrantAlert = async (grantId: number) => {
 		})
 	} catch (error) {
 		console.error('Error sending email:', error)
-	}
+	} */
 
 	/* const responseArray = clientsEmails.map( async (email) => {
 		if (!tailoredEmails.includes(email)) {

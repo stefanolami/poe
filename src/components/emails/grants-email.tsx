@@ -10,6 +10,8 @@ import {
 	Section,
 	Text,
 	Img,
+	Row,
+	//Column,
 } from '@react-email/components'
 
 const GrantsEmail = ({ grant }: { grant: FormattedGrantType }) => {
@@ -55,12 +57,22 @@ const GrantsEmail = ({ grant }: { grant: FormattedGrantType }) => {
 							paddingBottom: '0px',
 						}}
 					>
-						<Img
-							src={`https://www.poeontap.com/logos/poe-white.png`}
-							width="140"
-							height="32"
-							alt="Notion's Logo"
-						/>
+						<Section>
+							<Row className="flex justify-start items-center gap-2 flex-row">
+								<Img
+									src={`https://www.poeontap.com/logos/consulting-white.png`}
+									width="122"
+									height="32"
+									alt="Consulting's Logo"
+								/>
+								<Img
+									src={`https://www.poeontap.com/logos/poe-white.png`}
+									width="151"
+									height="32"
+									alt="POE's Logo"
+								/>
+							</Row>
+						</Section>
 						<Heading
 							as="h1"
 							style={{
