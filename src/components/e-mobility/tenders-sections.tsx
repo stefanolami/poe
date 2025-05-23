@@ -214,7 +214,7 @@ const TendersSection = ({
 						<div className="flex flex-row items-center gap-1 justify-start">
 							<input
 								type="checkbox"
-								id="checkbox-vehicle-type-all-above"
+								id={`checkbox-${category}-all-above`}
 								value="all"
 								onChange={(e) =>
 									handleAllAbove(
@@ -234,7 +234,7 @@ const TendersSection = ({
 							/>
 							<label
 								className="peer-checked:font-bold"
-								htmlFor="checkbox-vehicle-type-all-above"
+								htmlFor={`checkbox-${category}-all-above`}
 							>
 								All of the above
 							</label>
@@ -311,7 +311,7 @@ const TendersSection = ({
 								<div className="flex flex-row items-center gap-1 justify-start">
 									<input
 										type="checkbox"
-										id={`checkbox-vehicle-contract-all-above`}
+										id={`checkbox-${category}-contract-all-above`}
 										value="all"
 										onChange={(e) =>
 											handleAllAbove(
@@ -329,7 +329,16 @@ const TendersSection = ({
 										}
 										className="custom-checkbox scale-[.8]"
 									/>
-									<label htmlFor="checkbox-vehicle-contract-all-above">
+									<label
+										htmlFor={`checkbox-${category}-contract-all-above`}
+										className={
+											storeData.eMobility[
+												contractCategory as keyof MobilityData
+											].length == contracts?.length
+												? 'font-bold'
+												: ''
+										}
+									>
 										All of the above
 									</label>
 								</div>

@@ -354,7 +354,7 @@ export const sendGrantAlert = async (grantId: number) => {
 	}
 
 	// Send in parallel (or sequentially if you need to respect rate limits)
-	await Promise.all([
+	const response = await Promise.all([
 		normalRecipients.length > 0
 			? sendGrantBatch(
 					normalRecipients,
@@ -420,6 +420,6 @@ export const sendGrantAlert = async (grantId: number) => {
 	)
 
 	console.log('EMAIL RESPONSE', emailResponse) */
-
-	return grantData
+	console.log(response)
+	return response
 }

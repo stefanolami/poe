@@ -439,7 +439,7 @@ const SummaryDesktop = () => {
 				<div className="w-5/6 mb-3 mx-auto text-xl">
 					<div className="flex flex-row items-center justify-between ">
 						<span>TOTAL</span>
-						<span>€ {getTotalPrice()}</span>
+						<span>€ {getTotalPrice()} / year</span>
 					</div>
 					{getTotalPrice() >= 0 && (
 						<div className="w-3/4 mx-auto mt-6 mb-3 grid grid-rows-2 items-center gap-4 font-bold text-sm xl:text-lg text-center text-primary">

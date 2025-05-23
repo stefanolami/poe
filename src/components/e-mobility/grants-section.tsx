@@ -23,14 +23,16 @@ const GrantsSection = ({
 }) => {
 	const { label, fields } = section
 
-	const { storeData, addData, removeData, getSinglePrice } = useStore(
-		useShallow((state) => ({
-			storeData: state.data,
-			addData: state.addData,
-			removeData: state.removeData,
-			getSinglePrice: state.getSinglePrice,
-		}))
-	)
+	const { storeData, addData, removeData, getSinglePrice, getAllAbovePrice } =
+		useStore(
+			useShallow((state) => ({
+				storeData: state.data,
+				addData: state.addData,
+				removeData: state.removeData,
+				getSinglePrice: state.getSinglePrice,
+				getAllAbovePrice: state.getAllAbovePrice,
+			}))
+		)
 
 	const handleCheckbox = (
 		item: SelectableItem,
@@ -42,6 +44,33 @@ const GrantsSection = ({
 			removeData(category, item)
 		} else {
 			addData(category, item)
+		}
+	}
+
+	const handleAllAbove = (
+		e: React.ChangeEvent<HTMLInputElement>,
+		category: keyof MobilityData
+	) => {
+		if (e.target.checked) {
+			fields.forEach((item) => {
+				if (
+					!storeData.eMobility[category]?.find(
+						(el: SelectableItem) => el.value === item.value
+					)
+				) {
+					addData(category, item)
+				}
+			})
+		} else {
+			fields.forEach((item) => {
+				if (
+					storeData.eMobility[category]?.find(
+						(el: SelectableItem) => el.value === item.value
+					)
+				) {
+					removeData(category, item)
+				}
+			})
 		}
 	}
 
@@ -100,6 +129,48 @@ const GrantsSection = ({
 						)} / year`}</span>
 					</li>
 				))}
+				<li
+					key="all-above"
+					className="flex flex-row items-center justify-between text-primary"
+				>
+					<div className="flex flex-row items-center gap-1 justify-start">
+						<input
+							type="checkbox"
+							id={`checkbox-${category}-all-above`}
+							value="all"
+							onChange={(e) =>
+								handleAllAbove(
+									e,
+									category as keyof MobilityData
+								)
+							}
+							checked={
+								storeData.eMobility[
+									category as keyof MobilityData
+								]?.length === fields.length
+									? true
+									: false
+							}
+							className="custom-checkbox scale-[.8] peer"
+						/>
+						<label
+							className="peer-checked:font-bold"
+							htmlFor={`checkbox-${category}-all-above`}
+						>
+							All of the above
+						</label>
+					</div>
+					<span
+						className={
+							storeData.eMobility[category as keyof MobilityData]
+								.length === fields.length
+								? 'font-bold'
+								: ''
+						}
+					>{`€ ${getAllAbovePrice(
+						category as keyof MobilityData
+					)} / year`}</span>
+				</li>
 			</ul>
 		</div>
 	)

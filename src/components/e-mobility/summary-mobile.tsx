@@ -465,7 +465,7 @@ const SummaryMobile = () => {
 					<DrawerFooter className="w-5/6 my-6 mx-auto text-xl p-0">
 						<div className=" flex flex-row items-center justify-between ">
 							<span>TOTAL</span>
-							<span>€ {getTotalPrice()}</span>
+							<span>€ {getTotalPrice()} / year</span>
 						</div>
 						<div className="w-full mt-3 grid grid-cols-2 items-center gap-3 mx-auto  font-bold text-sm xl:text-lg text-center text-primary">
 							<button className="bg-white h-9 shadow-md hover:shadow-xl">

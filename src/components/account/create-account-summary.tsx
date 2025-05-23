@@ -84,8 +84,8 @@ const CreateAccountSummary = () => {
 													{getSinglePrice(
 														key as keyof MobilityData,
 														item
-													)}
-													/year
+													)}{' '}
+													/ year
 												</span>
 											</li>
 										))}
@@ -155,7 +155,7 @@ const CreateAccountSummary = () => {
 			<div className="mb-3 mt-6 text-base md:text-lg lg:text-xl">
 				<div className="flex flex-row items-center justify-between ">
 					<span>TOTAL</span>
-					<span>€ {getTotalPrice()}/year</span>
+					<span>€ {getTotalPrice()} / year</span>
 				</div>
 			</div>
 			<span className="w-full bg-primary h-[1px] my-8 block lg:hidden"></span>
