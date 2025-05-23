@@ -7,8 +7,8 @@ import {
 	SelectableItem,
 	MobilityData,
 	StoreState,
-	User,
-	UserSelection,
+	//User,
+	//UserSelection,
 	CategoryData,
 } from './store.types'
 
@@ -164,6 +164,24 @@ export const useStore = create<StoreState>()(
 				})
 				return total
 			},
+			getSinglePriceFromDB: (
+				category: string,
+				item: string,
+				geographies: string[]
+			) => {
+				console.log('getSinglePrice', category, item)
+				let total = 0
+				geographies.forEach((country: string) => {
+					total += parseInt(
+						//@ts-expect-error I hate you typescript
+						selectionData[get().sector?.value][
+							category
+						].fields.find((x: SelectableItem) => x.value === item)
+							.price[country as keyof Price]
+					)
+				})
+				return total
+			},
 			getModalSinglePrice: (category, item) => {
 				let total = 0
 				const dataItem = get().data.eMobility[category].find(
@@ -276,13 +294,41 @@ export const useStore = create<StoreState>()(
 
 				return total
 			},
-			getUser: (confirmed: boolean): User => {
+			getTotalPriceFromDB: (
+				clientSelection: { [key: string]: string[] },
+				geographies: string[]
+			) => {
+				let total = 0
+
+				// Iterate over the keys of eMobility
+				Object.keys(clientSelection).forEach((category) => {
+					// Ensure category is a valid key of MobilityData
+					if (
+						category !== 'typeOfVehicleContract' &&
+						category !== 'chargingStationsContract' &&
+						category !== 'report'
+					) {
+						const items = clientSelection[category]
+						if (Array.isArray(items)) {
+							items.forEach((item) => {
+								total += get().getSinglePriceFromDB(
+									category as keyof MobilityData,
+									item,
+									geographies
+								)
+							})
+						}
+					}
+				})
+
+				return total
+			},
+			/* getUser: (confirmed: boolean): User => {
 				const selection: UserSelection = {
 					typeOfVehicle: [],
 					typeOfVehicleContract: [],
 					chargingStations: [],
 					chargingStationsContract: [],
-					report: [],
 				}
 
 				Object.keys(get().data.eMobility).forEach((category) => {
@@ -338,7 +384,7 @@ export const useStore = create<StoreState>()(
 					accountConfirmed: confirmed,
 					...selection,
 				}
-			},
+			}, */
 			setUserRole: (role: 'client' | 'admin' | null) => {
 				set(
 					produce((state: StoreState) => {

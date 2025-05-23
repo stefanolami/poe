@@ -65,6 +65,11 @@ export interface StoreState {
 		category: keyof MobilityData,
 		item: SelectableItem
 	) => number
+	getSinglePriceFromDB: (
+		category: keyof MobilityData,
+		item: string,
+		geographies: string[]
+	) => number
 	getModalSinglePrice: (
 		category: keyof MobilityData,
 		item: SelectableItem
@@ -72,7 +77,11 @@ export interface StoreState {
 	getAllAbovePrice: (category: keyof MobilityData) => number
 	getSubTotalPrice: (category: keyof MobilityData) => number
 	getTotalPrice: () => number
-	getUser: (confirmed: boolean) => User
+	getTotalPriceFromDB: (
+		clientSelection: { [key: string]: string[] },
+		geographies: string[]
+	) => number
+	//getUser: (confirmed: boolean) => User
 	setUserRole: (role: 'client' | 'admin' | null) => void
 	removeUserRole: () => void
 }
@@ -95,5 +104,5 @@ export interface UserSelection {
 	typeOfVehicleContract: string[]
 	chargingStations: { name: string; geography: string[] }[]
 	chargingStationsContract: string[]
-	report: string[]
+	pif: string[]
 }

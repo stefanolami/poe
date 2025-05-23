@@ -15,6 +15,97 @@ export type LoginType = z.infer<typeof loginSchema>
 
 export type CreateGrantType = z.infer<typeof createGrantSchema>
 
+export type Price = {
+	[countryCode: string]: string
+}
+
+export type SelectionDataEmobilityType = {
+	/* [category: string]: {
+		label: string
+		value: string
+		fieldsLabel?: string
+		fields: {
+			value: string
+			label: string
+			price?: Price
+		}[]
+		contracts?: {
+			value: string
+			label: string
+		}[]
+	} */
+	typeOfVehicle: {
+		label: string
+		value: string
+		fieldsLabel?: string
+		fields: {
+			value: string
+			label: string
+			price?: Price
+		}[]
+		contracts?: {
+			value: string
+			label: string
+		}[]
+	}
+	chargingStations: {
+		label: string
+		value: string
+		fieldsLabel?: string
+		fields: {
+			value: string
+			label: string
+			price?: Price
+		}[]
+		contracts?: {
+			value: string
+			label: string
+		}[]
+	}
+	pif: {
+		label: string
+		value: string
+		fieldsLabel?: string
+		fields: {
+			value: string
+			label: string
+			price?: Price
+		}[]
+		contracts?: {
+			value: string
+			label: string
+		}[]
+	}
+	deployment: {
+		label: string
+		value: string
+		fieldsLabel?: string
+		fields: {
+			value: string
+			label: string
+			price?: Price
+		}[]
+		contracts?: {
+			value: string
+			label: string
+		}[]
+	}
+	project: {
+		label: string
+		value: string
+		fieldsLabel?: string
+		fields: {
+			value: string
+			label: string
+			price?: Price
+		}[]
+		contracts?: {
+			value: string
+			label: string
+		}[]
+	}
+}
+
 export type CreateGrantsTailoredAssessmentType = z.infer<
 	typeof createGrantsTailoredAssessmentSchema
 >
@@ -58,13 +149,17 @@ export interface PriceModalDataType {
 export type ClientDataType = {
 	charging_stations_contract: string[] | null
 	charging_stations_type: string[] | null
+	consultant: number | null
 	created_at: string
+	deployment: string[] | null
 	email: string
 	family_name: string
 	geography: string[] | null
 	id: number
 	name: string
 	org_name: string | null
+	pif: string[] | null
+	project: string[] | null
 	sector: string | null
 	user_id: string
 	vehicles_contract: string[] | null
