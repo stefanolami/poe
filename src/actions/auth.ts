@@ -40,7 +40,7 @@ export const getUserRole = async () => {
 		} = await supabase.auth.getUser()
 		if (!user) return null
 
-		return user.user_metadata?.user_role ?? null
+		return user.app_metadata?.user_role ?? null
 	} catch (error) {
 		console.log('GET USER ROLE ERROR', error)
 		throw error
@@ -66,7 +66,7 @@ export const signUpClient = async (data: CreateAccountType) => {
 		// Add user role
 		const { data: userData, error: adminError } =
 			await adminSupabase.auth.admin.updateUserById(userId, {
-				user_metadata: { user_role: 'client' },
+				app_metadata: { user_role: 'client' },
 			})
 
 		if (adminError) {
