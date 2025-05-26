@@ -29,7 +29,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 //import { sendEmail } from '@/actions/email'
-import React from 'react'
+import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FaTrashAlt } from 'react-icons/fa'
 
@@ -67,6 +67,8 @@ const GrantSingle = ({
 	grant: Grant
 	clients?: { id: number; name: string; email: string; family_name: string }[]
 }) => {
+	const [isSending, setIsSending] = useState(false)
+
 	const {
 		geography,
 		sector,
@@ -153,19 +155,20 @@ const GrantSingle = ({
 
 	const handleSend = async () => {
 		try {
+			setIsSending(true)
 			const response = await sendGrantAlert(id)
+			setIsSending(false)
 
-			/* if (response) {
+			if (response) {
 				toast({
 					title: 'Success!',
-					description: 'Tailored Assessment/s created successfully',
+					description: 'Grant alert sent successfully',
 					variant: 'default',
 				})
-				setTimeout(() => {
-					form.reset()
+				/* setTimeout(() => {
 					router.refresh()
-				}, 1000)
-			} */
+				}, 1000) */
+			}
 
 			console.log(response)
 
@@ -554,6 +557,7 @@ const GrantSingle = ({
 												))}
 												<div className="space-x-4">
 													<Button
+														disabled={isSending}
 														variant="default"
 														type="button"
 														onClick={() =>
@@ -592,6 +596,7 @@ const GrantSingle = ({
 				</div>
 				<div className="grid grid-cols-2 gap-4">
 					<Button
+						disabled={isSending}
 						variant="default"
 						type="button"
 						onClick={handleSend}
@@ -600,6 +605,7 @@ const GrantSingle = ({
 						Send
 					</Button>
 					<Button
+						disabled={isSending}
 						variant="default"
 						type="button"
 						className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
