@@ -393,7 +393,8 @@ const GrantSingle = ({
 														<div className="flex flex-col w-full gap-4 items-start">
 															<Select
 																disabled={
-																	isSubmitting
+																	isSubmitting ||
+																	isSending
 																}
 																value={
 																	detail[0] ??
@@ -447,7 +448,8 @@ const GrantSingle = ({
 															</Select>
 															<Textarea
 																disabled={
-																	isSubmitting
+																	isSubmitting ||
+																	isSending
 																}
 																placeholder="Relevance"
 																value={
@@ -474,7 +476,8 @@ const GrantSingle = ({
 															/>
 															<Textarea
 																disabled={
-																	isSubmitting
+																	isSubmitting ||
+																	isSending
 																}
 																placeholder="Next Steps"
 																value={
@@ -557,7 +560,10 @@ const GrantSingle = ({
 												))}
 												<div className="space-x-4">
 													<Button
-														disabled={isSending}
+														disabled={
+															isSending ||
+															isSubmitting
+														}
 														variant="default"
 														type="button"
 														onClick={() =>
@@ -577,6 +583,10 @@ const GrantSingle = ({
 														field.value.length >
 															0 && (
 															<Button
+																disabled={
+																	isSending ||
+																	isSubmitting
+																}
 																variant="default"
 																type="submit"
 																className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5 px-8"
@@ -596,7 +606,7 @@ const GrantSingle = ({
 				</div>
 				<div className="grid grid-cols-2 gap-4">
 					<Button
-						disabled={isSending}
+						disabled={isSending || isSubmitting}
 						variant="default"
 						type="button"
 						onClick={handleSend}
@@ -605,7 +615,7 @@ const GrantSingle = ({
 						Send
 					</Button>
 					<Button
-						disabled={isSending}
+						disabled={isSending || isSubmitting}
 						variant="default"
 						type="button"
 						className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
