@@ -1,13 +1,8 @@
 'use server'
 
-import { CreateGrantType /* FormattedGrantType */ } from '@/lib/types'
+import { CreateGrantType } from '@/lib/types'
 import { createClient } from '@/supabase/server'
-import {
-	//sendGrant,
-	sendGrantBatch,
-	//sendGrantTailored,
-	sendGrantTailoredBatch,
-} from /* sendEmail */ './email'
+import { sendGrantBatch, sendGrantTailoredBatch } from './email'
 
 export const createGrant = async (formData: CreateGrantType) => {
 	try {
