@@ -8,14 +8,6 @@ export const createGrant = async (formData: CreateGrantType) => {
 	try {
 		const supabase = await createClient()
 
-		const matchingClients = await matchGrant({
-			geography: formData.geography,
-			deployment: formData.deployment,
-			project: formData.project,
-		})
-
-		const matchingClientsIds = matchingClients.map((client) => client.id)
-
 		const flatDeadline = formData.deadline.map((element) =>
 			element.join('///')
 		)
@@ -29,7 +21,6 @@ export const createGrant = async (formData: CreateGrantType) => {
 
 		if (files && files.length > 0) {
 			const uploadPromises = files.map(async (file: File) => {
-				// Use the file name as the path (optionally add a folder prefix if needed)
 				const filePath = `/grants/${file.name}`
 				const { error } = await supabase.storage
 					.from('documents')
@@ -62,7 +53,6 @@ export const createGrant = async (formData: CreateGrantType) => {
 			deployment: formData.deployment,
 			project: formData.project,
 			files: uploadedFilePaths,
-			matched_clients: matchingClientsIds,
 		}
 
 		const { data, error } = await supabase
@@ -131,7 +121,7 @@ export const getGrant = async (id: number) => {
 	}
 }
 
-export const matchGrant = async ({
+/* export const matchGrant = async ({
 	geography,
 	deployment,
 	project,
@@ -176,7 +166,7 @@ export const matchGrant = async ({
 		console.log('ERROR MATCHING GRANT', error)
 		throw error
 	}
-}
+} */
 
 export const addGrantsTailoredAssessments = async (
 	grantId: number,
@@ -258,6 +248,16 @@ export const sendGrantAlert = async (grantId: number) => {
 	try {
 		const supabase = await createClient()
 
+		const { error: rpcError } = await supabase.rpc(
+			'update_grant_clients_call',
+			{
+				grant_id: grantId,
+			}
+		)
+		if (rpcError) {
+			throw new Error(rpcError.message)
+		}
+
 		const { data: grantData, error } = await supabase
 			.from('grants')
 			.select('*')
@@ -268,17 +268,15 @@ export const sendGrantAlert = async (grantId: number) => {
 			throw new Error(error.message)
 		}
 
-		const matchedClients = await matchGrant(grantData)
+		const matchedClients = grantData?.matched_clients
 
 		if (!matchedClients || matchedClients.length === 0)
 			return new Error('No matched clients found')
 
-		const matchedClientsIds = matchedClients.map((client) => client.id)
-
 		const { data: clientsData, error: clientsError } = await supabase
 			.from('clients')
 			.select('*')
-			.in('id', matchedClientsIds)
+			.in('id', matchedClients)
 
 		if (clientsError || !clientsData || clientsData.length === 0) {
 			throw new Error(clientsError?.message || 'No clients found')
@@ -310,7 +308,7 @@ export const sendGrantAlert = async (grantId: number) => {
 		}
 
 		const clientsEmails = clientsData.map((client) => client.email)
-		console.log('CLIENTS EMAILS', clientsEmails)
+		//console.log('CLIENTS EMAILS', clientsEmails)
 		const assessments = grantData.tailored_assessment as
 			| {
 					client: string
@@ -321,7 +319,7 @@ export const sendGrantAlert = async (grantId: number) => {
 		const tailoredEmails = assessments?.map(
 			(assessment) => assessment.client
 		)
-		console.log('TAILORED EMAILS', tailoredEmails)
+		//console.log('TAILORED EMAILS', tailoredEmails)
 
 		// Split emails into tailored and normal
 		const tailoredRecipients = clientsEmails.filter((email) =>
@@ -330,6 +328,8 @@ export const sendGrantAlert = async (grantId: number) => {
 		const normalRecipients = clientsEmails.filter(
 			(email) => !tailoredEmails?.includes(email)
 		)
+
+		console.log('normalRecipients', normalRecipients)
 
 		// For tailored, match each email to its assessment
 		const tailoredAssessments = tailoredRecipients.map(
@@ -351,7 +351,7 @@ export const sendGrantAlert = async (grantId: number) => {
 					)
 				: Promise.resolve(),
 			normalRecipients.length > 0 && tailoredRecipients.length > 0
-				? await sleep(3000)
+				? await sleep(1000)
 				: Promise.resolve(),
 			tailoredRecipients.length > 0
 				? sendGrantTailoredBatch(

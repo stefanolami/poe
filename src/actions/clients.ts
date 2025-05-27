@@ -1,28 +1,35 @@
 'use server'
 
-import { UpdateAccountType } from '@/lib/types'
+import { CreateAccountType, UpdateAccountType } from '@/lib/types'
 import { createAdminClient, createClient } from '@/supabase/server'
 
-/* export const clientSignUp = async (data: CreateAccountType) => {
+export const signUpClient = async (data: CreateAccountType) => {
 	try {
 		const supabase = await createClient()
 
-		// Create auth account
-		const { data: authData, error: authError } = await supabase.auth.signUp(
-			{
-				email: data.email,
-				password: data.password,
-			}
-		)
-		if (authError) {
-			throw new Error(`Auth creation failed: ${authError.message}`)
-		}
-		console.log('Auth account created successfully')
+		// Sign up user
+		const { data: authData, error } = await supabase.auth.signUp({
+			email: data.email,
+			password: data.password,
+		})
+		if (error) throw error
 
 		const userId = authData.user?.id
-		if (!userId) {
-			throw new Error('User ID is missing after account creation')
+		if (!userId) throw new Error('User ID not found after sign up')
+
+		const adminSupabase = await createAdminClient()
+
+		// Add user role
+		const { data: userData, error: adminError } =
+			await adminSupabase.auth.admin.updateUserById(userId, {
+				app_metadata: { user_role: 'client' },
+			})
+
+		if (adminError) {
+			console.error('Admin API error:', adminError)
+			throw new Error('Failed to set custom claims')
 		}
+		console.log('User role updated successfully:', userData)
 
 		// Sign in the user
 		const { error: signInError } = await supabase.auth.signInWithPassword({
@@ -33,41 +40,46 @@ import { createAdminClient, createClient } from '@/supabase/server'
 			throw new Error(`Sign-in failed: ${signInError.message}`)
 		}
 
-		// Create client record
-		const { error: clientError } = await supabase.from('clients').insert({
+		const clientInsertData = {
 			name: data.name,
 			family_name: data.familyName,
-			org_name: data.orgName,
+			org_name: data.orgName ?? null,
 			email: data.email,
 			user_id: userId,
-			sector: data.sector,
-			geography: data.geography,
-			vehicles_type: data.vehicles_type,
-			vehicles_contract: data.vehicles_contract,
-			charging_stations_type: data.charging_stations_type,
-			charging_stations_contract: data.charging_stations_contract,
-		})
+			sector: data.sector ?? null,
+			vehicles_type: data.vehicles_type ?? [],
+			vehicles_contract: data.vehicles_contract ?? [],
+			charging_stations_type: data.charging_stations_type ?? [],
+			charging_stations_contract: data.charging_stations_contract ?? [],
+			pif: data.pif ?? [],
+			deployment:
+				data.deployment?.map((item) => {
+					return {
+						value: item,
+						geography: data.geography,
+					}
+				}) ?? [],
+			project:
+				data.project?.map((item) => {
+					return {
+						value: item,
+						geography: data.geography,
+					}
+				}) ?? [],
+		}
+
+		// Create client record
+		const { data: clientData, error: clientError } = await supabase
+			.from('clients')
+			.insert(clientInsertData)
+			.select()
+			.single()
 		if (clientError) {
 			throw new Error(`Client creation failed: ${clientError.message}`)
 		}
 		console.log('Client account created successfully')
 
-		// Create users_profiles record
-		const { error: profileError } = await supabase
-			.from('users_profiles')
-			.insert({
-				user_id: userId,
-				role: 'client',
-			})
-		if (profileError) {
-			throw new Error(
-				`User profile creation failed: ${profileError.message}`
-			)
-		}
-		console.log('User profile created successfully')
-
-		// Return auth data
-		return authData
+		return clientData
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			console.error('SIGNUP ERROR:', error.message)
@@ -77,7 +89,7 @@ import { createAdminClient, createClient } from '@/supabase/server'
 			throw new Error('An unexpected error occurred during signup')
 		}
 	}
-} */
+}
 
 export const clientUpdate = async (
 	data: UpdateAccountType,

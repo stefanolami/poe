@@ -45,15 +45,14 @@ export type Database = {
           charging_stations_type: string[] | null
           consultant: number | null
           created_at: string
-          deployment: string[] | null
+          deployment: Json | null
           email: string
           family_name: string
-          geography: string[] | null
           id: number
           name: string
           org_name: string | null
           pif: string[] | null
-          project: string[] | null
+          project: Json | null
           sector: string | null
           user_id: string
           vehicles_contract: string[] | null
@@ -64,15 +63,14 @@ export type Database = {
           charging_stations_type?: string[] | null
           consultant?: number | null
           created_at?: string
-          deployment?: string[] | null
+          deployment?: Json | null
           email: string
           family_name: string
-          geography?: string[] | null
           id?: number
           name: string
           org_name?: string | null
           pif?: string[] | null
-          project?: string[] | null
+          project?: Json | null
           sector?: string | null
           user_id: string
           vehicles_contract?: string[] | null
@@ -83,15 +81,14 @@ export type Database = {
           charging_stations_type?: string[] | null
           consultant?: number | null
           created_at?: string
-          deployment?: string[] | null
+          deployment?: Json | null
           email?: string
           family_name?: string
-          geography?: string[] | null
           id?: number
           name?: string
           org_name?: string | null
           pif?: string[] | null
-          project?: string[] | null
+          project?: Json | null
           sector?: string | null
           user_id?: string
           vehicles_contract?: string[] | null
@@ -100,6 +97,71 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "clients_consultant_fkey"
+            columns: ["consultant"]
+            isOneToOne: false
+            referencedRelation: "consultants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clients_duplicate: {
+        Row: {
+          charging_stations_contract: string[] | null
+          charging_stations_type: string[] | null
+          consultant: number | null
+          created_at: string
+          deployment: Json[] | null
+          email: string
+          family_name: string
+          id: number
+          name: string
+          org_name: string | null
+          pif: string[] | null
+          project: Json[] | null
+          sector: string | null
+          user_id: string
+          vehicles_contract: string[] | null
+          vehicles_type: string[] | null
+        }
+        Insert: {
+          charging_stations_contract?: string[] | null
+          charging_stations_type?: string[] | null
+          consultant?: number | null
+          created_at?: string
+          deployment?: Json[] | null
+          email: string
+          family_name: string
+          id?: number
+          name: string
+          org_name?: string | null
+          pif?: string[] | null
+          project?: Json[] | null
+          sector?: string | null
+          user_id: string
+          vehicles_contract?: string[] | null
+          vehicles_type?: string[] | null
+        }
+        Update: {
+          charging_stations_contract?: string[] | null
+          charging_stations_type?: string[] | null
+          consultant?: number | null
+          created_at?: string
+          deployment?: Json[] | null
+          email?: string
+          family_name?: string
+          id?: number
+          name?: string
+          org_name?: string | null
+          pif?: string[] | null
+          project?: Json[] | null
+          sector?: string | null
+          user_id?: string
+          vehicles_contract?: string[] | null
+          vehicles_type?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clients_duplicate_consultant_fkey"
             columns: ["consultant"]
             isOneToOne: false
             referencedRelation: "consultants"
@@ -335,7 +397,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      update_grant_clients_call: {
+        Args: { grant_id: number }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

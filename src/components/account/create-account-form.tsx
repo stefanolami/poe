@@ -20,7 +20,7 @@ import { Button } from '../ui/button'
 import { LuEyeClosed, LuEye } from 'react-icons/lu'
 import { useStore } from '@/store/store'
 import { useShallow } from 'zustand/shallow'
-import { signUpClient } from '@/actions/auth'
+import { signUpClient } from '@/actions/clients'
 
 const CreateAccountForm = () => {
 	const [isView, setIsView] = useState(false)

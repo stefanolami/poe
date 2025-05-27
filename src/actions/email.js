@@ -63,7 +63,7 @@ export async function sendGrantTailored(
 	}
 }
 
-export async function sendGrantBatch(recipients, subject, grant, attachments) {
+/* export async function sendGrantBatch(recipients, subject, grant, attachments) {
 	return await Promise.all(
 		recipients.map((to) =>
 			resend.emails.send({
@@ -104,4 +104,56 @@ export async function sendGrantTailoredBatch(
 			})
 		)
 	)
+} */
+
+function sleep(ms) {
+	return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+export async function sendGrantBatch(recipients, subject, grant, attachments) {
+	const results = []
+	for (const to of recipients) {
+		const result = await resend.emails.send({
+			from: 'POE <alerts@poeontap.com>',
+			to,
+			subject,
+			react: <GrantsEmailCharin grant={grant} />,
+			...(attachments && attachments.length > 0
+				? { attachments: attachments.filter(Boolean) }
+				: {}),
+		})
+		results.push(result)
+		await sleep(600)
+	}
+	return results
+}
+
+export async function sendGrantTailoredBatch(
+	recipients,
+	subject,
+	grant,
+	assessments,
+	attachments
+) {
+	const results = []
+	for (let idx = 0; idx < recipients.length; idx++) {
+		const to = recipients[idx]
+		const result = await resend.emails.send({
+			from: 'POE <alerts@poeontap.com>',
+			to,
+			subject,
+			react: (
+				<GrantsEmailTailoredCharin
+					grant={grant}
+					assessment={assessments[idx]}
+				/>
+			),
+			...(attachments && attachments.length > 0
+				? { attachments: attachments.filter(Boolean) }
+				: {}),
+		})
+		results.push(result)
+		await sleep(600)
+	}
+	return results
 }
