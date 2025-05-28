@@ -2,6 +2,7 @@ import { geographiesArray, selectionData } from '@/data/data'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { SelectionDataEmobilityType } from './types'
+import { SelectableItem } from '@/store/store.types'
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
@@ -99,4 +100,11 @@ export function getSelectionItemContractLabel(
 		(item) => item.value === string
 	)
 	return found ? found.label : string
+}
+
+export function selectionArrayFromStoreToDB(array: SelectableItem[]) {
+	return array.map((item) => ({
+		value: item.value,
+		geography: item.geographies?.map((geo) => geo.value) || [],
+	}))
 }

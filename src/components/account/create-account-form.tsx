@@ -21,6 +21,7 @@ import { LuEyeClosed, LuEye } from 'react-icons/lu'
 import { useStore } from '@/store/store'
 import { useShallow } from 'zustand/shallow'
 import { signUpClient } from '@/actions/clients'
+import { selectionArrayFromStoreToDB } from '@/lib/utils'
 
 const CreateAccountForm = () => {
 	const [isView, setIsView] = useState(false)
@@ -30,11 +31,10 @@ const CreateAccountForm = () => {
 
 	const router = useRouter()
 
-	const { storeSector, storeData, storeGeographies } = useStore(
+	const { storeSector, storeData } = useStore(
 		useShallow((state) => ({
 			storeSector: state.sector,
 			storeData: state.data,
-			storeGeographies: state.geographies,
 		}))
 	)
 
@@ -59,25 +59,25 @@ const CreateAccountForm = () => {
 		const fullData = {
 			...data,
 			sector: storeSector.value,
-			geography: storeGeographies.map((item) => item.value),
-			vehicles_type: storeData.eMobility.typeOfVehicle?.map(
-				(item) => item.value
+			vehicles_type: selectionArrayFromStoreToDB(
+				storeData.eMobility.typeOfVehicle
 			),
-			vehicles_contract: storeData.eMobility.typeOfVehicleContract?.map(
-				(item) => item.value
-			),
-			charging_stations_type: storeData.eMobility.chargingStations?.map(
-				(item) => item.value
+			vehicles_contract:
+				storeData.eMobility.typeOfVehicleContract?.map(
+					(item) => item.value
+				) || [],
+			charging_stations_type: selectionArrayFromStoreToDB(
+				storeData.eMobility.chargingStations
 			),
 			charging_stations_contract:
 				storeData.eMobility.chargingStationsContract?.map(
 					(item) => item.value
-				),
-			pif: storeData.eMobility.pif?.map((item) => item.value),
-			deployment: storeData.eMobility.deployment?.map(
-				(item) => item.value
+				) || [],
+			pif: selectionArrayFromStoreToDB(storeData.eMobility.pif),
+			deployment: selectionArrayFromStoreToDB(
+				storeData.eMobility.deployment
 			),
-			project: storeData.eMobility.project?.map((item) => item.value),
+			project: selectionArrayFromStoreToDB(storeData.eMobility.project),
 		}
 
 		try {

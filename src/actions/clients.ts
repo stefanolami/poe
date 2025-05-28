@@ -52,20 +52,8 @@ export const signUpClient = async (data: CreateAccountType) => {
 			charging_stations_type: data.charging_stations_type ?? [],
 			charging_stations_contract: data.charging_stations_contract ?? [],
 			pif: data.pif ?? [],
-			deployment:
-				data.deployment?.map((item) => {
-					return {
-						value: item,
-						geography: data.geography,
-					}
-				}) ?? [],
-			project:
-				data.project?.map((item) => {
-					return {
-						value: item,
-						geography: data.geography,
-					}
-				}) ?? [],
+			deployment: data.deployment ?? [],
+			project: data.project ?? [],
 		}
 
 		// Create client record

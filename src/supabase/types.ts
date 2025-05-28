@@ -42,7 +42,7 @@ export type Database = {
       clients: {
         Row: {
           charging_stations_contract: string[] | null
-          charging_stations_type: string[] | null
+          charging_stations_type: Json | null
           consultant: number | null
           created_at: string
           deployment: Json | null
@@ -51,16 +51,16 @@ export type Database = {
           id: number
           name: string
           org_name: string | null
-          pif: string[] | null
+          pif: Json | null
           project: Json | null
           sector: string | null
           user_id: string
           vehicles_contract: string[] | null
-          vehicles_type: string[] | null
+          vehicles_type: Json | null
         }
         Insert: {
           charging_stations_contract?: string[] | null
-          charging_stations_type?: string[] | null
+          charging_stations_type?: Json | null
           consultant?: number | null
           created_at?: string
           deployment?: Json | null
@@ -69,16 +69,16 @@ export type Database = {
           id?: number
           name: string
           org_name?: string | null
-          pif?: string[] | null
+          pif?: Json | null
           project?: Json | null
           sector?: string | null
           user_id: string
           vehicles_contract?: string[] | null
-          vehicles_type?: string[] | null
+          vehicles_type?: Json | null
         }
         Update: {
           charging_stations_contract?: string[] | null
-          charging_stations_type?: string[] | null
+          charging_stations_type?: Json | null
           consultant?: number | null
           created_at?: string
           deployment?: Json | null
@@ -87,12 +87,12 @@ export type Database = {
           id?: number
           name?: string
           org_name?: string | null
-          pif?: string[] | null
+          pif?: Json | null
           project?: Json | null
           sector?: string | null
           user_id?: string
           vehicles_contract?: string[] | null
-          vehicles_type?: string[] | null
+          vehicles_type?: Json | null
         }
         Relationships: [
           {
