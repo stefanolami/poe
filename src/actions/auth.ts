@@ -45,3 +45,40 @@ export const getUserRole = async () => {
 		throw error
 	}
 }
+
+export const forgotPassword = async (email: string) => {
+	try {
+		const supabase = await createClient()
+
+		const { data, error } = await supabase.auth.resetPasswordForEmail(
+			email,
+			{
+				redirectTo: 'http://localhost:3000/update-password',
+			}
+		)
+		if (error) throw error
+		return data
+	} catch (error) {
+		console.log('FORGOT PASSWORD ERROR', error)
+		throw error
+	}
+}
+
+export const updatePassword = async (password: string, code: string) => {
+	try {
+		const supabase = await createClient()
+
+		const { error: sessionError } =
+			await supabase.auth.exchangeCodeForSession(code)
+		if (sessionError) throw sessionError
+
+		const { data, error } = await supabase.auth.updateUser({
+			password,
+		})
+		if (error) throw error
+		return data
+	} catch (error) {
+		console.log('UPDATE PASSWORD ERROR', error)
+		throw error
+	}
+}

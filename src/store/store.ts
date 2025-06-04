@@ -169,7 +169,6 @@ export const useStore = create<StoreState>()(
 				item: string,
 				geographies: string[]
 			) => {
-				console.log('getSinglePrice', category, item)
 				let total = 0
 				geographies.forEach((country: string) => {
 					total += parseInt(

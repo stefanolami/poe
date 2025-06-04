@@ -3,8 +3,10 @@ import {
 	createAccountSchema,
 	createGrantSchema,
 	createGrantsTailoredAssessmentSchema,
+	forgotPasswordSchema,
 	loginSchema,
 	updateAccountSchema,
+	updatePasswordSchema,
 } from './zod-schemas'
 
 export type CreateAccountType = z.infer<typeof createAccountSchema>
@@ -12,6 +14,10 @@ export type CreateAccountType = z.infer<typeof createAccountSchema>
 export type UpdateAccountType = z.infer<typeof updateAccountSchema>
 
 export type LoginType = z.infer<typeof loginSchema>
+
+export type ForgotPasswordType = z.infer<typeof forgotPasswordSchema>
+
+export type UpdatePasswordType = z.infer<typeof updatePasswordSchema>
 
 export type CreateGrantType = z.infer<typeof createGrantSchema>
 
@@ -146,24 +152,30 @@ export interface PriceModalDataType {
 	}
 }
 
+export type ClientDataJsonType = {
+	value: string
+	price?: Price
+	geography: string[]
+}[]
+
 export type ClientDataType = {
 	charging_stations_contract: string[] | null
-	charging_stations_type: string[] | null
+	charging_stations_type: ClientDataJsonType | null
 	consultant: number | null
 	created_at: string
-	deployment: string[] | null
+	deployment: ClientDataJsonType | null
 	email: string
 	family_name: string
-	geography: string[] | null
+	geography?: string[] | null
 	id: number
 	name: string
 	org_name: string | null
-	pif: string[] | null
-	project: string[] | null
+	pif: ClientDataJsonType | null
+	project: ClientDataJsonType | null
 	sector: string | null
 	user_id: string
 	vehicles_contract: string[] | null
-	vehicles_type: string[] | null
+	vehicles_type: ClientDataJsonType | null
 }
 
 export type FormattedGrantType = {
