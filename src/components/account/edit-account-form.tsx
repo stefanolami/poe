@@ -69,7 +69,7 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 					variant: 'default',
 				})
 				setTimeout(() => {
-					router.back()
+					router.replace('/account')
 				}, 1000)
 			}
 
