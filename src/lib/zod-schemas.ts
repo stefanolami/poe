@@ -11,14 +11,48 @@ export const createAccountSchema = z
 			.min(6, 'Password must be at least 6 characters long'),
 		confirmPassword: z.string().min(6, 'Confirm password is required'),
 		sector: z.string().optional(),
-		vehicles_type: z.array(z.string()).optional(),
+		vehicles_type: z
+			.array(
+				z.object({
+					value: z.string(),
+					geography: z.array(z.string()),
+				})
+			)
+			.optional(),
 		vehicles_contract: z.array(z.string()).optional(),
-		charging_stations_type: z.array(z.string()).optional(),
+		charging_stations_type: z
+			.array(
+				z.object({
+					value: z.string(),
+					geography: z.array(z.string()),
+				})
+			)
+			.optional(),
 		charging_stations_contract: z.array(z.string()).optional(),
-		pif: z.array(z.string()).optional(),
-		deployment: z.array(z.string()).optional(),
-		project: z.array(z.string()).optional(),
-		geography: z.array(z.string()).optional(),
+		pif: z
+			.array(
+				z.object({
+					value: z.string(),
+					geography: z.array(z.string()),
+				})
+			)
+			.optional(),
+		deployment: z
+			.array(
+				z.object({
+					value: z.string(),
+					geography: z.array(z.string()),
+				})
+			)
+			.optional(),
+		project: z
+			.array(
+				z.object({
+					value: z.string(),
+					geography: z.array(z.string()),
+				})
+			)
+			.optional(),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
 		message: 'Passwords must match',
@@ -36,6 +70,22 @@ export const loginSchema = z.object({
 	email: z.string().email('Invalid email address'),
 	password: z.string().min(6, 'Password must be at least 6 characters long'),
 })
+
+export const forgotPasswordSchema = z.object({
+	email: z.string().email('Invalid email address'),
+})
+
+export const updatePasswordSchema = z
+	.object({
+		password: z
+			.string()
+			.min(6, 'Password must be at least 6 characters long'),
+		confirmPassword: z.string().min(6, 'Confirm password is required'),
+	})
+	.refine((data) => data.password === data.confirmPassword, {
+		message: 'Passwords must match',
+		path: ['confirmPassword'],
+	})
 
 export const createGrantSchema = z
 	.object({

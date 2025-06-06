@@ -61,7 +61,7 @@ const SummaryMobile = () => {
 						</div>
 					</div>
 					<div className="h-full bg-primary-light flex-1">
-						TOTAL € {getTotalPrice()}
+						TOTAL € {getTotalPrice()} / year
 					</div>
 				</DrawerTrigger>
 				<DrawerContent className="bg-primary-light text-white">

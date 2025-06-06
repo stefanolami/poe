@@ -1,7 +1,5 @@
 'use client'
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { authenticate, getUserRole } from '@/actions/auth'
 import { Button } from '@/components/ui/button'
 import {
@@ -14,18 +12,13 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { LoginType } from '@/lib/types'
+import { loginSchema } from '@/lib/zod-schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-
-const loginSchema = z.object({
-	email: z.string().email({ message: 'Invalid email address' }),
-	password: z
-		.string()
-		.min(6, { message: 'Password must be at least 6 characters' }),
-})
+import { LuEye, LuEyeClosed } from 'react-icons/lu'
 
 export default function AuthComponent() {
 	const form = useForm<LoginType>({
@@ -37,6 +30,7 @@ export default function AuthComponent() {
 	})
 
 	const [isAuthenticating, setIsAuthenticating] = useState(false)
+	const [isView, setIsView] = useState(false)
 
 	const router = useRouter()
 
@@ -54,13 +48,18 @@ export default function AuthComponent() {
 				router.push('/admin/dashboard')
 			}
 		} catch (error) {
+			console.error('Authentication error:', error)
+			form.setError('email', {
+				type: 'manual',
+				message: 'Invalid email or password',
+			})
 		} finally {
 			setIsAuthenticating(false)
 		}
 	}
 
 	return (
-		<div className="flex items-center justify-center">
+		<div className="flex items-center justify-center text-primary">
 			<div className="mx-auto grid w-[350px] gap-6">
 				<Form {...form}>
 					<form
@@ -78,7 +77,7 @@ export default function AuthComponent() {
 											id="email"
 											type="email"
 											placeholder=""
-											className="text-black"
+											className="text-primary border-primary"
 											{...field}
 											disabled={isAuthenticating}
 										/>
@@ -91,7 +90,7 @@ export default function AuthComponent() {
 							control={form.control}
 							name="password"
 							render={({ field }) => (
-								<FormItem className="grid gap-2">
+								<FormItem className="grid gap-2 relative">
 									<div className="flex items-center">
 										<FormLabel htmlFor="password">
 											Password
@@ -101,15 +100,34 @@ export default function AuthComponent() {
 										<Input
 											disabled={isAuthenticating}
 											id="password"
-											type="password"
+											type={isView ? 'text' : 'password'}
 											{...field}
-											className="text-black"
+											className="text-primary border-primary"
 										/>
-									</FormControl>{' '}
+									</FormControl>
+									{isView ? (
+										<LuEye
+											className="absolute right-2 top-[32px] lg:top-[32px] z-10 cursor-pointer text-primary"
+											onClick={() => {
+												setIsView(!isView)
+											}}
+										/>
+									) : (
+										<LuEyeClosed
+											className="absolute right-2 top-[32px] lg:top-[32px] z-10 cursor-pointer text-primary"
+											onClick={() => setIsView(!isView)}
+										/>
+									)}
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
+						<Link
+							href="/forgot-password"
+							className="text-primary underline text-sm -mt-4"
+						>
+							Forgot Password
+						</Link>
 						<Button
 							disabled={isAuthenticating}
 							type="submit"

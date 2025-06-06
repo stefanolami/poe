@@ -1,7 +1,7 @@
 'use client'
 
 import { selectionData } from '@/data/data'
-import { ClientDataType } from '@/lib/types'
+import { ClientDataJsonType, ClientDataType } from '@/lib/types'
 import {
 	getGeoLabel,
 	getSelectionItemContractLabel,
@@ -32,6 +32,8 @@ const AccountSummary = ({ clientData }: { clientData: ClientDataType }) => {
 		project: clientData.project || [],
 	}
 
+	console.log('clientSelection', clientSelection)
+
 	const geographies = clientData.geography || []
 
 	return (
@@ -58,17 +60,23 @@ const AccountSummary = ({ clientData }: { clientData: ClientDataType }) => {
 				{Object.keys(clientSelection).map((key, index) => {
 					if (
 						key !== 'typeOfVehicleContract' &&
-						key !== 'chargingStationsContract' &&
-						key !== 'eVehiclesMaintenance' &&
-						key !== 'report'
+						key !== 'chargingStationsContract'
 					) {
+						console.log(
+							'key data',
+							key,
+							clientSelection[key as keyof MobilityData]
+						)
 						const category =
 							selectionData.eMobility[
 								key as keyof typeof selectionData.eMobility
 							]
 						if (
-							clientSelection[key as keyof MobilityData].length >
-							0
+							(
+								clientSelection[
+									key as keyof MobilityData
+								] as ClientDataJsonType[]
+							).length > 0
 						) {
 							return (
 								<div
@@ -83,16 +91,18 @@ const AccountSummary = ({ clientData }: { clientData: ClientDataType }) => {
 												: category.label}
 									</span>
 									<ul className="text-sm md:text-base space-y-1 lg:space-y-2 list-disc list-inside pl-1">
-										{clientSelection[
-											key as keyof MobilityData
-										].map((item, index) => (
+										{(
+											clientSelection[
+												key as keyof MobilityData
+											] as ClientDataJsonType[]
+										).map((item, index) => (
 											<li
 												className="flex flex-row items-center justify-between"
 												key={index}
 											>
 												<span className="list-item">
 													{getSelectionItemLabel(
-														item,
+														item.value,
 														key
 													)}
 												</span>
@@ -100,8 +110,7 @@ const AccountSummary = ({ clientData }: { clientData: ClientDataType }) => {
 													€{' '}
 													{getSinglePrice(
 														key as keyof MobilityData,
-														item,
-														geographies
+														item
 													)}{' '}
 													/ year
 												</span>
@@ -162,7 +171,7 @@ const AccountSummary = ({ clientData }: { clientData: ClientDataType }) => {
 										].map((item, index) => (
 											<li key={index}>
 												{getSelectionItemContractLabel(
-													item,
+													item as string,
 													key
 												)}
 											</li>
@@ -178,9 +187,7 @@ const AccountSummary = ({ clientData }: { clientData: ClientDataType }) => {
 			<div className="mb-3 mt-6 text-base md:text-lg lg:text-xl">
 				<div className="flex flex-row items-center justify-between ">
 					<span>TOTAL</span>
-					<span>
-						€ {getTotalPrice(clientSelection, geographies)} / year
-					</span>
+					<span>€ {getTotalPrice(clientSelection)} / year</span>
 				</div>
 			</div>
 			<span className="w-full bg-primary h-[1px] my-8 block lg:hidden"></span>
