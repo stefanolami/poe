@@ -11,6 +11,7 @@ import {
 	//UserSelection,
 	CategoryData,
 } from './store.types'
+import { ClientDataJsonType, ClientSelectionType } from '@/lib/types'
 
 export const useStore = create<StoreState>()(
 	persist(
@@ -166,17 +167,17 @@ export const useStore = create<StoreState>()(
 			},
 			getSinglePriceFromDB: (
 				category: string,
-				item: string,
-				geographies: string[]
+				item: ClientDataJsonType
 			) => {
 				let total = 0
-				geographies.forEach((country: string) => {
+				item.geography.forEach((country: string) => {
 					total += parseInt(
 						//@ts-expect-error I hate you typescript
 						selectionData[get().sector?.value][
 							category
-						].fields.find((x: SelectableItem) => x.value === item)
-							.price[country as keyof Price]
+						].fields.find(
+							(x: SelectableItem) => x.value === item.value
+						).price[country as keyof Price]
 					)
 				})
 				return total
@@ -293,7 +294,7 @@ export const useStore = create<StoreState>()(
 
 				return total
 			},
-			getTotalPriceFromDB: (
+			/* getTotalPriceFromDB: (
 				clientSelection: { [key: string]: string[] },
 				geographies: string[]
 			) => {
@@ -314,6 +315,33 @@ export const useStore = create<StoreState>()(
 									category as keyof MobilityData,
 									item,
 									geographies
+								)
+							})
+						}
+					}
+				})
+
+				return total
+			}, */
+			getTotalPriceFromDB: (clientSelection: ClientSelectionType) => {
+				let total = 0
+
+				// Iterate over the keys of eMobility
+				Object.keys(clientSelection).forEach((category) => {
+					// Ensure category is a valid key of MobilityData
+					if (
+						category !== 'typeOfVehicleContract' &&
+						category !== 'chargingStationsContract'
+					) {
+						const items =
+							clientSelection[
+								category as keyof ClientSelectionType
+							]
+						if (Array.isArray(items)) {
+							items.forEach((item) => {
+								total += get().getSinglePriceFromDB(
+									category as keyof ClientSelectionType,
+									item as ClientDataJsonType
 								)
 							})
 						}

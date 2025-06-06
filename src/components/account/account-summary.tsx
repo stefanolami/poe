@@ -72,8 +72,11 @@ const AccountSummary = ({ clientData }: { clientData: ClientDataType }) => {
 								key as keyof typeof selectionData.eMobility
 							]
 						if (
-							(clientSelection[key as keyof MobilityData] as ClientDataJsonType).length >
-							0
+							(
+								clientSelection[
+									key as keyof MobilityData
+								] as ClientDataJsonType[]
+							).length > 0
 						) {
 							return (
 								<div
@@ -88,7 +91,11 @@ const AccountSummary = ({ clientData }: { clientData: ClientDataType }) => {
 												: category.label}
 									</span>
 									<ul className="text-sm md:text-base space-y-1 lg:space-y-2 list-disc list-inside pl-1">
-										{(clientSelection[key as keyof MobilityData] as ClientDataJsonType).map((item, index) => (
+										{(
+											clientSelection[
+												key as keyof MobilityData
+											] as ClientDataJsonType[]
+										).map((item, index) => (
 											<li
 												className="flex flex-row items-center justify-between"
 												key={index}
@@ -103,8 +110,7 @@ const AccountSummary = ({ clientData }: { clientData: ClientDataType }) => {
 													€{' '}
 													{getSinglePrice(
 														key as keyof MobilityData,
-														item.value,
-														geographies
+														item
 													)}{' '}
 													/ year
 												</span>
@@ -181,9 +187,7 @@ const AccountSummary = ({ clientData }: { clientData: ClientDataType }) => {
 			<div className="mb-3 mt-6 text-base md:text-lg lg:text-xl">
 				<div className="flex flex-row items-center justify-between ">
 					<span>TOTAL</span>
-					<span>
-						€ {getTotalPrice(clientSelection, geographies)} / year
-					</span>
+					<span>€ {getTotalPrice(clientSelection)} / year</span>
 				</div>
 			</div>
 			<span className="w-full bg-primary h-[1px] my-8 block lg:hidden"></span>

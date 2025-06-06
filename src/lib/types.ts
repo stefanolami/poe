@@ -156,26 +156,36 @@ export type ClientDataJsonType = {
 	value: string
 	price?: Price
 	geography: string[]
-}[]
+}
 
 export type ClientDataType = {
 	charging_stations_contract: string[] | null
-	charging_stations_type: ClientDataJsonType | null
+	charging_stations_type: ClientDataJsonType[] | null
 	consultant: number | null
 	created_at: string
-	deployment: ClientDataJsonType | null
+	deployment: ClientDataJsonType[] | null
 	email: string
 	family_name: string
 	geography?: string[] | null
 	id: number
 	name: string
 	org_name: string | null
-	pif: ClientDataJsonType | null
-	project: ClientDataJsonType | null
+	pif: ClientDataJsonType[] | null
+	project: ClientDataJsonType[] | null
 	sector: string | null
 	user_id: string
 	vehicles_contract: string[] | null
-	vehicles_type: ClientDataJsonType | null
+	vehicles_type: ClientDataJsonType[] | null
+}
+
+export type ClientSelectionType = {
+	typeOfVehicle: ClientDataJsonType[]
+	typeOfVehicleContract: string[]
+	chargingStations: ClientDataJsonType[]
+	chargingStationsContract: string[]
+	pif: ClientDataJsonType[]
+	deployment: ClientDataJsonType[]
+	project: ClientDataJsonType[]
 }
 
 export type FormattedGrantType = {

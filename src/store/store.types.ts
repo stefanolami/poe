@@ -1,3 +1,5 @@
+import { ClientDataJsonType, ClientSelectionType } from '@/lib/types'
+
 export type Price = {
 	[countryCode: string]: string
 }
@@ -66,9 +68,8 @@ export interface StoreState {
 		item: SelectableItem
 	) => number
 	getSinglePriceFromDB: (
-		category: keyof MobilityData,
-		item: string,
-		geographies: string[]
+		category: keyof ClientSelectionType,
+		item: ClientDataJsonType
 	) => number
 	getModalSinglePrice: (
 		category: keyof MobilityData,
@@ -77,10 +78,7 @@ export interface StoreState {
 	getAllAbovePrice: (category: keyof MobilityData) => number
 	getSubTotalPrice: (category: keyof MobilityData) => number
 	getTotalPrice: () => number
-	getTotalPriceFromDB: (
-		clientSelection: { [key: string]: string[] },
-		geographies: string[]
-	) => number
+	getTotalPriceFromDB: (clientSelection: ClientSelectionType) => number
 	//getUser: (confirmed: boolean) => User
 	setUserRole: (role: 'client' | 'admin' | null) => void
 	removeUserRole: () => void
