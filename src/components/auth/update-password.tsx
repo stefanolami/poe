@@ -15,12 +15,12 @@ import { toast } from '@/hooks/use-toast'
 import { UpdatePasswordType } from '@/lib/types'
 import { updatePasswordSchema } from '@/lib/zod-schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { LuEye, LuEyeClosed } from 'react-icons/lu'
 
-export default function UpdatePassword({ code }: { code: string }) {
+export default function UpdatePassword() {
 	const form = useForm<UpdatePasswordType>({
 		resolver: zodResolver(updatePasswordSchema),
 		defaultValues: {
@@ -29,12 +29,25 @@ export default function UpdatePassword({ code }: { code: string }) {
 		},
 	})
 
+	const searchParams = useSearchParams()
+	const code = searchParams.get('code')
+
 	const [isView, setIsView] = useState(false)
 	const [isViewConfirm, setIsViewConfirm] = useState(false)
 
 	const router = useRouter()
 
 	const isSubmitting = form.formState.isSubmitting
+
+	if (!code) {
+		return (
+			<div className="w-full flex items-center justify-center">
+				This Link is not valid. Please try again.
+			</div>
+		)
+	}
+
+	console.log('CODE', code)
 
 	const onSubmit = async ({ password }: UpdatePasswordType) => {
 		try {

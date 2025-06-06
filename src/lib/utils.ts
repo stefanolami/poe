@@ -1,7 +1,11 @@
 import { geographiesArray, selectionData } from '@/data/data'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import { SelectionDataEmobilityType } from './types'
+import {
+	ClientDataJsonType,
+	ClientDataType,
+	SelectionDataEmobilityType,
+} from './types'
 import { SelectableItem } from '@/store/store.types'
 
 export function cn(...inputs: ClassValue[]) {
@@ -107,4 +111,26 @@ export function selectionArrayFromStoreToDB(array: SelectableItem[]) {
 		value: item.value,
 		geography: item.geographies?.map((geo) => geo.value) || [],
 	}))
+}
+
+//eslint-disable-next-line
+export function normalizeClientData(data: any): ClientDataType {
+	return {
+		...data,
+		deployment: Array.isArray(data.deployment)
+			? (data.deployment as ClientDataJsonType[])
+			: null,
+		vehicles_type: Array.isArray(data.vehicles_type)
+			? (data.vehicles_type as ClientDataJsonType[])
+			: null,
+		charging_stations_type: Array.isArray(data.charging_stations_type)
+			? (data.charging_stations_type as ClientDataJsonType[])
+			: null,
+		pif: Array.isArray(data.pif)
+			? (data.pif as ClientDataJsonType[])
+			: null,
+		project: Array.isArray(data.project)
+			? (data.project as ClientDataJsonType[])
+			: null,
+	}
 }

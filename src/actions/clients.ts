@@ -1,6 +1,7 @@
 'use server'
 
 import { CreateAccountType, UpdateAccountType } from '@/lib/types'
+import { normalizeClientData } from '@/lib/utils'
 import { createAdminClient, createClient } from '@/supabase/server'
 
 export const signUpClient = async (data: CreateAccountType) => {
@@ -153,7 +154,7 @@ export const getClient = async () => {
 			throw new Error(`Failed to fetch client data: ${error.message}`)
 		}
 
-		return data
+		return normalizeClientData(data)
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			console.error('GET CLIENT ERROR:', error.message)
