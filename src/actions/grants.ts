@@ -369,3 +369,21 @@ export const sendGrantAlert = async (grantId: number) => {
 		throw error
 	}
 }
+
+export const filterGrantClients = async (grantId: number) => {
+	try {
+		const supabase = await createClient()
+
+		const { error } = await supabase.rpc('update_grant_clients_call', {
+			grant_id: grantId,
+		})
+		if (error) {
+			throw new Error(error.message)
+		}
+		console.log('FILTERED CLIENTS', error)
+		return error
+	} catch (error) {
+		console.log('ERROR FILTERING GRANT CLIENTS', error)
+		throw error
+	}
+}

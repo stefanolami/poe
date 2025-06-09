@@ -28,7 +28,7 @@ const GrantsComponent = async () => {
 			<div className="flex flex-row items-center justify-between gap-16 mb-8">
 				<h1 className="text-white font-jose text-2xl">Grants</h1>
 				<Link href={'/admin/grants/create'}>
-					<button className="bg-primary-light text-white font-jose text-base px-4 py-2 shadow-md hover:scale-[1.02] hover:shadow-xl">
+					<button className="bg-primary-light hover:bg-primary-light/95 text-white font-jose text-base w-40 py-2 shadow-md hover:scale-[1.02] hover:shadow-xl">
 						Create New
 					</button>
 				</Link>
