@@ -1,6 +1,10 @@
 'use client'
 
-import { addGrantsTailoredAssessments, sendGrantAlert } from '@/actions/grants'
+import {
+	addGrantsTailoredAssessments,
+	filterGrantClients,
+	sendGrantAlert,
+} from '@/actions/grants'
 import { Button } from '@/components/ui/button'
 import {
 	Form,
@@ -18,17 +22,13 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/hooks/use-toast'
-import {
-	CreateGrantsTailoredAssessmentType,
-	//FormattedGrantType,
-} from '@/lib/types'
+import { CreateGrantsTailoredAssessmentType } from '@/lib/types'
 import { formatDeadline, formatGeography } from '@/lib/utils'
 import { createGrantsTailoredAssessmentSchema } from '@/lib/zod-schemas'
 import { Json } from '@/supabase/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-//import { sendEmail } from '@/actions/email'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FaTrashAlt } from 'react-icons/fa'
@@ -192,12 +192,61 @@ const GrantSingle = ({
 		}
 	}
 
+	const handleFilterClients = async () => {
+		try {
+			const response = await filterGrantClients(id)
+
+			if (!response) {
+				toast({
+					title: 'Success!',
+					description: 'Clients filtered successfully',
+					variant: 'default',
+				})
+				router.refresh()
+			} else {
+				toast({
+					title: 'Error',
+					description:
+						'An unexpected error occurred, please try again',
+					variant: 'destructive',
+				})
+			}
+		} catch (error) {
+			if (error instanceof Error) {
+				toast({
+					title: 'Error',
+					description: error.message,
+					variant: 'destructive',
+				})
+				console.error(error.message)
+			} else {
+				toast({
+					title: 'Error',
+					description: 'An unexpected error occurred',
+					variant: 'destructive',
+				})
+				console.error(error)
+			}
+		}
+	}
+
 	return (
-		<div className="font-jose max-w-[800px] mb-20">
-			<h1 className="text-white font-jose text-2xl">
-				{grant.call_title ? grant.call_title : grant.grant_programme}
-			</h1>
-			<div className="text-white font-jose text-sm grid grid-cols-2 gap-4 mt-16 space-y-2">
+		<div className="font-jose mb-20">
+			<div className="flex flex-row items-center justify-between w-full">
+				<h1 className="text-white font-jose text-2xl">
+					{grant.call_title
+						? grant.call_title
+						: grant.grant_programme}
+				</h1>
+				<button
+					disabled={isSending || isSubmitting}
+					className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-primary-light hover:bg-primary-light/90 text-white w-40 py-2"
+					onClick={() => router.replace(`/admin/grants/${id}/edit`)}
+				>
+					Edit
+				</button>
+			</div>
+			<div className="text-white font-jose text-sm grid grid-cols-2 gap-4 mt-12 space-y-2 max-w-[800px]">
 				<div className="flex flex-col gap-2 col-span-2">
 					<span className="block text-xl">Geography</span>
 					<span className="block text-base">
@@ -333,7 +382,7 @@ const GrantSingle = ({
 								relevance: string
 								next_steps: string
 							}
-							console.log('asessment', assessment)
+							console.log('assessment', assessment)
 							return (
 								<div
 									key={index}
@@ -619,8 +668,9 @@ const GrantSingle = ({
 						variant="default"
 						type="button"
 						className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+						onClick={handleFilterClients}
 					>
-						Edit
+						Filter Clients
 					</Button>
 				</div>
 			</div>

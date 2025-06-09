@@ -229,3 +229,9 @@ export type FormattedGrantTypeNull = {
 	deployment?: string[] | null
 	project?: string[] | null
 }
+
+export type FilterResponseType = {
+	status: number
+	data: string
+	statusText: string
+}
