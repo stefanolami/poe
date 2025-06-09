@@ -39,6 +39,7 @@ const GrantsConsultant = ({
 						<Select
 							disabled={isSubmitting}
 							onValueChange={field.onChange}
+							defaultValue={field.value}
 						>
 							<FormControl>
 								<SelectTrigger className="bg-white text-primary">

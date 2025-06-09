@@ -108,9 +108,7 @@ export const createGrantSchema = z
 				})
 			)
 			.optional(),
-		tailored_assessment: z
-			.array(z.tuple([z.number(), z.string(), z.string()]))
-			.optional(),
+		tailored_assessment: z.array(z.array(z.string())).optional(),
 		consultant: z.string().optional(),
 		sector: z.string().min(2, 'Sector is required'),
 		deployment: z.array(z.string()).optional(),

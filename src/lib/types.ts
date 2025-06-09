@@ -188,6 +188,39 @@ export type ClientSelectionType = {
 	project: ClientDataJsonType[]
 }
 
+export type TailoredAssessmentType = {
+	client: string
+	relevance: string
+	next_steps: string
+}
+
+export type GrantType = {
+	alert_purpose: string
+	amendments: string[] | null
+	awarding_authority: string
+	call_title: string | null
+	consultant: number | null
+	created_at: string
+	deadline: string[]
+	deployment: string[] | null
+	files: string[] | null
+	filtered_clients: number[] | null
+	further_details: string[] | null
+	geography: string[]
+	grant_programme: string | null
+	id: number
+	in_brief: string
+	instrument_type: string | null
+	matched_clients: number[] | null
+	programme_purpose: string | null
+	project: string[] | null
+	reference_number: string | null
+	sector: string
+	sent: boolean
+	tailored_assessment: TailoredAssessmentType[] | null
+	value: string
+}
+
 export type FormattedGrantType = {
 	geography: string[]
 	value: string

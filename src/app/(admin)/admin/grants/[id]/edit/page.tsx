@@ -1,6 +1,7 @@
-import { getClientsByConsultantId } from '@/actions/clients'
+import { getConsultants } from '@/actions/consultants'
 import { getGrant } from '@/actions/grants'
-import GrantSingle from '@/components/admin/grants/grant/grant-single'
+import { GrantEdit } from '@/components/admin/grants/grant/grant-edit'
+import { TailoredAssessmentType } from '@/lib/types'
 import { notFound } from 'next/navigation'
 import React from 'react'
 
@@ -11,25 +12,23 @@ const GrantEditPage = async ({
 }) => {
 	const { id } = await params
 
+	const consultants = await getConsultants()
+
 	const grant = await getGrant(Number(id))
+	const formattedGrant = {
+		...grant,
+		tailored_assessment:
+			grant.tailored_assessment as TailoredAssessmentType[],
+	}
 
 	if (!grant) {
 		throw notFound()
 	}
 
-	const clients = await getClientsByConsultantId()
-
-	const formattedClients = clients?.map((client) => ({
-		id: client.id,
-		name: client.name,
-		email: client.email,
-		family_name: client.family_name,
-	}))
-
 	return (
-		<GrantSingle
-			grant={grant}
-			clients={formattedClients}
+		<GrantEdit
+			grant={formattedGrant}
+			consultants={consultants}
 		/>
 	)
 }

@@ -22,10 +22,9 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/hooks/use-toast'
-import { CreateGrantsTailoredAssessmentType } from '@/lib/types'
+import { CreateGrantsTailoredAssessmentType, GrantType } from '@/lib/types'
 import { formatDeadline, formatGeography } from '@/lib/utils'
 import { createGrantsTailoredAssessmentSchema } from '@/lib/zod-schemas'
-import { Json } from '@/supabase/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -33,38 +32,11 @@ import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FaTrashAlt } from 'react-icons/fa'
 
-type Grant = {
-	alert_purpose: string
-	amendments: string[] | null
-	awarding_authority: string
-	call_title: string | null
-	consultant: number | null
-	created_at: string
-	deadline: string[]
-	deployment: string[] | null
-	files: string[] | null
-	filtered_clients: number[] | null
-	further_details: string[] | null
-	geography: string[]
-	grant_programme: string | null
-	id: number
-	in_brief: string
-	instrument_type: string | null
-	matched_clients: number[] | null
-	programme_purpose: string | null
-	project: string[] | null
-	reference_number: string | null
-	sector: string
-	sent: boolean
-	tailored_assessment: Json[] | null
-	value: string
-}
-
 const GrantSingle = ({
 	grant,
 	clients,
 }: {
-	grant: Grant
+	grant: GrantType
 	clients?: { id: number; name: string; email: string; family_name: string }[]
 }) => {
 	const [isSending, setIsSending] = useState(false)
