@@ -24,17 +24,18 @@ import {
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
-import { CreateGrantType, GrantType } from '@/lib/types'
+import { CreateGrantType, GrantType, UpdateGrantType } from '@/lib/types'
 import { createGrantSchema } from '@/lib/zod-schemas'
 import { geographiesArray } from '@/data/data'
 import { Textarea } from '@/components/ui/textarea'
 import GrantsDeadline from '../form-fields/grants-deadline'
 import GrantsFurtherDetails from '../form-fields/grants-further-details'
 import GrantsConsultant from '../form-fields/grants-consultant'
-import { createGrant } from '@/actions/grants'
+import { updateGrant } from '@/actions/grants'
 import GrantsFormEmobility from '../grants-form-emobility'
-import { FaFolderOpen } from 'react-icons/fa'
+import { FaFolderOpen, FaTrashAlt } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
+import { useState } from 'react'
 
 const SECTORS = [
 	{
@@ -58,6 +59,7 @@ export const GrantEdit = ({
 	}[]
 }) => {
 	const {
+		id,
 		geography,
 		consultant,
 		sector,
@@ -72,10 +74,11 @@ export const GrantEdit = ({
 		in_brief,
 		deadline,
 		further_details,
-		//files,
+		files,
 		tailored_assessment,
 	} = grant
-	console.log(grant)
+
+	const [filesArray, setFilesArray] = useState(files || [])
 
 	const formattedDeadline = deadline.map((d) => d.split('///'))
 	const formattedFurtherDetails = further_details?.map((d) => d.split('///'))
@@ -112,15 +115,22 @@ export const GrantEdit = ({
 
 	const isSubmitting = form.formState.isSubmitting
 
+	const handleFileDelete = (file: string) => {
+		setFilesArray((prevFiles) => prevFiles.filter((f) => f !== file))
+	}
+
 	const submitHandler: SubmitHandler<CreateGrantType> = async (data) => {
-		console.log('DATA', data)
+		const formattedData: UpdateGrantType = {
+			...data,
+			oldFiles: filesArray,
+		}
 		try {
-			const response = await createGrant(data)
+			const response = await updateGrant(id, formattedData)
 
 			if (response) {
 				toast({
 					title: 'Success!',
-					description: 'Grant created successfully',
+					description: 'Grant updated successfully',
 					variant: 'default',
 				})
 				setTimeout(() => {
@@ -159,7 +169,7 @@ export const GrantEdit = ({
 	}, [defaultValues, form]) */
 
 	return (
-		<div className="w-full mb-16">
+		<div className="form w-full mb-16">
 			<div className="grid grid-cols-2 items-start gap-4 text-white font-jose text-2xl mb-16">
 				<h1 className="">Create New Grant</h1>
 				<h1>
@@ -407,6 +417,40 @@ export const GrantEdit = ({
 								form={form}
 								isSubmitting={isSubmitting}
 							/>
+
+							{filesArray && filesArray.length > 0 ? (
+								<div className="col-span-2 mb-4">
+									<span className="block mb-2">
+										Documents
+									</span>
+									<ul className="list-disc pl-5 space-y-2">
+										{filesArray.map((file, index) => (
+											<li key={index}>
+												<div className="flex items-center justify-start gap-10">
+													<a
+														href={`https://wgbitmetlwsyukgoortd.supabase.co/storage/v1/object/public/documents${file}`}
+														target="_blank"
+														className="underline"
+													>
+														{file.slice(8)}
+													</a>
+													<button
+														onClick={() =>
+															handleFileDelete(
+																file
+															)
+														}
+														className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5 px-2 py-2"
+													>
+														<FaTrashAlt className="h-3 w-3" />
+													</button>
+												</div>
+											</li>
+										))}
+									</ul>
+								</div>
+							) : null}
+
 							<FormField
 								control={form.control}
 								name="files"
@@ -463,7 +507,7 @@ export const GrantEdit = ({
 															)
 														}}
 													/>
-													<span className="bg-white/5 hover:bg-white/5 px-2 py-2 shadow-md hover:shadow-xl text-white flex items-center justify-center transition-colors duration-150">
+													<span className="bg-white/5 hover:bg-white/5 px-2 py-2 shadow-md hover:shadow-xl hover:scale-[1.02] text-white flex items-center justify-center transition-colors duration-150">
 														<FaFolderOpen className="w-5 h-5" />
 													</span>
 												</label>

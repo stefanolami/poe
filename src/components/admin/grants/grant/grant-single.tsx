@@ -57,7 +57,7 @@ const GrantSingle = ({
 		in_brief,
 		deadline,
 		further_details,
-		//files,
+		files,
 		tailored_assessment,
 		deployment,
 		project,
@@ -323,6 +323,26 @@ const GrantSingle = ({
 								</span>
 							)
 						})
+					) : (
+						<span className="block text-base">-</span>
+					)}
+				</div>
+				<div className="col-span-2">
+					<span className="block text-xl mb-2">Documents</span>
+					{files && files.length > 0 ? (
+						<ul className="list-disc pl-5 space-y-2">
+							{files.map((file, index) => (
+								<li key={index}>
+									<a
+										href={`https://wgbitmetlwsyukgoortd.supabase.co/storage/v1/object/public/documents${file}`}
+										target="_blank"
+										className="underline text-base"
+									>
+										{file.slice(8)}
+									</a>
+								</li>
+							))}
+						</ul>
 					) : (
 						<span className="block text-base">-</span>
 					)}

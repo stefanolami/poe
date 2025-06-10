@@ -59,6 +59,10 @@
 	.desktop-nav-li a {
 		@apply w-full h-full;
 	}
+
+	.form label {
+		@apply text-base;
+	}
 }
 
 .active-link::after {

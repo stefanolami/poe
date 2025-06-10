@@ -91,7 +91,7 @@ export async function sendGrantBatch(recipients, subject, grant, attachments) {
 		}
 	}
 
-	const results = await mailerSend.sendBulk(bulkEmails)
+	const results = await mailerSend.email.sendBulk(bulkEmails)
 	return results
 }
 
@@ -140,6 +140,6 @@ export async function sendGrantTailoredBatch(
 		}
 	}
 
-	const results = await mailerSend.sendBulk(bulkEmails)
+	const results = await mailerSend.email.sendBulk(bulkEmails)
 	return results
 }

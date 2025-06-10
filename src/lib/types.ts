@@ -21,6 +21,28 @@ export type UpdatePasswordType = z.infer<typeof updatePasswordSchema>
 
 export type CreateGrantType = z.infer<typeof createGrantSchema>
 
+export type UpdateGrantType = {
+	sector: string
+	value: string
+	geography: string[]
+	alert_purpose: string
+	awarding_authority: string
+	deadline: string[][]
+	in_brief: string
+	deployment?: string[] | undefined
+	project?: string[] | undefined
+	call_title?: string | undefined
+	grant_programme?: string | undefined
+	programme_purpose?: string | undefined
+	instrument_type?: string | undefined
+	reference_number?: string | undefined
+	further_details?: string[][] | undefined
+	files?: File[] | undefined
+	oldFiles?: string[] | undefined
+	tailored_assessment?: string[][] | undefined
+	consultant?: string | undefined
+}
+
 export type Price = {
 	[countryCode: string]: string
 }

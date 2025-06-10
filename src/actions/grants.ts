@@ -1,6 +1,6 @@
 'use server'
 
-import { CreateGrantType } from '@/lib/types'
+import { CreateGrantType, UpdateGrantType } from '@/lib/types'
 import { createClient } from '@/supabase/server'
 import { sendGrantBatch, sendGrantTailoredBatch } from './email'
 
@@ -67,6 +67,77 @@ export const createGrant = async (formData: CreateGrantType) => {
 		return data
 	} catch (error) {
 		console.log('ERROR CREATING GRANT', error)
+		throw error
+	}
+}
+
+export const updateGrant = async (id: number, formData: UpdateGrantType) => {
+	try {
+		const supabase = await createClient()
+
+		const flatDeadline = formData.deadline.map((element) =>
+			element.join('///')
+		)
+		const flatFurtherDetails = formData.further_details?.map((element) =>
+			element.join('///')
+		)
+
+		const { files } = formData
+
+		let uploadedFilePaths: string[] = []
+
+		if (files && files.length > 0) {
+			const uploadPromises = files.map(async (file: File) => {
+				const filePath = `/grants/${file.name}`
+				const { error } = await supabase.storage
+					.from('documents')
+					.upload(filePath, file, {
+						cacheControl: '3600',
+						upsert: false,
+					})
+				if (error)
+					throw new Error(`File upload failed: ${error.message}`)
+				return filePath
+			})
+			uploadedFilePaths = await Promise.all(uploadPromises)
+		}
+
+		const filesArray =
+			formData.oldFiles?.concat(uploadedFilePaths) || uploadedFilePaths
+
+		const formattedData = {
+			geography: formData.geography,
+			call_title: formData.call_title,
+			grant_programme: formData.grant_programme,
+			alert_purpose: formData.alert_purpose,
+			programme_purpose: formData.programme_purpose,
+			instrument_type: formData.instrument_type,
+			awarding_authority: formData.awarding_authority,
+			reference_number: formData.reference_number,
+			deadline: flatDeadline,
+			further_details: flatFurtherDetails,
+			in_brief: formData.in_brief,
+			value: formData.value,
+			consultant: Number(formData.consultant),
+			sector: formData.sector,
+			deployment: formData.deployment,
+			project: formData.project,
+			files: filesArray,
+		}
+
+		const { data, error } = await supabase
+			.from('grants')
+			.update(formattedData)
+			.eq('id', id)
+			.select()
+
+		if (error) {
+			throw new Error(error.message)
+		}
+
+		return data
+	} catch (error) {
+		console.log('ERROR UPDATING GRANT', error)
 		throw error
 	}
 }
