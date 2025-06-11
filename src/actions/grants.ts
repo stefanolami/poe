@@ -2,7 +2,7 @@
 
 import { CreateGrantType, UpdateGrantType } from '@/lib/types'
 import { createClient } from '@/supabase/server'
-import { sendGrantBatch, sendGrantTailoredBatch } from './email'
+import { sendGrant, sendGrantTailored } from './email'
 
 export const createGrant = async (formData: CreateGrantType) => {
 	try {
@@ -412,7 +412,7 @@ export const sendGrantAlert = async (grantId: number) => {
 		}
 
 		// Send in parallel (or sequentially if you need to respect rate limits)
-		const response = await Promise.all([
+		/* const response = await Promise.all([
 			normalRecipients.length > 0
 				? sendGrantBatch(
 						normalRecipients,
@@ -434,7 +434,33 @@ export const sendGrantAlert = async (grantId: number) => {
 					)
 				: Promise.resolve(),
 		])
-		return response
+		console.log('GRANT ALERT SENT', response)
+		return response */
+		if (normalRecipients && normalRecipients.length > 0) {
+			for (const to of normalRecipients) {
+				await sendGrant(to, emailSubject, grantData, attachments)
+				await sleep(600) // optional delay to avoid rate limits
+			}
+		}
+
+		if (tailoredRecipients && tailoredRecipients.length > 0) {
+			for (let i = 0; i < tailoredRecipients.length; i++) {
+				const to = tailoredRecipients[i]
+				const assessment = tailoredAssessments[i]
+				await sendGrantTailored(
+					to,
+					emailSubject,
+					grantData,
+					assessment,
+					attachments
+				)
+				await sleep(600) // optional delay
+			}
+		}
+		// Send tailored emails one by one
+
+		console.log('GRANT ALERT SENT')
+		return { success: true }
 	} catch (error) {
 		console.log('ERROR SENDING GRANT ALERT', error)
 		throw error

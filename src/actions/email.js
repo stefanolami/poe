@@ -12,21 +12,22 @@ const mailerSend = new MailerSend({
 })
 
 export async function sendGrant(to, subject, grant, attachments) {
-	if (attachments) {
-		return await resend.emails.send({
-			from: 'POE <alerts@poeontap.com>',
-			to,
-			subject,
-			react: <GrantsEmail grant={grant} />,
-			attachments: attachments.filter(Boolean),
-		})
+	const emailHtml = await render(<GrantsEmail grant={grant} />)
+	if (attachments && attachments.length > 0) {
+		const emailParams = new EmailParams()
+			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setTo(new Recipient(to))
+			.setSubject(subject)
+			.setHtml(emailHtml)
+			.setAttachments(attachments.filter(Boolean))
+		return await mailerSend.email.send(emailParams)
 	} else {
-		return await resend.emails.send({
-			from: 'POE <alerts@poeontap.com>',
-			to,
-			subject,
-			react: <GrantsEmail grant={grant} />,
-		})
+		const emailParams = new EmailParams()
+			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setTo(new Recipient(to))
+			.setSubject(subject)
+			.setHtml(emailHtml)
+		return await mailerSend.email.send(emailParams)
 	}
 }
 
@@ -37,31 +38,27 @@ export async function sendGrantTailored(
 	assessment,
 	attachments
 ) {
-	if (attachments) {
-		return await resend.emails.send({
-			from: 'POE <alerts@poeontap.com>',
-			to,
-			subject,
-			react: (
-				<GrantsEmailTailored
-					grant={grant}
-					assessment={assessment}
-				/>
-			),
-			attachments: attachments.filter(Boolean),
-		})
+	const emailHtml = await render(
+		<GrantsEmailTailored
+			grant={grant}
+			assessment={assessment}
+		/>
+	)
+	if (attachments && attachments.length > 0) {
+		const emailParams = new EmailParams()
+			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setTo(new Recipient(to))
+			.setSubject(subject)
+			.setHtml(emailHtml)
+			.setAttachments(attachments.filter(Boolean))
+		return await mailerSend.email.send(emailParams)
 	} else {
-		return await resend.emails.send({
-			from: 'POE <alerts@poeontap.com>',
-			to,
-			subject,
-			react: (
-				<GrantsEmailTailored
-					grant={grant}
-					assessment={assessment}
-				/>
-			),
-		})
+		const emailParams = new EmailParams()
+			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setTo(new Recipient(to))
+			.setSubject(subject)
+			.setHtml(emailHtml)
+		return await mailerSend.email.send(emailParams)
 	}
 }
 
@@ -92,6 +89,7 @@ export async function sendGrantBatch(recipients, subject, grant, attachments) {
 	}
 
 	const results = await mailerSend.email.sendBulk(bulkEmails)
+	console.log('Sending bulk emails:', results)
 	return results
 }
 
