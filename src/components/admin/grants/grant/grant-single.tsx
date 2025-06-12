@@ -31,6 +31,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FaTrashAlt } from 'react-icons/fa'
+import DocViewerComponent from '../../doc-viewer'
 
 const GrantSingle = ({
 	grant,
@@ -137,9 +138,9 @@ const GrantSingle = ({
 					description: 'Grant alert sent successfully',
 					variant: 'default',
 				})
-				/* setTimeout(() => {
-					router.refresh()
-				}, 1000) */
+				setTimeout(() => {
+					router.push(`/admin/grants/`)
+				}, 1000)
 			}
 
 			console.log(response)
@@ -333,13 +334,21 @@ const GrantSingle = ({
 						<ul className="list-disc pl-5 space-y-2">
 							{files.map((file, index) => (
 								<li key={index}>
-									<a
+									<DocViewerComponent
+										docName={file.slice(8)}
+										doc={[
+											{
+												uri: `https://wgbitmetlwsyukgoortd.supabase.co/storage/v1/object/public/documents${file}`,
+											},
+										]}
+									/>
+									{/* <a
 										href={`https://wgbitmetlwsyukgoortd.supabase.co/storage/v1/object/public/documents${file}`}
 										target="_blank"
 										className="underline text-base"
 									>
 										{file.slice(8)}
-									</a>
+									</a> */}
 								</li>
 							))}
 						</ul>

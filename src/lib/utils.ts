@@ -134,3 +134,13 @@ export function normalizeClientData(data: any): ClientDataType {
 			: null,
 	}
 }
+
+export async function fileToAttachment(file: {
+	filename: string
+	content: Buffer
+}) {
+	return {
+		filename: file.filename,
+		content: file.content.toString('base64'),
+	}
+}
