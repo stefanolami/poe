@@ -55,6 +55,12 @@ const GrantsConsultant = ({
 										{consultant.name}
 									</SelectItem>
 								))}
+								{/* <SelectItem
+									key="clear"
+									value={'clear'}
+								>
+									No Consultant
+								</SelectItem> */}
 							</SelectContent>
 						</Select>
 					</FormControl>

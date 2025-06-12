@@ -134,7 +134,7 @@ export const GrantEdit = ({
 					variant: 'default',
 				})
 				setTimeout(() => {
-					router.push('/admin/grants')
+					router.push(`/admin/grants/${id}`)
 				}, 1000)
 			}
 
@@ -435,6 +435,7 @@ export const GrantEdit = ({
 														{file.slice(8)}
 													</a>
 													<button
+														type="button"
 														onClick={() =>
 															handleFileDelete(
 																file

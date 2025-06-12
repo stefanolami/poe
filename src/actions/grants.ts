@@ -48,7 +48,10 @@ export const createGrant = async (formData: CreateGrantType) => {
 			further_details: flatFurtherDetails,
 			in_brief: formData.in_brief,
 			value: formData.value,
-			consultant: Number(formData.consultant),
+			consultant:
+				formData.consultant === 'clear'
+					? null
+					: Number(formData.consultant),
 			sector: formData.sector,
 			deployment: formData.deployment,
 			project: formData.project,
@@ -93,7 +96,7 @@ export const updateGrant = async (id: number, formData: UpdateGrantType) => {
 					.from('documents')
 					.upload(filePath, file, {
 						cacheControl: '3600',
-						upsert: false,
+						upsert: true,
 					})
 				if (error)
 					throw new Error(`File upload failed: ${error.message}`)
@@ -118,7 +121,10 @@ export const updateGrant = async (id: number, formData: UpdateGrantType) => {
 			further_details: flatFurtherDetails,
 			in_brief: formData.in_brief,
 			value: formData.value,
-			consultant: Number(formData.consultant),
+			consultant:
+				formData.consultant === 'clear'
+					? null
+					: Number(formData.consultant),
 			sector: formData.sector,
 			deployment: formData.deployment,
 			project: formData.project,
@@ -457,7 +463,15 @@ export const sendGrantAlert = async (grantId: number) => {
 				await sleep(600) // optional delay
 			}
 		}
-		// Send tailored emails one by one
+
+		const { error: updateError } = await supabase
+			.from('grants')
+			.update({ sent: true })
+			.eq('id', grantId)
+
+		if (updateError) {
+			throw new Error(updateError.message)
+		}
 
 		console.log('GRANT ALERT SENT')
 		return { success: true }

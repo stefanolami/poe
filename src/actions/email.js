@@ -6,6 +6,7 @@ import GrantsEmailTailored from '@/components/emails/grants-email-tailored'
 import GrantsEmailTailoredCharin from '@/components/emails/grants-email-tailored-charin'
 import GrantsEmailCharin from '@/components/emails/grants-email-charin'
 import { render } from '@react-email/components'
+import { fileToAttachment } from '@/lib/utils'
 
 const mailerSend = new MailerSend({
 	apiKey: process.env.MAILERSEND_API_KEY || '',
@@ -14,17 +15,20 @@ const mailerSend = new MailerSend({
 export async function sendGrant(to, subject, grant, attachments) {
 	const emailHtml = await render(<GrantsEmail grant={grant} />)
 	if (attachments && attachments.length > 0) {
+		const bufferAttachments = await Promise.all(
+			attachments.map((a) => fileToAttachment(a))
+		)
 		const emailParams = new EmailParams()
 			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
-			.setTo(new Recipient(to))
+			.setTo([new Recipient(to)])
 			.setSubject(subject)
 			.setHtml(emailHtml)
-			.setAttachments(attachments.filter(Boolean))
+			.setAttachments(bufferAttachments)
 		return await mailerSend.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
 			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
-			.setTo(new Recipient(to))
+			.setTo([new Recipient(to)])
 			.setSubject(subject)
 			.setHtml(emailHtml)
 		return await mailerSend.email.send(emailParams)
@@ -45,17 +49,20 @@ export async function sendGrantTailored(
 		/>
 	)
 	if (attachments && attachments.length > 0) {
+		const bufferAttachments = await Promise.all(
+			attachments.map((a) => fileToAttachment(a))
+		)
 		const emailParams = new EmailParams()
 			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
-			.setTo(new Recipient(to))
+			.setTo([new Recipient(to)])
 			.setSubject(subject)
 			.setHtml(emailHtml)
-			.setAttachments(attachments.filter(Boolean))
+			.setAttachments(bufferAttachments)
 		return await mailerSend.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
 			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
-			.setTo(new Recipient(to))
+			.setTo([new Recipient(to)])
 			.setSubject(subject)
 			.setHtml(emailHtml)
 		return await mailerSend.email.send(emailParams)
