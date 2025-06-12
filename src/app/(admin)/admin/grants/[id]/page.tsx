@@ -1,6 +1,7 @@
 import { getClientsByConsultantId } from '@/actions/clients'
 import { getGrant } from '@/actions/grants'
 import GrantSingle from '@/components/admin/grants/grant/grant-single'
+import { TailoredAssessmentType } from '@/lib/types'
 import { notFound } from 'next/navigation'
 import React from 'react'
 
@@ -11,6 +12,12 @@ const GrantPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 
 	if (!grant) {
 		throw notFound()
+	}
+
+	const formattedGrants = {
+		...grant,
+		tailored_assessment:
+			grant.tailored_assessment as TailoredAssessmentType[],
 	}
 
 	const clients = await getClientsByConsultantId()
@@ -24,7 +31,7 @@ const GrantPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 
 	return (
 		<GrantSingle
-			grant={grant}
+			grant={formattedGrants}
 			clients={formattedClients}
 		/>
 	)
