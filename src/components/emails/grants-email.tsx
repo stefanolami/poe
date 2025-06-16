@@ -2,7 +2,6 @@ import { FormattedGrantType } from '@/lib/types'
 import { formatDeadline, formatGeography } from '@/lib/utils'
 import {
 	Body,
-	Container,
 	Head,
 	Heading,
 	Html,
@@ -49,7 +48,7 @@ const GrantsEmail = ({ grant }: { grant: FormattedGrantType }) => {
 				</style>
 			</Head>
 			<Body style={{ width: '100%' }}>
-				<Container style={{ width: '100%', margin: '0 auto' }}>
+				<div style={{ width: '600px', margin: '0 auto' }}>
 					<Section
 						style={{
 							backgroundColor: '#009EC2',
@@ -292,7 +291,8 @@ const GrantsEmail = ({ grant }: { grant: FormattedGrantType }) => {
 							.
 						</Text>
 					</Section>
-				</Container>
+					{/* </Container> */}
+				</div>
 			</Body>
 		</Html>
 	)
