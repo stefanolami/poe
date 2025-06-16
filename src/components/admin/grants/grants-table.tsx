@@ -6,6 +6,8 @@ import {
 	getCoreRowModel,
 	useReactTable,
 	getPaginationRowModel,
+	SortingState,
+	getSortedRowModel,
 } from '@tanstack/react-table'
 
 import {
@@ -19,6 +21,7 @@ import {
 
 import { TablePagination } from '../table-pagination'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[]
@@ -29,6 +32,8 @@ export function DataTable<TData, TValue>({
 	columns,
 	data,
 }: DataTableProps<TData, TValue>) {
+	const [sorting, setSorting] = useState<SortingState>([])
+
 	const router = useRouter()
 
 	const table = useReactTable({
@@ -36,6 +41,11 @@ export function DataTable<TData, TValue>({
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
+		onSortingChange: setSorting,
+		getSortedRowModel: getSortedRowModel(),
+		state: {
+			sorting,
+		},
 	})
 
 	const pageCount = Math.ceil(data.length / 10)
@@ -52,6 +62,7 @@ export function DataTable<TData, TValue>({
 								return (
 									<TableHead
 										key={header.id}
+										id={`grants-table-header-${header.id}`}
 										className="text-base"
 									>
 										{header.isPlaceholder

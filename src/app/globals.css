@@ -63,6 +63,21 @@
 	.form label {
 		@apply text-base;
 	}
+	#grants-table-header-call_title {
+		@apply w-1/4;
+	}
+	#grants-table-header-sent {
+		@apply w-[10%];
+	}
+	#grants-table-header-grant_programme {
+		@apply w-1/4;
+	}
+	#grants-table-header-geography {
+		@apply w-1/4;
+	}
+	#grants-table-header-value {
+		@apply w-[15%];
+	}
 }
 
 .active-link::after {
