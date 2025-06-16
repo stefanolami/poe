@@ -53,6 +53,7 @@ export type Database = {
           org_name: string | null
           pif: Json | null
           project: Json | null
+          referrer: string | null
           sector: string | null
           user_id: string
           vehicles_contract: string[] | null
@@ -71,6 +72,7 @@ export type Database = {
           org_name?: string | null
           pif?: Json | null
           project?: Json | null
+          referrer?: string | null
           sector?: string | null
           user_id: string
           vehicles_contract?: string[] | null
@@ -89,6 +91,7 @@ export type Database = {
           org_name?: string | null
           pif?: Json | null
           project?: Json | null
+          referrer?: string | null
           sector?: string | null
           user_id?: string
           vehicles_contract?: string[] | null

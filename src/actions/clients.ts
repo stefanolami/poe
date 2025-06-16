@@ -55,6 +55,7 @@ export const signUpClient = async (data: CreateAccountType) => {
 			pif: data.pif ?? [],
 			deployment: data.deployment ?? [],
 			project: data.project ?? [],
+			referrer: 'poe',
 		}
 
 		// Create client record

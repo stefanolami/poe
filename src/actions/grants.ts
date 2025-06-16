@@ -2,7 +2,12 @@
 
 import { CreateGrantType, UpdateGrantType } from '@/lib/types'
 import { createClient } from '@/supabase/server'
-import { sendGrant, sendGrantTailored } from './email'
+import {
+	sendGrant,
+	sendGrantCharIn,
+	sendGrantTailored,
+	sendGrantTailoredCharIn,
+} from './email'
 
 export const createGrant = async (formData: CreateGrantType) => {
 	try {
@@ -384,8 +389,13 @@ export const sendGrantAlert = async (grantId: number) => {
 			)
 		}
 
-		const clientsEmails = clientsData.map((client) => client.email)
-		//console.log('CLIENTS EMAILS', clientsEmails)
+		const clientsList = clientsData.map((client) => {
+			return {
+				email: client.email,
+				referrer: client.referrer,
+			}
+		})
+
 		const assessments = grantData.tailored_assessment as
 			| {
 					client: string
@@ -396,21 +406,18 @@ export const sendGrantAlert = async (grantId: number) => {
 		const tailoredEmails = assessments?.map(
 			(assessment) => assessment.client
 		)
-		//console.log('TAILORED EMAILS', tailoredEmails)
 
 		// Split emails into tailored and normal
-		const tailoredRecipients = clientsEmails.filter((email) =>
-			tailoredEmails?.includes(email)
+		const tailoredRecipients = clientsList.filter((client) =>
+			tailoredEmails?.includes(client.email)
 		)
-		const normalRecipients = clientsEmails.filter(
-			(email) => !tailoredEmails?.includes(email)
+		const normalRecipients = clientsList.filter(
+			(client) => !tailoredEmails?.includes(client.email)
 		)
-
-		console.log('normalRecipients', normalRecipients)
 
 		// For tailored, match each email to its assessment
 		const tailoredAssessments = tailoredRecipients.map(
-			(email) => assessments.find((a) => a.client === email) || {}
+			(client) => assessments.find((a) => a.client === client.email) || {}
 		)
 
 		function sleep(ms: number) {
@@ -443,24 +450,50 @@ export const sendGrantAlert = async (grantId: number) => {
 		console.log('GRANT ALERT SENT', response)
 		return response */
 		if (normalRecipients && normalRecipients.length > 0) {
-			for (const to of normalRecipients) {
-				await sendGrant(to, emailSubject, grantData, attachments)
-				await sleep(600) // optional delay to avoid rate limits
+			for (const client of normalRecipients) {
+				if (client.referrer === 'charIn') {
+					await sendGrantCharIn(
+						client.email,
+						emailSubject,
+						grantData,
+						attachments
+					)
+					await sleep(600)
+				} else {
+					await sendGrant(
+						client.email,
+						emailSubject,
+						grantData,
+						attachments
+					)
+					await sleep(600)
+				}
 			}
 		}
 
 		if (tailoredRecipients && tailoredRecipients.length > 0) {
 			for (let i = 0; i < tailoredRecipients.length; i++) {
-				const to = tailoredRecipients[i]
+				const to = tailoredRecipients[i].email
 				const assessment = tailoredAssessments[i]
-				await sendGrantTailored(
-					to,
-					emailSubject,
-					grantData,
-					assessment,
-					attachments
-				)
-				await sleep(600) // optional delay
+				if (tailoredRecipients[i].referrer === 'charIn') {
+					await sendGrantTailoredCharIn(
+						to,
+						emailSubject,
+						grantData,
+						assessment,
+						attachments
+					)
+					await sleep(600)
+				} else {
+					await sendGrantTailored(
+						to,
+						emailSubject,
+						grantData,
+						assessment,
+						attachments
+					)
+					await sleep(600)
+				}
 			}
 		}
 

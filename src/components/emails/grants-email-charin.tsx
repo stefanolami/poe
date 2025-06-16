@@ -61,18 +61,18 @@ const GrantsEmailCharIn = ({ grant }: { grant: FormattedGrantType }) => {
 							<Row>
 								<Column>
 									<Img
-										src={`https://www.poeontap.com/logos/poe-white.png`}
-										width="151"
-										height="32"
-										alt="POE's Logo"
-									/>
-								</Column>
-								<Column>
-									<Img
 										src={`https://www.poeontap.com/logos/charin.png`}
 										width="82"
 										height="64"
 										alt="Charin's Logo"
+									/>
+								</Column>
+								<Column>
+									<Img
+										src={`https://www.poeontap.com/logos/poe-white.png`}
+										width="151"
+										height="32"
+										alt="POE's Logo"
 									/>
 								</Column>
 							</Row>
