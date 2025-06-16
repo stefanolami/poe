@@ -24,24 +24,28 @@ const UsersLoginSection = ({
 	)
 
 	useEffect(() => {
+		const cachedRole = localStorage.getItem('userRole')
+		if (cachedRole) {
+			setRole(cachedRole as 'client' | 'admin')
+			console.log('User role from localStorage:', cachedRole)
+			setLoading(false)
+			return
+		}
 		if (storeUserRole) {
 			setRole(storeUserRole)
 			console.log('User role from store:', storeUserRole)
+			localStorage.setItem('userRole', storeUserRole)
 			setLoading(false)
 		} else {
 			const fetchUserRole = async () => {
 				try {
 					const userRole = await getUserRole()
-					/* setRole(
-						userRole === 'client' || userRole === 'admin'
-							? userRole
-							: null
-					) */
 					storeSetUserRole(
 						userRole === 'client' || userRole === 'admin'
 							? userRole
 							: null
 					)
+					localStorage.setItem('userRole', userRole)
 					console.log('Fetched user role:', userRole)
 				} catch (error) {
 					console.error('Failed to fetch user role:', error)
