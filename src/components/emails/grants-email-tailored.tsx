@@ -10,6 +10,8 @@ import {
 	Section,
 	Text,
 	Img,
+	Row,
+	Column,
 } from '@react-email/components'
 
 const GrantsEmailTailored = ({
@@ -52,8 +54,8 @@ const GrantsEmailTailored = ({
             }`}
 				</style>
 			</Head>
-			<Body>
-				<Container style={{ width: '600px' }}>
+			<Body style={{ width: '100%' }}>
+				<Container style={{ width: '100%', margin: '0 auto' }}>
 					<Section
 						style={{
 							backgroundColor: '#009EC2',
@@ -61,18 +63,26 @@ const GrantsEmailTailored = ({
 							paddingBottom: '0px',
 						}}
 					>
-						{/* <Img
-							src={`https://www.poeontap.com/logos/consulting-white.png`}
-							width="122"
-							height="32"
-							alt="Consulting's Logo"
-						/> */}
-						<Img
-							src={`https://www.poeontap.com/logos/poe-white.png`}
-							width="151"
-							height="32"
-							alt="POE's Logo"
-						/>
+						<Section>
+							<Row>
+								<Column>
+									<Img
+										src={`https://www.poeontap.com/logos/poe-white.png`}
+										width="151"
+										height="32"
+										alt="POE's Logo"
+									/>
+								</Column>
+								<Column>
+									<Img
+										src={`https://www.poeontap.com/logos/consulting-white.png`}
+										width="122"
+										height="32"
+										alt="T&P Consulting's Logo"
+									/>
+								</Column>
+							</Row>
+						</Section>
 						<Heading
 							as="h1"
 							style={{

@@ -10,11 +10,11 @@ import {
 	Section,
 	Text,
 	Img,
-	//Row,
-	//Column,
+	Row,
+	Column,
 } from '@react-email/components'
 
-const GrantsEmailCharin = ({ grant }: { grant: FormattedGrantType }) => {
+const GrantsEmailCharIn = ({ grant }: { grant: FormattedGrantType }) => {
 	const {
 		geography,
 		call_title,
@@ -48,8 +48,8 @@ const GrantsEmailCharin = ({ grant }: { grant: FormattedGrantType }) => {
             }`}
 				</style>
 			</Head>
-			<Body>
-				<Container style={{ width: '600px', margin: '0 auto' }}>
+			<Body style={{ width: '100%' }}>
+				<Container style={{ width: '100%', margin: '0 auto' }}>
 					<Section
 						style={{
 							backgroundColor: '#6AA5B9',
@@ -58,15 +58,9 @@ const GrantsEmailCharin = ({ grant }: { grant: FormattedGrantType }) => {
 							width: '100%',
 						}}
 					>
-						{/* <Section>
-							<Row className="flex justify-start items-center gap-2 flex-row">
+						<Section>
+							<Row>
 								<Column>
-									<Img
-										src={`https://www.poeontap.com/logos/consulting-white.png`}
-										width="122"
-										height="32"
-										alt="Consulting's Logo"
-									/>
 									<Img
 										src={`https://www.poeontap.com/logos/poe-white.png`}
 										width="151"
@@ -74,14 +68,16 @@ const GrantsEmailCharin = ({ grant }: { grant: FormattedGrantType }) => {
 										alt="POE's Logo"
 									/>
 								</Column>
+								<Column>
+									<Img
+										src={`https://www.poeontap.com/logos/charin.png`}
+										width="82"
+										height="64"
+										alt="Charin's Logo"
+									/>
+								</Column>
 							</Row>
-						</Section> */}
-						<Img
-							src={`https://www.poeontap.com/logos/charin.png`}
-							width="82"
-							height="64"
-							alt="Charin's Logo"
-						/>
+						</Section>
 						<Heading
 							as="h1"
 							style={{
@@ -303,7 +299,7 @@ const GrantsEmailCharin = ({ grant }: { grant: FormattedGrantType }) => {
 	)
 }
 
-export default GrantsEmailCharin
+export default GrantsEmailCharIn
 
 const Divider = () => {
 	return (

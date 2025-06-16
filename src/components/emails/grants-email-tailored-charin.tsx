@@ -10,9 +10,11 @@ import {
 	Section,
 	Text,
 	Img,
+	Row,
+	Column,
 } from '@react-email/components'
 
-const GrantsEmailTailoredCharin = ({
+const GrantsEmailTailoredCharIn = ({
 	grant,
 	assessment,
 }: {
@@ -52,8 +54,8 @@ const GrantsEmailTailoredCharin = ({
             }`}
 				</style>
 			</Head>
-			<Body>
-				<Container style={{ width: '600px', margin: '0 auto' }}>
+			<Body style={{ width: '100%' }}>
+				<Container style={{ width: '100%', margin: '0 auto' }}>
 					<Section
 						style={{
 							backgroundColor: '#6AA5B9',
@@ -62,24 +64,27 @@ const GrantsEmailTailoredCharin = ({
 							width: '100%',
 						}}
 					>
-						{/* <Img
-							src={`https://www.poeontap.com/logos/consulting-white.png`}
-							width="122"
-							height="32"
-							alt="Consulting's Logo"
-						/> */}
-						{/* <Img
-							src={`https://www.poeontap.com/logos/poe-white.png`}
-							width="151"
-							height="32"
-							alt="POE's Logo"
-						/> */}
-						<Img
-							src={`https://www.poeontap.com/logos/charin.png`}
-							width="82"
-							height="64"
-							alt="Charin's Logo"
-						/>
+						<Section>
+							<Row>
+								<Column>
+									<Img
+										src={`https://www.poeontap.com/logos/poe-white.png`}
+										width="151"
+										height="32"
+										alt="POE's Logo"
+									/>
+								</Column>
+								<Column>
+									<Img
+										src={`https://www.poeontap.com/logos/charin.png`}
+										width="82"
+										height="64"
+										alt="Charin's Logo"
+									/>
+								</Column>
+							</Row>
+						</Section>
+
 						<Heading
 							as="h1"
 							style={{
@@ -322,7 +327,7 @@ const GrantsEmailTailoredCharin = ({
 	)
 }
 
-export default GrantsEmailTailoredCharin
+export default GrantsEmailTailoredCharIn
 
 const Divider = () => {
 	return (
