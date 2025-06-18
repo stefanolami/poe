@@ -54,7 +54,7 @@ export const GrantEdit = ({
 }: {
 	grant: GrantType
 	consultants: {
-		id: number
+		id: string
 		name: string
 	}[]
 }) => {

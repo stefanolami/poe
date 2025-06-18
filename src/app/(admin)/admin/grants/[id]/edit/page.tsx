@@ -14,7 +14,7 @@ const GrantEditPage = async ({
 
 	const consultants = await getConsultants()
 
-	const grant = await getGrant(Number(id))
+	const grant = await getGrant(id)
 	const formattedGrant = {
 		...grant,
 		tailored_assessment:

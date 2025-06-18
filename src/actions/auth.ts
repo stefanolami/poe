@@ -38,8 +38,9 @@ export const getUserRole = async () => {
 			data: { user },
 		} = await supabase.auth.getUser()
 		if (!user || !user.app_metadata?.user_role) return null
+		console.log('User role:', user.app_metadata.user_role)
 
-		return user.app_metadata?.user_role
+		return user.app_metadata.user_role
 	} catch (error) {
 		console.log('GET USER ROLE ERROR', error)
 		throw error

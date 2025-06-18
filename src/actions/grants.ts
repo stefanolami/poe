@@ -54,9 +54,7 @@ export const createGrant = async (formData: CreateGrantType) => {
 			in_brief: formData.in_brief,
 			value: formData.value,
 			consultant:
-				formData.consultant === 'clear'
-					? null
-					: Number(formData.consultant),
+				formData.consultant === 'clear' ? null : formData.consultant,
 			sector: formData.sector,
 			deployment: formData.deployment,
 			project: formData.project,
@@ -79,7 +77,7 @@ export const createGrant = async (formData: CreateGrantType) => {
 	}
 }
 
-export const updateGrant = async (id: number, formData: UpdateGrantType) => {
+export const updateGrant = async (id: string, formData: UpdateGrantType) => {
 	try {
 		const supabase = await createClient()
 
@@ -127,9 +125,7 @@ export const updateGrant = async (id: number, formData: UpdateGrantType) => {
 			in_brief: formData.in_brief,
 			value: formData.value,
 			consultant:
-				formData.consultant === 'clear'
-					? null
-					: Number(formData.consultant),
+				formData.consultant === 'clear' ? null : formData.consultant,
 			sector: formData.sector,
 			deployment: formData.deployment,
 			project: formData.project,
@@ -182,7 +178,7 @@ export const getGrants = async () => {
 	}
 }
 
-export const getGrant = async (id: number) => {
+export const getGrant = async (id: string) => {
 	try {
 		const supabase = await createClient()
 
@@ -251,7 +247,7 @@ export const getGrant = async (id: number) => {
 } */
 
 export const addGrantsTailoredAssessments = async (
-	grantId: number,
+	grantId: string,
 	assessments: [string, string, string][]
 ) => {
 	try {
@@ -326,7 +322,7 @@ export const addGrantsTailoredAssessments = async (
 	}
 }
 
-export const sendGrantAlert = async (grantId: number) => {
+export const sendGrantAlert = async (grantId: string) => {
 	try {
 		const supabase = await createClient()
 
@@ -514,7 +510,7 @@ export const sendGrantAlert = async (grantId: number) => {
 	}
 }
 
-export const filterGrantClients = async (grantId: number) => {
+export const filterGrantClients = async (grantId: string) => {
 	try {
 		const supabase = await createClient()
 

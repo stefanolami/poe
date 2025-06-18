@@ -9,193 +9,81 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      agents: {
-        Row: {
-          created_at: string
-          email: string
-          family_name: string
-          id: number
-          languages: string[]
-          name: string
-          phone: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          family_name: string
-          id?: number
-          languages: string[]
-          name: string
-          phone: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          family_name?: string
-          id?: number
-          languages?: string[]
-          name?: string
-          phone?: string
-        }
-        Relationships: []
-      }
       clients: {
         Row: {
           charging_stations_contract: string[] | null
           charging_stations_type: Json | null
-          consultant: number | null
           created_at: string
           deployment: Json | null
           email: string
           family_name: string
-          id: number
+          id: string
           name: string
           org_name: string | null
           pif: Json | null
           project: Json | null
           referrer: string | null
           sector: string | null
-          user_id: string
           vehicles_contract: string[] | null
           vehicles_type: Json | null
         }
         Insert: {
           charging_stations_contract?: string[] | null
           charging_stations_type?: Json | null
-          consultant?: number | null
           created_at?: string
           deployment?: Json | null
           email: string
           family_name: string
-          id?: number
+          id: string
           name: string
           org_name?: string | null
           pif?: Json | null
           project?: Json | null
           referrer?: string | null
           sector?: string | null
-          user_id: string
           vehicles_contract?: string[] | null
           vehicles_type?: Json | null
         }
         Update: {
           charging_stations_contract?: string[] | null
           charging_stations_type?: Json | null
-          consultant?: number | null
           created_at?: string
           deployment?: Json | null
           email?: string
           family_name?: string
-          id?: number
+          id?: string
           name?: string
           org_name?: string | null
           pif?: Json | null
           project?: Json | null
           referrer?: string | null
           sector?: string | null
-          user_id?: string
           vehicles_contract?: string[] | null
           vehicles_type?: Json | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "clients_consultant_fkey"
-            columns: ["consultant"]
-            isOneToOne: false
-            referencedRelation: "consultants"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      clients_duplicate: {
-        Row: {
-          charging_stations_contract: string[] | null
-          charging_stations_type: string[] | null
-          consultant: number | null
-          created_at: string
-          deployment: Json[] | null
-          email: string
-          family_name: string
-          id: number
-          name: string
-          org_name: string | null
-          pif: string[] | null
-          project: Json[] | null
-          sector: string | null
-          user_id: string
-          vehicles_contract: string[] | null
-          vehicles_type: string[] | null
-        }
-        Insert: {
-          charging_stations_contract?: string[] | null
-          charging_stations_type?: string[] | null
-          consultant?: number | null
-          created_at?: string
-          deployment?: Json[] | null
-          email: string
-          family_name: string
-          id?: number
-          name: string
-          org_name?: string | null
-          pif?: string[] | null
-          project?: Json[] | null
-          sector?: string | null
-          user_id: string
-          vehicles_contract?: string[] | null
-          vehicles_type?: string[] | null
-        }
-        Update: {
-          charging_stations_contract?: string[] | null
-          charging_stations_type?: string[] | null
-          consultant?: number | null
-          created_at?: string
-          deployment?: Json[] | null
-          email?: string
-          family_name?: string
-          id?: number
-          name?: string
-          org_name?: string | null
-          pif?: string[] | null
-          project?: Json[] | null
-          sector?: string | null
-          user_id?: string
-          vehicles_contract?: string[] | null
-          vehicles_type?: string[] | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "clients_duplicate_consultant_fkey"
-            columns: ["consultant"]
-            isOneToOne: false
-            referencedRelation: "consultants"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       consultants: {
         Row: {
-          clients: number[] | null
+          clients: string[] | null
           created_at: string
           email: string
-          id: number
+          id: string
           name: string
-          user_id: string
         }
         Insert: {
-          clients?: number[] | null
+          clients?: string[] | null
           created_at?: string
           email: string
-          id?: number
+          id: string
           name: string
-          user_id: string
         }
         Update: {
-          clients?: number[] | null
+          clients?: string[] | null
           created_at?: string
           email?: string
-          id?: number
+          id?: string
           name?: string
-          user_id?: string
         }
         Relationships: []
       }
@@ -205,19 +93,18 @@ export type Database = {
           amendments: string[] | null
           awarding_authority: string
           call_title: string | null
-          consultant: number | null
+          consultant: string | null
           created_at: string
           deadline: string[]
           deployment: string[] | null
           files: string[] | null
-          filtered_clients: number[] | null
           further_details: string[] | null
           geography: string[]
           grant_programme: string | null
-          id: number
+          id: string
           in_brief: string
           instrument_type: string | null
-          matched_clients: number[] | null
+          matched_clients: string[] | null
           programme_purpose: string | null
           project: string[] | null
           reference_number: string | null
@@ -231,19 +118,18 @@ export type Database = {
           amendments?: string[] | null
           awarding_authority: string
           call_title?: string | null
-          consultant?: number | null
+          consultant?: string | null
           created_at?: string
           deadline: string[]
           deployment?: string[] | null
           files?: string[] | null
-          filtered_clients?: number[] | null
           further_details?: string[] | null
           geography: string[]
           grant_programme?: string | null
-          id?: number
+          id?: string
           in_brief: string
           instrument_type?: string | null
-          matched_clients?: number[] | null
+          matched_clients?: string[] | null
           programme_purpose?: string | null
           project?: string[] | null
           reference_number?: string | null
@@ -257,19 +143,18 @@ export type Database = {
           amendments?: string[] | null
           awarding_authority?: string
           call_title?: string | null
-          consultant?: number | null
+          consultant?: string | null
           created_at?: string
           deadline?: string[]
           deployment?: string[] | null
           files?: string[] | null
-          filtered_clients?: number[] | null
           further_details?: string[] | null
           geography?: string[]
           grant_programme?: string | null
-          id?: number
+          id?: string
           in_brief?: string
           instrument_type?: string | null
-          matched_clients?: number[] | null
+          matched_clients?: string[] | null
           programme_purpose?: string | null
           project?: string[] | null
           reference_number?: string | null
@@ -288,120 +173,13 @@ export type Database = {
           },
         ]
       }
-      tenders_e_mobility: {
-        Row: {
-          agent: number
-          charging_stations: string[] | null
-          closing: string
-          contract_type: string
-          contracting_org: string
-          contracting_org_info: string | null
-          created_at: string
-          description: string
-          eu_funded: boolean
-          eu_funded_details: string | null
-          id: number
-          location: string[]
-          lots_divided: boolean
-          lots_number: number | null
-          opening: string
-          sector: string
-          submission_language: string
-          tenders_for_all_lots: boolean | null
-          title: string
-          type_of_contract_charging_stations: string[] | null
-          type_of_contract_vehicles: string[] | null
-          type_of_vehicle: string[] | null
-          value: number
-        }
-        Insert: {
-          agent: number
-          charging_stations?: string[] | null
-          closing: string
-          contract_type: string
-          contracting_org: string
-          contracting_org_info?: string | null
-          created_at?: string
-          description: string
-          eu_funded: boolean
-          eu_funded_details?: string | null
-          id?: number
-          location: string[]
-          lots_divided: boolean
-          lots_number?: number | null
-          opening: string
-          sector: string
-          submission_language: string
-          tenders_for_all_lots?: boolean | null
-          title: string
-          type_of_contract_charging_stations?: string[] | null
-          type_of_contract_vehicles?: string[] | null
-          type_of_vehicle?: string[] | null
-          value: number
-        }
-        Update: {
-          agent?: number
-          charging_stations?: string[] | null
-          closing?: string
-          contract_type?: string
-          contracting_org?: string
-          contracting_org_info?: string | null
-          created_at?: string
-          description?: string
-          eu_funded?: boolean
-          eu_funded_details?: string | null
-          id?: number
-          location?: string[]
-          lots_divided?: boolean
-          lots_number?: number | null
-          opening?: string
-          sector?: string
-          submission_language?: string
-          tenders_for_all_lots?: boolean | null
-          title?: string
-          type_of_contract_charging_stations?: string[] | null
-          type_of_contract_vehicles?: string[] | null
-          type_of_vehicle?: string[] | null
-          value?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "tenders_agent_fkey"
-            columns: ["agent"]
-            isOneToOne: false
-            referencedRelation: "agents"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      users_profiles: {
-        Row: {
-          created_at: string
-          id: number
-          role: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          role: string
-          user_id?: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          role?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
       update_grant_clients_call: {
-        Args: { grant_id: number }
+        Args: { grant_id: string }
         Returns: undefined
       }
     }

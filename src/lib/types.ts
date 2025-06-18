@@ -189,13 +189,12 @@ export type ClientDataType = {
 	email: string
 	family_name: string
 	geography?: string[] | null
-	id: number
+	id: string
 	name: string
 	org_name: string | null
 	pif: ClientDataJsonType[] | null
 	project: ClientDataJsonType[] | null
 	sector: string | null
-	user_id: string
 	vehicles_contract: string[] | null
 	vehicles_type: ClientDataJsonType[] | null
 }
@@ -221,19 +220,18 @@ export type GrantType = {
 	amendments: string[] | null
 	awarding_authority: string
 	call_title: string | null
-	consultant: number | null
+	consultant: string | null
 	created_at: string
 	deadline: string[]
 	deployment: string[] | null
 	files: string[] | null
-	filtered_clients: number[] | null
 	further_details: string[] | null
 	geography: string[]
 	grant_programme: string | null
-	id: number
+	id: string
 	in_brief: string
 	instrument_type: string | null
-	matched_clients: number[] | null
+	matched_clients: string[] | null
 	programme_purpose: string | null
 	project: string[] | null
 	reference_number: string | null

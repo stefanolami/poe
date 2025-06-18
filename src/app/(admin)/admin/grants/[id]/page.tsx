@@ -8,7 +8,7 @@ import React from 'react'
 const GrantPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 	const { id } = await params
 
-	const grant = await getGrant(Number(id))
+	const grant = await getGrant(id)
 
 	if (!grant) {
 		throw notFound()

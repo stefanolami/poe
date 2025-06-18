@@ -51,7 +51,7 @@ export const GrantsForm = ({
 	consultants,
 }: {
 	consultants: {
-		id: number
+		id: string
 		name: string
 	}[]
 }) => {
