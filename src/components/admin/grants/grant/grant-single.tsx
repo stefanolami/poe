@@ -38,7 +38,7 @@ const GrantSingle = ({
 	clients,
 }: {
 	grant: GrantType
-	clients?: { id: number; name: string; email: string; family_name: string }[]
+	clients?: { id: string; name: string; email: string; family_name: string }[]
 }) => {
 	const [isSending, setIsSending] = useState(false)
 

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { columns } from './grants-columns'
-import { DataTable } from './grants-table'
+import { GrantsTable } from './grants-table'
 import { getGrants } from '@/actions/grants'
 
 /* import { TendersForm } from './tender-form'
@@ -34,7 +34,7 @@ const GrantsComponent = async () => {
 				</Link>
 			</div>
 
-			<DataTable
+			<GrantsTable
 				columns={columns}
 				data={data}
 			/>

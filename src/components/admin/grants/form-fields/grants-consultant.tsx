@@ -23,7 +23,7 @@ const GrantsConsultant = ({
 }: {
 	form: UseFormReturn<CreateGrantType>
 	consultants: {
-		id: number
+		id: string
 		name: string
 	}[]
 	isSubmitting: boolean

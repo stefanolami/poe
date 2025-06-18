@@ -46,7 +46,7 @@ export const signUpClient = async (data: CreateAccountType) => {
 			family_name: data.familyName,
 			org_name: data.orgName ?? null,
 			email: data.email,
-			user_id: userId,
+			id: userId,
 			sector: data.sector ?? null,
 			vehicles_type: data.vehicles_type ?? [],
 			vehicles_contract: data.vehicles_contract ?? [],
@@ -83,7 +83,7 @@ export const signUpClient = async (data: CreateAccountType) => {
 
 export const clientUpdate = async (
 	data: UpdateAccountType,
-	id: number,
+	id: string,
 	updateEmail: boolean
 ) => {
 	try {
@@ -183,7 +183,7 @@ export const getClientsByConsultantId = async () => {
 		const { data: consultantData, error: consultantError } = await supabase
 			.from('consultants')
 			.select('clients')
-			.eq('user_id', userId)
+			.eq('id', userId)
 			.single()
 
 		if (consultantError) {

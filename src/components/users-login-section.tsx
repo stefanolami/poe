@@ -25,13 +25,16 @@ const UsersLoginSection = ({
 
 	useEffect(() => {
 		const cachedRole = localStorage.getItem('userRole')
-		if (cachedRole) {
+		if (cachedRole && (cachedRole === 'client' || cachedRole === 'admin')) {
 			setRole(cachedRole as 'client' | 'admin')
 			console.log('User role from localStorage:', cachedRole)
 			setLoading(false)
 			return
 		}
-		if (storeUserRole) {
+		if (
+			storeUserRole &&
+			(storeUserRole === 'client' || storeUserRole === 'admin')
+		) {
 			setRole(storeUserRole)
 			console.log('User role from store:', storeUserRole)
 			localStorage.setItem('userRole', storeUserRole)
@@ -63,6 +66,7 @@ const UsersLoginSection = ({
 			await signOut()
 			setRole(null)
 			storeRemoveUserRole()
+			localStorage.removeItem('userRole')
 			if (setActive) setActive(false)
 		} catch (error) {
 			console.error('Logout failed:', error)
