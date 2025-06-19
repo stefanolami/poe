@@ -34,7 +34,7 @@
 		"framer-motion": "^12.4.5",
 		"immer": "^10.1.1",
 		"lexical": "^0.31.0",
-		"lucide-react": "^0.475.0",
+		"lucide-react": "^0.479.0",
 		"mailersend": "^2.6.0",
 		"next": "^15.2.4",
 		"react": "^19.0.0",

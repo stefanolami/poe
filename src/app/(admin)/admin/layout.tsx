@@ -1,6 +1,6 @@
 import '../../globals.css'
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { AppSidebar } from '@/components/admin/app-sidebar'
+import { AdminSidebar } from '@/components/admin/admin-sidebar'
 
 export default function AdminLayout({
 	children,
@@ -9,7 +9,7 @@ export default function AdminLayout({
 }) {
 	return (
 		<SidebarProvider>
-			<AppSidebar />
+			<AdminSidebar />
 			<main className="w-full bg-primary">
 				<SidebarTrigger className="text-white" />
 				<div className="w-full pt-8 px-8">{children}</div>

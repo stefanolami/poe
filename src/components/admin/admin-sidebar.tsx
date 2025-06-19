@@ -1,4 +1,15 @@
-import { Home, Inbox, Search, Settings, Megaphone } from 'lucide-react'
+import {
+	Home,
+	BarChart3,
+	Search,
+	Settings,
+	Megaphone,
+	ShieldUser,
+	Users,
+	Landmark,
+	Gavel,
+	Banknote,
+} from 'lucide-react'
 
 import {
 	Sidebar,
@@ -16,29 +27,39 @@ import Link from 'next/link'
 // Menu items.
 const items = [
 	{
-		title: 'Dasboard',
+		title: 'Dashboard',
 		url: '/admin/dashboard',
-		icon: Home,
+		icon: BarChart3,
 	},
 	{
 		title: 'Grants',
 		url: '/admin/grants',
-		icon: Inbox,
-	},
-	{
-		title: 'Investment Financing',
-		url: '/admin/investment-financing',
-		icon: Inbox,
+		icon: Landmark,
 	},
 	{
 		title: 'Procurement Tenders',
 		url: '/admin/tenders',
-		icon: Inbox,
+		icon: Gavel,
+	},
+	{
+		title: 'Investment Financing',
+		url: '/admin/investment-financing',
+		icon: Banknote,
+	},
+	{
+		title: 'Clients',
+		url: '/admin/clients',
+		icon: Users,
 	},
 	{
 		title: 'Alerts',
 		url: '/admin/alerts',
 		icon: Megaphone,
+	},
+	{
+		title: 'Users',
+		url: '/admin/users',
+		icon: ShieldUser,
 	},
 	{
 		title: 'Search',
@@ -52,7 +73,7 @@ const items = [
 	},
 ]
 
-export function AppSidebar() {
+export function AdminSidebar() {
 	return (
 		<Sidebar
 			collapsible="icon"
@@ -76,7 +97,10 @@ export function AppSidebar() {
 					<SidebarGroupContent>
 						<SidebarMenu>
 							{items.map((item) => (
-								<SidebarMenuItem key={item.title}>
+								<SidebarMenuItem
+									key={item.title}
+									className="hover:translate-x-1 transition-all duration-200"
+								>
 									<SidebarMenuButton asChild>
 										<a href={item.url}>
 											<item.icon />
