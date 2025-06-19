@@ -22,7 +22,10 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/hooks/use-toast'
-import { CreateGrantsTailoredAssessmentType, GrantType } from '@/lib/types'
+import {
+	CreateGrantsTailoredAssessmentType,
+	GrantWithConsultantType,
+} from '@/lib/types'
 import { formatDeadline, formatGeography } from '@/lib/utils'
 import { createGrantsTailoredAssessmentSchema } from '@/lib/zod-schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -37,7 +40,7 @@ const GrantSingle = ({
 	grant,
 	clients,
 }: {
-	grant: GrantType
+	grant: GrantWithConsultantType
 	clients?: { id: string; name: string; email: string; family_name: string }[]
 }) => {
 	const [isSending, setIsSending] = useState(false)
@@ -280,7 +283,9 @@ const GrantSingle = ({
 				<div className="flex flex-col gap-2">
 					<span className="block text-xl">Consultant</span>
 					<span className="block text-base">
-						{consultant ? consultant : '-'}
+						{consultant
+							? `${consultant.name} ${consultant.family_name}`
+							: '-'}
 					</span>
 				</div>
 				<div className="flex flex-col gap-2 col-span-2">

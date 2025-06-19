@@ -1,5 +1,4 @@
 import {
-	Home,
 	BarChart3,
 	Search,
 	Settings,
@@ -10,7 +9,6 @@ import {
 	Gavel,
 	Banknote,
 } from 'lucide-react'
-
 import {
 	Sidebar,
 	SidebarContent,

@@ -13,7 +13,6 @@ const GrantPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 	if (!grant) {
 		throw notFound()
 	}
-
 	const formattedGrants = {
 		...grant,
 		tailored_assessment:

@@ -256,6 +256,39 @@ export type GrantType = {
 	value: string
 }
 
+export type GrantWithConsultantType = {
+	alert_purpose: string
+	amendments: string[] | null
+	awarding_authority: string
+	call_title: string | null
+	consultant: {
+		id: string
+		name: string
+		email: string
+		family_name: string
+		created_at: string
+		clients: string[] | null
+	} | null
+	created_at: string
+	deadline: string[]
+	deployment: string[] | null
+	files: string[] | null
+	further_details: string[] | null
+	geography: string[]
+	grant_programme: string | null
+	id: string
+	in_brief: string
+	instrument_type: string | null
+	matched_clients: string[] | null
+	programme_purpose: string | null
+	project: string[] | null
+	reference_number: string | null
+	sector: string
+	sent: boolean
+	tailored_assessment: TailoredAssessmentType[] | null
+	value: string
+}
+
 export type FormattedGrantType = {
 	geography: string[]
 	value: string

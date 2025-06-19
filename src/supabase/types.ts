@@ -95,6 +95,7 @@ export type Database = {
           clients: string[] | null
           created_at: string
           email: string
+          family_name: string
           id: string
           name: string
         }
@@ -102,6 +103,7 @@ export type Database = {
           clients?: string[] | null
           created_at?: string
           email: string
+          family_name: string
           id: string
           name: string
         }
@@ -109,6 +111,7 @@ export type Database = {
           clients?: string[] | null
           created_at?: string
           email?: string
+          family_name?: string
           id?: string
           name?: string
         }

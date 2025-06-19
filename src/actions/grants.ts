@@ -185,7 +185,12 @@ export const getGrant = async (id: string) => {
 
 		const { data, error } = await supabase
 			.from('grants')
-			.select('*')
+			.select(
+				`
+    *,
+    consultant:consultants (*)
+  `
+			)
 			.eq('id', id)
 			.single()
 
