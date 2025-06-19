@@ -50,7 +50,20 @@ export const getAlert = async (id: string) => {
 			throw new Error(error.message)
 		}
 
-		return data
+		const formattedData = {
+			id: data.id,
+			subject: data.subject,
+			entity_type: data.entity_type,
+			created_at: new Date(data.created_at).toLocaleDateString('en-GB', {
+				year: 'numeric',
+				month: '2-digit',
+				day: '2-digit',
+			}),
+			entity_id: data.entity_id,
+			matched_clients: data.matched_clients,
+		}
+
+		return formattedData
 	} catch (error) {
 		console.log('ERROR FETCHING ALERT', error)
 		throw error

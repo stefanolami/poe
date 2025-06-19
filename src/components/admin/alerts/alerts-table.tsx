@@ -86,7 +86,7 @@ export function AlertsTable<TData, TValue>({
 								onClick={() =>
 									router.push(
 										//@ts-expect-error id not found by TS
-										`/admin/grants/${row.original.id}`
+										`/admin/alerts/${row.original.id}`
 									)
 								}
 								data-state={row.getIsSelected() && 'selected'}

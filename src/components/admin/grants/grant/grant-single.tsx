@@ -207,6 +207,7 @@ const GrantSingle = ({
 		<div className="font-jose mb-20">
 			<div className="flex flex-row items-center justify-between w-full">
 				<h1 className="text-white font-jose text-2xl">
+					Grant -{' '}
 					{grant.call_title
 						? grant.call_title
 						: grant.grant_programme}

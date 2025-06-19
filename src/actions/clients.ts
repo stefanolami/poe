@@ -221,3 +221,30 @@ export const getClientsByConsultantId = async () => {
 		}
 	}
 }
+
+export const getClientsByIds = async (ids: string[]) => {
+	try {
+		const supabase = await createClient()
+
+		const { data, error } = await supabase
+			.from('clients')
+			.select('*')
+			.in('id', ids)
+
+		if (error) {
+			throw new Error(`Failed to fetch clients: ${error.message}`)
+		}
+
+		return data
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error('GET CLIENTS BY IDS ERROR:', error.message)
+			throw error
+		} else {
+			console.error('Unexpected GET CLIENTS BY IDS ERROR:', error)
+			throw new Error(
+				'An unexpected error occurred while fetching clients'
+			)
+		}
+	}
+}
