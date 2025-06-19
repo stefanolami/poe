@@ -9,6 +9,33 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      alerts: {
+        Row: {
+          created_at: string
+          entity_id: string
+          entity_type: Database["public"]["Enums"]["AlertEntityType"]
+          id: string
+          matched_clients: string[] | null
+          subject: string
+        }
+        Insert: {
+          created_at?: string
+          entity_id: string
+          entity_type: Database["public"]["Enums"]["AlertEntityType"]
+          id?: string
+          matched_clients?: string[] | null
+          subject: string
+        }
+        Update: {
+          created_at?: string
+          entity_id?: string
+          entity_type?: Database["public"]["Enums"]["AlertEntityType"]
+          id?: string
+          matched_clients?: string[] | null
+          subject?: string
+        }
+        Relationships: []
+      }
       clients: {
         Row: {
           charging_stations_contract: string[] | null
@@ -184,7 +211,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      AlertEntityType: "grant" | "tender" | "investment"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -299,6 +326,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      AlertEntityType: ["grant", "tender", "investment"],
+    },
   },
 } as const

@@ -1,6 +1,6 @@
 'use server'
 
-import { CreateGrantType, UpdateGrantType } from '@/lib/types'
+import { CreateAlertType, CreateGrantType, UpdateGrantType } from '@/lib/types'
 import { createClient } from '@/supabase/server'
 import {
 	sendGrant,
@@ -8,6 +8,7 @@ import {
 	sendGrantTailored,
 	sendGrantTailoredCharIn,
 } from './email'
+import { createAlert } from './alerts'
 
 export const createGrant = async (formData: CreateGrantType) => {
 	try {
@@ -361,6 +362,7 @@ export const sendGrantAlert = async (grantId: string) => {
 		}
 
 		const emailSubject = `POE Alert - Grant - ${grantData.call_title || grantData.grant_programme}`
+		const alertSubject = `${grantData.call_title || grantData.grant_programme}`
 
 		let attachments: ({
 			filename: string | undefined
@@ -503,6 +505,16 @@ export const sendGrantAlert = async (grantId: string) => {
 		}
 
 		console.log('GRANT ALERT SENT')
+
+		const alert: CreateAlertType = {
+			subject: alertSubject,
+			entity_type: 'grant',
+			entity_id: grantId,
+			matched_clients: matchedClients,
+		}
+
+		await createAlert(alert)
+
 		return { success: true }
 	} catch (error) {
 		console.log('ERROR SENDING GRANT ALERT', error)

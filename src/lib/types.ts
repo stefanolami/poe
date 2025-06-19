@@ -21,6 +21,21 @@ export type UpdatePasswordType = z.infer<typeof updatePasswordSchema>
 
 export type CreateGrantType = z.infer<typeof createGrantSchema>
 
+export type AlertType = {
+	created_at: string
+	entity_id: string
+	entity_type: 'grant' | 'tender' | 'investment'
+	matched_clients: string[] | null
+	subject: string
+}
+
+export type CreateAlertType = {
+	entity_type: 'grant' | 'tender' | 'investment'
+	subject: string
+	entity_id: string
+	matched_clients: string[] | null
+}
+
 export type UpdateGrantType = {
 	sector: string
 	value: string
