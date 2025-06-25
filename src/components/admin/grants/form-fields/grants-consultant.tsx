@@ -50,7 +50,7 @@ const GrantsConsultant = ({
 								{consultants.map((consultant) => (
 									<SelectItem
 										key={consultant.id}
-										value={consultant.id.toString()}
+										value={consultant.id}
 									>
 										{consultant.name}
 									</SelectItem>

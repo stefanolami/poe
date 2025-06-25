@@ -96,7 +96,8 @@ export const GrantEdit = ({
 		resolver: zodResolver(createGrantSchema),
 		defaultValues: {
 			geography: geography || [],
-			consultant: consultant ? consultant.toString() : '',
+			//@ts-expect-error id is a string in the form, but consultant is an object in the grant
+			consultant: consultant ? consultant.id : '',
 			sector: sector || '',
 			call_title: call_title || '',
 			grant_programme: grant_programme || '',

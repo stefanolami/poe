@@ -145,7 +145,6 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 							<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
 								{filterDataByTimeRange(clients).length || 0}
 							</CardTitle>
-							{/* <CardAction></CardAction> */}
 						</CardHeader>
 					</Link>
 					<CardFooter className="flex-col items-start gap-1.5 text-sm">
@@ -247,12 +246,6 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 							<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
 								{filterDataByTimeRange(alerts).length || 0}
 							</CardTitle>
-							{/* <CardAction>
-						<Badge variant="outline">
-							<IconTrendingUp />
-							+12.5%
-						</Badge>
-					</CardAction> */}
 						</CardHeader>
 					</Link>
 					<CardFooter className="flex-col items-start gap-1.5 text-sm">
@@ -272,31 +265,10 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 					<CardHeader>
 						<CardDescription className="flex flex-row items-center justify-between">
 							<span>Notified Clients</span>
-							{/* <Badge variant="outline">
-									{Math.round(clientsIncrease) > 0 && (
-										<TrendingUp />
-									)}
-									{Math.round(clientsIncrease) < 0 && (
-										<TrendingDown />
-									)}
-									{Math.round(clientsIncrease) == 0 && (
-										<Equal />
-									)}
-									<span className="ml-2">
-										{clientsIncrease > 0 ? '+' : ''}
-										{clientsIncrease.toFixed(1)}%
-									</span>
-								</Badge> */}
 						</CardDescription>
 						<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
 							{getMatchedClientsCount(alerts) || 0}
 						</CardTitle>
-						{/* <CardAction>
-						<Badge variant="outline">
-							<IconTrendingUp />
-							+4.5%
-						</Badge>
-					</CardAction> */}
 					</CardHeader>
 					<CardFooter className="flex-col items-start gap-1.5 text-sm"></CardFooter>
 				</Card>
