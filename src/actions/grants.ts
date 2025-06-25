@@ -171,7 +171,7 @@ export const getGrants = async () => {
 			geography: grant.geography.join(', '),
 			call_title: grant.call_title,
 			grant_programme: grant.grant_programme,
-			value: grant.value,
+			deadline: grant.deadline[0].split('///')[0],
 		}))
 
 		return formattedData

@@ -22,6 +22,7 @@ const GrantsComponent = async () => {
 	} */
 
 	const data = await getGrants()
+	console.log('grants data', data)
 
 	return (
 		<div className="min-h-[calc(100vh-80px)] bg-primary">

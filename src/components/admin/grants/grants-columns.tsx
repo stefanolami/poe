@@ -12,7 +12,7 @@ export type Grant = {
 	geography: string
 	call_title: string | null
 	grant_programme: string | null
-	value: string
+	deadline: string
 }
 
 export const columns: ColumnDef<Grant>[] = [
@@ -68,8 +68,28 @@ export const columns: ColumnDef<Grant>[] = [
 		},
 	},
 	{
-		accessorKey: 'value',
-		header: 'Value',
+		accessorKey: 'deadline',
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() =>
+						column.toggleSorting(column.getIsSorted() === 'asc')
+					}
+					className="px-0"
+				>
+					Deadline
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			)
+		},
+		cell: ({ getValue }) => (
+			<span>
+				{getValue()
+					? new Date(getValue() as Date).toLocaleDateString('en-GB')
+					: 'N/A'}
+			</span>
+		),
 	},
 	{
 		accessorKey: 'sent',
