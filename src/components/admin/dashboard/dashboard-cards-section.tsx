@@ -8,8 +8,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card'
-import { TrendingDown, TrendingUp } from 'lucide-react'
-import { ToggleGroup, ToggleGroupItem } from '../toggle-group'
+import { Equal, Minus, TrendingDown, TrendingUp } from 'lucide-react'
+import { ToggleGroup, ToggleGroupItem } from '../../ui/toggle-group'
 import { useState } from 'react'
 import Link from 'next/link'
 
@@ -20,7 +20,7 @@ type DashboardDataType = {
 }
 
 export function DashboardCardSection({ data }: { data: DashboardDataType }) {
-	const [timeRange, setTimeRange] = useState('90d')
+	const [timeRange, setTimeRange] = useState('3d')
 
 	const { clients, grants, alerts } = data
 
@@ -36,8 +36,8 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 			let timeLimit: Date
 
 			switch (timeRange) {
-				case '90d':
-					timeLimit = new Date(now.setDate(now.getDate() - 90))
+				case '3d':
+					timeLimit = new Date(now.setDate(now.getDate() - 3))
 					break
 				case '2d':
 					timeLimit = new Date(now.setDate(now.getDate() - 2))
@@ -46,7 +46,7 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 					timeLimit = new Date(now.setDate(now.getDate() - 1))
 					break
 				default:
-					timeLimit = new Date(now.setDate(now.getDate() - 90))
+					timeLimit = new Date(now.setDate(now.getDate() - 3))
 			}
 
 			return itemDate >= timeLimit
@@ -71,7 +71,7 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 		const now = new Date()
 
 		// Determine period length in days
-		const days = timeRange === '1d' ? 1 : timeRange === '2d' ? 2 : 90
+		const days = timeRange === '1d' ? 1 : timeRange === '2d' ? 2 : 3
 
 		// Current period
 		const periodStart = new Date(now)
@@ -112,9 +112,9 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 					variant="outline"
 					className="w-fit ml-auto"
 				>
-					<ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
-					<ToggleGroupItem value="2d">Last 30 days</ToggleGroupItem>
-					<ToggleGroupItem value="1d">Last 7 days</ToggleGroupItem>
+					<ToggleGroupItem value="3d">Last 3 days</ToggleGroupItem>
+					<ToggleGroupItem value="2d">Last 2 days</ToggleGroupItem>
+					<ToggleGroupItem value="1d">Last 1 day</ToggleGroupItem>
 				</ToggleGroup>
 			</div>
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
@@ -125,11 +125,25 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 							<CardDescription className="flex flex-row items-center justify-between">
 								<span>Latest Clients</span>
 								<Badge variant="outline">
-									<TrendingDown />
-									<span>
-										{clientsIncrease > 0 ? '+' : ''}
-										{clientsIncrease.toFixed(1)}%
-									</span>
+									{clientsIncrease === Infinity ? (
+										<>
+											<Minus />
+											<Minus className="-ml-[10px]" />
+										</>
+									) : (
+										<>
+											{Math.round(clientsIncrease) >
+												0 && <TrendingUp />}
+											{Math.round(clientsIncrease) <
+												0 && <TrendingDown />}
+											{Math.round(clientsIncrease) ==
+												0 && <Equal />}
+											<span className="ml-2">
+												{clientsIncrease > 0 ? '+' : ''}
+												{clientsIncrease.toFixed(1)}%
+											</span>
+										</>
+									)}
 								</Badge>
 							</CardDescription>
 							<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
@@ -154,11 +168,27 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 							<CardDescription className="flex flex-row items-center justify-between">
 								<span>Latest Grants</span>
 								<Badge variant="outline">
-									<TrendingDown />
-									<span>
-										{grantsIncrease > 0 ? '+' : ''}
-										{grantsIncrease.toFixed(1)}%
-									</span>
+									{grantsIncrease === Infinity ? (
+										<>
+											<Minus />
+											<Minus className="-ml-[10px]" />
+										</>
+									) : (
+										<>
+											{Math.round(grantsIncrease) > 0 && (
+												<TrendingUp />
+											)}
+											{Math.round(grantsIncrease) < 0 && (
+												<TrendingDown />
+											)}
+											{Math.round(grantsIncrease) ==
+												0 && <Equal />}
+											<span className="ml-2">
+												{grantsIncrease > 0 ? '+' : ''}
+												{grantsIncrease.toFixed(1)}%
+											</span>
+										</>
+									)}
 								</Badge>
 							</CardDescription>
 							<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
@@ -188,11 +218,27 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 							<CardDescription className="flex flex-row items-center justify-between">
 								<span>Latest Alerts</span>
 								<Badge variant="outline">
-									<TrendingDown />
-									<span>
-										{alertsIncrease > 0 ? '+' : ''}
-										{alertsIncrease.toFixed(1)}%
-									</span>
+									{alertsIncrease === Infinity ? (
+										<>
+											<Minus />
+											<Minus className="-ml-[10px]" />
+										</>
+									) : (
+										<>
+											{Math.round(alertsIncrease) > 0 && (
+												<TrendingUp />
+											)}
+											{Math.round(alertsIncrease) < 0 && (
+												<TrendingDown />
+											)}
+											{Math.round(alertsIncrease) ==
+												0 && <Equal />}
+											<span className="ml-2">
+												{alertsIncrease > 0 ? '+' : ''}
+												{alertsIncrease.toFixed(1)}%
+											</span>
+										</>
+									)}
 								</Badge>
 							</CardDescription>
 							<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
@@ -220,14 +266,22 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 					<Card className="@container/card h-full w-full">
 						<CardHeader>
 							<CardDescription className="flex flex-row items-center justify-between">
-								<span>Latest Clients</span>
-								<Badge variant="outline">
-									<TrendingDown />
-									<span>
+								<span>Notified Clients</span>
+								{/* <Badge variant="outline">
+									{Math.round(clientsIncrease) > 0 && (
+										<TrendingUp />
+									)}
+									{Math.round(clientsIncrease) < 0 && (
+										<TrendingDown />
+									)}
+									{Math.round(clientsIncrease) == 0 && (
+										<Equal />
+									)}
+									<span className="ml-2">
 										{clientsIncrease > 0 ? '+' : ''}
 										{clientsIncrease.toFixed(1)}%
 									</span>
-								</Badge>
+								</Badge> */}
 							</CardDescription>
 							<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
 								{getMatchedClientsCount(alerts) || 0}

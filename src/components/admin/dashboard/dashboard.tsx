@@ -1,5 +1,5 @@
 import { getDashboardData } from '@/actions/dashboard'
-import { DashboardCardSection } from '@/components/ui/blocks/dashboard-cards-section'
+import { DashboardCardSection } from '@/components/admin/dashboard/dashboard-cards-section'
 import React from 'react'
 
 const DashboardComponent = async () => {

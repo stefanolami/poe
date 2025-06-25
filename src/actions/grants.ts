@@ -133,6 +133,8 @@ export const updateGrant = async (id: string, formData: UpdateGrantType) => {
 			files: filesArray,
 		}
 
+		console.log('FORMATTED DATA', formattedData)
+
 		const { data, error } = await supabase
 			.from('grants')
 			.update(formattedData)

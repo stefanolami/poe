@@ -120,6 +120,7 @@ export const GrantEdit = ({
 	}
 
 	const submitHandler: SubmitHandler<CreateGrantType> = async (data) => {
+		console.log('Form data:', data)
 		const formattedData: UpdateGrantType = {
 			...data,
 			oldFiles: filesArray,
