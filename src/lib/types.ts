@@ -336,3 +336,31 @@ export type FilterResponseType = {
 	data: string
 	statusText: string
 }
+
+export type DashboardDataType = {
+	clients:
+		| {
+				created_at: string
+				id: string
+				name: string
+				family_name: string
+				org_name?: string | null
+		  }[]
+		| []
+	grants:
+		| {
+				created_at: string
+				id: string
+				call_title?: string | null
+				grant_programme?: string | null
+		  }[]
+		| []
+	alerts:
+		| {
+				created_at: string
+				matched_clients: string[] | null
+				id: string
+				subject: string
+		  }[]
+		| []
+}

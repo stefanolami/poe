@@ -12,12 +12,7 @@ import { Equal, Minus, TrendingDown, TrendingUp } from 'lucide-react'
 import { ToggleGroup, ToggleGroupItem } from '../../ui/toggle-group'
 import { useState } from 'react'
 import Link from 'next/link'
-
-type DashboardDataType = {
-	clients: { created_at: string }[] | []
-	grants: { created_at: string }[] | []
-	alerts: { created_at: string; matched_clients: string[] | null }[] | []
-}
+import { DashboardDataType } from '@/lib/types'
 
 export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 	const [timeRange, setTimeRange] = useState('3d')
@@ -119,8 +114,9 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 			</div>
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
 				{/* <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4"> */}
-				<Link href="/admin/clients">
-					<Card className="@container/card h-full w-full">
+
+				<Card className="@container/card h-full w-full">
+					<Link href="/admin/clients">
 						<CardHeader>
 							<CardDescription className="flex flex-row items-center justify-between">
 								<span>Latest Clients</span>
@@ -151,19 +147,26 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 							</CardTitle>
 							{/* <CardAction></CardAction> */}
 						</CardHeader>
-						<CardFooter className="flex-col items-start gap-1.5 text-sm">
-							<div className="line-clamp-1 flex gap-2 font-medium">
-								Trending up this month{' '}
-								<TrendingUp className="size-4" />
-							</div>
-							<div className="text-muted-foreground">
-								Visitors for the last 6 months
-							</div>
-						</CardFooter>
-					</Card>
-				</Link>
-				<Link href="/admin/grants">
-					<Card className="@container/card h-full w-full">
+					</Link>
+					<CardFooter className="flex-col items-start gap-1.5 text-sm">
+						<ul>
+							{clients.slice(0, 3).map((client, index) => (
+								<li key={index}>
+									<Link href={`/admin/clients/${client.id}`}>
+										<span>
+											{client.name} {client.family_name}
+											{client.org_name &&
+												` - ${client.org_name}`}
+										</span>
+									</Link>
+								</li>
+							))}
+						</ul>
+					</CardFooter>
+				</Card>
+
+				<Card className="@container/card h-full w-full">
+					<Link href="/admin/grants">
 						<CardHeader>
 							<CardDescription className="flex flex-row items-center justify-between">
 								<span>Latest Grants</span>
@@ -194,26 +197,26 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 							<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
 								{filterDataByTimeRange(grants).length || 0}
 							</CardTitle>
-							{/* <CardAction>
-						<Badge variant="outline">
-							<IconTrendingDown />
-							-20%
-						</Badge>
-					</CardAction> */}
 						</CardHeader>
-						<CardFooter className="flex-col items-start gap-1.5 text-sm">
-							<div className="line-clamp-1 flex gap-2 font-medium">
-								Down 20% this period{' '}
-								<TrendingDown className="size-4" />
-							</div>
-							<div className="text-muted-foreground">
-								Acquisition needs attention
-							</div>
-						</CardFooter>
-					</Card>
-				</Link>
-				<Link href="/admin/alerts">
-					<Card className="@container/card h-full w-full">
+					</Link>
+					<CardFooter className="flex-col items-start gap-1.5 text-sm">
+						<ul>
+							{grants.slice(0, 3).map((grant, index) => (
+								<li key={index}>
+									<Link href={`/admin/grants/${grant.id}`}>
+										<span>
+											{grant.call_title
+												? grant.call_title
+												: grant.grant_programme}
+										</span>
+									</Link>
+								</li>
+							))}
+						</ul>
+					</CardFooter>
+				</Card>
+				<Card className="@container/card h-full w-full">
+					<Link href="/admin/alerts">
 						<CardHeader>
 							<CardDescription className="flex flex-row items-center justify-between">
 								<span>Latest Alerts</span>
@@ -251,23 +254,25 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 						</Badge>
 					</CardAction> */}
 						</CardHeader>
-						<CardFooter className="flex-col items-start gap-1.5 text-sm">
-							<div className="line-clamp-1 flex gap-2 font-medium">
-								Strong user retention{' '}
-								<TrendingUp className="size-4" />
-							</div>
-							<div className="text-muted-foreground">
-								Engagement exceed targets
-							</div>
-						</CardFooter>
-					</Card>
-				</Link>
-				<Link href="/admin/alerts">
-					<Card className="@container/card h-full w-full">
-						<CardHeader>
-							<CardDescription className="flex flex-row items-center justify-between">
-								<span>Notified Clients</span>
-								{/* <Badge variant="outline">
+					</Link>
+					<CardFooter className="flex-col items-start gap-1.5 text-sm">
+						<ul>
+							{alerts.slice(0, 3).map((alert, index) => (
+								<li key={index}>
+									<Link href={`/admin/alerts/${alert.id}`}>
+										<span>{alert.subject}</span>
+									</Link>
+								</li>
+							))}
+						</ul>
+					</CardFooter>
+				</Card>
+
+				<Card className="@container/card h-full w-full">
+					<CardHeader>
+						<CardDescription className="flex flex-row items-center justify-between">
+							<span>Notified Clients</span>
+							{/* <Badge variant="outline">
 									{Math.round(clientsIncrease) > 0 && (
 										<TrendingUp />
 									)}
@@ -282,28 +287,19 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 										{clientsIncrease.toFixed(1)}%
 									</span>
 								</Badge> */}
-							</CardDescription>
-							<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-								{getMatchedClientsCount(alerts) || 0}
-							</CardTitle>
-							{/* <CardAction>
+						</CardDescription>
+						<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+							{getMatchedClientsCount(alerts) || 0}
+						</CardTitle>
+						{/* <CardAction>
 						<Badge variant="outline">
 							<IconTrendingUp />
 							+4.5%
 						</Badge>
 					</CardAction> */}
-						</CardHeader>
-						<CardFooter className="flex-col items-start gap-1.5 text-sm">
-							<div className="line-clamp-1 flex gap-2 font-medium">
-								Steady performance increase{' '}
-								<TrendingUp className="size-4" />
-							</div>
-							<div className="text-muted-foreground">
-								Meets growth projections
-							</div>
-						</CardFooter>
-					</Card>
-				</Link>
+					</CardHeader>
+					<CardFooter className="flex-col items-start gap-1.5 text-sm"></CardFooter>
+				</Card>
 			</div>
 		</div>
 	)

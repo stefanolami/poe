@@ -13,8 +13,9 @@ export const getDashboardData = async () => {
 
 		const { data: clientsData, error: clientsError } = await supabase
 			.from('clients')
-			.select('created_at')
+			.select('created_at, id, name, family_name, org_name')
 			.gte('created_at', threeMonthsAgoISO)
+			.order('created_at', { ascending: false })
 
 		if (clientsError) {
 			console.error('ERROR FETCHING CLIENTS FOR DASHBOARD', clientsError)
@@ -23,8 +24,9 @@ export const getDashboardData = async () => {
 
 		const { data: grantsData, error: grantsError } = await supabase
 			.from('grants')
-			.select('created_at')
+			.select('created_at, id, call_title, grant_programme')
 			.gte('created_at', threeMonthsAgoISO)
+			.order('created_at', { ascending: false })
 
 		if (grantsError) {
 			console.error('ERROR FETCHING GRANTS FOR DASHBOARD', grantsError)
@@ -33,8 +35,9 @@ export const getDashboardData = async () => {
 
 		const { data: alertsData, error: alertsError } = await supabase
 			.from('alerts')
-			.select('created_at, matched_clients')
+			.select('created_at, matched_clients, id, subject')
 			.gte('created_at', threeMonthsAgoISO)
+			.order('created_at', { ascending: false })
 
 		if (alertsError) {
 			console.error('ERROR FETCHING ALERTS FOR DASHBOARD', alertsError)
@@ -46,35 +49,6 @@ export const getDashboardData = async () => {
 			grants: grantsData ?? [],
 			alerts: alertsData ?? [],
 		}
-	} catch (error) {
-		console.log('ERROR FETCHING GRANTS', error)
-		throw error
-	}
-}
-
-export const getGrants = async () => {
-	try {
-		const supabase = await createClient()
-
-		const { data, error } = await supabase
-			.from('grants')
-			.select('*')
-			.order('created_at', { ascending: false })
-
-		if (error) {
-			throw new Error(error.message)
-		}
-
-		const formattedData = data.map((grant) => ({
-			id: grant.id,
-			sent: grant.sent,
-			geography: grant.geography.join(', '),
-			call_title: grant.call_title,
-			grant_programme: grant.grant_programme,
-			value: grant.value,
-		}))
-
-		return formattedData
 	} catch (error) {
 		console.log('ERROR FETCHING GRANTS', error)
 		throw error
