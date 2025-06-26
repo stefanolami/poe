@@ -248,3 +248,52 @@ export const getClientsByIds = async (ids: string[]) => {
 		}
 	}
 }
+
+export const getClients = async () => {
+	try {
+		const supabase = await createClient()
+
+		const { data, error } = await supabase
+			.from('clients')
+			.select('*')
+			.order('created_at', { ascending: false })
+
+		if (error) {
+			throw new Error(error.message)
+		}
+
+		const formattedData = data.map((client) => ({
+			id: client.id,
+			name: `${client.name} ${client.family_name || ''}`.trim(),
+			org_name: client.org_name || '--',
+			email: client.email,
+			created_at: client.created_at,
+		}))
+
+		return formattedData
+	} catch (error) {
+		console.log('ERROR FETCHING GRANTS', error)
+		throw error
+	}
+}
+
+export const getClientById = async (id: string) => {
+	try {
+		const supabase = await createClient()
+
+		const { data, error } = await supabase
+			.from('clients')
+			.select('*')
+			.eq('id', id)
+			.single()
+
+		if (error) {
+			throw new Error(error.message)
+		}
+
+		return data
+	} catch (error) {
+		console.log('ERROR FETCHING CLIENT', error)
+		throw error
+	}
+}
