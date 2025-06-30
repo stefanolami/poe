@@ -26,6 +26,27 @@ export type UpdateAccountType = z.infer<typeof updateAccountSchema>
 
 export type UpdatePasswordType = z.infer<typeof updatePasswordSchema>
 
+export type Activity = {
+	entity_name: string
+	entity_type: string
+	created_at: string
+	recipient: string
+	event_type: string
+	email_status: string
+}
+
+export type ActivityItem = {
+	email: {
+		subject: string
+		recipient: {
+			email: string
+		}
+		status: string
+	}
+	type: string
+	created_at: string
+}
+
 export type AlertType = {
 	created_at: string
 	entity_id: string
