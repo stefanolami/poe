@@ -90,6 +90,51 @@ export type Database = {
         }
         Relationships: []
       }
+      clients_temp: {
+        Row: {
+          charging_stations_contract: string[] | null
+          charging_stations_type: Json | null
+          created_at: string
+          deployment: Json | null
+          email: string
+          id: string
+          pif: Json | null
+          project: Json | null
+          referrer: string | null
+          sector: string | null
+          vehicles_contract: string[] | null
+          vehicles_type: Json | null
+        }
+        Insert: {
+          charging_stations_contract?: string[] | null
+          charging_stations_type?: Json | null
+          created_at?: string
+          deployment?: Json | null
+          email: string
+          id?: string
+          pif?: Json | null
+          project?: Json | null
+          referrer?: string | null
+          sector?: string | null
+          vehicles_contract?: string[] | null
+          vehicles_type?: Json | null
+        }
+        Update: {
+          charging_stations_contract?: string[] | null
+          charging_stations_type?: Json | null
+          created_at?: string
+          deployment?: Json | null
+          email?: string
+          id?: string
+          pif?: Json | null
+          project?: Json | null
+          referrer?: string | null
+          sector?: string | null
+          vehicles_contract?: string[] | null
+          vehicles_type?: Json | null
+        }
+        Relationships: []
+      }
       consultants: {
         Row: {
           clients: string[] | null

@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import {
 	createAccountSchema,
+	createAccountTempSchema,
 	createGrantSchema,
 	createGrantsTailoredAssessmentSchema,
 	forgotPasswordSchema,
@@ -11,6 +12,8 @@ import {
 import { Json } from '@/supabase/types'
 
 export type CreateAccountType = z.infer<typeof createAccountSchema>
+
+export type CreateAccountTempType = z.infer<typeof createAccountTempSchema>
 
 export type CreateGrantType = z.infer<typeof createGrantSchema>
 

@@ -132,3 +132,54 @@ export const createGrantsTailoredAssessmentSchema = z.object({
 		.array(z.tuple([z.string(), z.string(), z.string()]))
 		.optional(),
 })
+
+export const sendOfferSchema = z.object({
+	email: z.string().email('Invalid email address'),
+})
+
+export const createAccountTempSchema = z.object({
+	email: z.string().email('Invalid email address'),
+	sector: z.string().optional(),
+	vehicles_type: z
+		.array(
+			z.object({
+				value: z.string(),
+				geography: z.array(z.string()),
+			})
+		)
+		.optional(),
+	vehicles_contract: z.array(z.string()).optional(),
+	charging_stations_type: z
+		.array(
+			z.object({
+				value: z.string(),
+				geography: z.array(z.string()),
+			})
+		)
+		.optional(),
+	charging_stations_contract: z.array(z.string()).optional(),
+	pif: z
+		.array(
+			z.object({
+				value: z.string(),
+				geography: z.array(z.string()),
+			})
+		)
+		.optional(),
+	deployment: z
+		.array(
+			z.object({
+				value: z.string(),
+				geography: z.array(z.string()),
+			})
+		)
+		.optional(),
+	project: z
+		.array(
+			z.object({
+				value: z.string(),
+				geography: z.array(z.string()),
+			})
+		)
+		.optional(),
+})

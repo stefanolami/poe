@@ -468,9 +468,11 @@ const SummaryMobile = () => {
 							<span>€ {getTotalPrice()} / year</span>
 						</div>
 						<div className="w-full mt-3 grid grid-cols-2 items-center gap-3 mx-auto  font-bold text-sm xl:text-lg text-center text-primary">
-							<button className="bg-white h-9 shadow-md hover:shadow-xl">
-								Send offer by email
-							</button>
+							<Link href="/send-offer-by-email">
+								<button className="bg-white h-9 shadow-md hover:shadow-xl w-full">
+									Send offer by email
+								</button>
+							</Link>
 							<Link href="/create-account">
 								<button className="bg-white h-9 shadow-md hover:shadow-xl w-full">
 									Continue

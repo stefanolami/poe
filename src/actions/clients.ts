@@ -1,6 +1,10 @@
 'use server'
 
-import { CreateAccountType, UpdateAccountType } from '@/lib/types'
+import {
+	CreateAccountTempType,
+	CreateAccountType,
+	UpdateAccountType,
+} from '@/lib/types'
 import { normalizeClientData } from '@/lib/utils'
 import { createAdminClient, createClient } from '@/supabase/server'
 
@@ -130,6 +134,47 @@ export const clientUpdate = async (
 			console.error('Unexpected CLIENT UPDATE ERROR:', error)
 			throw new Error(
 				'An unexpected error occurred while updating client data'
+			)
+		}
+	}
+}
+
+export const createClientTemp = async (data: CreateAccountTempType) => {
+	try {
+		const supabase = await createClient()
+
+		const clientInsertData = {
+			email: data.email,
+			sector: data.sector ?? null,
+			vehicles_type: data.vehicles_type ?? [],
+			vehicles_contract: data.vehicles_contract ?? [],
+			charging_stations_type: data.charging_stations_type ?? [],
+			charging_stations_contract: data.charging_stations_contract ?? [],
+			pif: data.pif ?? [],
+			deployment: data.deployment ?? [],
+			project: data.project ?? [],
+			referrer: 'poe',
+		}
+
+		const { data: clientData, error } = await supabase
+			.from('clients_temp')
+			.insert(clientInsertData)
+			.select()
+			.single()
+		if (error) {
+			throw new Error(`Client Temp creation failed: ${error.message}`)
+		}
+		console.log('Client Temp account created successfully')
+
+		return clientData
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error('CLIENT TEMP CREATION ERROR:', error.message)
+			throw error
+		} else {
+			console.error('Unexpected CLIENT TEMP CREATION ERROR:', error)
+			throw new Error(
+				'An unexpected error occurred during client temp creation'
 			)
 		}
 	}

@@ -443,9 +443,11 @@ const SummaryDesktop = () => {
 					</div>
 					{getTotalPrice() >= 0 && (
 						<div className="w-3/4 mx-auto mt-6 mb-3 grid grid-rows-2 items-center gap-4 font-bold text-sm xl:text-lg text-center text-primary">
-							<button className="bg-white h-9 shadow-md hover:shadow-xl">
-								Send offer by email
-							</button>
+							<Link href="/send-offer-by-email">
+								<button className="bg-white h-9 shadow-md hover:shadow-xl w-full">
+									Send offer by email
+								</button>
+							</Link>
 							<Link href="/create-account">
 								<button className="bg-white h-9 shadow-md hover:shadow-xl w-full">
 									Continue
