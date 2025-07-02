@@ -2,11 +2,9 @@
 
 import { useToast } from '@/hooks/use-toast'
 import {
-	BaseItem,
 	ClientDataJsonType,
 	ClientSelectionType,
 	CreateAccountTempType,
-	PricedGeographicItem,
 } from '@/lib/types'
 import { sendOfferSchema } from '@/lib/zod-schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -36,14 +34,15 @@ const SendOfferForm = () => {
 
 	const router = useRouter()
 
-	const { storeSector, storeData, getSinglePrice, getTotalPrice } = useStore(
-		useShallow((state) => ({
-			storeSector: state.sector,
-			storeData: state.data,
-			getSinglePrice: state.getSinglePriceFromDB,
-			getTotalPrice: state.getTotalPriceFromDB,
-		}))
-	)
+	const { storeSector, storeData, getSinglePrice, getTotalPriceFromStore } =
+		useStore(
+			useShallow((state) => ({
+				storeSector: state.sector,
+				storeData: state.data,
+				getSinglePrice: state.getSinglePriceFromDB,
+				getTotalPriceFromStore: state.getTotalPrice,
+			}))
+		)
 
 	const form = useForm<SendOfferType>({
 		resolver: zodResolver(sendOfferSchema),
@@ -81,8 +80,9 @@ const SendOfferForm = () => {
 			project: selectionArrayFromStoreToDB(storeData.eMobility.project),
 		}
 
-		const emailData = storeData.eMobility
+		/* const emailData = { ...storeData.eMobility }
 
+		console.log('emobility data', storeData.eMobility)
 		console.log('email data', emailData)
 
 		Object.entries(emailData).forEach(([category, items]) => {
@@ -95,14 +95,35 @@ const SendOfferForm = () => {
 					)
 				}
 			})
-		})
+		}) */
+
+		const emailData = Object.fromEntries(
+			Object.entries(storeData.eMobility).map(([category, items]) => [
+				category,
+				items.map((item: ClientDataJsonType) =>
+					'price' in item
+						? {
+								...item,
+								price: getSinglePrice(
+									category as keyof ClientSelectionType,
+									item
+								),
+							}
+						: item
+				),
+			])
+		)
 
 		console.log('emailData', emailData)
-		console.log('totalPrice', getTotalPrice(storeData.eMobility))
-		/* 
+		console.log('totalPrice', getTotalPriceFromStore())
+
 		try {
 			console.log('fullData', fullData)
-			//const response = await createClientTemp(fullData, emailData, getTotalPrice((storeData.eMobility)))
+			const response = await createClientTemp(
+				fullData,
+				emailData,
+				getTotalPriceFromStore()
+			)
 
 			if (response) {
 				toast({
@@ -134,7 +155,7 @@ const SendOfferForm = () => {
 				})
 				console.error(error)
 			}
-		} */
+		}
 	}
 
 	return (

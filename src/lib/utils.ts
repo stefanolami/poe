@@ -109,7 +109,7 @@ export function getSelectionItemContractLabel(
 export function selectionArrayFromStoreToDB(array: SelectableItem[]) {
 	return array.map((item) => ({
 		value: item.value,
-		geography: item.geographies?.map((geo) => geo.value) || [],
+		geographies: item.geographies?.map((geo) => geo.value) || [],
 	}))
 }
 

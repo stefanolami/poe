@@ -86,7 +86,7 @@ export type ClientType = {
 export type ClientDataJsonType = {
 	value: string
 	price?: Price
-	geography: string[]
+	geographies: string[]
 }
 
 export type ClientDataType = {

@@ -167,17 +167,21 @@ export const useStore = create<StoreState>()(
 			},
 			getSinglePriceFromDB: (
 				category: string,
-				item: ClientDataJsonType
+				item: {
+					value: string
+					price?: Price | undefined
+					geographies: SelectableItem[]
+				}
 			) => {
 				let total = 0
-				item.geography.forEach((country: string) => {
+				item.geographies.forEach((country) => {
 					total += parseInt(
 						//@ts-expect-error I hate you typescript
 						selectionData[get().sector?.value][
 							category
 						].fields.find(
 							(x: SelectableItem) => x.value === item.value
-						).price[country as keyof Price]
+						).price[country.value as keyof Price]
 					)
 				})
 				return total

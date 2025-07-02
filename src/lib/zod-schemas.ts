@@ -144,7 +144,7 @@ export const createAccountTempSchema = z.object({
 		.array(
 			z.object({
 				value: z.string(),
-				geography: z.array(z.string()),
+				geographies: z.array(z.string()),
 			})
 		)
 		.optional(),
@@ -153,7 +153,7 @@ export const createAccountTempSchema = z.object({
 		.array(
 			z.object({
 				value: z.string(),
-				geography: z.array(z.string()),
+				geographies: z.array(z.string()),
 			})
 		)
 		.optional(),
@@ -162,7 +162,7 @@ export const createAccountTempSchema = z.object({
 		.array(
 			z.object({
 				value: z.string(),
-				geography: z.array(z.string()),
+				geographies: z.array(z.string()),
 			})
 		)
 		.optional(),
@@ -170,7 +170,7 @@ export const createAccountTempSchema = z.object({
 		.array(
 			z.object({
 				value: z.string(),
-				geography: z.array(z.string()),
+				geographies: z.array(z.string()),
 			})
 		)
 		.optional(),
@@ -178,7 +178,7 @@ export const createAccountTempSchema = z.object({
 		.array(
 			z.object({
 				value: z.string(),
-				geography: z.array(z.string()),
+				geographies: z.array(z.string()),
 			})
 		)
 		.optional(),
