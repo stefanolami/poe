@@ -406,3 +406,19 @@ export type UpdateGrantType = {
 	tailored_assessment?: string[][] | undefined
 	consultant?: string | undefined
 }
+
+/* ACCOUNT RECAP TYPES */
+
+export type BaseItem = {
+	label: string
+	value: string
+}
+
+export type PricedGeographicItem = BaseItem & {
+	geographies?: Geography[]
+	price?: number
+}
+
+export type AccountRecapType = {
+	[category: string]: BaseItem[] | PricedGeographicItem[]
+}

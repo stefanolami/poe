@@ -20,6 +20,7 @@ const CreateAccountSummary = () => {
 				removeSingleGeography: state.removeSingleGeography,
 			}))
 		)
+	console.log('storeData', storeData)
 	return (
 		<div className="lg:order-2">
 			<h2 className="text-lg md:text-xl lg:text-3xl mb-4 lg:mb-10">

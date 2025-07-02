@@ -1,7 +1,13 @@
 'use client'
 
 import { useToast } from '@/hooks/use-toast'
-import { CreateAccountTempType } from '@/lib/types'
+import {
+	BaseItem,
+	ClientDataJsonType,
+	ClientSelectionType,
+	CreateAccountTempType,
+	PricedGeographicItem,
+} from '@/lib/types'
 import { sendOfferSchema } from '@/lib/zod-schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
@@ -30,10 +36,12 @@ const SendOfferForm = () => {
 
 	const router = useRouter()
 
-	const { storeSector, storeData } = useStore(
+	const { storeSector, storeData, getSinglePrice, getTotalPrice } = useStore(
 		useShallow((state) => ({
 			storeSector: state.sector,
 			storeData: state.data,
+			getSinglePrice: state.getSinglePriceFromDB,
+			getTotalPrice: state.getTotalPriceFromDB,
 		}))
 	)
 
@@ -49,7 +57,6 @@ const SendOfferForm = () => {
 	const submitHandler: SubmitHandler<CreateAccountTempType> = async (
 		data: CreateAccountTempType
 	) => {
-		console.log('formatting data', data)
 		const fullData = {
 			...data,
 			sector: storeSector.value,
@@ -74,9 +81,28 @@ const SendOfferForm = () => {
 			project: selectionArrayFromStoreToDB(storeData.eMobility.project),
 		}
 
+		const emailData = storeData.eMobility
+
+		console.log('email data', emailData)
+
+		Object.entries(emailData).forEach(([category, items]) => {
+			;(items as ClientDataJsonType[]).forEach((item) => {
+				if ('price' in item) {
+					//@ts-expect-error TS bullshit
+					item.price = getSinglePrice(
+						category as keyof ClientSelectionType,
+						item
+					)
+				}
+			})
+		})
+
+		console.log('emailData', emailData)
+		console.log('totalPrice', getTotalPrice(storeData.eMobility))
+		/* 
 		try {
 			console.log('fullData', fullData)
-			const response = await createClientTemp(fullData)
+			//const response = await createClientTemp(fullData, emailData, getTotalPrice((storeData.eMobility)))
 
 			if (response) {
 				toast({
@@ -108,7 +134,7 @@ const SendOfferForm = () => {
 				})
 				console.error(error)
 			}
-		}
+		} */
 	}
 
 	return (

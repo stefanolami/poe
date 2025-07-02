@@ -1,12 +1,14 @@
 'use server'
 
 import {
+	AccountRecapType,
 	CreateAccountTempType,
 	CreateAccountType,
 	UpdateAccountType,
 } from '@/lib/types'
 import { normalizeClientData } from '@/lib/utils'
 import { createAdminClient, createClient } from '@/supabase/server'
+import { sendAccountRecap } from './email'
 
 export const signUpClient = async (data: CreateAccountType) => {
 	try {
@@ -139,7 +141,11 @@ export const clientUpdate = async (
 	}
 }
 
-export const createClientTemp = async (data: CreateAccountTempType) => {
+export const createClientTemp = async (
+	data: CreateAccountTempType,
+	emailData: AccountRecapType,
+	total: number
+) => {
 	try {
 		const supabase = await createClient()
 
@@ -165,6 +171,8 @@ export const createClientTemp = async (data: CreateAccountTempType) => {
 			throw new Error(`Client Temp creation failed: ${error.message}`)
 		}
 		console.log('Client Temp account created successfully')
+
+		await sendAccountRecap(data.email, emailData, total)
 
 		return clientData
 	} catch (error: unknown) {

@@ -7,6 +7,7 @@ import GrantsEmailTailoredCharIn from '@/components/emails/grants-email-tailored
 import GrantsEmailCharIn from '@/components/emails/grants-email-charin'
 import { render } from '@react-email/components'
 import { fileToAttachment } from '@/lib/utils'
+import AccountRecapEmail from '@/components/emails/account-recap'
 
 const mailerSend = new MailerSend({
 	apiKey: process.env.MAILERSEND_API_KEY || '',
@@ -124,6 +125,21 @@ export async function sendGrantTailoredCharIn(
 			.setHtml(emailHtml)
 		return await mailerSend.email.send(emailParams)
 	}
+}
+
+export async function sendAccountRecap(to, data, total) {
+	const emailHtml = await render(
+		<AccountRecapEmail
+			data={data}
+			total={total}
+		/>
+	)
+	const emailParams = new EmailParams()
+		.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+		.setTo([new Recipient(to)])
+		.setSubject('POE - Your Account Recap')
+		.setHtml(emailHtml)
+	return await mailerSend.email.send(emailParams)
 }
 
 /* export async function sendGrantBatch(recipients, subject, grant, attachments) {
