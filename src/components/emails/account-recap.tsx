@@ -3,12 +3,13 @@ import { AccountRecapType, PricedGeographicItem } from '@/lib/types'
 import { removeParenthesesContent } from '@/lib/utils'
 import {
 	Body,
-	Container,
+	Column,
 	Head,
 	Heading,
 	Html,
 	Img,
 	Link,
+	Row,
 	Section,
 	Text,
 } from '@react-email/components'
@@ -38,8 +39,8 @@ const AccountRecapEmail = ({
             }`}
 				</style>
 			</Head>
-			<Body>
-				<Container style={{ width: '600px' }}>
+			<Body style={{ width: '100%', fontFamily: 'Josefin Sans' }}>
+				<div style={{ width: '600px', margin: '0 auto' }}>
 					<Section
 						style={{
 							backgroundColor: '#009EC2',
@@ -47,12 +48,26 @@ const AccountRecapEmail = ({
 							paddingBottom: '0px',
 						}}
 					>
-						<Img
-							src={`https://www.poeontap.com/logos/poe-white.png`}
-							width="140"
-							height="32"
-							alt="Notion's Logo"
-						/>
+						<Section>
+							<Row>
+								<Column>
+									<Img
+										src={`https://www.poeontap.com/logos/poe-white.png`}
+										width="151"
+										height="32"
+										alt="POE's Logo"
+									/>
+								</Column>
+								<Column>
+									<Img
+										src={`https://www.poeontap.com/logos/consulting-white.png`}
+										width="122"
+										height="32"
+										alt="T&P Consulting's Logo"
+									/>
+								</Column>
+							</Row>
+						</Section>
 						<Heading
 							as="h1"
 							style={{
@@ -87,58 +102,63 @@ const AccountRecapEmail = ({
 										<>
 											{index > 0 && <Divider />}
 											<div key={index}>
-												<span>
+												<Text style={fieldTitle}>
 													{key == 'deployment'
 														? 'Grants Deployment'
 														: key == 'project'
 															? 'Grants Innovative Projects'
 															: category.label}
-												</span>
+												</Text>
 												<ul style={list}>
 													{data[
 														key as keyof AccountRecapType
 													].map((item, index) => (
-														<li
-															key={index}
-															style={listItem}
-														>
+														<li key={index}>
 															<div
 																style={
 																	listItemDiv
 																}
 															>
-																<div
-																	style={
-																		listItemLabel
-																	}
+																<Text
+																	style={{
+																		marginRight:
+																			'20px',
+																	}}
 																>
-																	<span>
-																		{removeParenthesesContent(
-																			item.label
-																		)}
-																	</span>
-																	<span>
-																		(
-																		{(
-																			item as PricedGeographicItem
-																		).geographies
-																			?.map(
-																				(
-																					geo
-																				) =>
-																					geo.label
-																			)
-																			.join(
-																				', '
-																			)}
+																	{removeParenthesesContent(
+																		item.label
+																	)}{' '}
+																	(
+																	{(
+																		item as PricedGeographicItem
+																	).geographies
+																		?.map(
+																			(
+																				geo
+																			) =>
+																				geo.label
 																		)
-																	</span>
-																</div>
-
-																<div>
-																	€ 67609 /
-																	year
-																</div>
+																		.join(
+																			', '
+																		)}
+																	)
+																</Text>
+																<Text
+																	style={{
+																		marginLeft:
+																			'auto',
+																		whiteSpace:
+																			'nowrap',
+																	}}
+																>
+																	€{' '}
+																	{
+																		(
+																			item as PricedGeographicItem
+																		).price
+																	}{' '}
+																	/ year
+																</Text>
 															</div>
 														</li>
 													))}
@@ -201,7 +221,9 @@ const AccountRecapEmail = ({
 																listItemContract
 															}
 														>
-															{item.label}
+															<Text>
+																{item.label}
+															</Text>
 														</li>
 													))}
 												</ul>
@@ -216,16 +238,22 @@ const AccountRecapEmail = ({
 					<Divider />
 
 					<Section style={section}>
-						<div
-							style={{
-								display: 'flex',
-								justifyContent: 'space-between',
-								flexDirection: 'row',
-								alignItems: 'center',
-							}}
-						>
-							<span>TOTAL</span>
-							<span>€ {total} / year</span>
+						<div style={listItemDiv}>
+							<Text
+								style={{
+									fontSize: '30px',
+								}}
+							>
+								TOTAL
+							</Text>
+							<Text
+								style={{
+									marginLeft: 'auto',
+									fontSize: '30px',
+								}}
+							>
+								€ {total} / year
+							</Text>
 						</div>
 					</Section>
 
@@ -253,7 +281,7 @@ const AccountRecapEmail = ({
 							.
 						</Text>
 					</Section>
-				</Container>
+				</div>
 			</Body>
 		</Html>
 	)
@@ -292,14 +320,11 @@ const section = {
 	padding: '16px',
 }
 
-/* const fieldTitle = {
-	marginBottom: '-10px',
-	marginTop: '26px',
+const fieldTitle = {
 	fontWeight: 500,
-	fontSize: '14px',
+	fontSize: '20px',
 	fontFamily: 'Josefin Sans',
-	color: '#009EC2',
-} */
+}
 
 const fieldText = {
 	fontSize: '16px',
@@ -307,10 +332,6 @@ const fieldText = {
 
 const list = {
 	listStyleType: 'disc',
-}
-
-const listItem = {
-	margin: '8px 0',
 }
 
 const listItemContract = {
@@ -322,13 +343,4 @@ const listItemDiv: React.CSSProperties = {
 	justifyContent: 'space-between',
 	alignItems: 'start',
 	flexDirection: 'row',
-}
-
-const listItemLabel: React.CSSProperties = {
-	display: 'flex',
-	justifyContent: 'space-between',
-	gap: '4px',
-	alignItems: 'start',
-	flexDirection: 'column',
-	maxWidth: '75%',
 }

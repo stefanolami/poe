@@ -175,6 +175,9 @@ export const useStore = create<StoreState>()(
 			) => {
 				let total = 0
 				item.geographies.forEach((country) => {
+					/* console.log(
+						`${category}: Adding price for item ${item.value}, country ${country.value}. TOTAL: ${total}`
+					) */
 					total += parseInt(
 						//@ts-expect-error I hate you typescript
 						selectionData[get().sector?.value][
