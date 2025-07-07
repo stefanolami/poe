@@ -217,7 +217,7 @@ export const getClient = async () => {
 		const { data, error } = await supabase
 			.from('clients')
 			.select('*')
-			.eq('user_id', user.id)
+			.eq('id', user.id)
 			.single()
 
 		if (error) {
@@ -381,7 +381,7 @@ export const getClientTempById = async (id: string) => {
 			throw new Error(error.message)
 		}
 
-		return data
+		return normalizeClientData(data)
 	} catch (error) {
 		console.log('ERROR FETCHING CLIENT', error)
 		throw error

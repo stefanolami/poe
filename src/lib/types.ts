@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import {
 	createAccountSchema,
-	createAccountTempSchema,
 	createGrantSchema,
 	createGrantsTailoredAssessmentSchema,
 	forgotPasswordSchema,
@@ -12,8 +11,6 @@ import {
 import { Json } from '@/supabase/types'
 
 export type CreateAccountType = z.infer<typeof createAccountSchema>
-
-export type CreateAccountTempType = z.infer<typeof createAccountTempSchema>
 
 export type CreateGrantType = z.infer<typeof createGrantSchema>
 
@@ -85,23 +82,39 @@ export type ClientType = {
 
 export type ClientTempType = {
 	charging_stations_contract?: string[] | null
-	charging_stations_type?: Json | null
+	charging_stations_type?: ClientDataJsonType[] | null
 	created_at: string
-	deployment?: Json | null
+	deployment?: ClientDataJsonType[] | null
 	email: string
 	id: string
-	pif?: Json | null
-	project?: Json | null
+	pif?: ClientDataJsonType[] | null
+	project?: ClientDataJsonType[] | null
 	referrer?: string | null
 	sector?: string | null
 	vehicles_contract?: string[] | null
-	vehicles_type?: Json | null
+	vehicles_type?: ClientDataJsonType[] | null
+}
+
+export type CreateAccountTempType = {
+	charging_stations_contract?: string[] | null
+	charging_stations_type?: ClientDataJsonType[] | null
+	deployment?: ClientDataJsonType[] | null
+	email: string
+	pif?: ClientDataJsonType[] | null
+	project?: ClientDataJsonType[] | null
+	referrer?: string | null
+	sector?: string | null
+	vehicles_contract?: string[] | null
+	vehicles_type?: ClientDataJsonType[] | null
 }
 
 export type ClientDataJsonType = {
 	value: string
 	price?: Price
-	geographies: string[]
+	geographies: {
+		value: string
+		label: string
+	}[]
 }
 
 export type ClientDataType = {

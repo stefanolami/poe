@@ -15,7 +15,12 @@ export const createAccountSchema = z
 			.array(
 				z.object({
 					value: z.string(),
-					geography: z.array(z.string()),
+					geographies: z.array(
+						z.object({
+							value: z.string(),
+							label: z.string(),
+						})
+					),
 				})
 			)
 			.optional(),
@@ -24,7 +29,12 @@ export const createAccountSchema = z
 			.array(
 				z.object({
 					value: z.string(),
-					geography: z.array(z.string()),
+					geographies: z.array(
+						z.object({
+							value: z.string(),
+							label: z.string(),
+						})
+					),
 				})
 			)
 			.optional(),
@@ -33,7 +43,12 @@ export const createAccountSchema = z
 			.array(
 				z.object({
 					value: z.string(),
-					geography: z.array(z.string()),
+					geographies: z.array(
+						z.object({
+							value: z.string(),
+							label: z.string(),
+						})
+					),
 				})
 			)
 			.optional(),
@@ -41,7 +56,12 @@ export const createAccountSchema = z
 			.array(
 				z.object({
 					value: z.string(),
-					geography: z.array(z.string()),
+					geographies: z.array(
+						z.object({
+							value: z.string(),
+							label: z.string(),
+						})
+					),
 				})
 			)
 			.optional(),
@@ -49,7 +69,12 @@ export const createAccountSchema = z
 			.array(
 				z.object({
 					value: z.string(),
-					geography: z.array(z.string()),
+					geographies: z.array(
+						z.object({
+							value: z.string(),
+							label: z.string(),
+						})
+					),
 				})
 			)
 			.optional(),
@@ -137,7 +162,7 @@ export const sendOfferSchema = z.object({
 	email: z.string().email('Invalid email address'),
 })
 
-export const createAccountTempSchema = z.object({
+/* export const createAccountTempSchema = z.object({
 	email: z.string().email('Invalid email address'),
 	sector: z.string().optional(),
 	vehicles_type: z
@@ -182,4 +207,4 @@ export const createAccountTempSchema = z.object({
 			})
 		)
 		.optional(),
-})
+}) */
