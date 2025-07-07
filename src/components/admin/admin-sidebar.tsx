@@ -45,14 +45,14 @@ const items = [
 		icon: Banknote,
 	},
 	{
-		title: 'Clients',
-		url: '/admin/clients',
-		icon: Users,
-	},
-	{
 		title: 'Alerts',
 		url: '/admin/alerts',
 		icon: Megaphone,
+	},
+	{
+		title: 'Clients',
+		url: '/admin/clients',
+		icon: Users,
 	},
 	{
 		title: 'Users',

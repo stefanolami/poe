@@ -2,8 +2,8 @@ import { z } from 'zod'
 
 export const createAccountSchema = z
 	.object({
-		name: z.string().min(1, 'Name is required'),
-		familyName: z.string().min(1, 'Family name is required'),
+		name: z.string().min(1, 'First Name is required'),
+		familyName: z.string().min(1, 'Last Name is required'),
 		orgName: z.string().min(1, 'Company name is required'),
 		email: z.string().email('Invalid email address'),
 		password: z
@@ -85,8 +85,8 @@ export const createAccountSchema = z
 	})
 
 export const updateAccountSchema = z.object({
-	name: z.string().min(1, 'Name is required'),
-	familyName: z.string().min(1, 'Family name is required'),
+	name: z.string().min(1, 'First Name is required'),
+	familyName: z.string().min(1, 'Last Name is required'),
 	orgName: z.string().optional(),
 	email: z.string().email('Invalid email address'),
 })

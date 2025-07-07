@@ -113,7 +113,7 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel className="text-sm md:text-base lg:text-lg">
-									Name
+									First Name
 								</FormLabel>
 								<FormControl>
 									<Input
@@ -133,7 +133,7 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel className="text-sm md:text-base lg:text-lg">
-									Family Name
+									Last Name
 								</FormLabel>
 								<FormControl>
 									<Input

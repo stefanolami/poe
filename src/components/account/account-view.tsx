@@ -14,11 +14,11 @@ const AccountView = ({ clientData }: { clientData: ClientDataType }) => {
 			</h2>
 			<div className="my-4 text-base md:text-lg lg:text-xl space-y-1 lg:space-y-2">
 				<div>
-					<span>Name:</span>
+					<span>First Name:</span>
 					<span className="ml-2">{clientData.name}</span>
 				</div>
 				<div>
-					<span>Family Name:</span>
+					<span>Last Name:</span>
 					<span className="ml-2">{clientData.family_name}</span>
 				</div>
 				<div>
