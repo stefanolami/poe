@@ -1,11 +1,11 @@
 'use client'
 
 import { useToast } from '@/hooks/use-toast'
-import { ClientDataType, UpdateAccountType } from '@/lib/types'
-import { updateAccountSchema } from '@/lib/zod-schemas'
+import { CreateAccountType } from '@/lib/types'
+import { createAccountSchema } from '@/lib/zod-schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
-//import { useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import {
 	Form,
@@ -14,62 +14,97 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '../ui/form'
-import { Input } from '../ui/input'
-import { Button } from '../ui/button'
-//import { LuEyeClosed, LuEye } from 'react-icons/lu'
-/* import { useStore } from '@/store/store'
-import { useShallow } from 'zustand/shallow' */
-import { clientUpdate } from '@/actions/clients'
+} from '../../ui/form'
+import { Input } from '../../ui/input'
+import { Button } from '../../ui/button'
+import { LuEyeClosed, LuEye } from 'react-icons/lu'
+import { useStore } from '@/store/store'
+import { useShallow } from 'zustand/shallow'
+import { signUpClient } from '@/actions/clients'
+import { selectionArrayFromStoreToDB } from '@/lib/utils'
 
-const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
-	//const [isView, setIsView] = useState(false)
-	//const [isViewConfirm, setIsViewConfirm] = useState(false)
+const CreateAccountForm = () => {
+	const [isView, setIsView] = useState(false)
+	const [isViewConfirm, setIsViewConfirm] = useState(false)
 
 	const { toast } = useToast()
 
 	const router = useRouter()
+	const pathname = usePathname()
 
-	/* const { storeSector, storeData, storeGeographies } = useStore(
+	console.log('pathname', pathname)
+
+	const { storeSector, storeData } = useStore(
 		useShallow((state) => ({
 			storeSector: state.sector,
 			storeData: state.data,
-			storeGeographies: state.geographies,
 		}))
-	) */
+	)
 
-	const form = useForm<UpdateAccountType>({
-		resolver: zodResolver(updateAccountSchema),
+	const form = useForm<CreateAccountType>({
+		resolver: zodResolver(createAccountSchema),
 		defaultValues: {
-			name: clientData.name,
-			familyName: clientData.family_name,
-			orgName: clientData.org_name ?? undefined,
-			email: clientData.email,
+			name: '',
+			familyName: '',
+			orgName: '',
+			email: '',
+			password: '',
+			confirmPassword: '',
 		},
 	})
 
 	const isSubmitting = form.formState.isSubmitting
 
-	const submitHandler: SubmitHandler<UpdateAccountType> = async (
-		data: UpdateAccountType
+	const submitHandler: SubmitHandler<CreateAccountType> = async (
+		data: CreateAccountType
 	) => {
-		const updateEmail = data.email !== clientData.email
+		console.log('formatting data', data)
+		const fullData = {
+			...data,
+			sector: storeSector.value,
+			vehicles_type: selectionArrayFromStoreToDB(
+				storeData.eMobility.typeOfVehicle
+			),
+			vehicles_contract:
+				storeData.eMobility.typeOfVehicleContract?.map(
+					(item) => item.value
+				) || [],
+			charging_stations_type: selectionArrayFromStoreToDB(
+				storeData.eMobility.chargingStations
+			),
+			charging_stations_contract:
+				storeData.eMobility.chargingStationsContract?.map(
+					(item) => item.value
+				) || [],
+			pif: selectionArrayFromStoreToDB(storeData.eMobility.pif),
+			deployment: selectionArrayFromStoreToDB(
+				storeData.eMobility.deployment
+			),
+			project: selectionArrayFromStoreToDB(storeData.eMobility.project),
+		}
 
 		try {
-			const response = await clientUpdate(
-				data,
-				clientData.id,
-				updateEmail
-			)
+			let response
+			if (pathname.includes('confirm-account')) {
+				// If we are on the confirm-account page, we need to pass the id
+				const id = pathname.split('/').pop()
+				if (!id) {
+					throw new Error('No ID found in the URL')
+				}
+				response = await signUpClient(fullData, id)
+			} else {
+				// Otherwise, we just call the signUpClient without an id
+				response = await signUpClient(fullData)
+			}
 
 			if (response) {
 				toast({
 					title: 'Thank You!',
-					description: 'Account updated successfully',
+					description: 'Account created successfully',
 					variant: 'default',
 				})
 				setTimeout(() => {
-					router.replace('/account')
+					router.push('/')
 				}, 1000)
 			}
 
@@ -80,7 +115,7 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 			if (error instanceof Error) {
 				toast({
 					title: 'Error',
-					description: 'An error occurred while updating the account',
+					description: 'An error occurred while creating the account',
 					variant: 'destructive',
 				})
 				console.error(error.message)
@@ -98,7 +133,7 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 	return (
 		<div className="mt-10 lg:mt-0">
 			<h2 className="text-lg md:text-xl lg:text-3xl mb-4 lg:mb-10">
-				Edit Account
+				Create Account
 			</h2>
 			<Form {...form}>
 				<form
@@ -187,7 +222,7 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 							</FormItem>
 						)}
 					/>
-					{/* <FormField
+					<FormField
 						control={form.control}
 						name="password"
 						render={({ field }) => (
@@ -206,14 +241,14 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 								</FormControl>
 								{isView ? (
 									<LuEye
-										className="absolute right-2 top-8 z-10 cursor-pointer text-gray-500"
+										className="absolute right-2 top-[34px] lg:top-[38px] z-10 cursor-pointer text-gray-500"
 										onClick={() => {
 											setIsView(!isView)
 										}}
 									/>
 								) : (
 									<LuEyeClosed
-										className="absolute right-2 top-8 z-10 cursor-pointer text-gray-500"
+										className="absolute right-2 top-[34px] lg:top-[38px] z-10 cursor-pointer text-gray-500"
 										onClick={() => setIsView(!isView)}
 									/>
 								)}
@@ -242,14 +277,14 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 								</FormControl>
 								{isViewConfirm ? (
 									<LuEye
-										className="absolute right-2 top-8 z-10 cursor-pointer text-gray-500"
+										className="absolute right-2 top-[34px] lg:top-[38px] z-10 cursor-pointer text-gray-500"
 										onClick={() => {
 											setIsViewConfirm(!isViewConfirm)
 										}}
 									/>
 								) : (
 									<LuEyeClosed
-										className="absolute right-2 top-8 z-10 cursor-pointer text-gray-500"
+										className="absolute right-2 top-[34px] lg:top-[38px] z-10 cursor-pointer text-gray-500"
 										onClick={() =>
 											setIsViewConfirm(!isViewConfirm)
 										}
@@ -258,15 +293,15 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 								<FormMessage className="text-red-500 text-sm md:text-base" />
 							</FormItem>
 						)}
-					/> */}
+					/>
 
 					<Button
 						disabled={isSubmitting}
 						type="submit"
 						variant="default"
-						className="text-sm md:text-base lg:text-lg bg-primary-light text-white hover:bg-primary-light shadow-md hover:shadow-xl hover:scale-[1.02] mt-8 px-12 py-2"
+						className="text-sm md:text-base lg:text-lg bg-primary-light text-white hover:bg-primary-light shadow-md hover:shadow-xl hover:scale-[1.02] mt-8 px-6 py-2"
 					>
-						Save
+						Create Account
 					</Button>
 				</form>
 			</Form>
@@ -274,4 +309,4 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 	)
 }
 
-export default EditAccountForm
+export default CreateAccountForm

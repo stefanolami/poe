@@ -1,9 +1,8 @@
 'use client'
 
 import { selectionData } from '@/data/data'
-import { ClientDataJsonType, ClientDataType } from '@/lib/types'
+import { ClientDataJsonType, ClientSelectionType } from '@/lib/types'
 import {
-	getGeoLabel,
 	getSelectionItemContractLabel,
 	getSelectionItemLabel,
 } from '@/lib/utils'
@@ -11,51 +10,35 @@ import { useStore } from '@/store/store'
 import { MobilityData } from '@/store/store.types'
 import React from 'react'
 import { useShallow } from 'zustand/shallow'
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from '../../ui/accordion'
 
-const AccountSummary = ({ clientData }: { clientData: ClientDataType }) => {
-	const { getTotalPrice, getSinglePrice } = useStore(
+const AccountSummaryFromDB = ({
+	clientSelection,
+}: {
+	clientSelection: ClientSelectionType
+}) => {
+	const { getTotalPriceFromDB, getSinglePrice } = useStore(
 		useShallow((state) => ({
-			getTotalPrice: state.getTotalPriceFromDB,
+			storeData: state.data,
+			getTotalPriceFromDB: state.getTotalPriceFromDB,
 			getSinglePrice: state.getSinglePriceFromDB,
 			addSingleGeography: state.addSingleGeography,
 			removeSingleGeography: state.removeSingleGeography,
 		}))
 	)
 
-	const clientSelection = {
-		typeOfVehicle: clientData.vehicles_type || [],
-		typeOfVehicleContract: clientData.vehicles_contract || [],
-		chargingStations: clientData.charging_stations_type || [],
-		chargingStationsContract: clientData.charging_stations_contract || [],
-		pif: clientData.pif || [],
-		deployment: clientData.deployment || [],
-		project: clientData.project || [],
-	}
-
 	console.log('clientSelection', clientSelection)
-
-	const geographies = clientData.geography || []
 
 	return (
 		<div className="lg:order-2">
 			<h2 className="text-lg md:text-xl lg:text-3xl mb-4 lg:mb-10">
 				Your Plan
 			</h2>
-			<div className="my-4">
-				<span className="text-base md:text-lg lg:text-xl">
-					{geographies.length > 1 ? 'Geographies' : 'Geography'}
-				</span>
-				<ul className="mt-2 space-y-1 list-disc list-inside pl-1">
-					{geographies.map((item, index) => (
-						<li
-							className="text-sm md:text-base"
-							key={index}
-						>
-							{getGeoLabel(item)}
-						</li>
-					))}
-				</ul>
-			</div>
 			<div className="my-4">
 				{Object.keys(clientSelection).map((key, index) => {
 					if (
@@ -90,30 +73,58 @@ const AccountSummary = ({ clientData }: { clientData: ClientDataType }) => {
 												? 'Grants Innovative Projects'
 												: category.label}
 									</span>
-									<ul className="text-sm md:text-base space-y-1 lg:space-y-2 list-disc list-inside pl-1">
+									<ul className="text-sm md:text-base space-y-1 list-inside pl-1">
 										{(
 											clientSelection[
 												key as keyof MobilityData
 											] as ClientDataJsonType[]
 										).map((item, index) => (
-											<li
-												className="flex flex-row items-center justify-between"
-												key={index}
-											>
-												<span className="list-item">
-													{getSelectionItemLabel(
-														item.value,
-														key
-													)}
-												</span>
-												<span>
-													€{' '}
-													{getSinglePrice(
-														key as keyof MobilityData,
-														item
-													)}{' '}
-													/ year
-												</span>
+											<li key={index}>
+												<Accordion
+													type="single"
+													collapsible
+												>
+													<AccordionItem value="item-1">
+														<AccordionTrigger>
+															<div className="flex flex-row items-center justify-between w-full">
+																<div className="list-item">
+																	{getSelectionItemLabel(
+																		item.value,
+																		key
+																	)}
+																</div>
+																<div>
+																	€{' '}
+																	{getSinglePrice(
+																		key as keyof MobilityData,
+																		item
+																	)}{' '}
+																	/ year
+																</div>
+															</div>
+														</AccordionTrigger>
+														<AccordionContent>
+															<ul className="list-disc list-inside pl-6">
+																{item.geographies?.map(
+																	(
+																		geoItem,
+																		geoIndex
+																	) => (
+																		<li
+																			key={
+																				geoIndex
+																			}
+																		>
+																			{
+																				geoItem.label
+																			}
+																		</li>
+																	)
+																)}
+															</ul>
+														</AccordionContent>
+													</AccordionItem>
+												</Accordion>
 											</li>
 										))}
 									</ul>
@@ -187,7 +198,7 @@ const AccountSummary = ({ clientData }: { clientData: ClientDataType }) => {
 			<div className="mb-3 mt-6 text-base md:text-lg lg:text-xl">
 				<div className="flex flex-row items-center justify-between ">
 					<span>TOTAL</span>
-					<span>€ {getTotalPrice(clientSelection)} / year</span>
+					<span>€ {getTotalPriceFromDB(clientSelection)} / year</span>
 				</div>
 			</div>
 			<span className="w-full bg-primary h-[1px] my-8 block lg:hidden"></span>
@@ -195,4 +206,4 @@ const AccountSummary = ({ clientData }: { clientData: ClientDataType }) => {
 	)
 }
 
-export default AccountSummary
+export default AccountSummaryFromDB

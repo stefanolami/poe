@@ -17,9 +17,9 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '../ui/form'
-import { Input } from '../ui/input'
-import { Button } from '../ui/button'
+} from '../../ui/form'
+import { Input } from '../../ui/input'
+import { Button } from '../../ui/button'
 import { useStore } from '@/store/store'
 import { useShallow } from 'zustand/shallow'
 import { createClientTemp } from '@/actions/clients'
@@ -61,23 +61,27 @@ const SendOfferForm = () => {
 			sector: storeSector.value,
 			vehicles_type: selectionArrayFromStoreToDB(
 				storeData.eMobility.typeOfVehicle
-			),
+			) as ClientDataJsonType[],
 			vehicles_contract:
 				storeData.eMobility.typeOfVehicleContract?.map(
 					(item) => item.value
 				) || [],
 			charging_stations_type: selectionArrayFromStoreToDB(
 				storeData.eMobility.chargingStations
-			),
+			) as ClientDataJsonType[],
 			charging_stations_contract:
 				storeData.eMobility.chargingStationsContract?.map(
 					(item) => item.value
 				) || [],
-			pif: selectionArrayFromStoreToDB(storeData.eMobility.pif),
+			pif: selectionArrayFromStoreToDB(
+				storeData.eMobility.pif
+			) as ClientDataJsonType[],
 			deployment: selectionArrayFromStoreToDB(
 				storeData.eMobility.deployment
-			),
-			project: selectionArrayFromStoreToDB(storeData.eMobility.project),
+			) as ClientDataJsonType[],
+			project: selectionArrayFromStoreToDB(
+				storeData.eMobility.project
+			) as ClientDataJsonType[],
 		}
 
 		/* const emailData = { ...storeData.eMobility }

@@ -107,10 +107,13 @@ export function getSelectionItemContractLabel(
 }
 
 export function selectionArrayFromStoreToDB(array: SelectableItem[]) {
-	return array.map((item) => ({
-		value: item.value,
-		geographies: item.geographies?.map((geo) => geo.value) || [],
-	}))
+	return array.map(
+		(item) =>
+			({
+				value: item.value,
+				geographies: item.geographies,
+			}) as ClientDataJsonType
+	)
 }
 
 //eslint-disable-next-line

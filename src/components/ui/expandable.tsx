@@ -8,11 +8,13 @@ const Expandable = ({
 	children,
 	price,
 	defaultOpen = false,
+	text = 'white',
 }: {
 	title: string
 	children: JSX.Element
 	price: string
 	defaultOpen?: boolean
+	text?: string
 }) => {
 	const [ref, { height }] = useMeasure()
 	const [open, setOpen] = useState(defaultOpen)
@@ -20,7 +22,7 @@ const Expandable = ({
 	return (
 		<motion.div
 			animate={open ? 'open' : 'closed'}
-			className="text-white"
+			className={`text-${text}`}
 		>
 			<button
 				onClick={() => setOpen((pv) => !pv)}
@@ -37,11 +39,11 @@ const Expandable = ({
 							},
 						}}
 					>
-						<FiChevronDown className="text-lg text-white" />
+						<FiChevronDown className={`text-lg text-${text}`} />
 					</motion.span>
-					<span className="text-white">{title}</span>
+					<span className={`text-${text}`}>{title}</span>
 				</div>
-				<span className="text-white">€ {price}</span>
+				<span className={`text-${text}`}>€ {price}</span>
 			</button>
 			<motion.div
 				initial={false}
