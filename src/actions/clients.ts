@@ -10,7 +10,7 @@ import { normalizeClientData } from '@/lib/utils'
 import { createAdminClient, createClient } from '@/supabase/server'
 import { sendAccountRecap } from './email'
 
-export const signUpClient = async (data: CreateAccountType) => {
+export const signUpClient = async (data: CreateAccountType, id?: string) => {
 	try {
 		const supabase = await createClient()
 
@@ -74,6 +74,22 @@ export const signUpClient = async (data: CreateAccountType) => {
 			throw new Error(`Client creation failed: ${clientError.message}`)
 		}
 		console.log('Client account created successfully')
+
+		// Delete client_temp if id is provided
+		if (id) {
+			setTimeout(async () => {
+				const { error: deleteError } = await supabase
+					.from('clients_temp')
+					.delete()
+					.eq('id', id)
+				if (deleteError) {
+					throw new Error(
+						`Client temp deletion failed: ${deleteError.message}`
+					)
+				}
+				console.log('Client temp deleted successfully')
+			}, 2000)
+		}
 
 		return clientData
 	} catch (error: unknown) {
@@ -172,7 +188,7 @@ export const createClientTemp = async (
 		}
 		console.log('Client Temp account created successfully')
 
-		await sendAccountRecap(data.email, emailData, total)
+		await sendAccountRecap(data.email, emailData, total, clientData.id)
 
 		return clientData
 	} catch (error: unknown) {
@@ -336,6 +352,27 @@ export const getClientById = async (id: string) => {
 
 		const { data, error } = await supabase
 			.from('clients')
+			.select('*')
+			.eq('id', id)
+			.single()
+
+		if (error) {
+			throw new Error(error.message)
+		}
+
+		return data
+	} catch (error) {
+		console.log('ERROR FETCHING CLIENT', error)
+		throw error
+	}
+}
+
+export const getClientTempById = async (id: string) => {
+	try {
+		const supabase = await createClient()
+
+		const { data, error } = await supabase
+			.from('clients_temp')
 			.select('*')
 			.eq('id', id)
 			.single()

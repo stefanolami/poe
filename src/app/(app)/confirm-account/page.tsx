@@ -1,7 +1,7 @@
 import React from 'react'
 
-const ConfirmAccountPage = () => {
-	return <div>ConfirmAccountPage</div>
+const ConfirmAccount = () => {
+	return <div>ConfirmAccount</div>
 }
 
-export default ConfirmAccountPage
+export default ConfirmAccount

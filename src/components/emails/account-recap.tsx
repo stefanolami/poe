@@ -17,9 +17,11 @@ import {
 const AccountRecapEmail = ({
 	data,
 	total,
+	id,
 }: {
 	data: AccountRecapType
 	total: number
+	id: string
 }) => {
 	return (
 		<Html lang="en">
@@ -82,6 +84,18 @@ const AccountRecapEmail = ({
 						>
 							Hello!
 						</Heading>
+					</Section>
+
+					<Section style={section}>
+						<Text style={fieldText}>
+							Here is a summary of your selection. Click on the
+							link below to confirm it and create your account.
+						</Text>
+						<Link
+							href={`http://localhost:3000/confirm-account/${id}`}
+						>
+							Confirm Account
+						</Link>
 					</Section>
 
 					<Section style={section}>

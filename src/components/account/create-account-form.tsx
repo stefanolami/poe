@@ -4,7 +4,7 @@ import { useToast } from '@/hooks/use-toast'
 import { CreateAccountType } from '@/lib/types'
 import { createAccountSchema } from '@/lib/zod-schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import {
@@ -30,6 +30,9 @@ const CreateAccountForm = () => {
 	const { toast } = useToast()
 
 	const router = useRouter()
+	const pathname = usePathname()
+
+	console.log('pathname', pathname)
 
 	const { storeSector, storeData } = useStore(
 		useShallow((state) => ({
@@ -81,8 +84,18 @@ const CreateAccountForm = () => {
 		}
 
 		try {
-			console.log('fullData', fullData)
-			const response = await signUpClient(fullData)
+			let response
+			if (pathname.includes('confirm-account')) {
+				// If we are on the confirm-account page, we need to pass the id
+				const id = pathname.split('/').pop()
+				if (!id) {
+					throw new Error('No ID found in the URL')
+				}
+				response = await signUpClient(fullData, id)
+			} else {
+				// Otherwise, we just call the signUpClient without an id
+				response = await signUpClient(fullData)
+			}
 
 			if (response) {
 				toast({

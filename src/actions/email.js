@@ -127,11 +127,12 @@ export async function sendGrantTailoredCharIn(
 	}
 }
 
-export async function sendAccountRecap(to, data, total) {
+export async function sendAccountRecap(to, data, total, id) {
 	const emailHtml = await render(
 		<AccountRecapEmail
 			data={data}
 			total={total}
+			id={id}
 		/>
 	)
 	const emailParams = new EmailParams()
