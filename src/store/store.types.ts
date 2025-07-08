@@ -40,6 +40,7 @@ export interface StoreState {
 	geographies: SelectableItem[]
 	languages: SelectableItem[]
 	userRole: 'client' | 'admin' | null
+	isAuthenticated: boolean
 	data: {
 		eMobility: MobilityData
 	}
@@ -81,7 +82,7 @@ export interface StoreState {
 	getTotalPriceFromDB: (clientSelection: ClientSelectionType) => number
 	//getUser: (confirmed: boolean) => User
 	setUserRole: (role: 'client' | 'admin' | null) => void
-	removeUserRole: () => void
+	setIsAuthenticated: (isAuthenticated: boolean) => void
 }
 
 export interface User {

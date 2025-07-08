@@ -1,6 +1,6 @@
 'use client'
 
-import { getUserRole, signOut } from '@/actions/auth'
+import { signOut } from '@/actions/auth'
 import { useStore } from '@/store/store'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -12,61 +12,27 @@ const UsersLoginSection = ({
 }: {
 	setActive?: (active: boolean) => void
 }) => {
-	const [role, setRole] = useState<'client' | 'admin' | null>(null)
 	const [loading, setLoading] = useState(true)
 
-	const { storeUserRole, storeSetUserRole, storeRemoveUserRole } = useStore(
-		useShallow((state) => ({
-			storeUserRole: state.userRole,
-			storeSetUserRole: state.setUserRole,
-			storeRemoveUserRole: state.removeUserRole,
-		}))
-	)
+	const { userRole, isAuthenticated, setIsAuthenticated, setUserRole } =
+		useStore(
+			useShallow((state) => ({
+				userRole: state.userRole,
+				isAuthenticated: state.isAuthenticated,
+				setIsAuthenticated: state.setIsAuthenticated,
+				setUserRole: state.setUserRole,
+			}))
+		)
 
 	useEffect(() => {
-		const cachedRole = localStorage.getItem('userRole')
-		if (cachedRole && (cachedRole === 'client' || cachedRole === 'admin')) {
-			setRole(cachedRole as 'client' | 'admin')
-			console.log('User role from localStorage:', cachedRole)
-			setLoading(false)
-			return
-		}
-		if (
-			storeUserRole &&
-			(storeUserRole === 'client' || storeUserRole === 'admin')
-		) {
-			setRole(storeUserRole)
-			console.log('User role from store:', storeUserRole)
-			localStorage.setItem('userRole', storeUserRole)
-			setLoading(false)
-		} else {
-			const fetchUserRole = async () => {
-				try {
-					const userRole = await getUserRole()
-					storeSetUserRole(
-						userRole === 'client' || userRole === 'admin'
-							? userRole
-							: null
-					)
-					localStorage.setItem('userRole', userRole)
-					console.log('Fetched user role:', userRole)
-				} catch (error) {
-					console.error('Failed to fetch user role:', error)
-				} finally {
-					setLoading(false)
-				}
-			}
-
-			fetchUserRole()
-		}
-	}, [storeUserRole, storeSetUserRole])
+		setLoading(false)
+	}, [isAuthenticated, userRole])
 
 	const handleLogout = async () => {
 		try {
 			await signOut()
-			setRole(null)
-			storeRemoveUserRole()
-			localStorage.removeItem('userRole')
+			setUserRole(null)
+			setIsAuthenticated(false)
 			if (setActive) setActive(false)
 		} catch (error) {
 			console.error('Logout failed:', error)
@@ -86,7 +52,7 @@ const UsersLoginSection = ({
 
 	return (
 		<>
-			{role === 'client' && (
+			{userRole === 'client' && (
 				<div className="grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-3 mt-6 lg:mt-0 mx-auto">
 					<Link href="/account">
 						<button
@@ -104,7 +70,7 @@ const UsersLoginSection = ({
 					</button>
 				</div>
 			)}
-			{role === 'admin' && (
+			{userRole === 'admin' && (
 				<div className="grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-3 mt-6 lg:mt-0 mx-auto">
 					<Link href="/admin/dashboard">
 						<button
@@ -122,7 +88,7 @@ const UsersLoginSection = ({
 					</button>
 				</div>
 			)}
-			{!role && (
+			{!userRole && (
 				<div className="mt-6 lg:mt-0 mx-auto">
 					<Link href="/login">
 						<button className="bg-primary-light hover:bg-primary-light/90 text-white font-jose w-36 md:w-24 lg:w-28 py-[6px] shadow-md hover:scale-[1.02] hover:shadow-xl text-sm lg:text-base">

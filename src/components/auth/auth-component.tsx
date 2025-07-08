@@ -13,12 +13,14 @@ import {
 import { Input } from '@/components/ui/input'
 import { LoginType } from '@/lib/types'
 import { loginSchema } from '@/lib/zod-schemas'
+import { useStore } from '@/store/store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { LuEye, LuEyeClosed } from 'react-icons/lu'
+import { useShallow } from 'zustand/shallow'
 
 export default function AuthComponent() {
 	const form = useForm<LoginType>({
@@ -32,6 +34,13 @@ export default function AuthComponent() {
 	const [isAuthenticating, setIsAuthenticating] = useState(false)
 	const [isView, setIsView] = useState(false)
 
+	const { storeSetIsAuthenticated, storeSetUserRole } = useStore(
+		useShallow((state) => ({
+			storeSetIsAuthenticated: state.setIsAuthenticated,
+			storeSetUserRole: state.setUserRole,
+		}))
+	)
+
 	const router = useRouter()
 
 	const onSubmit = async ({ email, password }: LoginType) => {
@@ -40,7 +49,12 @@ export default function AuthComponent() {
 		try {
 			await authenticate(email, password)
 			const userRole = await getUserRole()
-			console.log('USER ROLE', userRole)
+
+			storeSetIsAuthenticated(true)
+			storeSetUserRole(
+				userRole === 'client' || userRole === 'admin' ? userRole : null
+			)
+
 			if (userRole === 'client') {
 				router.push('/')
 			}

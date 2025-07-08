@@ -20,6 +20,7 @@ export const useStore = create<StoreState>()(
 			geographies: [],
 			languages: [],
 			userRole: null,
+			isAuthenticated: false,
 			data: {
 				eMobility: {
 					typeOfVehicle: [],
@@ -427,10 +428,10 @@ export const useStore = create<StoreState>()(
 					})
 				)
 			},
-			removeUserRole: () => {
+			setIsAuthenticated: (isAuthenticated: boolean) => {
 				set(
 					produce((state: StoreState) => {
-						state.userRole = null
+						state.isAuthenticated = isAuthenticated
 					})
 				)
 			},

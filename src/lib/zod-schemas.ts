@@ -4,7 +4,7 @@ export const createAccountSchema = z
 	.object({
 		name: z.string().min(1, 'First Name is required'),
 		familyName: z.string().min(1, 'Last Name is required'),
-		orgName: z.string().min(1, 'Company name is required'),
+		orgName: z.string().min(1, 'Organization name is required'),
 		email: z.string().email('Invalid email address'),
 		password: z
 			.string()
