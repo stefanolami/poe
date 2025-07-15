@@ -246,17 +246,17 @@ export type FormattedGrantType = {
 	deadline: string[]
 	in_brief: string
 	sector: string
-	call_title?: string | undefined
-	grant_programme?: string | undefined
-	programme_purpose?: string | undefined
-	instrument_type?: string | undefined
-	reference_number?: string | undefined
-	further_details?: string[] | undefined
-	files?: string[] | undefined
-	tailored_assessment?: [number, string, string][] | undefined
-	consultant?: string | undefined
-	deployment?: string[] | undefined
-	project?: string[] | undefined
+	call_title?: string | undefined | null
+	grant_programme?: string | undefined | null
+	programme_purpose?: string | undefined | null
+	instrument_type?: string | undefined | null
+	reference_number?: string | undefined | null
+	further_details?: string[] | undefined | null
+	files?: string[] | undefined | null
+	tailored_assessment?: TailoredAssessmentType[] | undefined | null
+	consultant?: string | undefined | null
+	deployment?: string[] | undefined | null
+	project?: string[] | undefined | null
 }
 
 export type FormattedGrantTypeNull = {

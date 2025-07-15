@@ -27,7 +27,7 @@ const variants = {
 	},
 }
 
-const BarLoader = () => {
+export const BarLoader = () => {
 	return (
 		<motion.div
 			transition={{
@@ -35,27 +35,27 @@ const BarLoader = () => {
 			}}
 			initial="initial"
 			animate="animate"
-			className="flex gap-1"
+			className="flex gap-1 scale-[2]"
 		>
 			<motion.div
 				variants={variants}
-				className="h-12 w-2 bg-primary"
+				className="h-12 w-2 bg-primary-light"
 			/>
 			<motion.div
 				variants={variants}
-				className="h-12 w-2 bg-primary"
+				className="h-12 w-2 bg-primary-light"
 			/>
 			<motion.div
 				variants={variants}
-				className="h-12 w-2 bg-primary"
+				className="h-12 w-2 bg-primary-light"
 			/>
 			<motion.div
 				variants={variants}
-				className="h-12 w-2 bg-primary"
+				className="h-12 w-2 bg-primary-light"
 			/>
 			<motion.div
 				variants={variants}
-				className="h-12 w-2 bg-primary"
+				className="h-12 w-2 bg-primary-light"
 			/>
 		</motion.div>
 	)

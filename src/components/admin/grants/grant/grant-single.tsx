@@ -24,6 +24,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/hooks/use-toast'
 import {
 	CreateGrantsTailoredAssessmentType,
+	FormattedGrantType,
 	GrantWithConsultantType,
 } from '@/lib/types'
 import { formatDeadline, formatGeography } from '@/lib/utils'
@@ -35,6 +36,9 @@ import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FaTrashAlt } from 'react-icons/fa'
 import DocViewerComponent from '../../doc-viewer'
+import ButtonWithAlert from '@/components/button-alert'
+import LoadingOverlay from '@/components/loading-overlay'
+import EmailPreviewButton from '@/components/emails/email-preview-button'
 
 const GrantSingle = ({
 	grant,
@@ -76,14 +80,10 @@ const GrantSingle = ({
 
 	const isSubmitting = form.formState.isSubmitting
 
-	/* const handleEmail = async () => {
-		const emailResponse = await sendEmail(
-			'stefanolami90@gmail.com',
-			grant.call_title,
-			grant.in_brief
-		)
-		console.log('EMAIL RESPONSE', emailResponse)
-	} */
+	const formattedGrant: FormattedGrantType = {
+		...grant,
+		consultant: grant.consultant?.id ?? undefined,
+	}
 
 	const submitHandler: SubmitHandler<
 		CreateGrantsTailoredAssessmentType
@@ -288,6 +288,7 @@ const GrantSingle = ({
 							: '-'}
 					</span>
 				</div>
+				{/* <Divider /> */}
 				<div className="flex flex-col gap-2 col-span-2">
 					<span className="block text-xl">In Brief</span>
 					<span className="block text-base">
@@ -660,16 +661,20 @@ const GrantSingle = ({
 						</form>
 					</Form>
 				</div>
-				<div className="grid grid-cols-2 gap-4">
-					<Button
+				<div className="grid grid-cols-4 col-span-2 gap-4">
+					<ButtonWithAlert
+						buttonText="Send"
+						dialogText="Are you sure you want to send this Grant alert?"
+						confirmText="Send"
+						action={handleSend}
 						disabled={isSending || isSubmitting}
-						variant="default"
-						type="button"
-						onClick={handleSend}
-						className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+						buttonClass="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
 					>
-						Send
-					</Button>
+						<EmailPreviewButton
+							emailData={formattedGrant}
+							disabled={isSending || isSubmitting}
+						/>
+					</ButtonWithAlert>
 					<Button
 						disabled={isSending || isSubmitting}
 						variant="default"
@@ -679,10 +684,19 @@ const GrantSingle = ({
 					>
 						Filter Clients
 					</Button>
+					<EmailPreviewButton
+						emailData={formattedGrant}
+						disabled={isSending || isSubmitting}
+					/>
 				</div>
 			</div>
+			{isSending && <LoadingOverlay />}
 		</div>
 	)
 }
 
 export default GrantSingle
+
+/* const Divider = () => (
+	<div className="border-t border-white my-4 w-4/5 col-span-2" />
+) */
