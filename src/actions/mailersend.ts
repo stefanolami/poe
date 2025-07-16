@@ -7,9 +7,11 @@ const mailerSend = new MailerSend({
 })
 
 export const getEmailActivity = async () => {
-	const dateTo = Math.floor(Date.now() / 1000)
+	const dateTo = Math.floor(Date.now() / 1000 - 10)
 
 	const dateFrom = Math.floor((Date.now() - 14 * 24 * 60 * 60 * 1000) / 1000)
+
+	console.log('datTo', new Date(dateTo * 1000))
 
 	const queryParams = {
 		limit: 100, // Min: 10, Max: 100, Default: 25
@@ -28,7 +30,6 @@ export const getEmailActivity = async () => {
 			'z3m5jgry7o04dpyo',
 			queryParams
 		)
-		console.log('response', response.body)
 		return response.body
 	} catch (error) {
 		console.log(error)

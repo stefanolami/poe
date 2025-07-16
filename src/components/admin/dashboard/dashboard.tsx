@@ -25,7 +25,6 @@ const DashboardComponent = async () => {
 		event_type: item.type,
 		email_status: item.email.status,
 	}))
-	console.log('Email activity:', formattedActivity)
 	return (
 		<div className="bg-primary text-white">
 			<h1 className="text-white font-jose text-2xl">Dashboard</h1>

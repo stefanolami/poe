@@ -47,7 +47,7 @@ const GrantSingle = ({
 	grant: GrantWithConsultantType
 	clients?: { id: string; name: string; email: string; family_name: string }[]
 }) => {
-	const [isSending, setIsSending] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
 
 	const {
 		geography,
@@ -131,9 +131,9 @@ const GrantSingle = ({
 
 	const handleSend = async () => {
 		try {
-			setIsSending(true)
+			setIsLoading(true)
 			const response = await sendGrantAlert(id)
-			setIsSending(false)
+			setIsLoading(false)
 
 			if (response) {
 				toast({
@@ -170,6 +170,7 @@ const GrantSingle = ({
 
 	const handleFilterClients = async () => {
 		try {
+			setIsLoading(true)
 			const response = await filterGrantClients(id)
 
 			if (!response) {
@@ -187,6 +188,7 @@ const GrantSingle = ({
 					variant: 'destructive',
 				})
 			}
+			setIsLoading(false)
 		} catch (error) {
 			if (error instanceof Error) {
 				toast({
@@ -216,7 +218,7 @@ const GrantSingle = ({
 						: grant.grant_programme}
 				</h1>
 				<button
-					disabled={isSending || isSubmitting}
+					disabled={isLoading || isSubmitting}
 					className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-primary-light hover:bg-primary-light/90 text-white w-40 py-2"
 					onClick={() => router.replace(`/admin/grants/${id}/edit`)}
 				>
@@ -451,7 +453,7 @@ const GrantSingle = ({
 															<Select
 																disabled={
 																	isSubmitting ||
-																	isSending
+																	isLoading
 																}
 																value={
 																	detail[0] ??
@@ -506,7 +508,7 @@ const GrantSingle = ({
 															<Textarea
 																disabled={
 																	isSubmitting ||
-																	isSending
+																	isLoading
 																}
 																placeholder="Relevance"
 																value={
@@ -534,7 +536,7 @@ const GrantSingle = ({
 															<Textarea
 																disabled={
 																	isSubmitting ||
-																	isSending
+																	isLoading
 																}
 																placeholder="Next Steps"
 																value={
@@ -618,7 +620,7 @@ const GrantSingle = ({
 												<div className="space-x-4">
 													<Button
 														disabled={
-															isSending ||
+															isLoading ||
 															isSubmitting
 														}
 														variant="default"
@@ -641,7 +643,7 @@ const GrantSingle = ({
 															0 && (
 															<Button
 																disabled={
-																	isSending ||
+																	isLoading ||
 																	isSubmitting
 																}
 																variant="default"
@@ -667,16 +669,16 @@ const GrantSingle = ({
 						dialogText="Are you sure you want to send this Grant alert?"
 						confirmText="Send"
 						action={handleSend}
-						disabled={isSending || isSubmitting}
+						disabled={isLoading || isSubmitting}
 						buttonClass="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
 					>
 						<EmailPreviewButton
 							emailData={formattedGrant}
-							disabled={isSending || isSubmitting}
+							disabled={isLoading || isSubmitting}
 						/>
 					</ButtonWithAlert>
 					<Button
-						disabled={isSending || isSubmitting}
+						disabled={isLoading || isSubmitting}
 						variant="default"
 						type="button"
 						className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
@@ -686,11 +688,11 @@ const GrantSingle = ({
 					</Button>
 					<EmailPreviewButton
 						emailData={formattedGrant}
-						disabled={isSending || isSubmitting}
+						disabled={isLoading || isSubmitting}
 					/>
 				</div>
 			</div>
-			{isSending && <LoadingOverlay />}
+			{isLoading && <LoadingOverlay />}
 		</div>
 	)
 }

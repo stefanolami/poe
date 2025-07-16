@@ -100,10 +100,10 @@ export function AdminSidebar() {
 									className="hover:translate-x-1 transition-all duration-200"
 								>
 									<SidebarMenuButton asChild>
-										<a href={item.url}>
+										<Link href={item.url}>
 											<item.icon />
 											<span>{item.title}</span>
-										</a>
+										</Link>
 									</SidebarMenuButton>
 								</SidebarMenuItem>
 							))}

@@ -26,7 +26,7 @@ const EmailPreviewButton = ({
 					type="button"
 					className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5 font-jose"
 				>
-					See Email
+					Show Email
 				</Button>
 			</DialogTrigger>
 			<DialogContent
