@@ -12,14 +12,10 @@ import {
 import {
 	Sidebar,
 	SidebarContent,
-	SidebarGroup,
-	SidebarGroupContent,
-	SidebarGroupLabel,
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import Image from 'next/image'
 import Link from 'next/link'
 
 // Menu items.
@@ -78,38 +74,49 @@ export function AdminSidebar() {
 			className="bg-primary text-white"
 		>
 			<SidebarContent>
-				<SidebarGroup>
-					<SidebarGroupLabel className="mb-8 mt-2">
-						<Link
-							href="/"
-							className="w-2/3 aspect-[116/24] relative "
+				<SidebarMenu>
+					<SidebarMenuItem className="hover:translate-x-1 transition-all duration-200 mt-4 mb-6">
+						<SidebarMenuButton
+							asChild
+							className="[&>img]:size-8 group-data-[collapsible=icon]:[&>img]:size-6 group-data-[collapsible=icon]:!pr-0"
 						>
-							<Image
-								src={'/logos/poe-white.png'}
-								alt="Logo"
-								fill
-								className=""
-							/>
-						</Link>
-					</SidebarGroupLabel>
-					<SidebarGroupContent>
-						<SidebarMenu>
-							{items.map((item) => (
-								<SidebarMenuItem
-									key={item.title}
-									className="hover:translate-x-1 transition-all duration-200"
-								>
-									<SidebarMenuButton asChild>
-										<Link href={item.url}>
-											<item.icon />
-											<span>{item.title}</span>
-										</Link>
-									</SidebarMenuButton>
-								</SidebarMenuItem>
-							))}
-						</SidebarMenu>
-					</SidebarGroupContent>
-				</SidebarGroup>
+							<Link
+								href="/"
+								className="group-data-[collapsible=icon]:!p-0"
+							>
+								{/* eslint-disable-next-line */}
+								<img
+									src={'/logos/icon1.png'}
+									alt="Logo"
+									className="transition-all duration-200"
+								/>
+								<span>
+									{/* eslint-disable-next-line */}
+									<img
+										src={'/logos/poe-white.png'}
+										alt="Logo"
+									/>
+								</span>
+							</Link>
+						</SidebarMenuButton>
+					</SidebarMenuItem>
+					{items.map((item) => (
+						<SidebarMenuItem
+							key={item.title}
+							className="hover:translate-x-1 transition-all duration-200"
+						>
+							<SidebarMenuButton
+								asChild
+								className="[&>svg]:size-6"
+							>
+								<Link href={item.url}>
+									<item.icon />
+									<span>{item.title}</span>
+								</Link>
+							</SidebarMenuButton>
+						</SidebarMenuItem>
+					))}
+				</SidebarMenu>
 			</SidebarContent>
 		</Sidebar>
 	)
