@@ -19,6 +19,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { ImSpinner6 } from 'react-icons/im'
 import { LuEye, LuEyeClosed } from 'react-icons/lu'
 import { useShallow } from 'zustand/shallow'
 
@@ -65,7 +66,6 @@ export default function AuthComponent() {
 				type: 'manual',
 				message: 'Invalid email or password',
 			})
-		} finally {
 			setIsAuthenticating(false)
 		}
 	}
@@ -140,13 +140,27 @@ export default function AuthComponent() {
 						>
 							Forgot Password
 						</Link>
-						<Button
-							disabled={isAuthenticating}
-							type="submit"
-							className="bg-primary text-white border-2 border-white font-bold text-lg px-10 py-5 mx-auto flex shadow-lg hover:shadow-xl w-full"
-						>
-							Login
-						</Button>
+						{isAuthenticating && (
+							<Button
+								disabled={isAuthenticating}
+								type="submit"
+								className="bg-primary text-white border-2 border-white font-bold text-lg px-10 py-5 mx-auto flex shadow-lg hover:shadow-xl w-full"
+							>
+								<ImSpinner6
+									className="animate-spin text-white"
+									size={20}
+								/>
+							</Button>
+						)}
+						{!isAuthenticating && (
+							<Button
+								disabled={isAuthenticating}
+								type="submit"
+								className="bg-primary text-white border-2 border-white font-bold text-lg px-10 py-5 mx-auto flex shadow-lg hover:shadow-xl w-full"
+							>
+								Login
+							</Button>
+						)}
 					</form>
 				</Form>
 			</div>
