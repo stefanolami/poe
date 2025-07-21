@@ -75,7 +75,7 @@ export function AdminSidebar() {
 		>
 			<SidebarContent>
 				<SidebarMenu>
-					<SidebarMenuItem className="hover:translate-x-1 transition-all duration-200 mt-4 mb-6">
+					<SidebarMenuItem className="mt-4 mb-6">
 						<SidebarMenuButton
 							asChild
 							className="[&>img]:size-8 group-data-[collapsible=icon]:[&>img]:size-6 group-data-[collapsible=icon]:!pr-0"

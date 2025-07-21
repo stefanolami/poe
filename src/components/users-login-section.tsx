@@ -1,9 +1,9 @@
 'use client'
 
 import { signOut } from '@/actions/auth'
-import { useStore } from '@/store/store'
+import { useAuthStore } from '@/store/auth-store'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { ImSpinner6 } from 'react-icons/im'
 import { useShallow } from 'zustand/shallow'
 
@@ -12,34 +12,27 @@ const UsersLoginSection = ({
 }: {
 	setActive?: (active: boolean) => void
 }) => {
-	const [loading, setLoading] = useState(true)
+	const { userRole, authInitialized, setUserRole } = useAuthStore(
+		useShallow((state) => ({
+			userRole: state.userRole,
+			authInitialized: state.authInitialized,
+			setUserRole: state.setUserRole,
+		}))
+	)
 
-	const { userRole, isAuthenticated, setIsAuthenticated, setUserRole } =
-		useStore(
-			useShallow((state) => ({
-				userRole: state.userRole,
-				isAuthenticated: state.isAuthenticated,
-				setIsAuthenticated: state.setIsAuthenticated,
-				setUserRole: state.setUserRole,
-			}))
-		)
-
-	useEffect(() => {
-		setLoading(false)
-	}, [isAuthenticated, userRole])
+	useEffect(() => {}, [userRole, authInitialized])
 
 	const handleLogout = async () => {
 		try {
 			await signOut()
 			setUserRole(null)
-			setIsAuthenticated(false)
 			if (setActive) setActive(false)
 		} catch (error) {
 			console.error('Logout failed:', error)
 		}
 	}
 
-	if (loading) {
+	if (!authInitialized) {
 		return (
 			<button className="flex items-center justify-center bg-primary-light hover:bg-primary-light/90 text-white font-jose w-36 lg:w-28 px-5 py-[6px] shadow-md hover:scale-[1.02] hover:shadow-xl text-sm lg:text-base">
 				<ImSpinner6

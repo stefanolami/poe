@@ -5,6 +5,7 @@ import { Suspense } from 'react'
 import Loading from '@/components/loading'
 import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
+import { AuthProvider } from '@/components/auth/auth-provider'
 
 export const metadata: Metadata = {
 	title: 'POE',
@@ -21,9 +22,11 @@ export default function RootLayout({
 			<body
 				className={`${unna.variable} ${jose.variable} antialiased relative`}
 			>
-				<RenderMounted>
-					<Suspense fallback={<Loading />}>{children}</Suspense>
-				</RenderMounted>
+				<AuthProvider>
+					<RenderMounted>
+						<Suspense fallback={<Loading />}>{children}</Suspense>
+					</RenderMounted>
+				</AuthProvider>
 				<Toaster />
 			</body>
 		</html>

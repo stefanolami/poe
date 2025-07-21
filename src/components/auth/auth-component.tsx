@@ -13,7 +13,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { LoginType } from '@/lib/types'
 import { loginSchema } from '@/lib/zod-schemas'
-import { useStore } from '@/store/store'
+import { useAuthStore } from '@/store/auth-store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -34,9 +34,8 @@ export default function AuthComponent() {
 	const [isAuthenticating, setIsAuthenticating] = useState(false)
 	const [isView, setIsView] = useState(false)
 
-	const { storeSetIsAuthenticated, storeSetUserRole } = useStore(
+	const { storeSetUserRole } = useAuthStore(
 		useShallow((state) => ({
-			storeSetIsAuthenticated: state.setIsAuthenticated,
 			storeSetUserRole: state.setUserRole,
 		}))
 	)
@@ -50,7 +49,6 @@ export default function AuthComponent() {
 			await authenticate(email, password)
 			const userRole = await getUserRole()
 
-			storeSetIsAuthenticated(true)
 			storeSetUserRole(
 				userRole === 'client' || userRole === 'admin' ? userRole : null
 			)

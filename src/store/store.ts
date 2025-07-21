@@ -19,8 +19,6 @@ export const useStore = create<StoreState>()(
 			sector: {},
 			geographies: [],
 			languages: [],
-			userRole: null,
-			isAuthenticated: false,
 			data: {
 				eMobility: {
 					typeOfVehicle: [],
@@ -421,20 +419,6 @@ export const useStore = create<StoreState>()(
 					...selection,
 				}
 			}, */
-			setUserRole: (role: 'client' | 'admin' | null) => {
-				set(
-					produce((state: StoreState) => {
-						state.userRole = role
-					})
-				)
-			},
-			setIsAuthenticated: (isAuthenticated: boolean) => {
-				set(
-					produce((state: StoreState) => {
-						state.isAuthenticated = isAuthenticated
-					})
-				)
-			},
 		})),
 		{ name: 'store', storage: createJSONStorage(() => localStorage) }
 	)

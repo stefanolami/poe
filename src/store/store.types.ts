@@ -39,8 +39,6 @@ export interface StoreState {
 	sector: Sector | Record<string, never>
 	geographies: SelectableItem[]
 	languages: SelectableItem[]
-	userRole: 'client' | 'admin' | null
-	isAuthenticated: boolean
 	data: {
 		eMobility: MobilityData
 	}
@@ -80,9 +78,6 @@ export interface StoreState {
 	getSubTotalPrice: (category: keyof MobilityData) => number
 	getTotalPrice: () => number
 	getTotalPriceFromDB: (clientSelection: ClientSelectionType) => number
-	//getUser: (confirmed: boolean) => User
-	setUserRole: (role: 'client' | 'admin' | null) => void
-	setIsAuthenticated: (isAuthenticated: boolean) => void
 }
 
 export interface User {
@@ -104,4 +99,11 @@ export interface UserSelection {
 	chargingStations: { name: string; geography: string[] }[]
 	chargingStationsContract: string[]
 	pif: string[]
+}
+
+export interface AuthStoreState {
+	userRole: string | null
+	authInitialized: boolean
+	setUserRole: (role: string | null) => void
+	setAuthInitialized: (initialized: boolean) => void
 }
