@@ -12,6 +12,7 @@ export const signUpUser = async (data: CreateUserType) => {
 			await adminSupabase.auth.admin.createUser({
 				email: data.email,
 				password: data.password,
+				email_confirm: true,
 				app_metadata: { user_role: data.role },
 			})
 		console.log('Auth data:', authData)
@@ -48,5 +49,33 @@ export const signUpUser = async (data: CreateUserType) => {
 			console.error('Unexpected USER SIGNUP ERROR:', error)
 			throw new Error('An unexpected error occurred during user signup')
 		}
+	}
+}
+
+export const getUsers = async () => {
+	try {
+		const supabase = await createClient()
+
+		const { data, error } = await supabase
+			.from('users')
+			.select('*')
+			.order('created_at', { ascending: false })
+
+		if (error) {
+			throw new Error(error.message)
+		}
+
+		const formattedData = data.map((user) => ({
+			id: user.id,
+			name: `${user.first_name} ${user.last_name || ''}`.trim(),
+			role: user.role,
+			email: user.email,
+			created_at: user.created_at,
+		}))
+
+		return formattedData
+	} catch (error) {
+		console.log('ERROR FETCHING USERS', error)
+		throw error
 	}
 }

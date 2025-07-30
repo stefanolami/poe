@@ -32,6 +32,7 @@ import { CreateUserType } from '@/lib/types'
 import { createUserSchema } from '@/lib/zod-schemas'
 import { useAuthStore } from '@/store/auth-store'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { ImSpinner6 } from 'react-icons/im'
@@ -48,6 +49,8 @@ const UsersForm = () => {
 			userRole: state.userRole,
 		}))
 	)
+
+	const router = useRouter()
 
 	const form = useForm<CreateUserType>({
 		resolver: zodResolver(createUserSchema),
@@ -76,6 +79,7 @@ const UsersForm = () => {
 				})
 				setOpen(false)
 				form.reset()
+				router.refresh()
 			}
 		} catch (error) {
 			if (error instanceof Error) {
@@ -199,6 +203,7 @@ const UsersForm = () => {
 												<FormControl>
 													<SelectTrigger className="bg-white text-primary">
 														<SelectValue
+															tabIndex={0}
 															defaultValue={
 																field.value ||
 																''

@@ -1,27 +1,10 @@
-import { getClients } from '@/actions/clients'
 import { columns } from './users-columns'
 import { UsersTable } from './users-table'
 import UsersForm from './users-form'
-
-/* import { TendersForm } from './tender-form'
-import { sendEmail } from '@/actions/email'
-import { notify } from '@/actions/notification' */
+import { getUsers } from '@/actions/users'
 
 const UsersComponent = async () => {
-	/* const submitEmail = async () => {
-		const emailResponse = await sendEmail(
-			['stefanolami90@gmail.com'],
-			'New Tender'
-		)
-		console.log(emailResponse)
-	}
-
-	const filterUsers = async (tenderTitle: string) => {
-		const users = await notify(tenderTitle)
-		console.log(users)
-	} */
-
-	const data = await getClients()
+	const data = await getUsers()
 
 	return (
 		<div className="min-h-[calc(100vh-80px)] bg-primary">

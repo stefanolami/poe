@@ -9,7 +9,7 @@ import { ArrowUpDown } from 'lucide-react'
 export type Client = {
 	id: string
 	name: string
-	org_name: string | null
+	role: string
 	email: string
 	created_at: string
 }
@@ -33,7 +33,7 @@ export const columns: ColumnDef<Client>[] = [
 		},
 	},
 	{
-		accessorKey: 'org_name',
+		accessorKey: 'role',
 		header: ({ column }) => {
 			return (
 				<Button
@@ -43,7 +43,7 @@ export const columns: ColumnDef<Client>[] = [
 					}
 					className="px-0"
 				>
-					Organization
+					Role
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			)
