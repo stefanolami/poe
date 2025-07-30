@@ -1323,7 +1323,6 @@ export const geographiesArrayFrontend = [
 			{ label: 'Luxembourg', value: 'LU' },
 			{ label: 'Malta', value: 'MT' },
 			{ label: 'Netherlands', value: 'NL' },
-			{ label: 'Norway', value: 'NO' },
 			{ label: 'Poland', value: 'PL' },
 			{ label: 'Portugal', value: 'PT' },
 			{ label: 'Romania', value: 'RO' },

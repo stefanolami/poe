@@ -71,7 +71,7 @@ export function AdminSidebar() {
 	return (
 		<Sidebar
 			collapsible="icon"
-			className="bg-primary text-white"
+			className="bg-primary text-white min-w-[210px] max-w-[320px]"
 		>
 			<SidebarContent>
 				<SidebarMenu>
@@ -82,7 +82,7 @@ export function AdminSidebar() {
 						>
 							<Link
 								href="/"
-								className="group-data-[collapsible=icon]:!p-0"
+								className="group-data-[collapsible=icon]:!p-0 w-[200px]"
 							>
 								{/* eslint-disable-next-line */}
 								<img

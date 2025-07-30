@@ -63,7 +63,10 @@ const UsersLoginSection = ({
 					</button>
 				</div>
 			)}
-			{userRole === 'admin' && (
+			{(userRole === 'admin' ||
+				userRole === 'super-admin' ||
+				userRole === 'supervisor' ||
+				userRole === 'consultant') && (
 				<div className="grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-3 mt-6 lg:mt-0 mx-auto">
 					<Link href="/admin/dashboard">
 						<button

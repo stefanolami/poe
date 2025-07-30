@@ -247,9 +247,9 @@ export const getClientsByConsultantId = async () => {
 		} = await supabase.auth.getUser()
 		if (!user) return null
 
-		const userId = user.id
+		//const userId = user.id
 
-		const { data: consultantData, error: consultantError } = await supabase
+		/* const { data: consultantData, error: consultantError } = await supabase
 			.from('consultants')
 			.select('clients')
 			.eq('id', userId)
@@ -263,12 +263,10 @@ export const getClientsByConsultantId = async () => {
 
 		if (!consultantData || !consultantData.clients) {
 			return null
-		}
+		} */
 
-		const { data, error } = await supabase
-			.from('clients')
-			.select('*')
-			.in('id', consultantData.clients)
+		const { data, error } = await supabase.from('clients').select('*')
+		//.in('id', consultantData.clients)
 
 		if (error) {
 			throw new Error(`Failed to fetch clients: ${error.message}`)

@@ -50,14 +50,17 @@ export default function AuthComponent() {
 			await authenticate(email, password)
 			const userRole = await getUserRole()
 
-			storeSetUserRole(
-				userRole === 'client' || userRole === 'admin' ? userRole : null
-			)
+			storeSetUserRole(userRole)
 
 			if (userRole === 'client') {
 				router.push('/')
 			}
-			if (userRole === 'admin') {
+			if (
+				userRole === 'admin' ||
+				userRole === 'super-admin' ||
+				userRole === 'supervisor' ||
+				userRole === 'consultant'
+			) {
 				router.push('/admin/dashboard')
 			}
 		} catch (error) {

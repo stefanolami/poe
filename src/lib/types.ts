@@ -3,6 +3,7 @@ import {
 	createAccountSchema,
 	createGrantSchema,
 	createGrantsTailoredAssessmentSchema,
+	createUserSchema,
 	forgotPasswordSchema,
 	loginSchema,
 	updateAccountSchema,
@@ -17,6 +18,8 @@ export type CreateGrantType = z.infer<typeof createGrantSchema>
 export type CreateGrantsTailoredAssessmentType = z.infer<
 	typeof createGrantsTailoredAssessmentSchema
 >
+
+export type CreateUserType = z.infer<typeof createUserSchema>
 
 export type ForgotPasswordType = z.infer<typeof forgotPasswordSchema>
 

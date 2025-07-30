@@ -15,7 +15,7 @@ export function useSyncAuthState() {
 	)
 
 	useEffect(() => {
-		console.log('🔄 useSyncAuthState: Setting up auth...')
+		console.log('useSyncAuthState: Setting up auth...')
 		setUserRole(null)
 		setAuthInitialized(false)
 
@@ -24,8 +24,14 @@ export function useSyncAuthState() {
 			console.log('Checking session...')
 			try {
 				const role = await getUserRole()
-				console.log('👤 Found role:', role)
-				if (role === 'client' || role === 'admin') {
+				console.log('Found role:', role)
+				if (
+					role === 'client' ||
+					role === 'admin' ||
+					role === 'super-admin' ||
+					role === 'supervisor' ||
+					role === 'consultant'
+				) {
 					setUserRole(role)
 				}
 			} catch (error) {
@@ -39,12 +45,12 @@ export function useSyncAuthState() {
 			const {
 				data: { subscription },
 			} = supabase.auth.onAuthStateChange(async (event, session) => {
-				console.log('🔔 Auth state changed:', event, !!session)
+				console.log('Auth state changed:', event, !!session)
 				if (event === 'SIGNED_OUT' || !session) {
 					setUserRole(null)
 				} else if (event === 'SIGNED_IN' && session) {
 					const role = await getUserRole()
-					console.log('👤 Auth listener found role:', role)
+					console.log('Auth listener found role:', role)
 					setUserRole(role)
 				}
 			})
@@ -58,7 +64,7 @@ export function useSyncAuthState() {
 		})
 
 		return () => {
-			console.log('🧹 Cleaning up auth listener')
+			console.log('Cleaning up auth listener')
 			subscription?.unsubscribe()
 		}
 	}, [setUserRole, setAuthInitialized])

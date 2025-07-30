@@ -45,9 +45,15 @@ export const updateSession = async (request: NextRequest) => {
 			return NextResponse.redirect(new URL('/login', request.url))
 		}
 		const userRole = await getUserRole()
+		const allowedRoles = [
+			'admin',
+			'super-admin',
+			'supervisor',
+			'consultant',
+		]
 		if (
 			request.nextUrl.pathname.startsWith('/admin') &&
-			userRole !== 'admin'
+			!allowedRoles.includes(userRole)
 		) {
 			console.log('User role is not admin')
 			return NextResponse.redirect(new URL('/', request.url))

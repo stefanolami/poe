@@ -7,12 +7,12 @@ const HomeComponent = () => {
 		<div className="mb-24 xl:mb-20 relative">
 			<Hero />
 			<div className="space-y-2 text-left text-primary text-xs md:text-base xl:text-xl m-5 md:my-16 xl:my-24 font-normal w-4/5 md:w-3/4 xl:w-2/3 max-w-screen-lg mx-auto">
-				<p>
+				<p className="text-justify">
 					POE is a real-time alert system connecting you to local,
 					regional and global publicly-supported funding, financial &
 					business opportunities:
 				</p>
-				<ul className="list-disc list-outside pl-5">
+				<ul className="list-disc list-outside pl-5 text-justify">
 					<li>
 						<strong>Public Grants</strong> - non-repayable pockets
 						designed for developing and implementing your innovative
@@ -32,7 +32,7 @@ const HomeComponent = () => {
 						infrastructure.
 					</li>
 				</ul>
-				<p>
+				<p className="text-justify">
 					These opportunities are identified by our global teams of
 					experts who have direct access to the decision-makers, have
 					local knowledge, speak the local language and have the
