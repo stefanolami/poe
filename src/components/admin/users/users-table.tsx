@@ -86,7 +86,7 @@ export function UsersTable<TData, TValue>({
 								onClick={() =>
 									router.push(
 										//@ts-expect-error id not found by TS
-										`/admin/clients/${row.original.id}`
+										`/admin/users/${row.original.id}`
 									)
 								}
 								data-state={row.getIsSelected() && 'selected'}

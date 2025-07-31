@@ -79,3 +79,47 @@ export const getUsers = async () => {
 		throw error
 	}
 }
+
+export const getUserById = async (id: string) => {
+	try {
+		const supabase = await createClient()
+
+		const { data, error } = await supabase
+			.from('users')
+			.select('*')
+			.eq('id', id)
+			.single()
+
+		if (error) {
+			throw new Error(error.message)
+		}
+
+		if (data.clients) {
+			console.log('User clients:', data.clients)
+
+			const { data: clientData, error: clientError } = await supabase
+				.from('clients')
+				.select('*')
+				.in('id', data.clients)
+
+			if (clientError) {
+				throw new Error(clientError.message)
+			}
+			return {
+				...data,
+				clients: clientData.map((client) => ({
+					id: client.id,
+					firstName: client.name,
+					lastName: client.family_name,
+					org: client.org_name,
+					email: client.email,
+				})),
+			}
+		}
+
+		return data
+	} catch (error) {
+		console.log('ERROR FETCHING USER', error)
+		throw error
+	}
+}
