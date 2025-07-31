@@ -22,6 +22,7 @@ import Link from 'next/link'
 import { useAuthStore } from '@/store/auth-store'
 import { useShallow } from 'zustand/shallow'
 import { Skeleton } from '../ui/skeleton'
+import { usePathname } from 'next/navigation'
 
 const ITEMS = [
 	{
@@ -79,22 +80,24 @@ export function AdminSidebar() {
 		}))
 	)
 
+	const pathname = usePathname()
+
 	if (!authInitialized) {
 		return (
 			<Sidebar
 				collapsible="icon"
-				className="bg-primary text-white min-w-[210px] max-w-[320px]"
+				className="bg-primary text-white"
 			>
-				<SidebarContent>
+				<SidebarContent className="overflow-hidden">
 					<SidebarMenu>
 						<SidebarMenuItem className="mt-4 mb-6">
 							<SidebarMenuButton
 								asChild
-								className="[&>img]:size-8 group-data-[collapsible=icon]:[&>img]:size-6 group-data-[collapsible=icon]:!pr-0"
+								className="[&>img]:size-8 group-data-[collapsible=icon]:[&>img]:size-6 group-data-[collapsible=icon]:!pr-0 w-[200px]"
 							>
 								<Link
 									href="/"
-									className="group-data-[collapsible=icon]:!p-0 w-[200px]"
+									className="group-data-[collapsible=icon]:!p-0"
 								>
 									{/* eslint-disable-next-line */}
 									<img
@@ -138,18 +141,18 @@ export function AdminSidebar() {
 	return (
 		<Sidebar
 			collapsible="icon"
-			className="bg-primary text-white min-w-[210px] max-w-[320px]"
+			className="bg-primary text-white overflow-hidden"
 		>
-			<SidebarContent>
+			<SidebarContent className="overflow-hidden">
 				<SidebarMenu>
 					<SidebarMenuItem className="mt-4 mb-6">
 						<SidebarMenuButton
 							asChild
-							className="[&>img]:size-8 group-data-[collapsible=icon]:[&>img]:size-6 group-data-[collapsible=icon]:!pr-0"
+							className="[&>img]:size-8 group-data-[collapsible=icon]:[&>img]:size-6 group-data-[collapsible=icon]:!pr-0 w-[200px]"
 						>
 							<Link
 								href="/"
-								className="group-data-[collapsible=icon]:!p-0 w-[200px]"
+								className="group-data-[collapsible=icon]:!p-0"
 							>
 								{/* eslint-disable-next-line */}
 								<img
@@ -170,11 +173,11 @@ export function AdminSidebar() {
 					{filteredItems.map((item) => (
 						<SidebarMenuItem
 							key={item.title}
-							className="hover:translate-x-1 transition-all duration-200"
+							className={`${pathname.startsWith(item.url) ? 'bg-gradient-to-r from-secondary to-primary' : ''}`}
 						>
 							<SidebarMenuButton
 								asChild
-								className="[&>svg]:size-6"
+								className="[&>svg]:size-6 hover:translate-x-1 transition-all duration-200"
 							>
 								<Link href={item.url}>
 									<item.icon />
