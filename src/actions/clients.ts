@@ -332,7 +332,7 @@ export const getClients = async () => {
 		const formattedData = data.map((client) => ({
 			id: client.id,
 			name: `${client.name} ${client.family_name || ''}`.trim(),
-			org_name: client.org_name || '--',
+			org: client.org_name || '--',
 			email: client.email,
 			created_at: client.created_at,
 		}))

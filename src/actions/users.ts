@@ -1,6 +1,6 @@
 'use server'
 
-import { CreateUserType } from '@/lib/types'
+import { CreateUserType, UpdateUserType } from '@/lib/types'
 import { createAdminClient, createClient } from '@/supabase/server'
 
 export const signUpUser = async (data: CreateUserType) => {
@@ -52,6 +52,41 @@ export const signUpUser = async (data: CreateUserType) => {
 	}
 }
 
+export const updateUser = async (data: UpdateUserType, id: string) => {
+	try {
+		const supabase = await createClient()
+
+		const { data: userData, error } = await supabase
+			.from('users')
+			.update({
+				first_name: data.firstName,
+				last_name: data.lastName,
+				email: data.email,
+				role: data.role,
+				clients: data.clients,
+			})
+			.eq('id', id)
+			.select()
+			.single()
+
+		if (error) {
+			throw new Error(`User update failed: ${error.message}`)
+		}
+
+		console.log('User account updated successfully')
+
+		return userData
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error('USER UPDATE ERROR:', error.message)
+			throw error
+		} else {
+			console.error('Unexpected USER UPDATE ERROR:', error)
+			throw new Error('An unexpected error occurred during user update')
+		}
+	}
+}
+
 export const getUsers = async () => {
 	try {
 		const supabase = await createClient()
@@ -95,8 +130,6 @@ export const getUserById = async (id: string) => {
 		}
 
 		if (data.clients) {
-			console.log('User clients:', data.clients)
-
 			const { data: clientData, error: clientError } = await supabase
 				.from('clients')
 				.select('*')
@@ -106,18 +139,21 @@ export const getUserById = async (id: string) => {
 				throw new Error(clientError.message)
 			}
 			return {
-				...data,
+				user: data,
 				clients: clientData.map((client) => ({
 					id: client.id,
-					firstName: client.name,
-					lastName: client.family_name,
+					name: `${client.name} ${client.family_name || ''}`.trim(),
 					org: client.org_name,
 					email: client.email,
+					created_at: client.created_at,
 				})),
 			}
 		}
 
-		return data
+		return {
+			user: data,
+			clients: null,
+		}
 	} catch (error) {
 		console.log('ERROR FETCHING USER', error)
 		throw error

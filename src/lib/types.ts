@@ -8,6 +8,7 @@ import {
 	loginSchema,
 	updateAccountSchema,
 	updatePasswordSchema,
+	updateUserSchema,
 } from './zod-schemas'
 import { Json } from '@/supabase/types'
 
@@ -28,6 +29,8 @@ export type LoginType = z.infer<typeof loginSchema>
 export type UpdateAccountType = z.infer<typeof updateAccountSchema>
 
 export type UpdatePasswordType = z.infer<typeof updatePasswordSchema>
+
+export type UpdateUserType = z.infer<typeof updateUserSchema>
 
 export type Activity = {
 	entity_name: string
@@ -440,14 +443,14 @@ export type UpdateGrantType = {
 
 export type UserClientType = {
 	id: string
-	firstName: string
-	lastName: string
+	name: string
 	email: string
-	org?: string | null
+	org: string | null
+	created_at: string
 }
 
 export type UserType = {
-	clients: UserClientType[] | string[] | null
+	clients: string[] | null
 	created_at: string
 	email: string
 	first_name: string

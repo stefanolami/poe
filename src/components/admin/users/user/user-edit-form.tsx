@@ -1,6 +1,6 @@
 'use client'
 
-import { signUpUser } from '@/actions/users'
+import { updateUser } from '@/actions/users'
 import { Button } from '@/components/ui/button'
 import {
 	Dialog,
@@ -20,6 +20,7 @@ import {
 	FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { MultiSelect } from '@/components/ui/multi-select'
 import {
 	Select,
 	SelectContent,
@@ -28,20 +29,23 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/hooks/use-toast'
-import { CreateUserType } from '@/lib/types'
-import { createUserSchema } from '@/lib/zod-schemas'
+import { UpdateUserType, UserClientType, UserType } from '@/lib/types'
+import { updateUserSchema } from '@/lib/zod-schemas'
 import { useAuthStore } from '@/store/auth-store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { ImSpinner6 } from 'react-icons/im'
-import { LuEye, LuEyeClosed } from 'react-icons/lu'
 import { useShallow } from 'zustand/shallow'
 
-const UsersForm = () => {
-	const [isView, setIsView] = useState(false)
-	const [isViewConfirm, setIsViewConfirm] = useState(false)
+const UserEditForm = ({
+	user,
+	clientsData,
+}: {
+	user: UserType
+	clientsData: UserClientType[] | null
+}) => {
 	const [open, setOpen] = useState(false)
 
 	const { userRole } = useAuthStore(
@@ -52,40 +56,55 @@ const UsersForm = () => {
 
 	const router = useRouter()
 
-	const form = useForm<CreateUserType>({
-		resolver: zodResolver(createUserSchema),
+	const form = useForm<UpdateUserType>({
+		resolver: zodResolver(updateUserSchema),
 		defaultValues: {
-			firstName: '',
-			lastName: '',
-			email: '',
-			password: '',
-			confirmPassword: '',
-			role: '',
+			firstName: user.first_name,
+			lastName: user.last_name,
+			email: user.email,
+			role: user.role,
+			clients: user.clients,
 		},
 	})
 
 	const isSubmitting = form.formState.isSubmitting
 
-	const submitHandler: SubmitHandler<CreateUserType> = async (
-		data: CreateUserType
+	const clientsArray = clientsData
+		? clientsData.map((client) => {
+				return {
+					value: client.id,
+					label: `${client.name} (${client.org})`,
+				}
+			})
+		: []
+
+	const submitHandler: SubmitHandler<UpdateUserType> = async (
+		data: UpdateUserType
 	) => {
+		console.log('Form data:', data)
 		try {
-			const response = await signUpUser(data)
+			const response = await updateUser(data, user.id)
 			if (response) {
+				form.reset({
+					firstName: response.first_name,
+					lastName: response.last_name,
+					email: response.email,
+					role: response.role,
+					clients: response.clients,
+				})
 				toast({
 					title: 'Success!',
-					description: 'User created successfully',
+					description: 'User updated successfully',
 					variant: 'default',
 				})
 				setOpen(false)
-				form.reset()
 				router.refresh()
 			}
 		} catch (error) {
 			if (error instanceof Error) {
 				toast({
 					title: 'Error',
-					description: 'An error occurred while creating the user',
+					description: 'An error occurred while updating the user',
 					variant: 'destructive',
 				})
 				console.error(error.message)
@@ -110,7 +129,7 @@ const UsersForm = () => {
 					variant="default"
 					className="bg-primary-light hover:bg-primary-light/90 text-white font-jose text-base w-40 py-2 shadow-md hover:scale-[1.02] hover:shadow-xl"
 				>
-					Create New
+					Edit
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="max-w-[600px] bg-primary text-white font-jose border-none">
@@ -121,7 +140,7 @@ const UsersForm = () => {
 						})}
 					>
 						<DialogHeader className="mb-8">
-							<DialogTitle>Create New User</DialogTitle>
+							<DialogTitle>Edit User</DialogTitle>
 						</DialogHeader>
 						<div className="grid grid-cols-2 gap-4">
 							<FormField
@@ -237,89 +256,38 @@ const UsersForm = () => {
 									</FormItem>
 								)}
 							/>
-							<FormField
-								control={form.control}
-								name="password"
-								render={({ field }) => (
-									<FormItem className="relative">
-										<FormLabel className="text-sm">
-											Password
-										</FormLabel>
-										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												type={
-													isView ? 'text' : 'password'
-												}
-												{...field}
-												className="bg-white text-primary text-sm"
-												autoComplete="new-password"
-											/>
-										</FormControl>
-										{isView ? (
-											<LuEye
-												className="absolute right-2 top-[30px] lg:top-[34px] z-10 cursor-pointer text-gray-500"
-												onClick={() => {
-													setIsView(!isView)
-												}}
-											/>
-										) : (
-											<LuEyeClosed
-												className="absolute right-2 top-[30px] lg:top-[34px] z-10 cursor-pointer text-gray-500"
-												onClick={() =>
-													setIsView(!isView)
-												}
-											/>
-										)}
-										<FormMessage className="text-red-500 text-sm" />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="confirmPassword"
-								render={({ field }) => (
-									<FormItem className="relative">
-										<FormLabel className="text-sm">
-											Confirm Password
-										</FormLabel>
-										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												type={
-													isViewConfirm
-														? 'text'
-														: 'password'
-												}
-												{...field}
-												className="bg-white text-primary text-sm"
-											/>
-										</FormControl>
-										{isViewConfirm ? (
-											<LuEye
-												className="absolute right-2 top-[30px] lg:top-[34px] z-10 cursor-pointer text-gray-500"
-												onClick={() => {
-													setIsViewConfirm(
-														!isViewConfirm
-													)
-												}}
-											/>
-										) : (
-											<LuEyeClosed
-												className="absolute right-2 top-[30px] lg:top-[34px] z-10 cursor-pointer text-gray-500"
-												onClick={() =>
-													setIsViewConfirm(
-														!isViewConfirm
-													)
-												}
-											/>
-										)}
-										<FormMessage className="text-red-500 text-sm" />
-									</FormItem>
-								)}
-							/>
+							{form.watch('role') === 'supervisor' && (
+								<FormField
+									control={form.control}
+									name="clients"
+									render={({ field }) => (
+										<FormItem className="col-span-2">
+											<FormLabel className="text-sm">
+												Clients
+											</FormLabel>
+											<FormControl>
+												<MultiSelect
+													className="bg-white text-primary hover:bg-white"
+													onValueChange={
+														field.onChange
+													}
+													defaultValue={
+														field.value || []
+													}
+													disabled={isSubmitting}
+													variant="default"
+													selectAll={false}
+													searchable={true}
+													maxCount={20}
+													placeholder="Select clients"
+													options={clientsArray}
+												/>
+											</FormControl>
+											<FormMessage className="text-red-500 text-sm" />
+										</FormItem>
+									)}
+								/>
+							)}
 						</div>
 						<DialogFooter>
 							<div className="w-2/5 grid grid-cols-2 gap-2 mt-4">
@@ -353,4 +321,4 @@ const UsersForm = () => {
 	)
 }
 
-export default UsersForm
+export default UserEditForm

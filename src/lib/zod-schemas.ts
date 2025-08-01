@@ -178,49 +178,10 @@ export const createUserSchema = z
 		path: ['confirmPassword'],
 	})
 
-/* export const createAccountTempSchema = z.object({
+export const updateUserSchema = z.object({
+	firstName: z.string().min(2, 'First Name is required'),
+	lastName: z.string().min(2, 'Last Name is required'),
 	email: z.string().email('Invalid email address'),
-	sector: z.string().optional(),
-	vehicles_type: z
-		.array(
-			z.object({
-				value: z.string(),
-				geographies: z.array(z.string()),
-			})
-		)
-		.optional(),
-	vehicles_contract: z.array(z.string()).optional(),
-	charging_stations_type: z
-		.array(
-			z.object({
-				value: z.string(),
-				geographies: z.array(z.string()),
-			})
-		)
-		.optional(),
-	charging_stations_contract: z.array(z.string()).optional(),
-	pif: z
-		.array(
-			z.object({
-				value: z.string(),
-				geographies: z.array(z.string()),
-			})
-		)
-		.optional(),
-	deployment: z
-		.array(
-			z.object({
-				value: z.string(),
-				geographies: z.array(z.string()),
-			})
-		)
-		.optional(),
-	project: z
-		.array(
-			z.object({
-				value: z.string(),
-				geographies: z.array(z.string()),
-			})
-		)
-		.optional(),
-}) */
+	role: z.string(),
+	clients: z.array(z.string()).nullable(),
+})
