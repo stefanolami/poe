@@ -39,6 +39,9 @@ import DocViewerComponent from '../../doc-viewer'
 import ButtonWithAlert from '@/components/button-alert'
 import LoadingOverlay from '@/components/loading-overlay'
 import EmailPreviewButton from '@/components/emails/email-preview-button'
+import { useAuthStore } from '@/store/auth-store'
+import { useShallow } from 'zustand/shallow'
+import { canSendAlert } from '@/lib/permissions'
 
 const GrantSingle = ({
 	grant,
@@ -48,6 +51,14 @@ const GrantSingle = ({
 	clients?: { id: string; name: string; email: string; family_name: string }[]
 }) => {
 	const [isLoading, setIsLoading] = useState(false)
+
+	const { userRole } = useAuthStore(
+		useShallow((state) => ({
+			userRole: state.userRole,
+		}))
+	)
+
+	const showSend = canSendAlert(userRole)
 
 	const {
 		geography,
@@ -664,19 +675,21 @@ const GrantSingle = ({
 					</Form>
 				</div>
 				<div className="grid grid-cols-4 col-span-2 gap-4">
-					<ButtonWithAlert
-						buttonText="Send"
-						dialogText="Are you sure you want to send this Grant alert?"
-						confirmText="Send"
-						action={handleSend}
-						disabled={isLoading || isSubmitting}
-						buttonClass="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
-					>
-						<EmailPreviewButton
-							emailData={formattedGrant}
+					{showSend && (
+						<ButtonWithAlert
+							buttonText="Send"
+							dialogText="Are you sure you want to send this Grant alert?"
+							confirmText="Send"
+							action={handleSend}
 							disabled={isLoading || isSubmitting}
-						/>
-					</ButtonWithAlert>
+							buttonClass="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+						>
+							<EmailPreviewButton
+								emailData={formattedGrant}
+								disabled={isLoading || isSubmitting}
+							/>
+						</ButtonWithAlert>
+					)}
 					<Button
 						disabled={isLoading || isSubmitting}
 						variant="default"

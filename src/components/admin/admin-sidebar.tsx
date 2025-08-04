@@ -10,10 +10,12 @@ import {
 	Landmark,
 	Gavel,
 	Banknote,
+	LogOut,
 } from 'lucide-react'
 import {
 	Sidebar,
 	SidebarContent,
+	SidebarFooter,
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
@@ -22,7 +24,8 @@ import Link from 'next/link'
 import { useAuthStore } from '@/store/auth-store'
 import { useShallow } from 'zustand/shallow'
 import { Skeleton } from '../ui/skeleton'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { signOut } from '@/actions/auth'
 
 const ITEMS = [
 	{
@@ -73,14 +76,23 @@ const ITEMS = [
 ]
 
 export function AdminSidebar() {
-	const { userRole, authInitialized } = useAuthStore(
+	const { userRole, authInitialized, setUserRole } = useAuthStore(
 		useShallow((state) => ({
 			userRole: state.userRole,
 			authInitialized: state.authInitialized,
+			setUserRole: state.setUserRole,
 		}))
 	)
 
 	const pathname = usePathname()
+
+	const router = useRouter()
+
+	const handleLogout = async () => {
+		await signOut()
+		setUserRole(null)
+		router.push('/')
+	}
 
 	if (!authInitialized) {
 		return (
@@ -141,11 +153,11 @@ export function AdminSidebar() {
 	return (
 		<Sidebar
 			collapsible="icon"
-			className="bg-primary text-white overflow-hidden"
+			className="bg-primary text-white overflow-hidden font-jose text-base"
 		>
 			<SidebarContent className="overflow-hidden">
 				<SidebarMenu>
-					<SidebarMenuItem className="mt-4 mb-6">
+					<SidebarMenuItem className="mt-4 mb-10">
 						<SidebarMenuButton
 							asChild
 							className="[&>img]:size-8 group-data-[collapsible=icon]:[&>img]:size-6 group-data-[collapsible=icon]:!pr-0 w-[200px]"
@@ -181,13 +193,26 @@ export function AdminSidebar() {
 							>
 								<Link href={item.url}>
 									<item.icon />
-									<span>{item.title}</span>
+									<span className="text-base">
+										{item.title}
+									</span>
 								</Link>
 							</SidebarMenuButton>
 						</SidebarMenuItem>
 					))}
 				</SidebarMenu>
 			</SidebarContent>
+			<SidebarFooter>
+				<button
+					onClick={handleLogout}
+					className="[&>svg]:size-6 [&>svg]:shrink-0 hover:translate-x-1 transition-all duration-200 flex items-center gap-2 pb-2"
+				>
+					<LogOut />
+					<span className="group-data-[collapsible=icon]:hidden text-base">
+						Logout
+					</span>
+				</button>
+			</SidebarFooter>
 		</Sidebar>
 	)
 }

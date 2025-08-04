@@ -16,3 +16,11 @@ export const canEditUser = (
 
 	return false
 }
+
+export const canSendAlert = (currentUserRole: string | null): boolean => {
+	if (!currentUserRole) {
+		return false
+	}
+
+	return ['super-admin', 'admin', 'supervisor'].includes(currentUserRole)
+}
