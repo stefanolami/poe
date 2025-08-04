@@ -81,7 +81,6 @@ const UserEditForm = ({
 	const submitHandler: SubmitHandler<UpdateUserType> = async (
 		data: UpdateUserType
 	) => {
-		console.log('Form data:', data)
 		try {
 			const response = await updateUser(data, user.id)
 			if (response) {
