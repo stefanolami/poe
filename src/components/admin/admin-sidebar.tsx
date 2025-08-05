@@ -102,7 +102,7 @@ export function AdminSidebar() {
 			>
 				<SidebarContent className="overflow-hidden">
 					<SidebarMenu>
-						<SidebarMenuItem className="mt-4 mb-6">
+						<SidebarMenuItem className="mt-4 mb-10">
 							<SidebarMenuButton
 								asChild
 								className="[&>img]:size-8 group-data-[collapsible=icon]:[&>img]:size-6 group-data-[collapsible=icon]:!pr-0 w-[200px]"
@@ -127,18 +127,24 @@ export function AdminSidebar() {
 								</Link>
 							</SidebarMenuButton>
 						</SidebarMenuItem>
-						<div className="flex flex-col space-y-2 px-2">
-							{[...Array(6)].map((_, i) => (
+						<div className="flex flex-col space-y-3 mr-6">
+							{[...Array(7)].map((_, i) => (
 								<SidebarMenuItem key={i}>
-									<SidebarMenuButton className="flex items-center space-x-3">
+									<SidebarMenuButton className="flex justify-start items-center">
 										<Skeleton className="h-6 w-6 rounded-full bg-white/20" />
-										<Skeleton className="h-4 flex-1 rounded-full bg-white/20" />
+										<Skeleton className="h-5 flex-1 rounded-full bg-white/20" />
 									</SidebarMenuButton>
 								</SidebarMenuItem>
 							))}
 						</div>
 					</SidebarMenu>
 				</SidebarContent>
+				<SidebarFooter>
+					<button className="flex justify-start items-center space-x-2 mr-6 mb-2">
+						<Skeleton className="h-6 w-6 rounded-full bg-white/20" />
+						<Skeleton className="h-5 flex-1 rounded-full bg-white/20" />
+					</button>
+				</SidebarFooter>
 			</Sidebar>
 		)
 	}
@@ -193,7 +199,7 @@ export function AdminSidebar() {
 							>
 								<Link href={item.url}>
 									<item.icon />
-									<span className="text-base">
+									<span className="text-base mt-1">
 										{item.title}
 									</span>
 								</Link>
@@ -208,7 +214,7 @@ export function AdminSidebar() {
 					className="[&>svg]:size-6 [&>svg]:shrink-0 hover:translate-x-1 transition-all duration-200 flex items-center gap-2 pb-2"
 				>
 					<LogOut />
-					<span className="group-data-[collapsible=icon]:hidden text-base">
+					<span className="group-data-[collapsible=icon]:hidden text-base mt-1">
 						Logout
 					</span>
 				</button>

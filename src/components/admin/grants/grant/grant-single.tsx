@@ -42,6 +42,7 @@ import EmailPreviewButton from '@/components/emails/email-preview-button'
 import { useAuthStore } from '@/store/auth-store'
 import { useShallow } from 'zustand/shallow'
 import { canSendAlert } from '@/lib/permissions'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const GrantSingle = ({
 	grant,
@@ -52,9 +53,10 @@ const GrantSingle = ({
 }) => {
 	const [isLoading, setIsLoading] = useState(false)
 
-	const { userRole } = useAuthStore(
+	const { userRole, authInitialized } = useAuthStore(
 		useShallow((state) => ({
 			userRole: state.userRole,
+			authInitialized: state.authInitialized,
 		}))
 	)
 
@@ -161,6 +163,7 @@ const GrantSingle = ({
 
 			return response
 		} catch (error) {
+			setIsLoading(false)
 			if (error instanceof Error) {
 				toast({
 					title: 'Error',
@@ -674,36 +677,44 @@ const GrantSingle = ({
 						</form>
 					</Form>
 				</div>
-				<div className="grid grid-cols-4 col-span-2 gap-4">
-					{showSend && (
-						<ButtonWithAlert
-							buttonText="Send"
-							dialogText="Are you sure you want to send this Grant alert?"
-							confirmText="Send"
-							action={handleSend}
-							disabled={isLoading || isSubmitting}
-							buttonClass="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
-						>
-							<EmailPreviewButton
-								emailData={formattedGrant}
+				{authInitialized ? (
+					<div className="grid grid-cols-4 col-span-2 gap-4">
+						{showSend && (
+							<ButtonWithAlert
+								buttonText="Send"
+								dialogText="Are you sure you want to send this Grant alert?"
+								confirmText="Send"
+								action={handleSend}
 								disabled={isLoading || isSubmitting}
-							/>
-						</ButtonWithAlert>
-					)}
-					<Button
-						disabled={isLoading || isSubmitting}
-						variant="default"
-						type="button"
-						className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
-						onClick={handleFilterClients}
-					>
-						Filter Clients
-					</Button>
-					<EmailPreviewButton
-						emailData={formattedGrant}
-						disabled={isLoading || isSubmitting}
-					/>
-				</div>
+								buttonClass="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+							>
+								<EmailPreviewButton
+									emailData={formattedGrant}
+									disabled={isLoading || isSubmitting}
+								/>
+							</ButtonWithAlert>
+						)}
+						<Button
+							disabled={isLoading || isSubmitting}
+							variant="default"
+							type="button"
+							className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+							onClick={handleFilterClients}
+						>
+							Filter Clients
+						</Button>
+						<EmailPreviewButton
+							emailData={formattedGrant}
+							disabled={isLoading || isSubmitting}
+						/>
+					</div>
+				) : (
+					<div className="grid grid-cols-4 col-span-2 gap-4">
+						<Skeleton className="h-9" />
+						<Skeleton className="h-9" />
+						<Skeleton className="h-9" />
+					</div>
+				)}
 			</div>
 			{isLoading && <LoadingOverlay />}
 		</div>

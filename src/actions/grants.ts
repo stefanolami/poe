@@ -343,6 +343,7 @@ export const sendGrantAlert = async (grantId: string) => {
 		if (rpcError) {
 			throw new Error(rpcError.message)
 		}
+		console.log('RPC CALL DONE')
 
 		const { data: grantData, error } = await supabase
 			.from('grants')
@@ -353,16 +354,19 @@ export const sendGrantAlert = async (grantId: string) => {
 		if (error) {
 			throw new Error(error.message)
 		}
+		console.log('GRANT CALL DONE')
 
 		const matchedClients = grantData?.matched_clients
 
 		if (!matchedClients || matchedClients.length === 0)
-			return new Error('No matched clients found')
+			throw new Error('No matched clients found')
 
 		const { data: clientsData, error: clientsError } = await supabase
 			.from('clients')
 			.select('*')
 			.in('id', matchedClients)
+
+		console.log('CLIENTS CALL DONE')
 
 		if (clientsError || !clientsData || clientsData.length === 0) {
 			throw new Error(clientsError?.message || 'No clients found')
@@ -393,6 +397,7 @@ export const sendGrantAlert = async (grantId: string) => {
 				})
 			)
 		}
+		console.log('ATTACHMENTS DONE')
 
 		const clientsList = clientsData.map((client) => {
 			return {
@@ -424,6 +429,7 @@ export const sendGrantAlert = async (grantId: string) => {
 		const tailoredAssessments = tailoredRecipients.map(
 			(client) => assessments.find((a) => a.client === client.email) || {}
 		)
+		console.log('RECIPIENTS SPLIT DONE')
 
 		function sleep(ms: number) {
 			return new Promise((resolve) => setTimeout(resolve, ms))
@@ -501,6 +507,7 @@ export const sendGrantAlert = async (grantId: string) => {
 				}
 			}
 		}
+		console.log('GRANT SENT')
 
 		const { error: updateError } = await supabase
 			.from('grants')

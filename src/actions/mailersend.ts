@@ -11,8 +11,6 @@ export const getEmailActivity = async () => {
 
 	const dateFrom = Math.floor((Date.now() - 14 * 24 * 60 * 60 * 1000) / 1000)
 
-	console.log('datTo', new Date(dateTo * 1000))
-
 	const queryParams = {
 		limit: 100, // Min: 10, Max: 100, Default: 25
 		page: 1,
