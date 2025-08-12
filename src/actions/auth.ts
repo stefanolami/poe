@@ -71,12 +71,22 @@ export const updatePassword = async (password: string, code: string) => {
 
 		const { error: sessionError } =
 			await supabase.auth.exchangeCodeForSession(code)
-		if (sessionError) throw sessionError
+
+		if (sessionError) {
+			console.error('Session exchange error:', sessionError)
+			throw new Error(
+				`Failed to verify reset code: ${sessionError.message}`
+			)
+		}
 
 		const { data, error } = await supabase.auth.updateUser({
 			password,
 		})
-		if (error) throw error
+
+		if (error) {
+			console.error('Password update error:', error)
+			throw new Error(`Failed to update password: ${error.message}`)
+		}
 		return data
 	} catch (error) {
 		console.log('UPDATE PASSWORD ERROR', error)
