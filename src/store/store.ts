@@ -180,9 +180,7 @@ export const useStore = create<StoreState>()(
 					)
 					total += parseInt(
 						//@ts-expect-error I hate you typescript
-						selectionData[get().sector?.value][
-							category
-						].fields.find(
+						selectionData.eMobility[category].fields.find(
 							(x: SelectableItem) => x.value === item.value
 						).price[country.value as keyof Price]
 					)

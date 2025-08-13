@@ -8,7 +8,6 @@ import {
 } from '@/lib/utils'
 import { useStore } from '@/store/store'
 import { MobilityData } from '@/store/store.types'
-import React, { useEffect, useState } from 'react'
 import { useShallow } from 'zustand/shallow'
 import {
 	Accordion,
@@ -16,36 +15,18 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from '@/components/ui/accordion'
-import Loading from '@/components/loading'
 
 const AccountSummaryFromDB = ({
 	clientSelection,
 }: {
 	clientSelection: ClientSelectionType
 }) => {
-	const [mounted, setMounted] = useState(false)
-
-	// Ensure component is mounted (hydration complete)
-	useEffect(() => {
-		setMounted(true)
-	}, [])
 	const { getTotalPriceFromDB, getSinglePrice } = useStore(
 		useShallow((state) => ({
 			getTotalPriceFromDB: state.getTotalPriceFromDB,
 			getSinglePrice: state.getSinglePriceFromDB,
 		}))
 	)
-
-	if (!mounted) {
-		return (
-			<div className="">
-				<h2 className="text-lg md:text-xl lg:text-3xl mb-4 lg:mb-10">
-					Your Plan
-				</h2>
-				<Loading />
-			</div>
-		)
-	}
 
 	// Debug logs to identify the issue
 	console.log('selectionData:', selectionData)
