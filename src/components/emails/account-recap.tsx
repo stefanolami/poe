@@ -92,7 +92,7 @@ const AccountRecapEmail = ({
 							link below to confirm it and create your account.
 						</Text>
 						<Link
-							href={`http://localhost:3000/confirm-account/${id}`}
+							href={`https://www.poeontap.com/confirm-account/${id}`}
 						>
 							Confirm Account
 						</Link>

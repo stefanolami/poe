@@ -28,11 +28,6 @@ const AccountSummaryFromDB = ({
 		}))
 	)
 
-	// Debug logs to identify the issue
-	console.log('selectionData:', selectionData)
-	console.log('selectionData.eMobility:', selectionData?.eMobility)
-	console.log('clientSelection:', clientSelection)
-
 	return (
 		<div className="">
 			<h2 className="text-lg md:text-xl lg:text-3xl mb-4 lg:mb-10">

@@ -132,7 +132,7 @@ const SendOfferForm = () => {
 			if (response) {
 				toast({
 					title: 'Thank You!',
-					description: 'Account created successfully',
+					description: 'Email sent successfully',
 					variant: 'default',
 				})
 				setTimeout(() => {
@@ -147,7 +147,7 @@ const SendOfferForm = () => {
 			if (error instanceof Error) {
 				toast({
 					title: 'Error',
-					description: 'An error occurred while creating the account',
+					description: 'An error occurred while sending the email',
 					variant: 'destructive',
 				})
 				console.error(error.message)
