@@ -105,7 +105,7 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 					value={timeRange}
 					onValueChange={setTimeRange}
 					variant="outline"
-					className="w-fit ml-auto"
+					className="w-full mt-4 md:mt-0 md:w-fit ml-auto"
 				>
 					<ToggleGroupItem value="3d">Last 3 days</ToggleGroupItem>
 					<ToggleGroupItem value="2d">Last 2 days</ToggleGroupItem>

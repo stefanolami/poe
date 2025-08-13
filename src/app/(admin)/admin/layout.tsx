@@ -13,7 +13,7 @@ export default function AdminLayout({
 		<SidebarProvider>
 			<AdminSidebar />
 			<Suspense fallback={<LoadingAdmin />}>
-				<main className="w-full bg-primary">
+				<main className="w-full bg-primary min-h-screen">
 					<SidebarTrigger className="text-white" />
 					<div className="w-full pt-8 px-8">{children}</div>
 				</main>

@@ -75,8 +75,8 @@ export default function UpdatePassword() {
 	}
 
 	return (
-		<div className="flex items-center justify-center text-primary">
-			<div className="mx-auto grid w-[350px] gap-6">
+		<div className="flex items-center justify-center text-primary w-[90%] sm:w-[350px]">
+			<div className="mx-auto grid w-full gap-6">
 				{/* <h2 className="text-lg md:text-xl lg:text-2xl mb-4 lg:mb-6">
 					Forgot Password
 				</h2> */}

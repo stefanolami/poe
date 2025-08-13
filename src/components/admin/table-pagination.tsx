@@ -25,13 +25,13 @@ export function TablePagination<TData>({
 	pageCountArray,
 }: DataTablePaginationProps<TData>) {
 	return (
-		<div className="flex items-center justify-end px-2 mb-2">
+		<div className="flex items-center justify-end px-2 my-2">
 			{/* <div className="flex-1 text-sm text-muted-foreground">
 				{table.getFilteredSelectedRowModel().rows.length} of{' '}
 				{table.getFilteredRowModel().rows.length} row(s) selected.
 			</div> */}
-			<div className="flex items-center space-x-6 lg:space-x-8">
-				<div className="flex items-center space-x-2 text-white">
+			<div className="flex items-center space-x-6 lg:space-x-8 space-y-2 flex-wrap">
+				<div className="hidden md:flex items-center space-x-2 text-white">
 					<p className="text-sm font-medium">Select Page</p>
 					<Select
 						value={`${table.getState().pagination.pageIndex}`}

@@ -74,8 +74,8 @@ export default function AuthComponent() {
 	}
 
 	return (
-		<div className="flex items-center justify-center text-primary">
-			<div className="mx-auto grid w-[350px] gap-6">
+		<div className="flex items-center justify-center text-primary w-[90%] sm:w-[350px]">
+			<div className="mx-auto grid w-full gap-6">
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(onSubmit)}

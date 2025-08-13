@@ -19,6 +19,7 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
+	useSidebar,
 } from '@/components/ui/sidebar'
 import Link from 'next/link'
 import { useAuthStore } from '@/store/auth-store'
@@ -85,8 +86,13 @@ export function AdminSidebar() {
 	)
 
 	const pathname = usePathname()
+	const { setOpenMobile } = useSidebar()
 
 	const router = useRouter()
+
+	const handleMenuItemClick = () => {
+		setOpenMobile(false)
+	}
 
 	const handleLogout = async () => {
 		await signOut()
@@ -197,7 +203,10 @@ export function AdminSidebar() {
 								asChild
 								className="[&>svg]:size-6 hover:translate-x-1 transition-all duration-200"
 							>
-								<Link href={item.url}>
+								<Link
+									href={item.url}
+									onClick={handleMenuItemClick}
+								>
 									<item.icon />
 									<span className="text-base mt-1">
 										{item.title}
