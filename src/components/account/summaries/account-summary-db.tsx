@@ -15,7 +15,7 @@ import {
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
-} from '../../ui/accordion'
+} from '@/components/ui/accordion'
 
 const AccountSummaryFromDB = ({
 	clientSelection,
@@ -24,15 +24,15 @@ const AccountSummaryFromDB = ({
 }) => {
 	const { getTotalPriceFromDB, getSinglePrice } = useStore(
 		useShallow((state) => ({
-			storeData: state.data,
 			getTotalPriceFromDB: state.getTotalPriceFromDB,
 			getSinglePrice: state.getSinglePriceFromDB,
-			addSingleGeography: state.addSingleGeography,
-			removeSingleGeography: state.removeSingleGeography,
 		}))
 	)
 
-	console.log('clientSelection', clientSelection)
+	// Debug logs to identify the issue
+	console.log('selectionData:', selectionData)
+	console.log('selectionData.eMobility:', selectionData?.eMobility)
+	console.log('clientSelection:', clientSelection)
 
 	return (
 		<div className="">
@@ -41,135 +41,116 @@ const AccountSummaryFromDB = ({
 			</h2>
 			<div className="my-4">
 				{Object.keys(clientSelection).map((key, index) => {
+					// Skip contract types initially
 					if (
 						key !== 'typeOfVehicleContract' &&
 						key !== 'chargingStationsContract'
 					) {
-						console.log(
-							'key data',
-							key,
-							clientSelection[key as keyof MobilityData]
-						)
+						console.log('Processing key:', key)
+
+						// Safe access to category with fallback
 						const category =
-							selectionData.eMobility[
+							selectionData?.eMobility?.[
 								key as keyof typeof selectionData.eMobility
 							]
-						if (
-							(
-								clientSelection[
-									key as keyof MobilityData
-								] as ClientDataJsonType[]
-							).length > 0
-						) {
+
+						console.log('Category for key', key, ':', category)
+
+						const dataArray = clientSelection[
+							key as keyof MobilityData
+						] as ClientDataJsonType[]
+
+						if (dataArray && dataArray.length > 0) {
 							return (
 								<div
 									className="mt-2 space-y-2"
 									key={index}
 								>
 									<span className="text-base md:text-lg lg:text-xl">
-										{key == 'deployment'
+										{key === 'deployment'
 											? 'Grants Deployment'
-											: key == 'project'
+											: key === 'project'
 												? 'Grants Innovative Projects'
-												: category.label}
+												: category?.label || key}{' '}
+										{/* Safe access with fallback */}
 									</span>
 									<ul className="text-sm md:text-base space-y-1 list-inside pl-1">
-										{(
-											clientSelection[
-												key as keyof MobilityData
-											] as ClientDataJsonType[]
-										).map((item, index) => (
-											<li key={index}>
-												<Accordion
-													type="single"
-													collapsible
-												>
-													<AccordionItem value="item-1">
-														<AccordionTrigger>
-															<div className="flex flex-row items-center justify-between w-full">
-																<div className="list-item">
-																	{getSelectionItemLabel(
-																		item.value,
-																		key
+										{dataArray.map((item, itemIndex) => {
+											let price = 0
+											try {
+												price = getSinglePrice(
+													key as keyof MobilityData,
+													item
+												) as number
+											} catch (e) {
+												console.error(
+													'Price calculation error:',
+													e
+												)
+											}
+
+											return (
+												<li key={itemIndex}>
+													<Accordion
+														type="single"
+														collapsible
+													>
+														<AccordionItem
+															value={`item-${index}-${itemIndex}`}
+														>
+															<AccordionTrigger>
+																<div className="flex flex-row items-center justify-between w-full">
+																	<div className="list-item">
+																		{getSelectionItemLabel(
+																			item.value,
+																			key
+																		)}
+																	</div>
+																	<div>
+																		€{' '}
+																		{price}{' '}
+																		/ year
+																	</div>
+																</div>
+															</AccordionTrigger>
+															<AccordionContent>
+																<ul className="list-disc list-inside pl-6">
+																	{item.geographies?.map(
+																		(
+																			geoItem,
+																			geoIndex
+																		) => (
+																			<li
+																				key={
+																					geoIndex
+																				}
+																			>
+																				{
+																					geoItem.label
+																				}
+																			</li>
+																		)
 																	)}
-																</div>
-																<div>
-																	€{' '}
-																	{getSinglePrice(
-																		key as keyof MobilityData,
-																		item
-																	)}{' '}
-																	/ year
-																</div>
-															</div>
-														</AccordionTrigger>
-														<AccordionContent>
-															<ul className="list-disc list-inside pl-6">
-																{item.geographies?.map(
-																	(
-																		geoItem,
-																		geoIndex
-																	) => (
-																		<li
-																			key={
-																				geoIndex
-																			}
-																		>
-																			{
-																				geoItem.label
-																			}
-																		</li>
-																	)
-																)}
-															</ul>
-														</AccordionContent>
-													</AccordionItem>
-												</Accordion>
-											</li>
-										))}
+																</ul>
+															</AccordionContent>
+														</AccordionItem>
+													</Accordion>
+												</li>
+											)
+										})}
 									</ul>
 								</div>
 							)
 						}
-					} /* else if (key === 'report') {
-                        const category =
-                            clientSelection[key as keyof MobilityData]
-
-                        if (category.length > 0) {
-                            return (
-                                <div
-                                    className="mt-2"
-                                    key={index}
-                                >
-                                    <span className="text-lg">Reports</span>
-                                    <ul className="pl-1 pr-3">
-                                        {category.map((item, index) => (
-                                            <li
-                                                key={index}
-                                                className="flex w-full items-center justify-between gap-4 py-2"
-                                            >
-                                                <span className="text-white">
-                                                    {item.value == 'eu'
-                                                        ? 'EU'
-                                                        : 'Non-EU'}
-                                                </span>
-                                                <span className="text-white">
-                                                    € {item.price?.default}
-                                                </span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )
-                        }
-                    } */ else if (
+					} else if (
 						key === 'typeOfVehicleContract' ||
 						key === 'chargingStationsContract'
 					) {
-						if (
-							clientSelection[key as keyof MobilityData].length >
-							0
-						) {
+						const contractArray = clientSelection[
+							key as keyof MobilityData
+						] as string[]
+
+						if (contractArray && contractArray.length > 0) {
 							return (
 								<div
 									className="mt-2 space-y-2 mb-4"
@@ -177,31 +158,46 @@ const AccountSummaryFromDB = ({
 								>
 									<span className="w-1/3 bg-primary h-[1px] block"></span>
 									<ul className="text-sm md:text-base space-y-1 list-disc list-inside pl-1">
-										{clientSelection[
-											key as keyof MobilityData
-										].map((item, index) => (
-											<li key={index}>
-												{getSelectionItemContractLabel(
-													item as string,
-													key
-												)}
-											</li>
-										))}
+										{contractArray.map(
+											(item, contractIndex) => (
+												<li key={contractIndex}>
+													{getSelectionItemContractLabel(
+														item,
+														key
+													)}
+												</li>
+											)
+										)}
 									</ul>
 								</div>
 							)
 						}
 					}
+
+					return null // Make sure to return null for non-matching cases
 				})}
 			</div>
 
 			<div className="mb-3 mt-6 text-base md:text-lg lg:text-xl">
-				<div className="flex flex-row items-center justify-between ">
+				<div className="flex flex-row items-center justify-between">
 					<span>TOTAL</span>
-					<span>€ {getTotalPriceFromDB(clientSelection)} / year</span>
+					<span>
+						€{' '}
+						{(() => {
+							try {
+								return getTotalPriceFromDB(clientSelection)
+							} catch (e) {
+								console.error(
+									'Total price calculation error:',
+									e
+								)
+								return 0
+							}
+						})()}{' '}
+						/ year
+					</span>
 				</div>
 			</div>
-			{/* <span className="w-full bg-primary h-[1px] my-8 block lg:hidden"></span> */}
 		</div>
 	)
 }
