@@ -15,14 +15,12 @@ import { toast } from '@/hooks/use-toast'
 import { UpdatePasswordType } from '@/lib/types'
 import { updatePasswordSchema } from '@/lib/zod-schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { LuEye, LuEyeClosed } from 'react-icons/lu'
 
 export default function UpdatePassword() {
-	const [code, setCode] = useState<string | null>(null)
-	const [isLoading, setIsLoading] = useState(true)
 	const [isView, setIsView] = useState(false)
 	const [isViewConfirm, setIsViewConfirm] = useState(false)
 
@@ -34,43 +32,13 @@ export default function UpdatePassword() {
 		},
 	})
 
-	const searchParams = useSearchParams()
-
 	const router = useRouter()
 
 	const isSubmitting = form.formState.isSubmitting
 
-	useEffect(() => {
-		const urlCode = searchParams.get('code')
-		console.log('URL Code:', urlCode)
-
-		if (urlCode) {
-			setCode(urlCode)
-		}
-		setIsLoading(false)
-	}, [searchParams])
-
-	if (isLoading) {
-		return (
-			<div className="w-full flex items-center justify-center">
-				Loading...
-			</div>
-		)
-	}
-
-	if (!code) {
-		return (
-			<div className="w-full flex items-center justify-center">
-				This Link is not valid. Please try again.
-			</div>
-		)
-	}
-
-	console.log('CODE', code)
-
 	const onSubmit = async ({ password }: UpdatePasswordType) => {
 		try {
-			const response = await updatePassword(password, code)
+			const response = await updatePassword(password)
 
 			if (response) {
 				toast({

@@ -51,12 +51,7 @@ export const forgotPassword = async (email: string) => {
 	try {
 		const supabase = await createClient()
 
-		const { data, error } = await supabase.auth.resetPasswordForEmail(
-			email,
-			{
-				redirectTo: 'https://www.poeontap.com/update-password',
-			}
-		)
+		const { data, error } = await supabase.auth.resetPasswordForEmail(email)
 		if (error) throw error
 		return data
 	} catch (error) {
@@ -65,9 +60,11 @@ export const forgotPassword = async (email: string) => {
 	}
 }
 
-export const updatePassword = async (password: string, code: string) => {
+export const updatePassword = async (password: string) => {
 	try {
 		const supabase = await createClient()
+
+		/* console.log('Exchanging code for session:', code)
 
 		const { error: sessionError } =
 			await supabase.auth.exchangeCodeForSession(code)
@@ -77,7 +74,7 @@ export const updatePassword = async (password: string, code: string) => {
 			throw new Error(
 				`Failed to verify reset code: ${sessionError.message}`
 			)
-		}
+		} */
 
 		const { data, error } = await supabase.auth.updateUser({
 			password,
