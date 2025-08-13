@@ -8,7 +8,7 @@ const AccountView = ({ clientData }: { clientData: ClientDataType }) => {
 	const router = useRouter()
 
 	return (
-		<div>
+		<div className="mb-10">
 			<h2 className="text-lg md:text-xl lg:text-3xl mb-4 lg:mb-10">
 				Your Account
 			</h2>
