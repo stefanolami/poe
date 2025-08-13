@@ -3,6 +3,7 @@
 import { signOut } from '@/actions/auth'
 import { useAuthStore } from '@/store/auth-store'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { ImSpinner6 } from 'react-icons/im'
 import { useShallow } from 'zustand/shallow'
@@ -20,6 +21,8 @@ const UsersLoginSection = ({
 		}))
 	)
 
+	const router = useRouter()
+
 	useEffect(() => {}, [userRole, authInitialized])
 
 	const handleLogout = async () => {
@@ -27,6 +30,7 @@ const UsersLoginSection = ({
 			await signOut()
 			setUserRole(null)
 			if (setActive) setActive(false)
+			router.push('/')
 		} catch (error) {
 			console.error('Logout failed:', error)
 		}
