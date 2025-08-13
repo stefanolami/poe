@@ -1,5 +1,6 @@
 import { getClient } from '@/actions/clients'
 import AccountComponent from '@/components/account/account-component'
+import { ErrorBoundary } from '@/components/error-boundary'
 
 const AccountPage = async () => {
 	const clientData = await getClient()
@@ -7,7 +8,11 @@ const AccountPage = async () => {
 	if (!clientData) {
 		return null
 	}
-	return <AccountComponent clientData={clientData} />
+	return (
+		<ErrorBoundary>
+			<AccountComponent clientData={clientData} />
+		</ErrorBoundary>
+	)
 }
 
 export default AccountPage
