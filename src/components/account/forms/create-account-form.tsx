@@ -22,10 +22,17 @@ import { useStore } from '@/store/store'
 import { useShallow } from 'zustand/shallow'
 import { signUpClient } from '@/actions/clients'
 import { selectionArrayFromStoreToDB } from '@/lib/utils'
+import { useAuthStore } from '@/store/auth-store'
 
 const CreateAccountForm = () => {
 	const [isView, setIsView] = useState(false)
 	const [isViewConfirm, setIsViewConfirm] = useState(false)
+
+	const { setUserRole } = useAuthStore(
+		useShallow((state) => ({
+			setUserRole: state.setUserRole,
+		}))
+	)
 
 	const { toast } = useToast()
 
@@ -98,6 +105,7 @@ const CreateAccountForm = () => {
 			}
 
 			if (response) {
+				setUserRole('client')
 				toast({
 					title: 'Thank You!',
 					description: 'Account created successfully',
