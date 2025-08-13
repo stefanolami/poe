@@ -113,7 +113,6 @@ const CreateAccountForm = () => {
 				})
 				setTimeout(() => {
 					router.push('/')
-					router.refresh()
 				}, 1000)
 			}
 
