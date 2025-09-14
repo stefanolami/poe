@@ -118,85 +118,64 @@ export default function SectorSelector() {
 
 			{/* BIG */}
 			<div className="hidden md:block">
-				<div className="grid grid-cols-2 justify-center items-center w-auto gap-4 xl:gap-12 mx-auto mt-10 xl:mt-12 3xl:mt-24">
-					{/* LEFT */}
-					<div className="justify-self-end self-start">
-						<div className="justify-self-end">
-							{activeSector !== 'aviation' && (
-								<SectorButton
-									text="E-Mobility"
-									handler={() =>
-										handleClick({
-											value: 'eMobility',
-											label: 'E-Mobility',
-										})
-									}
-									activeButton={activeSector}
-								/>
-							)}
-						</div>
-						{activeSector == 'eMobility' && (
-							<div className="my-2 xl:my-4 justify-self-end flex flex-col items-end justify-between text-primary">
-								<p className="hidden md:block text-right text-base xl:text-xl text-wrap w-64 xl:w-96 mt-10 md:mt-0">
-									Get started by choosing the geographies you
-									are interested in
-								</p>
-								<p className="text-red-500 h-10 my-3 text-right text-base xl:text-xl text-wrap w-64 xl:w-96">
-									{missingGeographies}
-								</p>
-								<button
-									className="ml-auto font-unna font-bold text-base md:text-xl xl:text-3xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 md:w-48 xl:w-52 h-9 md:h-12 xl:h-16 mt-2 shadow-md hover:shadow-xl"
-									onClick={handleContinue}
-								>
-									Continue
-								</button>
-							</div>
-						)}
-						<div ref={geoRef}>
-							{openGeographies && activeSector == 'aviation' && (
-								<>
-									<GeographySelector />
-								</>
-							)}
-						</div>
-					</div>
-
-					{/* RIGHT */}
-					<div className="justify-self-start self-start">
-						<div className="justify-self-end">
-							{activeSector !== 'eMobility' && (
-								<SectorButton
-									text="Aviation"
-									activeButton={activeSector}
-								/>
-							)}
-						</div>
-						{activeSector == 'aviation' && (
-							<div className="my-2 xl:my-4 justify-self-end flex flex-col items-end justify-between text-primary">
-								<p className="hidden md:block text-left text-base xl:text-xl text-wrap w-64 xl:w-96 mt-10 md:mt-0">
-									Get started by choosing the geographies you
-									are interested in
-								</p>
-								<p className="text-red-500 h-10 my-3 text-left text-base xl:text-xl text-wrap w-64 xl:w-96">
-									{missingGeographies}
-								</p>
-								<button
-									className="mr-auto font-unna font-bold text-base md:text-xl xl:text-3xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 md:w-48 xl:w-52 h-9 md:h-12 xl:h-16 mt-2 shadow-md hover:shadow-xl"
-									onClick={handleContinue}
-								>
-									Continue
-								</button>
-							</div>
-						)}
-						<div ref={geoRef}>
-							{openGeographies && activeSector == 'eMobility' && (
-								<>
-									<GeographySelector />
-								</>
-							)}
-						</div>
-					</div>
+				{/* Sector Buttons - Centered */}
+				<div className="flex flex-col xl:flex-row items-center justify-center gap-4 xl:gap-12 mx-auto mt-10 xl:mt-12 3xl:mt-24">
+					{activeSector !== 'aviation' && (
+						<SectorButton
+							text="E-Mobility"
+							handler={() =>
+								handleClick({
+									value: 'eMobility',
+									label: 'E-Mobility',
+								})
+							}
+							activeButton={activeSector}
+						/>
+					)}
+					{activeSector !== 'eMobility' && (
+						<SectorButton
+							text="Aviation"
+							handler={() =>
+								handleClick({
+									value: 'aviation',
+									label: 'Aviation',
+								})
+							}
+							activeButton={activeSector}
+						/>
+					)}
 				</div>
+
+				{/* Geography Section - Centered Below Buttons */}
+				{activeSector && (
+					<div className="mt-8 xl:mt-12">
+						<div className="text-center mb-6">
+							<p className="text-base xl:text-xl text-primary mb-4">
+								Get started by choosing the geographies you are
+								interested in
+							</p>
+							<p className="text-red-500 h-10 text-base xl:text-xl">
+								{missingGeographies}
+							</p>
+						</div>
+
+						<div
+							ref={geoRef}
+							className="mb-8"
+						>
+							{openGeographies && <GeographySelector />}
+						</div>
+
+						<div className="text-center">
+							<button
+								className="font-unna font-bold text-base md:text-xl xl:text-3xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 md:w-48 xl:w-52 h-9 md:h-12 xl:h-16 mx-auto shadow-md hover:shadow-xl"
+								onClick={handleContinue}
+							>
+								Continue
+							</button>
+						</div>
+					</div>
+				)}
 			</div>
 		</div>
 	)
