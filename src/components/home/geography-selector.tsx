@@ -80,7 +80,7 @@ export default function GeographySelector() {
 					<span className="text-primary font-medium">
 						{isExpanded
 							? 'Hide geography options'
-							: 'Show all geography options'}
+							: 'Show geography options'}
 					</span>
 					<ChevronDown
 						className={`h-5 w-5 text-primary transition-transform ${

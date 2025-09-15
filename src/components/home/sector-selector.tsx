@@ -135,12 +135,12 @@ export default function SectorSelector() {
 					{activeSector !== 'eMobility' && (
 						<SectorButton
 							text="Aviation"
-							handler={() =>
+							/* handler={() =>
 								handleClick({
 									value: 'aviation',
 									label: 'Aviation',
 								})
-							}
+							} */
 							activeButton={activeSector}
 						/>
 					)}
