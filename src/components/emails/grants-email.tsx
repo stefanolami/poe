@@ -315,7 +315,7 @@ const Divider = () => {
 
 const section = {
 	backgroundColor: '#fff',
-	color: '#004A6A',
+	color: '#27335a',
 	padding: '16px',
 }
 

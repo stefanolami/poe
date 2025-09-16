@@ -119,7 +119,7 @@ export function AdminSidebar() {
 								>
 									{/* eslint-disable-next-line */}
 									<img
-										src={'/logos/icon1.png'}
+										src={'/logos/consulting-logo.png'}
 										alt="Logo"
 										className="transition-all duration-200"
 									/>
@@ -180,7 +180,7 @@ export function AdminSidebar() {
 							>
 								{/* eslint-disable-next-line */}
 								<img
-									src={'/logos/icon1.png'}
+									src={'/logos/consulting-logo.png'}
 									alt="Logo"
 									className="transition-all duration-200"
 								/>

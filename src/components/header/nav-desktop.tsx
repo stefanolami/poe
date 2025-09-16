@@ -6,44 +6,37 @@ import { usePathname } from 'next/navigation'
 const LINKS = [
 	{
 		name: 'WHO WE ARE',
-		url: '/',
-		sublinks: [
-			{
-				name: 'ABOUT US',
-				url: '/',
-			},
-			{
-				name: 'OUR TEAM',
-				url: '/',
-			},
-		],
+		url: 'https://www.consultingontap.com/who-we-are',
 	},
 	{
 		name: 'SERVICES',
-		url: '/',
+		url: 'https://www.consultingontap.com/services',
 	},
 	{
 		name: 'SECTORS',
-		url: '/',
+		url: 'https://www.consultingontap.com/sectors',
 	},
 	{
 		name: 'WHY US',
-		url: '/',
+		url: 'https://www.consultingontap.com/why-us',
 		sublinks: [
 			{
 				name: 'OVERVIEW',
-				url: '/',
+				url: 'https://www.consultingontap.com/why-us',
 			},
-
 			{
 				name: 'CLIENT CODEX',
-				url: '/',
+				url: 'https://www.consultingontap.com/why-us#client-codex',
+			},
+			{
+				name: 'ENDORSEMENTS',
+				url: 'https://www.consultingontap.com/why-us#endorsements',
 			},
 		],
 	},
 	{
 		name: 'CONTACT',
-		url: '/',
+		url: 'https://www.consultingontap.com/contact',
 	},
 ]
 
@@ -52,7 +45,7 @@ export default function Navbar() {
 	return (
 		<div
 			id="desktop-nav"
-			className="hidden md:flex flex-row justify-between items-center gap-12 h-full font-unna font-bold"
+			className="hidden lg:flex flex-row justify-between items-center gap-12 h-full font-unna font-bold"
 		>
 			{/* CHANGE TO GRID-COLS-6 */}
 			<nav

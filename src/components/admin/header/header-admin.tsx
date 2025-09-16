@@ -35,7 +35,7 @@ export default function HeaderAdmin() {
 			variants={{
 				visible: {
 					y: 0,
-					backgroundColor: '#004A6A',
+					backgroundColor: '#27335a',
 					color: '#FFFFFF',
 				},
 				hidden: {

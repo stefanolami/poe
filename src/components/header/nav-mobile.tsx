@@ -10,44 +10,37 @@ import UsersLoginSection from '../users-login-section'
 const LINKS = [
 	{
 		name: 'WHO WE ARE',
-		url: '/',
-		sublinks: [
-			{
-				name: 'ABOUT US',
-				url: '/',
-			},
-			{
-				name: 'OUR TEAM',
-				url: '/',
-			},
-		],
+		url: 'https://www.consultingontap.com/who-we-are',
 	},
 	{
 		name: 'SERVICES',
-		url: '/',
+		url: 'https://www.consultingontap.com/services',
 	},
 	{
 		name: 'SECTORS',
-		url: '/',
+		url: 'https://www.consultingontap.com/sectors',
 	},
 	{
 		name: 'WHY US',
-		url: '/',
+		url: 'https://www.consultingontap.com/why-us',
 		sublinks: [
 			{
 				name: 'OVERVIEW',
-				url: '/',
+				url: 'https://www.consultingontap.com/why-us',
 			},
-
 			{
 				name: 'CLIENT CODEX',
-				url: '/',
+				url: 'https://www.consultingontap.com/why-us#client-codex',
+			},
+			{
+				name: 'ENDORSEMENTS',
+				url: 'https://www.consultingontap.com/why-us#endorsements',
 			},
 		],
 	},
 	{
 		name: 'CONTACT',
-		url: '/',
+		url: 'https://www.consultingontap.com/contact',
 	},
 ]
 
@@ -64,7 +57,7 @@ export default function NavMobile() {
 	}, [active])
 
 	return (
-		<div className="md:hidden flex flex-row items-center justify-end font-unna text-lg">
+		<div className="lg:hidden flex flex-row items-center justify-end font-unna text-lg">
 			{/* <MobileLocaleSwitcher /> */}
 			<MotionConfig
 				transition={{
@@ -76,7 +69,7 @@ export default function NavMobile() {
 				<motion.button
 					initial={false}
 					onClick={() => setActive((pv) => !pv)}
-					className="relative h-10 w-10 ml-3 rounded-full z-50 bg-primary-light scale-90"
+					className="relative h-10 w-10 ml-3 rounded-full z-50 bg-transparent scale-90"
 					animate={active ? 'open' : 'closed'}
 				>
 					<motion.span

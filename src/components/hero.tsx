@@ -8,7 +8,7 @@ export default function Hero() {
 		<div className="w-full relative">
 			<div className="relative mx-auto w-1/2 md:w-1/3 max-w-[520px] aspect-[116/23]">
 				<Image
-					src="/poe-hero-logo.png"
+					src="/logos/poe-hero-logo-new.png"
 					fill
 					alt="POE hero logo"
 				/>

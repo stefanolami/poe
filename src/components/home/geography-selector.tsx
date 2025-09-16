@@ -6,6 +6,12 @@ import ExpandableGeography from '../ui/expandableGeography'
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 
+type GeographyGroup = {
+	label: string
+	value: string
+	countries?: Geography[]
+}
+
 export default function GeographySelector() {
 	const geographies = useStore<Geography[]>((state) => state.geographies)
 	const addGeography = useStore((state) => state.addGeography)
@@ -13,7 +19,7 @@ export default function GeographySelector() {
 	const [isExpanded, setIsExpanded] = useState(false)
 
 	const handleGeographies = (geography: Geography) => {
-		if (geographies.find((geo) => geography.value == geo.value)) {
+		if (geographies.find((geo) => geography.value === geo.value)) {
 			removeGeography(geography)
 		} else {
 			addGeography(geography)
@@ -27,7 +33,7 @@ export default function GeographySelector() {
 		<div className="w-full max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
 			{/* Header */}
 			<div className="text-center mb-6">
-				<h3 className="text-lg md:text-xl xl:text-2xl font-semibold text-primary mb-4">
+				<h3 className="text-lg md:text-xl xl:text-2xl font-semibold text-primary my-4 md:my-0 md:mb-3">
 					Select Your Geographies
 				</h3>
 			</div>
@@ -41,7 +47,6 @@ export default function GeographySelector() {
 						</h4>
 						<button
 							onClick={() => {
-								// Clear all selections
 								geographies.forEach((geo) =>
 									removeGeography(geo)
 								)
@@ -83,9 +88,7 @@ export default function GeographySelector() {
 							: 'Show geography options'}
 					</span>
 					<ChevronDown
-						className={`h-5 w-5 text-primary transition-transform ${
-							isExpanded ? 'rotate-180' : ''
-						}`}
+						className={`h-5 w-5 text-primary transition-transform ${isExpanded ? 'rotate-180' : ''}`}
 					/>
 				</button>
 			</div>
@@ -93,114 +96,304 @@ export default function GeographySelector() {
 			{/* Expanded geography selection */}
 			{isExpanded && (
 				<div className="bg-white border-2 border-primary/20 rounded-lg p-6 lg:p-8">
-					<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-						{geographiesArrayFrontend.map((item, groupIndex) => {
-							if (item.countries) {
-								return (
-									<div
-										key={groupIndex}
-										className="space-y-3 flex items-start justify-start"
-									>
-										<ExpandableGeography
-											title={item.label}
-											defaultOpen={true}
+					{/* Mobile: original stacked layout */}
+					<div className="grid gap-6 md:hidden">
+						{(geographiesArrayFrontend as GeographyGroup[]).map(
+							(group, groupIndex) => {
+								if (
+									group.countries &&
+									group.countries.length > 0
+								) {
+									return (
+										<div
+											key={groupIndex}
+											className="space-y-3 flex items-start justify-start"
 										>
-											<div
-												className={`pl-4 ${
-													item.value === 'eu27'
-														? 'grid grid-cols-2 gap-x-4 gap-y-2'
-														: 'space-y-2'
-												}`}
+											<ExpandableGeography
+												title={group.label}
+												defaultOpen={true}
 											>
-												{item.countries.map(
-													(country, countryIndex) => {
-														const isSelected =
-															geographies.find(
-																(geo) =>
-																	country.value ===
-																	geo.value
+												<div
+													className={`pl-4 ${group.value === 'eu27' ? 'grid grid-cols-2 gap-x-4 gap-y-2' : 'space-y-2'}`}
+												>
+													{group.countries.map(
+														(
+															country,
+															countryIndex
+														) => {
+															const isSelected =
+																geographies.find(
+																	(geo) =>
+																		country.value ===
+																		geo.value
+																)
+															return (
+																<label
+																	key={
+																		countryIndex
+																	}
+																	className="flex items-center gap-3 cursor-pointer hover:bg-primary/5 rounded px-2 py-1 transition-colors"
+																>
+																	<input
+																		type="checkbox"
+																		value={
+																			country.value
+																		}
+																		checked={
+																			!!isSelected
+																		}
+																		onChange={() =>
+																			handleGeographies(
+																				country
+																			)
+																		}
+																		className="custom-checkbox"
+																	/>
+																	<span className="text-sm md:text-base text-primary">
+																		{
+																			country.label
+																		}
+																	</span>
+																</label>
 															)
-														return (
-															<label
-																key={
-																	countryIndex
-																}
-																className="flex items-center gap-3 cursor-pointer hover:bg-primary/5 rounded px-2 py-1 transition-colors"
-															>
-																<input
-																	type="checkbox"
-																	value={
-																		country.value
-																	}
-																	checked={
-																		!!isSelected
-																	}
-																	onChange={() =>
-																		handleGeographies(
-																			country
-																		)
-																	}
-																	className="custom-checkbox"
-																/>
-																<span className="text-sm md:text-base text-primary">
-																	{
-																		country.label
-																	}
-																</span>
-															</label>
-														)
-													}
-												)}
-											</div>
-										</ExpandableGeography>
-									</div>
-								)
-							} else {
-								const isSelected = geographies.find(
-									(geo) => item.value === geo.value
-								)
-								const isDisabled = item.value === 'BR'
-
-								return (
-									<div
-										key={groupIndex}
-										className="space-y-3 flex items-start justify-start"
-									>
-										<label
-											className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
-												isDisabled
-													? 'bg-gray-50 border-gray-200 cursor-not-allowed'
-													: 'cursor-pointer'
-											}`}
+														}
+													)}
+												</div>
+											</ExpandableGeography>
+										</div>
+									)
+								} else {
+									const single: Geography = {
+										label: group.label,
+										value: group.value,
+									}
+									const isSelected = geographies.find(
+										(geo) => single.value === geo.value
+									)
+									const isDisabled = single.value === 'BR'
+									return (
+										<div
+											key={groupIndex}
+											className="space-y-3 flex items-start justify-start"
 										>
-											<input
-												disabled={isDisabled}
-												type="checkbox"
-												value={item.value}
-												checked={!!isSelected}
-												onChange={() =>
-													handleGeographies(item)
-												}
-												className={`custom-checkbox ${
+											<label
+												className={`grid grid-cols-[1.25rem,1fr] items-center gap-3 px-2 py-1 rounded transition-colors ${
 													isDisabled
-														? 'disabled:bg-gray-200 disabled:border-gray-300 disabled:cursor-not-allowed'
-														: ''
-												}`}
-											/>
-											<span
-												className={`text-sm md:text-base ${
-													isDisabled
-														? 'text-gray-400'
-														: 'text-primary'
+														? 'bg-gray-50 cursor-not-allowed'
+														: 'cursor-pointer hover:bg-primary/5'
 												}`}
 											>
-												{item.label}
-											</span>
-										</label>
-									</div>
-								)
+												<span className="inline-flex w-5 justify-start">
+													<input
+														disabled={isDisabled}
+														type="checkbox"
+														value={single.value}
+														checked={!!isSelected}
+														onChange={() =>
+															handleGeographies(
+																single
+															)
+														}
+														className={`custom-checkbox ${isDisabled ? 'disabled:bg-gray-200 disabled:border-gray-300 disabled:cursor-not-allowed' : ''}`}
+													/>
+												</span>
+												<span
+													className={`text-sm md:text-base ${isDisabled ? 'text-gray-400' : 'text-primary'} font-medium`}
+												>
+													{single.label}
+												</span>
+											</label>
+										</div>
+									)
+								}
 							}
-						})}
+						)}
+					</div>
+
+					{/* Desktop: fixed 3-column layout */}
+					<div className="hidden md:grid md:grid-cols-3 gap-6">
+						{/* Column 1: EU-Administered and Brazil */}
+						<div className="space-y-3">
+							{(() => {
+								const euAdmin = (
+									geographiesArrayFrontend as GeographyGroup[]
+								).find((i) => i.value === 'euAdmin')
+								if (!euAdmin) return null
+								const isSelected = geographies.find(
+									(geo) => euAdmin.value === geo.value
+								)
+								return (
+									<label className="flex items-center gap-3 cursor-pointer hover:bg-primary/5 rounded px-2 py-1 transition-colors">
+										<input
+											type="checkbox"
+											value={euAdmin.value}
+											checked={!!isSelected}
+											onChange={() =>
+												handleGeographies({
+													label: euAdmin.label,
+													value: euAdmin.value,
+												})
+											}
+											className="custom-checkbox"
+										/>
+										<span className="text-sm md:text-base text-primary font-medium">
+											{euAdmin.label}
+										</span>
+									</label>
+								)
+							})()}
+
+							{(() => {
+								const brazil = (
+									geographiesArrayFrontend as GeographyGroup[]
+								).find((i) => i.value === 'BR')
+								if (!brazil) return null
+								const isSelected = geographies.find(
+									(geo) => brazil.value === geo.value
+								)
+								const isDisabled = true
+								return (
+									<label
+										className={`flex items-center gap-3 rounded px-2 py-1 transition-colors ${
+											isDisabled
+												? 'bg-gray-50 cursor-not-allowed'
+												: 'cursor-pointer hover:bg-primary/5'
+										}`}
+									>
+										<input
+											disabled={isDisabled}
+											type="checkbox"
+											value={brazil.value}
+											checked={!!isSelected}
+											onChange={() =>
+												handleGeographies({
+													label: brazil.label,
+													value: brazil.value,
+												})
+											}
+											className={`custom-checkbox ${
+												isDisabled
+													? 'disabled:bg-gray-200 disabled:border-gray-300 disabled:cursor-not-allowed'
+													: ''
+											}`}
+										/>
+										<span
+											className={`text-sm md:text-base ${isDisabled ? 'text-gray-400' : 'text-primary'} font-medium`}
+										>
+											{brazil.label}
+										</span>
+									</label>
+								)
+							})()}
+						</div>
+
+						{/* Column 2: EU-27 accordion */}
+						<div className="space-y-3">
+							{(() => {
+								const eu27 = (
+									geographiesArrayFrontend as GeographyGroup[]
+								).find((i) => i.value === 'eu27')
+								if (!eu27 || !eu27.countries) return null
+								return (
+									<ExpandableGeography
+										title={eu27.label}
+										defaultOpen={true}
+									>
+										<div className="pl-4 pt-1 grid grid-cols-2 gap-x-4 gap-y-2">
+											{eu27.countries.map(
+												(country, idx) => {
+													const isSelected =
+														geographies.find(
+															(geo) =>
+																country.value ===
+																geo.value
+														)
+													return (
+														<label
+															key={idx}
+															className="flex items-center gap-3 cursor-pointer hover:bg-primary/5 rounded px-2 py-1 transition-colors"
+														>
+															<input
+																type="checkbox"
+																value={
+																	country.value
+																}
+																checked={
+																	!!isSelected
+																}
+																onChange={() =>
+																	handleGeographies(
+																		country
+																	)
+																}
+																className="custom-checkbox"
+															/>
+															<span className="text-sm md:text-base text-primary font-medium">
+																{country.label}
+															</span>
+														</label>
+													)
+												}
+											)}
+										</div>
+									</ExpandableGeography>
+								)
+							})()}
+						</div>
+
+						{/* Column 3: Other European Countries accordion */}
+						<div className="space-y-3">
+							{(() => {
+								const other = (
+									geographiesArrayFrontend as GeographyGroup[]
+								).find((i) => i.value === 'otherEu')
+								if (!other || !other.countries) return null
+								return (
+									<ExpandableGeography
+										title={other.label}
+										defaultOpen={true}
+									>
+										<div className="pl-4 pt-1 space-y-2">
+											{other.countries.map(
+												(country, idx) => {
+													const isSelected =
+														geographies.find(
+															(geo) =>
+																country.value ===
+																geo.value
+														)
+													return (
+														<label
+															key={idx}
+															className="flex items-center gap-3 cursor-pointer hover:bg-primary/5 rounded px-2 py-1 transition-colors"
+														>
+															<input
+																type="checkbox"
+																value={
+																	country.value
+																}
+																checked={
+																	!!isSelected
+																}
+																onChange={() =>
+																	handleGeographies(
+																		country
+																	)
+																}
+																className="custom-checkbox"
+															/>
+															<span className="text-sm md:text-base text-primary font-medium">
+																{country.label}
+															</span>
+														</label>
+													)
+												}
+											)}
+										</div>
+									</ExpandableGeography>
+								)
+							})()}
+						</div>
 					</div>
 
 					{/* Done button */}

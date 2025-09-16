@@ -26,7 +26,7 @@ export default function Header() {
 			variants={{
 				visible: {
 					y: 0,
-					backgroundColor: '#004A6A',
+					backgroundColor: '#27335a',
 					color: '#FFFFFF',
 				},
 				hidden: {
@@ -38,11 +38,11 @@ export default function Header() {
 			animate={hidden ? 'hidden' : 'visible'}
 			transition={{ duration: 0.3, ease: 'easeInOut' }}
 			className={
-				'fixed top-0 w-full bg-transparent text-white z-50 flex justify-between items-center h-16 xl:h-24 font-unna'
+				'fixed top-0 w-full bg-transparent text-white z-50 px-6 md:px-10 xl:px-[7%]'
 			}
 		>
-			<div className="mx-auto w-[90%] max-w-[1200px] flex flex-row items-center justify-between h-full">
-				<div className="flex items-center justify-center w-auto xl:w-[270px] h-full ">
+			<div className="flex justify-between items-center max-w-[1300px] mx-auto h-16 lg:h-24">
+				<div className="flex items-center justify-center h-full md:pl-4 lg:pl-0">
 					<Link
 						className="pl-6 md:pl-0 md:py-4 xl:py-7 w-[124px] xl:w-[231px] aspect-[694/186] relative xl:scale-75"
 						href="/"
