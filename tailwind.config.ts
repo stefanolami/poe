@@ -111,19 +111,19 @@ const config: Config = {
 			const newUtilities = {
 				'.scrollbar-thin': {
 					scrollbarWidth: 'thin',
-					scrollbarColor: 'white #009EC2',
+					scrollbarColor: 'white #27335a',
 				},
 				'.scrollbar-webkit': {
 					'&::-webkit-scrollbar': {
 						width: '8px',
 					},
 					'&::-webkit-scrollbar-track': {
-						background: '#009EC2',
+						background: '#27335a',
 					},
 					'&::-webkit-scrollbar-thumb': {
 						backgroundColor: 'white',
 						borderRadius: '20px',
-						border: '1px solid #009EC2',
+						border: '1px solid #27335a',
 					},
 				},
 			}

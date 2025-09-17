@@ -45,7 +45,7 @@ export default function Header() {
 				<div className="flex items-center justify-center h-full md:pl-4 lg:pl-0">
 					<Link
 						className="pl-6 md:pl-0 md:py-4 xl:py-7 w-[124px] xl:w-[231px] aspect-[694/186] relative xl:scale-75"
-						href="/"
+						href="https://www.consultingontap.com/"
 					>
 						<Image
 							src="/logos/consulting-white.png"

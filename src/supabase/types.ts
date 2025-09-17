@@ -7,10 +7,10 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
+    PostgrestVersion: "13.0.4"
   }
   public: {
     Tables: {
@@ -43,9 +43,11 @@ export type Database = {
       }
       clients: {
         Row: {
+          account_status: string
           charging_stations_contract: string[] | null
           charging_stations_type: Json | null
           created_at: string
+          current_subscription: string | null
           deployment: Json | null
           email: string
           family_name: string
@@ -60,9 +62,11 @@ export type Database = {
           vehicles_type: Json | null
         }
         Insert: {
+          account_status?: string
           charging_stations_contract?: string[] | null
           charging_stations_type?: Json | null
           created_at?: string
+          current_subscription?: string | null
           deployment?: Json | null
           email: string
           family_name: string
@@ -77,9 +81,11 @@ export type Database = {
           vehicles_type?: Json | null
         }
         Update: {
+          account_status?: string
           charging_stations_contract?: string[] | null
           charging_stations_type?: Json | null
           created_at?: string
+          current_subscription?: string | null
           deployment?: Json | null
           email?: string
           family_name?: string
@@ -93,7 +99,15 @@ export type Database = {
           vehicles_contract?: string[] | null
           vehicles_type?: Json | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "clients_current_subscription_fkey"
+            columns: ["current_subscription"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       clients_temp: {
         Row: {
@@ -249,6 +263,50 @@ export type Database = {
             columns: ["consultant"]
             isOneToOne: false
             referencedRelation: "consultants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscriptions: {
+        Row: {
+          auto_renew: boolean
+          client_id: string | null
+          created_at: string | null
+          id: string
+          invoice_sent_at: string | null
+          period_end: string
+          period_start: string
+          renewal_processed_at: string | null
+          status: string
+        }
+        Insert: {
+          auto_renew?: boolean
+          client_id?: string | null
+          created_at?: string | null
+          id?: string
+          invoice_sent_at?: string | null
+          period_end: string
+          period_start: string
+          renewal_processed_at?: string | null
+          status?: string
+        }
+        Update: {
+          auto_renew?: boolean
+          client_id?: string | null
+          created_at?: string | null
+          id?: string
+          invoice_sent_at?: string | null
+          period_end?: string
+          period_start?: string
+          renewal_processed_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
             referencedColumns: ["id"]
           },
         ]
