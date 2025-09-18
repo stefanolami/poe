@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Subscription Auto-Renewal
 
-## Getting Started
+Yearly subscription management has been added:
 
-First, run the development server:
+- Table: `subscriptions` with `period_start`, `period_end`, `auto_renew`, `status` (active | expired | frozen)
+- Client columns: `current_subscription`, `account_status` (active | frozen)
+- Cron endpoint: `GET /api/cron/subscription-renewal` (configure via Vercel Cron)
+    - If `auto_renew = true` and period_end = today: creates new period & triggers invoice email stub
+    - If `auto_renew = false`: reminder emails at -30, -7, -1 days; freezes after period_end
+- UI toggle: `AutoRenewToggle` component in account area
+- Guard: `ensureActiveAccount` throws for frozen accounts
+- Email stubs: `subscription-mails.ts` (implement real templates & sending)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Example Vercel cron config:
+
+```json
+{
+	"cron": [
+		{ "path": "/api/cron/subscription-renewal", "schedule": "0 5 * * *" }
+	]
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Next steps you can implement:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Replace email stubs with real React Email templates
+2. Add admin UI to manually create / extend subscriptions
+3. Add analytics around renewal conversion
+4. Add soft-grace period before freezing (e.g. 7 days)

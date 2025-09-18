@@ -8,33 +8,35 @@ const AccountView = ({ clientData }: { clientData: ClientDataType }) => {
 	const router = useRouter()
 
 	return (
-		<div className="mb-10">
-			<h2 className="text-lg md:text-xl lg:text-3xl mb-4 lg:mb-10">
-				Your Account
+		<div>
+			<h2 className="text-lg md:text-xl lg:text-2xl font-semibold mb-4">
+				Account Details
 			</h2>
-			<div className="my-4 text-base md:text-lg lg:text-xl space-y-1 lg:space-y-2">
-				<div>
-					<span>First Name:</span>
-					<span className="ml-2">{clientData.name}</span>
+			<dl className="space-y-3 text-sm md:text-base">
+				<div className="flex justify-between">
+					<dt className="text-primary/70">First name</dt>
+					<dd>{clientData.name || '-'}</dd>
 				</div>
-				<div>
-					<span>Last Name:</span>
-					<span className="ml-2">{clientData.family_name}</span>
+				<div className="flex justify-between">
+					<dt className="text-primary/70">Last name</dt>
+					<dd>{clientData.family_name || '-'}</dd>
 				</div>
-				<div>
-					<span>Organization:</span>
-					<span className="ml-2">{clientData.org_name}</span>
+				<div className="flex justify-between">
+					<dt className="text-primary/70">Organization</dt>
+					<dd>{clientData.org_name || '-'}</dd>
 				</div>
-				<div>
-					<span>Email:</span>
-					<span className="ml-2">{clientData.email}</span>
+				<div className="flex justify-between">
+					<dt className="text-primary/70">Email</dt>
+					<dd className="break-all text-right max-w-[60%]">
+						{clientData.email || '-'}
+					</dd>
 				</div>
-			</div>
+			</dl>
 			<button
-				className="text-sm md:text-base lg:text-lg bg-primary-light text-white hover:bg-primary-light shadow-md hover:shadow-xl hover:scale-[1.02] mt-8 px-12 py-2"
+				className="text-xs md:text-sm bg-primary-light text-white hover:bg-primary-light/90 shadow-sm hover:shadow transition-transform hover:scale-[1.02] mt-6 px-6 py-2 w-full"
 				onClick={() => router.replace('/account/edit')}
 			>
-				Edit
+				Edit Details
 			</button>
 		</div>
 	)

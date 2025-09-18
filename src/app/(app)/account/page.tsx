@@ -1,16 +1,16 @@
-import { getClient } from '@/actions/clients'
+import { getClientWithSubscription } from '@/actions/clients'
 import AccountComponent from '@/components/account/account-component'
 import { ErrorBoundary } from '@/components/error-boundary'
 
 const AccountPage = async () => {
-	const clientData = await getClient()
-	console.log('CLIENT DATA:', clientData)
-	if (!clientData) {
-		return null
-	}
+	const data = await getClientWithSubscription()
+	if (!data?.client) return null
 	return (
 		<ErrorBoundary>
-			<AccountComponent clientData={clientData} />
+			<AccountComponent
+				clientData={data.client}
+				subscription={data.subscription}
+			/>
 		</ErrorBoundary>
 	)
 }

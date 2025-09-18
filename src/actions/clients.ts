@@ -238,6 +238,61 @@ export const getClient = async () => {
 	}
 }
 
+interface SubscriptionRow {
+	id: string
+	period_start: string
+	period_end: string
+	auto_renew: boolean
+	status: string
+	invoice_sent_at: string | null
+	renewal_processed_at: string | null
+}
+
+export const getClientWithSubscription = async () => {
+	try {
+		const supabase = await createClient()
+		const {
+			data: { user },
+		} = await supabase.auth.getUser()
+		if (!user) throw new Error('User not found')
+
+		const { data: client, error: clientError } = await supabase
+			.from('clients')
+			.select('*')
+			.eq('id', user.id)
+			.single()
+		if (clientError)
+			throw new Error(
+				`Failed to fetch client data: ${clientError.message}`
+			)
+
+		let subscription: SubscriptionRow | null = null
+		if (client.current_subscription) {
+			const { data: subData, error: subError } = await supabase
+				.from('subscriptions')
+				.select('*')
+				.eq('id', client.current_subscription)
+				.single()
+			if (!subError) subscription = subData
+		}
+
+		return { client: normalizeClientData(client), subscription }
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error('GET CLIENT WITH SUBSCRIPTION ERROR:', error.message)
+			throw error
+		} else {
+			console.error(
+				'Unexpected GET CLIENT WITH SUBSCRIPTION ERROR:',
+				error
+			)
+			throw new Error(
+				'An unexpected error occurred while fetching client+subscription data'
+			)
+		}
+	}
+}
+
 export const getClientsByConsultantId = async () => {
 	try {
 		const supabase = await createClient()
@@ -340,6 +395,34 @@ export const getClients = async () => {
 		return formattedData
 	} catch (error) {
 		console.log('ERROR FETCHING GRANTS', error)
+		throw error
+	}
+}
+
+// Fetch clients eligible for new subscription (no current active subscription)
+export const getClientsEligibleForSubscription = async () => {
+	try {
+		const supabase = await createClient()
+		// We assume a client is eligible if current_subscription is null OR account_status != 'active'
+		const { data, error } = await supabase
+			.from('clients')
+			.select('*')
+			.or('current_subscription.is.null,account_status.neq.active')
+			.order('created_at', { ascending: false })
+
+		if (error) {
+			throw new Error(error.message)
+		}
+
+		return (data || []).map((client) => ({
+			id: client.id,
+			name: `${client.name} ${client.family_name || ''}`.trim(),
+			org: client.org_name || '--',
+			email: client.email,
+			created_at: client.created_at,
+		}))
+	} catch (error) {
+		console.error('ERROR FETCHING ELIGIBLE CLIENTS', error)
 		throw error
 	}
 }

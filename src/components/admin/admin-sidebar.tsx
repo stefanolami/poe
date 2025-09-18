@@ -11,6 +11,7 @@ import {
 	Gavel,
 	Banknote,
 	LogOut,
+	CreditCard,
 } from 'lucide-react'
 import {
 	Sidebar,
@@ -58,6 +59,11 @@ const ITEMS = [
 		title: 'Clients',
 		url: '/admin/clients',
 		icon: Users,
+	},
+	{
+		title: 'Subscriptions',
+		url: '/admin/subscriptions',
+		icon: CreditCard,
 	},
 	{
 		title: 'Users',

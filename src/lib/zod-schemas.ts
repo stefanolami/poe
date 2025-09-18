@@ -158,6 +158,34 @@ export const createGrantsTailoredAssessmentSchema = z.object({
 		.optional(),
 })
 
+// Subscriptions
+export const subscriptionIdSchema = z.string().uuid('Invalid subscription id')
+
+export const createSubscriptionSchema = z.object({
+	clientId: z.string().uuid('Client id required'),
+	periodStart: z
+		.string()
+		.regex(/\d{4}-\d{2}-\d{2}/, 'Invalid date format (yyyy-mm-dd)'),
+	periodEnd: z
+		.string()
+		.regex(/\d{4}-\d{2}-\d{2}/, 'Invalid date format (yyyy-mm-dd)'),
+	autoRenew: z.boolean().optional(),
+	status: z.enum(['active', 'expired', 'frozen']).default('active'),
+})
+
+export const updateSubscriptionSchema = z.object({
+	period_start: z
+		.string()
+		.regex(/\d{4}-\d{2}-\d{2}/, 'Invalid date format (yyyy-mm-dd)')
+		.optional(),
+	period_end: z
+		.string()
+		.regex(/\d{4}-\d{2}-\d{2}/, 'Invalid date format (yyyy-mm-dd)')
+		.optional(),
+	auto_renew: z.boolean().optional(),
+	status: z.enum(['active', 'expired', 'frozen']).optional(),
+})
+
 export const sendOfferSchema = z.object({
 	email: z.string().email('Invalid email address'),
 })
