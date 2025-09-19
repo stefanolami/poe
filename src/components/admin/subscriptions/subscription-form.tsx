@@ -33,6 +33,7 @@ import {
 	createSubscriptionSchema,
 	updateSubscriptionSchema,
 } from '@/lib/zod-schemas'
+import { toast } from '@/hooks/use-toast'
 
 interface FormClientRef {
 	id: string
@@ -122,23 +123,56 @@ export default function SubscriptionForm({
 	async function onSubmit(values: FormValues) {
 		try {
 			if (isEdit && subscriptionId) {
-				await updateSubscription(subscriptionId, {
+				const response = await updateSubscription(subscriptionId, {
 					period_start: values.periodStart || undefined,
 					period_end: values.periodEnd || undefined,
 					status: values.status,
 				})
+				if (response) {
+					toast({
+						title: 'Success!',
+						description: 'Subscription updated successfully',
+						variant: 'default',
+					})
+					setTimeout(() => {
+						router.push('/admin/subscriptions')
+					}, 1000)
+				}
 			} else if (!isEdit) {
 				const createVals = values as FormValues & { clientId: string }
-				await createSubscription({
+				const response = await createSubscription({
 					clientId: createVals.clientId,
 					periodStart: createVals.periodStart,
 					periodEnd: createVals.periodEnd,
 					status: createVals.status,
 				})
+				if (response) {
+					toast({
+						title: 'Success!',
+						description: 'Subscription created successfully',
+						variant: 'default',
+					})
+					setTimeout(() => {
+						router.push('/admin/subscriptions')
+					}, 1000)
+				}
 			}
-			router.push('/admin/subscriptions')
-		} catch (e) {
-			console.error(e)
+		} catch (error) {
+			if (error instanceof Error) {
+				toast({
+					title: 'Error',
+					description: error.message,
+					variant: 'destructive',
+				})
+				console.error(error.message)
+			} else {
+				toast({
+					title: 'Error',
+					description: 'An unexpected error occurred',
+					variant: 'destructive',
+				})
+				console.error(error)
+			}
 		}
 	}
 

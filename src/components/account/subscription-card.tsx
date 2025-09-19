@@ -21,11 +21,35 @@ interface Props {
 }
 
 // Utility (minimal) – could be moved to a shared utils if pattern repeats
+// Formats as `Sep 12 2025`. Avoids TZ shifts for date-only strings (YYYY-MM-DD).
 const formatDate = (d: string | null | undefined) => {
 	if (!d) return '-'
+	// Handle plain date (YYYY-MM-DD) as UTC to avoid off-by-one with local zones
+	const match = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/.exec(d)
+	if (match) {
+		const [, y, m, day] = match
+		const date = new Date(Date.UTC(Number(y), Number(m) - 1, Number(day)))
+		if (isNaN(date.getTime())) return '-'
+		return date
+			.toLocaleDateString('en-US', {
+				month: 'short',
+				day: 'numeric',
+				year: 'numeric',
+				timeZone: 'UTC',
+			})
+			.replace(/,/g, '')
+	}
+
+	// Fallback: parse any other ISO/date string normally
 	const date = new Date(d)
 	if (isNaN(date.getTime())) return '-'
-	return date.toLocaleDateString()
+	return date
+		.toLocaleDateString('en-US', {
+			month: 'short',
+			day: 'numeric',
+			year: 'numeric',
+		})
+		.replace(/,/g, '')
 }
 
 export function SubscriptionCard({
@@ -47,11 +71,11 @@ export function SubscriptionCard({
 						<dd>{formatDate(accountCreatedAt)}</dd>
 					</div>
 					<div className="flex justify-between">
-						<dt className="text-primary/70">Period start</dt>
+						<dt className="text-primary/70">Subscription start</dt>
 						<dd>{formatDate(subscription.period_start)}</dd>
 					</div>
 					<div className="flex justify-between">
-						<dt className="text-primary/70">Period end</dt>
+						<dt className="text-primary/70">Subscription end</dt>
 						<dd>{formatDate(subscription.period_end)}</dd>
 					</div>
 					<div className="flex justify-between items-center">
