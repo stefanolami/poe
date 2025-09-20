@@ -24,18 +24,17 @@ import {
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
-import { CreateGrantType, GrantType, UpdateGrantType } from '@/lib/types'
-import { createGrantSchema } from '@/lib/zod-schemas'
+import { CreateTendersType } from '@/lib/types'
+import { createTendersSchema } from '@/lib/zod-schemas'
 import { geographiesArray } from '@/data/data'
 import { Textarea } from '@/components/ui/textarea'
-import GrantsDeadline from '../form-fields/grants-deadline'
-import GrantsFurtherDetails from '../form-fields/grants-further-details'
-import GrantsConsultant from '../form-fields/grants-consultant'
-import { updateGrant } from '@/actions/grants'
-import GrantsFormEmobility from '../grants-form-emobility'
-import { FaFolderOpen, FaTrashAlt } from 'react-icons/fa'
+import { FaFolderOpen } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
-import { useState } from 'react'
+import { createTender } from '@/actions/tenders'
+import TendersConsultant from './form-fields/tenders-consultant'
+import TendersDeadline from './form-fields/tenders-deadline'
+import TendersFurtherDetails from './form-fields/tenders-further-details'
+import TendersFormEmobility from './tenders-form-emobility'
 
 const SECTORS = [
 	{
@@ -48,95 +47,49 @@ const SECTORS = [
 	},
 ]
 
-export const GrantEdit = ({
-	grant,
+export const TendersForm = ({
 	consultants,
 }: {
-	grant: GrantType
 	consultants: {
 		id: string
 		name: string
 	}[]
 }) => {
-	const {
-		id,
-		geography,
-		consultant,
-		sector,
-		value,
-		call_title,
-		grant_programme,
-		alert_purpose,
-		programme_purpose,
-		instrument_type,
-		awarding_authority,
-		reference_number,
-		in_brief,
-		deadline,
-		further_details,
-		files,
-		tailored_assessment,
-	} = grant
-
-	const [filesArray, setFilesArray] = useState(files || [])
-
-	const formattedDeadline = deadline.map((d) => d.split('///'))
-	const formattedFurtherDetails = further_details?.map((d) => d.split('///'))
-	const formattedTailoredAssessment = tailored_assessment?.map((t) => [
-		t.client,
-		t.relevance,
-		t.next_steps,
-	])
-
 	const { toast } = useToast()
 
 	const router = useRouter()
 
-	const form = useForm<CreateGrantType>({
-		resolver: zodResolver(createGrantSchema),
+	const form = useForm<CreateTendersType>({
+		resolver: zodResolver(createTendersSchema),
 		defaultValues: {
-			geography: geography || [],
-			//@ts-expect-error id is a string in the form, but consultant is an object in the grant
-			consultant: consultant ? consultant.id : '',
-			sector: sector || '',
-			call_title: call_title || '',
-			grant_programme: grant_programme || '',
-			value: value || '',
-			alert_purpose: alert_purpose || '',
-			programme_purpose: programme_purpose || '',
-			instrument_type: instrument_type || '',
-			awarding_authority: awarding_authority || '',
-			reference_number: reference_number || '',
-			deadline: formattedDeadline || [['', '', '']],
-			in_brief: in_brief || '',
-			further_details: formattedFurtherDetails || [],
-			tailored_assessment: formattedTailoredAssessment || [],
+			programme: '',
+			value: '',
+			alert_purpose: '',
+			programme_purpose: '',
+			instrument_type: '',
+			awarding_authority: '',
+			deadline: [['', '', '']],
+			in_brief: '',
+			further_details: [],
+			tailored_assessment: [],
 		},
 	})
 
 	const isSubmitting = form.formState.isSubmitting
 
-	const handleFileDelete = (file: string) => {
-		setFilesArray((prevFiles) => prevFiles.filter((f) => f !== file))
-	}
-
-	const submitHandler: SubmitHandler<CreateGrantType> = async (data) => {
-		console.log('Form data:', data)
-		const formattedData: UpdateGrantType = {
-			...data,
-			oldFiles: filesArray,
-		}
+	const submitHandler: SubmitHandler<CreateTendersType> = async (data) => {
+		console.log('DATA', data)
 		try {
-			const response = await updateGrant(id, formattedData)
+			const response = await createTender(data)
 
 			if (response) {
 				toast({
 					title: 'Success!',
-					description: 'Grant updated successfully',
+					description: 'Tender created successfully',
 					variant: 'default',
 				})
 				setTimeout(() => {
-					router.push(`/admin/grants/${id}`)
+					router.push('/admin/tenders')
 				}, 1000)
 			}
 
@@ -171,9 +124,9 @@ export const GrantEdit = ({
 	}, [defaultValues, form]) */
 
 	return (
-		<div className="form w-full mb-16">
+		<div className="w-full mb-16">
 			<div className="grid grid-cols-2 items-start gap-4 text-white font-jose text-2xl mb-16">
-				<h1 className="">Edit Grant</h1>
+				<h1 className="">Create New Tender</h1>
 				<h1>
 					{
 						SECTORS.find((s) => s.value == form.watch('sector'))
@@ -206,7 +159,6 @@ export const GrantEdit = ({
 												maxCount={10}
 												options={geographiesArray}
 												disabled={isSubmitting}
-												defaultValue={field.value}
 											/>
 										</FormControl>
 										<FormMessage className="text-red-500 text-sm" />
@@ -262,28 +214,10 @@ export const GrantEdit = ({
 							/>
 							<FormField
 								control={form.control}
-								name="call_title"
+								name="programme"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Call Title</FormLabel>
-										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												{...field}
-												className="bg-white text-primary"
-											/>
-										</FormControl>
-										<FormMessage className="text-red-500 text-sm text-nowrap" />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="grant_programme"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Grant Programme</FormLabel>
+										<FormLabel>Programme</FormLabel>
 										<FormControl>
 											<Input
 												disabled={isSubmitting}
@@ -370,25 +304,7 @@ export const GrantEdit = ({
 									</FormItem>
 								)}
 							/>
-							<FormField
-								control={form.control}
-								name="reference_number"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Reference Number</FormLabel>
-										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												{...field}
-												className="bg-white text-primary"
-											/>
-										</FormControl>
-										<FormMessage className="text-red-500 text-sm" />
-									</FormItem>
-								)}
-							/>
-							<GrantsConsultant
+							<TendersConsultant
 								form={form}
 								consultants={consultants}
 								isSubmitting={isSubmitting}
@@ -411,49 +327,14 @@ export const GrantEdit = ({
 									</FormItem>
 								)}
 							/>
-							<GrantsDeadline
+							<TendersDeadline
 								form={form}
 								isSubmitting={isSubmitting}
 							/>
-							<GrantsFurtherDetails
+							<TendersFurtherDetails
 								form={form}
 								isSubmitting={isSubmitting}
 							/>
-
-							{filesArray && filesArray.length > 0 ? (
-								<div className="col-span-2 mb-4">
-									<span className="block mb-2">
-										Documents
-									</span>
-									<ul className="list-disc pl-5 space-y-2">
-										{filesArray.map((file, index) => (
-											<li key={index}>
-												<div className="flex items-center justify-start gap-10">
-													<a
-														href={`https://wgbitmetlwsyukgoortd.supabase.co/storage/v1/object/public/documents${file}`}
-														target="_blank"
-														className="underline"
-													>
-														{file.slice(8)}
-													</a>
-													<button
-														type="button"
-														onClick={() =>
-															handleFileDelete(
-																file
-															)
-														}
-														className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5 px-2 py-2"
-													>
-														<FaTrashAlt className="h-3 w-3" />
-													</button>
-												</div>
-											</li>
-										))}
-									</ul>
-								</div>
-							) : null}
-
 							<FormField
 								control={form.control}
 								name="files"
@@ -510,7 +391,7 @@ export const GrantEdit = ({
 															)
 														}}
 													/>
-													<span className="bg-white/5 hover:bg-white/5 px-2 py-2 shadow-md hover:shadow-xl hover:scale-[1.02] text-white flex items-center justify-center transition-colors duration-150">
+													<span className="bg-white/5 hover:bg-white/5 px-2 py-2 shadow-md hover:shadow-xl text-white flex items-center justify-center transition-colors duration-150">
 														<FaFolderOpen className="w-5 h-5" />
 													</span>
 												</label>
@@ -522,7 +403,7 @@ export const GrantEdit = ({
 							/>
 						</div>
 						{form.watch('sector') === 'e-mobility' ? (
-							<GrantsFormEmobility form={form} />
+							<TendersFormEmobility form={form} />
 						) : null}
 					</div>
 					<Button

@@ -3,6 +3,7 @@ import {
 	createAccountSchema,
 	createGrantSchema,
 	createGrantsTailoredAssessmentSchema,
+	createTendersSchema,
 	createUserSchema,
 	forgotPasswordSchema,
 	loginSchema,
@@ -17,6 +18,12 @@ export type CreateAccountType = z.infer<typeof createAccountSchema>
 export type CreateGrantType = z.infer<typeof createGrantSchema>
 
 export type CreateGrantsTailoredAssessmentType = z.infer<
+	typeof createGrantsTailoredAssessmentSchema
+>
+
+export type CreateTendersType = z.infer<typeof createTendersSchema>
+
+export type CreateTendersTailoredAssessmentType = z.infer<
 	typeof createGrantsTailoredAssessmentSchema
 >
 
@@ -206,6 +213,32 @@ export type GrantType = {
 	value: string
 }
 
+export type TenderType = {
+	alert_purpose: string
+	amendments: string[] | null
+	awarding_authority: string
+	consultant: string | null
+	created_at: string
+	deadline: string[]
+	vehicles: string[] | null
+	vehicles_contracts: string[] | null
+	stations: string[] | null
+	stations_contracts: string[] | null
+	files: string[] | null
+	further_details: string[] | null
+	geography: string[]
+	programme: string
+	id: string
+	in_brief: string
+	instrument_type: string
+	matched_clients: string[] | null
+	programme_purpose: string
+	sector: string
+	sent: boolean
+	tailored_assessment: TailoredAssessmentType[] | null
+	value: string
+}
+
 export type GrantWithConsultantType = {
 	alert_purpose: string
 	amendments: string[] | null
@@ -239,6 +272,39 @@ export type GrantWithConsultantType = {
 	value: string
 }
 
+export type TenderWithConsultantType = {
+	alert_purpose: string
+	amendments: string[] | null
+	awarding_authority: string
+	consultant: {
+		id: string
+		name: string
+		email: string
+		family_name: string
+		created_at: string
+		clients: string[] | null
+	} | null
+	created_at: string
+	deadline: string[]
+	vehicles: string[] | null
+	vehicles_contracts: string[] | null
+	stations: string[] | null
+	stations_contracts: string[] | null
+	files: string[] | null
+	further_details: string[] | null
+	geography: string[]
+	programme: string
+	id: string
+	in_brief: string
+	instrument_type: string
+	matched_clients: string[] | null
+	programme_purpose: string
+	sector: string
+	sent: boolean
+	tailored_assessment: TailoredAssessmentType[] | null
+	value: string
+}
+
 export type Geography = {
 	value: string
 	label: string
@@ -263,6 +329,27 @@ export type FormattedGrantType = {
 	consultant?: string | undefined | null
 	deployment?: string[] | undefined | null
 	project?: string[] | undefined | null
+}
+
+export type FormattedTenderType = {
+	geography: string[]
+	value: string
+	alert_purpose: string
+	awarding_authority: string
+	deadline: string[]
+	in_brief: string
+	sector: string
+	programme: string
+	programme_purpose: string
+	instrument_type: string
+	further_details?: string[] | undefined | null
+	files?: string[] | undefined | null
+	tailored_assessment?: TailoredAssessmentType[] | undefined | null
+	consultant?: string | undefined | null
+	vehicles?: string[] | undefined | null
+	vehicles_contracts?: string[] | undefined | null
+	stations?: string[] | undefined | null
+	stations_contracts?: string[] | undefined | null
 }
 
 export type FormattedGrantTypeNull = {
@@ -434,6 +521,28 @@ export type UpdateGrantType = {
 	programme_purpose?: string | undefined
 	instrument_type?: string | undefined
 	reference_number?: string | undefined
+	further_details?: string[][] | undefined
+	files?: File[] | undefined
+	oldFiles?: string[] | undefined
+	tailored_assessment?: string[][] | undefined
+	consultant?: string | undefined
+}
+
+export type UpdateTenderType = {
+	sector: string
+	value: string
+	geography: string[]
+	alert_purpose: string
+	awarding_authority: string
+	deadline: string[][]
+	in_brief: string
+	vehicles?: string[] | undefined
+	vehicles_contracts?: string[] | undefined
+	stations?: string[] | undefined
+	stations_contracts?: string[] | undefined
+	programme: string
+	programme_purpose: string
+	instrument_type: string
 	further_details?: string[][] | undefined
 	files?: File[] | undefined
 	oldFiles?: string[] | undefined

@@ -311,6 +311,92 @@ export type Database = {
           },
         ]
       }
+      tenders: {
+        Row: {
+          alert_purpose: string
+          amendments: string[] | null
+          awarding_authority: string
+          consultant: string | null
+          created_at: string
+          deadline: string[]
+          files: string[] | null
+          further_details: string[] | null
+          geography: string[]
+          id: string
+          in_brief: string
+          instrument_type: string
+          matched_clients: string[] | null
+          programme: string
+          programme_purpose: string
+          sector: string
+          sent: boolean
+          stations: string[] | null
+          stations_contracts: string[] | null
+          tailored_assessment: Json[] | null
+          value: string
+          vehicles: string[] | null
+          vehicles_contracts: string[] | null
+        }
+        Insert: {
+          alert_purpose: string
+          amendments?: string[] | null
+          awarding_authority: string
+          consultant?: string | null
+          created_at?: string
+          deadline: string[]
+          files?: string[] | null
+          further_details?: string[] | null
+          geography: string[]
+          id?: string
+          in_brief: string
+          instrument_type: string
+          matched_clients?: string[] | null
+          programme: string
+          programme_purpose: string
+          sector: string
+          sent?: boolean
+          stations?: string[] | null
+          stations_contracts?: string[] | null
+          tailored_assessment?: Json[] | null
+          value: string
+          vehicles?: string[] | null
+          vehicles_contracts?: string[] | null
+        }
+        Update: {
+          alert_purpose?: string
+          amendments?: string[] | null
+          awarding_authority?: string
+          consultant?: string | null
+          created_at?: string
+          deadline?: string[]
+          files?: string[] | null
+          further_details?: string[] | null
+          geography?: string[]
+          id?: string
+          in_brief?: string
+          instrument_type?: string
+          matched_clients?: string[] | null
+          programme?: string
+          programme_purpose?: string
+          sector?: string
+          sent?: boolean
+          stations?: string[] | null
+          stations_contracts?: string[] | null
+          tailored_assessment?: Json[] | null
+          value?: string
+          vehicles?: string[] | null
+          vehicles_contracts?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenders_consultant_fkey"
+            columns: ["consultant"]
+            isOneToOne: false
+            referencedRelation: "consultants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           clients: string[] | null
@@ -348,6 +434,10 @@ export type Database = {
     Functions: {
       update_grant_clients_call: {
         Args: { grant_id: string }
+        Returns: undefined
+      }
+      update_tender_clients_call: {
+        Args: { tender_id: string }
         Returns: undefined
       }
     }

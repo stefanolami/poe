@@ -39,8 +39,6 @@ const CreateAccountForm = () => {
 	const router = useRouter()
 	const pathname = usePathname()
 
-	console.log('pathname', pathname)
-
 	const { storeSector, storeData } = useStore(
 		useShallow((state) => ({
 			storeSector: state.sector,

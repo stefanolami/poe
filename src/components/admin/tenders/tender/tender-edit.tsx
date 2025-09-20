@@ -24,18 +24,18 @@ import {
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
-import { CreateGrantType, GrantType, UpdateGrantType } from '@/lib/types'
-import { createGrantSchema } from '@/lib/zod-schemas'
+import { CreateTendersType, TenderType, UpdateTenderType } from '@/lib/types'
+import { createTendersSchema } from '@/lib/zod-schemas'
 import { geographiesArray } from '@/data/data'
 import { Textarea } from '@/components/ui/textarea'
-import GrantsDeadline from '../form-fields/grants-deadline'
-import GrantsFurtherDetails from '../form-fields/grants-further-details'
-import GrantsConsultant from '../form-fields/grants-consultant'
-import { updateGrant } from '@/actions/grants'
-import GrantsFormEmobility from '../grants-form-emobility'
 import { FaFolderOpen, FaTrashAlt } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
 import { useState } from 'react'
+import { updateTender } from '@/actions/tenders'
+import TendersConsultant from '../form-fields/tenders-consultant'
+import TendersDeadline from '../form-fields/tenders-deadline'
+import TendersFurtherDetails from '../form-fields/tenders-further-details'
+import TendersFormEmobility from '../tenders-form-emobility'
 
 const SECTORS = [
 	{
@@ -48,11 +48,11 @@ const SECTORS = [
 	},
 ]
 
-export const GrantEdit = ({
-	grant,
+export const TenderEdit = ({
+	tender,
 	consultants,
 }: {
-	grant: GrantType
+	tender: TenderType
 	consultants: {
 		id: string
 		name: string
@@ -64,19 +64,17 @@ export const GrantEdit = ({
 		consultant,
 		sector,
 		value,
-		call_title,
-		grant_programme,
+		programme,
 		alert_purpose,
 		programme_purpose,
 		instrument_type,
 		awarding_authority,
-		reference_number,
 		in_brief,
 		deadline,
 		further_details,
 		files,
 		tailored_assessment,
-	} = grant
+	} = tender
 
 	const [filesArray, setFilesArray] = useState(files || [])
 
@@ -92,21 +90,19 @@ export const GrantEdit = ({
 
 	const router = useRouter()
 
-	const form = useForm<CreateGrantType>({
-		resolver: zodResolver(createGrantSchema),
+	const form = useForm<CreateTendersType>({
+		resolver: zodResolver(createTendersSchema),
 		defaultValues: {
 			geography: geography || [],
 			//@ts-expect-error id is a string in the form, but consultant is an object in the grant
 			consultant: consultant ? consultant.id : '',
 			sector: sector || '',
-			call_title: call_title || '',
-			grant_programme: grant_programme || '',
+			programme: programme || '',
 			value: value || '',
 			alert_purpose: alert_purpose || '',
 			programme_purpose: programme_purpose || '',
 			instrument_type: instrument_type || '',
 			awarding_authority: awarding_authority || '',
-			reference_number: reference_number || '',
 			deadline: formattedDeadline || [['', '', '']],
 			in_brief: in_brief || '',
 			further_details: formattedFurtherDetails || [],
@@ -120,23 +116,23 @@ export const GrantEdit = ({
 		setFilesArray((prevFiles) => prevFiles.filter((f) => f !== file))
 	}
 
-	const submitHandler: SubmitHandler<CreateGrantType> = async (data) => {
+	const submitHandler: SubmitHandler<CreateTendersType> = async (data) => {
 		console.log('Form data:', data)
-		const formattedData: UpdateGrantType = {
+		const formattedData: UpdateTenderType = {
 			...data,
 			oldFiles: filesArray,
 		}
 		try {
-			const response = await updateGrant(id, formattedData)
+			const response = await updateTender(id, formattedData)
 
 			if (response) {
 				toast({
 					title: 'Success!',
-					description: 'Grant updated successfully',
+					description: 'Tender updated successfully',
 					variant: 'default',
 				})
 				setTimeout(() => {
-					router.push(`/admin/grants/${id}`)
+					router.push(`/admin/tenders/${id}`)
 				}, 1000)
 			}
 
@@ -173,7 +169,7 @@ export const GrantEdit = ({
 	return (
 		<div className="form w-full mb-16">
 			<div className="grid grid-cols-2 items-start gap-4 text-white font-jose text-2xl mb-16">
-				<h1 className="">Edit Grant</h1>
+				<h1 className="">Edit Tender</h1>
 				<h1>
 					{
 						SECTORS.find((s) => s.value == form.watch('sector'))
@@ -262,28 +258,10 @@ export const GrantEdit = ({
 							/>
 							<FormField
 								control={form.control}
-								name="call_title"
+								name="programme"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Call Title</FormLabel>
-										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												{...field}
-												className="bg-white text-primary"
-											/>
-										</FormControl>
-										<FormMessage className="text-red-500 text-sm text-nowrap" />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="grant_programme"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Grant Programme</FormLabel>
+										<FormLabel>Programme</FormLabel>
 										<FormControl>
 											<Input
 												disabled={isSubmitting}
@@ -370,25 +348,7 @@ export const GrantEdit = ({
 									</FormItem>
 								)}
 							/>
-							<FormField
-								control={form.control}
-								name="reference_number"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Reference Number</FormLabel>
-										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												{...field}
-												className="bg-white text-primary"
-											/>
-										</FormControl>
-										<FormMessage className="text-red-500 text-sm" />
-									</FormItem>
-								)}
-							/>
-							<GrantsConsultant
+							<TendersConsultant
 								form={form}
 								consultants={consultants}
 								isSubmitting={isSubmitting}
@@ -411,11 +371,11 @@ export const GrantEdit = ({
 									</FormItem>
 								)}
 							/>
-							<GrantsDeadline
+							<TendersDeadline
 								form={form}
 								isSubmitting={isSubmitting}
 							/>
-							<GrantsFurtherDetails
+							<TendersFurtherDetails
 								form={form}
 								isSubmitting={isSubmitting}
 							/>
@@ -522,7 +482,7 @@ export const GrantEdit = ({
 							/>
 						</div>
 						{form.watch('sector') === 'e-mobility' ? (
-							<GrantsFormEmobility form={form} />
+							<TendersFormEmobility form={form} />
 						) : null}
 					</div>
 					<Button
