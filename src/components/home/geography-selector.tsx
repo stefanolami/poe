@@ -116,6 +116,102 @@ export default function GeographySelector() {
 												<div
 													className={`pl-4 ${group.value === 'eu27' ? 'grid grid-cols-2 gap-x-4 gap-y-2' : 'space-y-2'}`}
 												>
+													{[
+														'eu27',
+														'otherEu',
+													].includes(group.value) && (
+														<label
+															className={`flex items-center gap-3 cursor-pointer hover:bg-primary/5 rounded px-2 py-1 transition-colors ${group.value === 'eu27' ? 'col-span-2' : ''}`}
+														>
+															{(() => {
+																const countries =
+																	group.countries ||
+																	[]
+																const selectedInGroup =
+																	countries.filter(
+																		(c) =>
+																			geographies.some(
+																				(
+																					g
+																				) =>
+																					g.value ===
+																					c.value
+																			)
+																	)
+																const allSelected =
+																	selectedInGroup.length ===
+																		countries.length &&
+																	countries.length >
+																		0
+																const onToggleAll =
+																	() => {
+																		if (
+																			allSelected
+																		) {
+																			// Deselect all
+																			countries.forEach(
+																				(
+																					c
+																				) => {
+																					if (
+																						geographies.some(
+																							(
+																								g
+																							) =>
+																								g.value ===
+																								c.value
+																						)
+																					) {
+																						removeGeography(
+																							c
+																						)
+																					}
+																				}
+																			)
+																		} else {
+																			// Select all
+																			countries.forEach(
+																				(
+																					c
+																				) => {
+																					if (
+																						!geographies.some(
+																							(
+																								g
+																							) =>
+																								g.value ===
+																								c.value
+																						)
+																					) {
+																						addGeography(
+																							c
+																						)
+																					}
+																				}
+																			)
+																		}
+																	}
+																return (
+																	<>
+																		<input
+																			type="checkbox"
+																			checked={
+																				allSelected
+																			}
+																			onChange={
+																				onToggleAll
+																			}
+																			className="custom-checkbox"
+																		/>
+																		<span className="text-sm md:text-base text-primary">
+																			Select
+																			all
+																		</span>
+																	</>
+																)
+															})()}
+														</label>
+													)}
 													{group.countries.map(
 														(
 															country,
@@ -300,6 +396,75 @@ export default function GeographySelector() {
 										defaultOpen={true}
 									>
 										<div className="pl-4 pt-1 grid grid-cols-2 gap-x-4 gap-y-2">
+											{(() => {
+												const countries =
+													eu27.countries || []
+												const selectedInGroup =
+													countries.filter(
+														(c: Geography) =>
+															geographies.some(
+																(g) =>
+																	g.value ===
+																	c.value
+															)
+													)
+												const allSelected =
+													selectedInGroup.length ===
+														countries.length &&
+													countries.length > 0
+												const onToggleAll = () => {
+													if (allSelected) {
+														countries.forEach(
+															(c: Geography) => {
+																if (
+																	geographies.some(
+																		(g) =>
+																			g.value ===
+																			c.value
+																	)
+																) {
+																	removeGeography(
+																		c
+																	)
+																}
+															}
+														)
+													} else {
+														countries.forEach(
+															(c: Geography) => {
+																if (
+																	!geographies.some(
+																		(g) =>
+																			g.value ===
+																			c.value
+																	)
+																) {
+																	addGeography(
+																		c
+																	)
+																}
+															}
+														)
+													}
+												}
+												return (
+													<label className="flex items-center gap-3 cursor-pointer hover:bg-primary/5 rounded px-2 py-1 transition-colors col-span-2">
+														<input
+															type="checkbox"
+															checked={
+																allSelected
+															}
+															onChange={
+																onToggleAll
+															}
+															className="custom-checkbox"
+														/>
+														<span className="text-sm md:text-base text-primary font-medium">
+															Select all
+														</span>
+													</label>
+												)
+											})()}
 											{eu27.countries.map(
 												(country, idx) => {
 													const isSelected =
@@ -354,6 +519,75 @@ export default function GeographySelector() {
 										defaultOpen={true}
 									>
 										<div className="pl-4 pt-1 space-y-2">
+											{(() => {
+												const countries =
+													other.countries || []
+												const selectedInGroup =
+													countries.filter(
+														(c: Geography) =>
+															geographies.some(
+																(g) =>
+																	g.value ===
+																	c.value
+															)
+													)
+												const allSelected =
+													selectedInGroup.length ===
+														countries.length &&
+													countries.length > 0
+												const onToggleAll = () => {
+													if (allSelected) {
+														countries.forEach(
+															(c: Geography) => {
+																if (
+																	geographies.some(
+																		(g) =>
+																			g.value ===
+																			c.value
+																	)
+																) {
+																	removeGeography(
+																		c
+																	)
+																}
+															}
+														)
+													} else {
+														countries.forEach(
+															(c: Geography) => {
+																if (
+																	!geographies.some(
+																		(g) =>
+																			g.value ===
+																			c.value
+																	)
+																) {
+																	addGeography(
+																		c
+																	)
+																}
+															}
+														)
+													}
+												}
+												return (
+													<label className="flex items-center gap-3 cursor-pointer hover:bg-primary/5 rounded px-2 py-1 transition-colors">
+														<input
+															type="checkbox"
+															checked={
+																allSelected
+															}
+															onChange={
+																onToggleAll
+															}
+															className="custom-checkbox"
+														/>
+														<span className="text-sm md:text-base text-primary font-medium">
+															Select all
+														</span>
+													</label>
+												)
+											})()}
 											{other.countries.map(
 												(country, idx) => {
 													const isSelected =

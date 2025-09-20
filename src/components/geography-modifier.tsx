@@ -139,6 +139,102 @@ export default function GeographyModifier() {
 																	: 'space-y-2'
 															}`}
 														>
+															{[
+																'eu27',
+																'otherEu',
+															].includes(
+																item.value
+															) && (
+																<label className="flex items-center gap-3 cursor-pointer hover:bg-primary/5 rounded px-2 py-1 transition-colors">
+																	{(() => {
+																		const countries =
+																			(item.countries ||
+																				[]) as Geography[]
+																		const selectedInGroup =
+																			countries.filter(
+																				(
+																					c
+																				) =>
+																					geographies.some(
+																						(
+																							g: Geography
+																						) =>
+																							g.value ===
+																							c.value
+																					)
+																			)
+																		const allSelected =
+																			selectedInGroup.length ===
+																				countries.length &&
+																			countries.length >
+																				0
+																		const onToggleAll =
+																			() => {
+																				if (
+																					allSelected
+																				) {
+																					countries.forEach(
+																						(
+																							c
+																						) => {
+																							if (
+																								geographies.some(
+																									(
+																										g: Geography
+																									) =>
+																										g.value ===
+																										c.value
+																								)
+																							) {
+																								removeGeography(
+																									c
+																								)
+																							}
+																						}
+																					)
+																				} else {
+																					countries.forEach(
+																						(
+																							c
+																						) => {
+																							if (
+																								!geographies.some(
+																									(
+																										g: Geography
+																									) =>
+																										g.value ===
+																										c.value
+																								)
+																							) {
+																								addGeography(
+																									c
+																								)
+																							}
+																						}
+																					)
+																				}
+																			}
+																		return (
+																			<>
+																				<input
+																					type="checkbox"
+																					checked={
+																						allSelected
+																					}
+																					onChange={
+																						onToggleAll
+																					}
+																					className="custom-checkbox"
+																				/>
+																				<span className="text-sm text-primary">
+																					Select
+																					all
+																				</span>
+																			</>
+																		)
+																	})()}
+																</label>
+															)}
 															{item.countries.map(
 																(
 																	country,
