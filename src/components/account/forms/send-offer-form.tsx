@@ -27,6 +27,7 @@ import { selectionArrayFromStoreToDB } from '@/lib/utils'
 
 type SendOfferType = {
 	email: string
+	additionalEmails?: string[]
 }
 
 const SendOfferForm = () => {
@@ -48,16 +49,23 @@ const SendOfferForm = () => {
 		resolver: zodResolver(sendOfferSchema),
 		defaultValues: {
 			email: '',
+			additionalEmails: [],
 		},
 	})
 
 	const isSubmitting = form.formState.isSubmitting
 
-	const submitHandler: SubmitHandler<CreateAccountTempType> = async (
-		data: CreateAccountTempType
+	const submitHandler: SubmitHandler<SendOfferType> = async (
+		data: SendOfferType
 	) => {
-		const fullData = {
+		const fullData: CreateAccountTempType = {
 			...data,
+			additional_emails:
+				data.additionalEmails && data.additionalEmails.length
+					? data.additionalEmails.filter(
+							(e) => e && e.trim().length > 0
+						)
+					: [],
 			sector: storeSector.value,
 			vehicles_type: selectionArrayFromStoreToDB(
 				storeData.eMobility.typeOfVehicle
@@ -165,7 +173,7 @@ const SendOfferForm = () => {
 	return (
 		<div className="mt-10 lg:mt-0">
 			<h2 className="text-lg md:text-xl lg:text-3xl mb-4 lg:mb-10">
-				Create Account
+				Send Offer
 			</h2>
 			<Form {...form}>
 				<form
@@ -189,6 +197,84 @@ const SendOfferForm = () => {
 										{...field}
 										className="bg-white text-primary text-sm md:text-base"
 									/>
+								</FormControl>
+								<FormMessage className="text-red-500 text-sm md:text-base" />
+							</FormItem>
+						)}
+					/>
+					{/* Additional Emails (dynamic) */}
+					<FormField
+						control={form.control}
+						name="additionalEmails"
+						render={({ field }) => (
+							<FormItem className="mt-6">
+								<FormLabel className="text-sm md:text-base lg:text-lg">
+									Additional Emails
+								</FormLabel>
+								<FormControl>
+									<div className="space-y-3">
+										{(field.value ?? []).map(
+											(email, index) => (
+												<div
+													key={index}
+													className="flex items-center gap-3"
+												>
+													<Input
+														disabled={isSubmitting}
+														placeholder=""
+														value={email || ''}
+														onChange={(e) => {
+															const updated = [
+																...(field.value ??
+																	[]),
+															]
+															updated[index] =
+																e.target.value
+															field.onChange(
+																updated
+															)
+														}}
+														className="bg-white text-primary text-sm md:text-base flex-1"
+													/>
+													<Button
+														variant="destructive"
+														type="button"
+														disabled={isSubmitting}
+														onClick={() => {
+															const updated = (
+																field.value ??
+																[]
+															).filter(
+																(_, i) =>
+																	i !== index
+															)
+															field.onChange(
+																updated
+															)
+														}}
+														className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+													>
+														Remove
+													</Button>
+												</div>
+											)
+										)}
+
+										<Button
+											variant="default"
+											type="button"
+											disabled={isSubmitting}
+											onClick={() =>
+												field.onChange([
+													...(field.value ?? []),
+													'',
+												])
+											}
+											className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+										>
+											Add Emails
+										</Button>
+									</div>
 								</FormControl>
 								<FormMessage className="text-red-500 text-sm md:text-base" />
 							</FormItem>

@@ -2,8 +2,8 @@
 
 import {
 	BarChart3,
-	Search,
-	Settings,
+	//Search,
+	//Settings,
 	Megaphone,
 	ShieldUser,
 	Users,
@@ -70,7 +70,7 @@ const ITEMS = [
 		url: '/admin/users',
 		icon: ShieldUser,
 	},
-	{
+	/* {
 		title: 'Search',
 		url: '#',
 		icon: Search,
@@ -79,7 +79,7 @@ const ITEMS = [
 		title: 'Settings',
 		url: '#',
 		icon: Settings,
-	},
+	}, */
 ]
 
 export function AdminSidebar() {

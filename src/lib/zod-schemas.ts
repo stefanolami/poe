@@ -10,6 +10,9 @@ export const createAccountSchema = z
 			.string()
 			.min(6, 'Password must be at least 6 characters long'),
 		confirmPassword: z.string().min(6, 'Confirm password is required'),
+		additionalEmails: z
+			.array(z.string().email('Invalid email address'))
+			.optional(),
 		sector: z.string().optional(),
 		vehicles_type: z
 			.array(
@@ -89,6 +92,9 @@ export const updateAccountSchema = z.object({
 	familyName: z.string().min(1, 'Last Name is required'),
 	orgName: z.string().optional(),
 	email: z.string().email('Invalid email address'),
+	additionalEmails: z
+		.array(z.string().email('Invalid email address'))
+		.optional(),
 })
 
 export const loginSchema = z.object({
@@ -226,6 +232,9 @@ export const updateSubscriptionSchema = z.object({
 
 export const sendOfferSchema = z.object({
 	email: z.string().email('Invalid email address'),
+	additionalEmails: z
+		.array(z.string().email('Invalid email address'))
+		.optional(),
 })
 
 export const createUserSchema = z

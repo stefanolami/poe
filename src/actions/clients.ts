@@ -62,6 +62,7 @@ export const signUpClient = async (data: CreateAccountType, id?: string) => {
 			deployment: data.deployment ?? [],
 			project: data.project ?? [],
 			referrer: 'poe',
+			additional_emails: data.additionalEmails ?? [],
 		}
 
 		// Create client record
@@ -120,6 +121,12 @@ export const clientUpdate = async (
 				family_name: data.familyName,
 				org_name: data.orgName,
 				email: data.email,
+				additional_emails:
+					(data.additionalEmails &&
+						data.additionalEmails.filter(
+							(e) => e && e.trim().length > 0
+						)) ||
+					[],
 			})
 			.eq('id', id)
 			.select()
@@ -176,6 +183,7 @@ export const createClientTemp = async (
 			deployment: data.deployment ?? [],
 			project: data.project ?? [],
 			referrer: 'poe',
+			additional_emails: data.additional_emails ?? [],
 		}
 
 		const { data: clientData, error } = await supabase

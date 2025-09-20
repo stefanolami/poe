@@ -13,7 +13,7 @@ const mailerSend = new MailerSend({
 	apiKey: process.env.MAILERSEND_API_KEY || '',
 })
 
-export async function sendGrant(to, subject, grant, attachments) {
+export async function sendGrant(to, subject, grant, attachments, cc = []) {
 	const emailHtml = await render(<GrantsEmail grant={grant} />)
 	if (attachments && attachments.length > 0) {
 		const bufferAttachments = await Promise.all(
@@ -22,6 +22,7 @@ export async function sendGrant(to, subject, grant, attachments) {
 		const emailParams = new EmailParams()
 			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
 			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
 			.setAttachments(bufferAttachments)
@@ -30,13 +31,20 @@ export async function sendGrant(to, subject, grant, attachments) {
 		const emailParams = new EmailParams()
 			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
 			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
 		return await mailerSend.email.send(emailParams)
 	}
 }
 
-export async function sendGrantCharIn(to, subject, grant, attachments) {
+export async function sendGrantCharIn(
+	to,
+	subject,
+	grant,
+	attachments,
+	cc = []
+) {
 	const emailHtml = await render(<GrantsEmailCharIn grant={grant} />)
 	if (attachments && attachments.length > 0) {
 		const bufferAttachments = await Promise.all(
@@ -45,6 +53,7 @@ export async function sendGrantCharIn(to, subject, grant, attachments) {
 		const emailParams = new EmailParams()
 			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
 			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
 			.setAttachments(bufferAttachments)
@@ -53,6 +62,7 @@ export async function sendGrantCharIn(to, subject, grant, attachments) {
 		const emailParams = new EmailParams()
 			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
 			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
 		return await mailerSend.email.send(emailParams)
@@ -64,7 +74,8 @@ export async function sendGrantTailored(
 	subject,
 	grant,
 	assessment,
-	attachments
+	attachments,
+	cc = []
 ) {
 	const emailHtml = await render(
 		<GrantsEmailTailored
@@ -79,6 +90,7 @@ export async function sendGrantTailored(
 		const emailParams = new EmailParams()
 			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
 			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
 			.setAttachments(bufferAttachments)
@@ -87,6 +99,7 @@ export async function sendGrantTailored(
 		const emailParams = new EmailParams()
 			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
 			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
 		return await mailerSend.email.send(emailParams)
@@ -98,7 +111,8 @@ export async function sendGrantTailoredCharIn(
 	subject,
 	grant,
 	assessment,
-	attachments
+	attachments,
+	cc = []
 ) {
 	const emailHtml = await render(
 		<GrantsEmailTailoredCharIn
@@ -113,6 +127,7 @@ export async function sendGrantTailoredCharIn(
 		const emailParams = new EmailParams()
 			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
 			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
 			.setAttachments(bufferAttachments)
@@ -121,6 +136,7 @@ export async function sendGrantTailoredCharIn(
 		const emailParams = new EmailParams()
 			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
 			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
 		return await mailerSend.email.send(emailParams)

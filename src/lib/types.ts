@@ -91,6 +91,7 @@ export type ClientType = {
 	sector?: string | null
 	vehicles_contract?: string[] | null
 	vehicles_type?: Json | null
+	additional_emails?: string[] | null
 }
 
 export type ClientTempType = {
@@ -106,6 +107,7 @@ export type ClientTempType = {
 	sector?: string | null
 	vehicles_contract?: string[] | null
 	vehicles_type?: ClientDataJsonType[] | null
+	additional_emails?: string[] | null
 }
 
 export type CreateAccountTempType = {
@@ -119,6 +121,7 @@ export type CreateAccountTempType = {
 	sector?: string | null
 	vehicles_contract?: string[] | null
 	vehicles_type?: ClientDataJsonType[] | null
+	additional_emails?: string[] | null
 }
 
 export type ClientDataJsonType = {
@@ -147,6 +150,7 @@ export type ClientDataType = {
 	sector: string | null
 	vehicles_contract: string[] | null
 	vehicles_type: ClientDataJsonType[] | null
+	additional_emails?: string[] | null
 }
 
 export type ClientSelectionType = {

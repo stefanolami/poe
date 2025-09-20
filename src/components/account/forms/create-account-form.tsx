@@ -18,6 +18,7 @@ import {
 import { Input } from '../../ui/input'
 import { Button } from '../../ui/button'
 import { LuEyeClosed, LuEye } from 'react-icons/lu'
+import { FaTrashAlt } from 'react-icons/fa'
 import { useStore } from '@/store/store'
 import { useShallow } from 'zustand/shallow'
 import { signUpClient } from '@/actions/clients'
@@ -55,6 +56,7 @@ const CreateAccountForm = () => {
 			email: '',
 			password: '',
 			confirmPassword: '',
+			additionalEmails: [],
 		},
 	})
 
@@ -66,6 +68,12 @@ const CreateAccountForm = () => {
 		console.log('formatting data', data)
 		const fullData = {
 			...data,
+			additional_emails:
+				data.additionalEmails && data.additionalEmails.length
+					? data.additionalEmails.filter(
+							(e) => e && e.trim().length > 0
+						)
+					: [],
 			sector: storeSector.value,
 			vehicles_type: selectionArrayFromStoreToDB(
 				storeData.eMobility.typeOfVehicle
@@ -168,6 +176,7 @@ const CreateAccountForm = () => {
 							</FormItem>
 						)}
 					/>
+
 					<FormField
 						control={form.control}
 						name="familyName"
@@ -296,6 +305,85 @@ const CreateAccountForm = () => {
 										}
 									/>
 								)}
+								<FormMessage className="text-red-500 text-sm md:text-base" />
+							</FormItem>
+						)}
+					/>
+
+					{/* Additional Emails (dynamic) */}
+					<FormField
+						control={form.control}
+						name="additionalEmails"
+						render={({ field }) => (
+							<FormItem className="mt-6">
+								<FormLabel className="text-sm md:text-base lg:text-lg">
+									Additional Emails
+								</FormLabel>
+								<FormControl>
+									<div className="space-y-3">
+										{(field.value ?? []).map(
+											(email, index) => (
+												<div
+													key={index}
+													className="flex items-center gap-3"
+												>
+													<Input
+														disabled={isSubmitting}
+														placeholder=""
+														value={email || ''}
+														onChange={(e) => {
+															const updated = [
+																...(field.value ??
+																	[]),
+															]
+															updated[index] =
+																e.target.value
+															field.onChange(
+																updated
+															)
+														}}
+														className="bg-white text-primary text-sm md:text-base flex-1"
+													/>
+													<Button
+														variant="destructive"
+														type="button"
+														disabled={isSubmitting}
+														onClick={() => {
+															const updated = (
+																field.value ??
+																[]
+															).filter(
+																(_, i) =>
+																	i !== index
+															)
+															field.onChange(
+																updated
+															)
+														}}
+														className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+													>
+														<FaTrashAlt className="h-4 w-4" />
+													</Button>
+												</div>
+											)
+										)}
+
+										<Button
+											variant="default"
+											type="button"
+											disabled={isSubmitting}
+											onClick={() =>
+												field.onChange([
+													...(field.value ?? []),
+													'',
+												])
+											}
+											className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+										>
+											Add Emails
+										</Button>
+									</div>
+								</FormControl>
 								<FormMessage className="text-red-500 text-sm md:text-base" />
 							</FormItem>
 						)}

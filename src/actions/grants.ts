@@ -401,8 +401,13 @@ export const sendGrantAlert = async (grantId: string) => {
 
 		const clientsList = clientsData.map((client) => {
 			return {
-				email: client.email,
-				referrer: client.referrer,
+				email: client.email as string,
+				referrer: client.referrer as string | null,
+				cc: (Array.isArray(client.additional_emails)
+					? (client.additional_emails as string[]).filter(
+							(e) => !!e && e.trim().length > 0
+						)
+					: []) as string[],
 			}
 		})
 
@@ -435,31 +440,6 @@ export const sendGrantAlert = async (grantId: string) => {
 			return new Promise((resolve) => setTimeout(resolve, ms))
 		}
 
-		// Send in parallel (or sequentially if you need to respect rate limits)
-		/* const response = await Promise.all([
-			normalRecipients.length > 0
-				? sendGrantBatch(
-						normalRecipients,
-						emailSubject,
-						grantData,
-						attachments
-					)
-				: Promise.resolve(),
-			normalRecipients.length > 0 && tailoredRecipients.length > 0
-				? await sleep(1000)
-				: Promise.resolve(),
-			tailoredRecipients.length > 0
-				? sendGrantTailoredBatch(
-						tailoredRecipients,
-						emailSubject,
-						grantData,
-						tailoredAssessments,
-						attachments
-					)
-				: Promise.resolve(),
-		])
-		console.log('GRANT ALERT SENT', response)
-		return response */
 		if (normalRecipients && normalRecipients.length > 0) {
 			for (const client of normalRecipients) {
 				if (client.referrer === 'charIn') {
@@ -467,7 +447,8 @@ export const sendGrantAlert = async (grantId: string) => {
 						client.email,
 						emailSubject,
 						grantData,
-						attachments
+						attachments,
+						client.cc
 					)
 					await sleep(600)
 				} else {
@@ -475,7 +456,8 @@ export const sendGrantAlert = async (grantId: string) => {
 						client.email,
 						emailSubject,
 						grantData,
-						attachments
+						attachments,
+						client.cc
 					)
 					await sleep(600)
 				}
@@ -492,7 +474,8 @@ export const sendGrantAlert = async (grantId: string) => {
 						emailSubject,
 						grantData,
 						assessment,
-						attachments
+						attachments,
+						tailoredRecipients[i].cc
 					)
 					await sleep(600)
 				} else {
@@ -501,7 +484,8 @@ export const sendGrantAlert = async (grantId: string) => {
 						emailSubject,
 						grantData,
 						assessment,
-						attachments
+						attachments,
+						tailoredRecipients[i].cc
 					)
 					await sleep(600)
 				}

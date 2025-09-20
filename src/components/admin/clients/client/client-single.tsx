@@ -17,6 +17,7 @@ const ClientSingle = ({ client }: { client: ClientType }) => {
 		deployment,
 		project,
 		referrer,
+		additional_emails,
 		/* vehicles_type,
 		vehicles_contract,
 		charging_stations_type,
@@ -48,6 +49,23 @@ const ClientSingle = ({ client }: { client: ClientType }) => {
 				<div className="flex flex-col gap-2">
 					<span className="block text-xl">Email</span>
 					<span className="block text-base">{email}</span>
+				</div>
+				<div className="flex flex-col gap-2">
+					<span className="block text-xl">Additional Emails</span>
+					{additional_emails && additional_emails.length > 0 ? (
+						<div className="flex flex-wrap gap-2">
+							{additional_emails.map((addr, idx) => (
+								<span
+									key={`${addr}-${idx}`}
+									className="inline-block rounded-full bg-white/10 px-3 py-1 text-xs md:text-sm"
+								>
+									{addr}
+								</span>
+							))}
+						</div>
+					) : (
+						<span className="block text-base">--</span>
+					)}
 				</div>
 				<div className="flex flex-col gap-2">
 					<span className="block text-xl">Organization</span>

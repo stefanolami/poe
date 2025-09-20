@@ -5,7 +5,6 @@ import { ClientDataType, UpdateAccountType } from '@/lib/types'
 import { updateAccountSchema } from '@/lib/zod-schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-//import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import {
 	Form,
@@ -17,26 +16,12 @@ import {
 } from '../../ui/form'
 import { Input } from '../../ui/input'
 import { Button } from '../../ui/button'
-//import { LuEyeClosed, LuEye } from 'react-icons/lu'
-/* import { useStore } from '@/store/store'
-import { useShallow } from 'zustand/shallow' */
 import { clientUpdate } from '@/actions/clients'
+import { FaTrashAlt } from 'react-icons/fa'
 
 const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
-	//const [isView, setIsView] = useState(false)
-	//const [isViewConfirm, setIsViewConfirm] = useState(false)
-
 	const { toast } = useToast()
-
 	const router = useRouter()
-
-	/* const { storeSector, storeData, storeGeographies } = useStore(
-		useShallow((state) => ({
-			storeSector: state.sector,
-			storeData: state.data,
-			storeGeographies: state.geographies,
-		}))
-	) */
 
 	const form = useForm<UpdateAccountType>({
 		resolver: zodResolver(updateAccountSchema),
@@ -45,6 +30,7 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 			familyName: clientData.family_name,
 			orgName: clientData.org_name ?? undefined,
 			email: clientData.email,
+			additionalEmails: clientData.additional_emails ?? [],
 		},
 	})
 
@@ -72,8 +58,6 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 					router.replace('/account')
 				}, 1000)
 			}
-
-			console.log('response', response)
 
 			return response
 		} catch (error) {
@@ -105,7 +89,6 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 					onSubmit={form.handleSubmit(submitHandler, (e) => {
 						console.log(e)
 					})}
-					className=""
 				>
 					<FormField
 						control={form.control}
@@ -127,6 +110,7 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 							</FormItem>
 						)}
 					/>
+
 					<FormField
 						control={form.control}
 						name="familyName"
@@ -147,6 +131,7 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 							</FormItem>
 						)}
 					/>
+
 					<FormField
 						control={form.control}
 						name="orgName"
@@ -167,6 +152,7 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 							</FormItem>
 						)}
 					/>
+
 					<FormField
 						control={form.control}
 						name="email"
@@ -187,78 +173,85 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 							</FormItem>
 						)}
 					/>
-					{/* <FormField
+
+					{/* Additional Emails (dynamic) */}
+					<FormField
 						control={form.control}
-						name="password"
+						name="additionalEmails"
 						render={({ field }) => (
-							<FormItem className="relative">
+							<FormItem className="mt-6">
 								<FormLabel className="text-sm md:text-base lg:text-lg">
-									Password
+									Additional Emails
 								</FormLabel>
 								<FormControl>
-									<Input
-										disabled={isSubmitting}
-										placeholder=""
-										type={isView ? 'text' : 'password'}
-										{...field}
-										className="bg-white text-primary text-sm md:text-base"
-									/>
+									<div className="space-y-3">
+										{(field.value ?? []).map(
+											(email, index) => (
+												<div
+													key={index}
+													className="flex items-center gap-3"
+												>
+													<Input
+														disabled={isSubmitting}
+														placeholder=""
+														value={email || ''}
+														onChange={(e) => {
+															const updated = [
+																...(field.value ??
+																	[]),
+															]
+															updated[index] =
+																e.target.value
+															field.onChange(
+																updated
+															)
+														}}
+														className="bg-white text-primary text-sm md:text-base flex-1"
+													/>
+													<Button
+														variant="destructive"
+														type="button"
+														disabled={isSubmitting}
+														onClick={() => {
+															const updated = (
+																field.value ??
+																[]
+															).filter(
+																(_, i) =>
+																	i !== index
+															)
+															field.onChange(
+																updated
+															)
+														}}
+														className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+													>
+														<FaTrashAlt className="h-4 w-4" />
+													</Button>
+												</div>
+											)
+										)}
+
+										<Button
+											variant="default"
+											type="button"
+											disabled={isSubmitting}
+											onClick={() =>
+												field.onChange([
+													...(field.value ?? []),
+													'',
+												])
+											}
+											className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+										>
+											Add Emails
+										</Button>
+									</div>
 								</FormControl>
-								{isView ? (
-									<LuEye
-										className="absolute right-2 top-8 z-10 cursor-pointer text-gray-500"
-										onClick={() => {
-											setIsView(!isView)
-										}}
-									/>
-								) : (
-									<LuEyeClosed
-										className="absolute right-2 top-8 z-10 cursor-pointer text-gray-500"
-										onClick={() => setIsView(!isView)}
-									/>
-								)}
 								<FormMessage className="text-red-500 text-sm md:text-base" />
 							</FormItem>
 						)}
 					/>
-					<FormField
-						control={form.control}
-						name="confirmPassword"
-						render={({ field }) => (
-							<FormItem className="relative">
-								<FormLabel className="text-sm md:text-base lg:text-lg">
-									Confirm Password
-								</FormLabel>
-								<FormControl>
-									<Input
-										disabled={isSubmitting}
-										placeholder=""
-										type={
-											isViewConfirm ? 'text' : 'password'
-										}
-										{...field}
-										className="bg-white text-primary text-sm md:text-base"
-									/>
-								</FormControl>
-								{isViewConfirm ? (
-									<LuEye
-										className="absolute right-2 top-8 z-10 cursor-pointer text-gray-500"
-										onClick={() => {
-											setIsViewConfirm(!isViewConfirm)
-										}}
-									/>
-								) : (
-									<LuEyeClosed
-										className="absolute right-2 top-8 z-10 cursor-pointer text-gray-500"
-										onClick={() =>
-											setIsViewConfirm(!isViewConfirm)
-										}
-									/>
-								)}
-								<FormMessage className="text-red-500 text-sm md:text-base" />
-							</FormItem>
-						)}
-					/> */}
 
 					<Button
 						disabled={isSubmitting}
