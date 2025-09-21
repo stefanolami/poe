@@ -1,3 +1,9 @@
+import type { Metadata } from 'next'
+export const metadata: Metadata = {
+	title: 'Grant Details | Admin | POE',
+	description: 'View grant details and matches.',
+}
+
 import { getClientsByConsultantId } from '@/actions/clients'
 import { getGrant } from '@/actions/grants'
 import GrantSingle from '@/components/admin/grants/grant/grant-single'

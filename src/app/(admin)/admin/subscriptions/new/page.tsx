@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+export const metadata: Metadata = {
+	title: 'New Subscription | Admin | POE',
+	description: 'Create a new subscription for a client.',
+}
 import SubscriptionForm from '@/components/admin/subscriptions/subscription-form'
 import { getClientsEligibleForSubscription } from '@/actions/clients'
 

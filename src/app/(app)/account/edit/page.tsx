@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+export const metadata: Metadata = {
+	title: 'Edit Account | POE',
+	description: 'Edit your POE account details.',
+}
 import { getClient } from '@/actions/clients'
 import EditAccountComponent from '@/components/account/edit-account-component'
 

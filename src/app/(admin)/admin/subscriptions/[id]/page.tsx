@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+export const metadata: Metadata = {
+	title: 'Subscription Details | Admin | POE',
+	description: 'View subscription details.',
+}
 import SubscriptionSingle from '@/components/admin/subscriptions/subscription-single'
 
 const SubscriptionDetailPage = async ({

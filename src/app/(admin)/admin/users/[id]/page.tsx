@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+export const metadata: Metadata = {
+	title: 'User Details | Admin | POE',
+	description: 'View and edit a user.',
+}
 import { getClients } from '@/actions/clients'
 import { getUserById } from '@/actions/users'
 import UserSingle from '@/components/admin/users/user/user-single'

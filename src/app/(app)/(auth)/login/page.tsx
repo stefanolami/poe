@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+export const metadata: Metadata = {
+	title: 'Login | POE',
+	description: 'Access your POE account.',
+}
 import AuthComponent from '@/components/auth/auth-component'
 import React from 'react'
 

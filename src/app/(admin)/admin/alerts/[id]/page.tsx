@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+export const metadata: Metadata = {
+	title: 'Alert Details | Admin | POE',
+	description: 'View the details of a specific alert.',
+}
 import { getAlert } from '@/actions/alerts'
 import { getClientsByIds } from '@/actions/clients'
 import AlertSingle from '@/components/admin/alerts/alert/alert-single'

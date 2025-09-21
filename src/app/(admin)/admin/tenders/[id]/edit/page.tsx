@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+export const metadata: Metadata = {
+	title: 'Edit Tender | Admin | POE',
+	description: 'Update tender details.',
+}
 import { getConsultants } from '@/actions/consultants'
 import { getTender } from '@/actions/tenders'
 import { TenderEdit } from '@/components/admin/tenders/tender/tender-edit'

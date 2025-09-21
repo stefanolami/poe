@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+export const metadata: Metadata = {
+	title: 'Client Details | Admin | POE',
+	description: 'View and edit a client profile.',
+}
 import { getClientById } from '@/actions/clients'
 import ClientSingle from '@/components/admin/clients/client/client-single'
 import { notFound } from 'next/navigation'

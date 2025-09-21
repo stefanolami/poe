@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+export const metadata: Metadata = {
+	title: 'Tender Details | Admin | POE',
+	description: 'View tender details and matches.',
+}
 import { getClientsByConsultantId } from '@/actions/clients'
 import { getTender } from '@/actions/tenders'
 import TenderSingle from '@/components/admin/tenders/tender/tender-single'

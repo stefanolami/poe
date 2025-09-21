@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+export const metadata: Metadata = {
+	title: 'Account | POE',
+	description: 'Manage your POE account and subscription.',
+}
 import { getClientWithSubscription } from '@/actions/clients'
 import AccountComponent from '@/components/account/account-component'
 import { ErrorBoundary } from '@/components/error-boundary'

@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+export const metadata: Metadata = {
+	title: 'Edit Subscription | Admin | POE',
+	description: 'Update subscription details.',
+}
 import { getSubscriptionById } from '@/actions/subscriptions'
 import SubscriptionForm from '@/components/admin/subscriptions/subscription-form'
 
