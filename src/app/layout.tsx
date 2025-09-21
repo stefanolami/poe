@@ -20,7 +20,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				className={`${unna.variable} ${jose.variable} antialiased relative`}
+				className={`${unna.variable} ${jose.variable} antialiased relative min-h-screen`}
 			>
 				<AuthProvider>
 					<RenderMounted>

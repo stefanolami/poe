@@ -30,7 +30,7 @@ const AccountSummaryFromStore = () => {
 	console.log('clientSelection', clientSelection)
 
 	return (
-		<div className="lg:order-2">
+		<div className="lg:order-2 mb-10">
 			<h2 className="text-lg md:text-xl lg:text-3xl mb-4 lg:mb-10">
 				Your Plan
 			</h2>
