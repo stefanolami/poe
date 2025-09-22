@@ -8,7 +8,12 @@ const AlertSingle = ({
 	clients,
 }: {
 	alert: AlertType
-	clients: { name: string; family_name: string; id: string; email: string }[]
+	clients: {
+		first_name: string
+		last_name: string
+		id: string
+		email: string
+	}[]
 }) => {
 	const { entity_type, entity_id, created_at, subject } = alert
 
@@ -50,8 +55,8 @@ const AlertSingle = ({
 											className="underline"
 										>
 											<span className="capitalize">
-												{client.name}{' '}
-												{client.family_name}
+												{client.first_name}{' '}
+												{client.last_name}
 											</span>{' '}
 											- {client.email}
 										</Link>

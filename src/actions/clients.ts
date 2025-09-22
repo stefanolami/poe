@@ -48,8 +48,8 @@ export const signUpClient = async (data: CreateAccountType, id?: string) => {
 		}
 
 		const clientInsertData = {
-			name: data.name,
-			family_name: data.familyName,
+			first_name: data.firstName,
+			last_name: data.lastName,
 			org_name: data.orgName ?? null,
 			email: data.email,
 			id: userId,
@@ -117,8 +117,8 @@ export const clientUpdate = async (
 		const { data: clientData, error: clientError } = await supabase
 			.from('clients')
 			.update({
-				name: data.name,
-				family_name: data.familyName,
+				first_name: data.firstName,
+				last_name: data.lastName,
 				org_name: data.orgName,
 				email: data.email,
 				additional_emails:
@@ -394,7 +394,7 @@ export const getClients = async () => {
 
 		const formattedData = data.map((client) => ({
 			id: client.id,
-			name: `${client.name} ${client.family_name || ''}`.trim(),
+			name: `${client.first_name} ${client.last_name || ''}`.trim(),
 			org: client.org_name || '--',
 			email: client.email,
 			created_at: client.created_at,
@@ -424,7 +424,7 @@ export const getClientsEligibleForSubscription = async () => {
 
 		return (data || []).map((client) => ({
 			id: client.id,
-			name: `${client.name} ${client.family_name || ''}`.trim(),
+			name: `${client.first_name} ${client.last_name || ''}`.trim(),
 			org: client.org_name || '--',
 			email: client.email,
 			created_at: client.created_at,
@@ -441,7 +441,12 @@ export const getClientById = async (id: string) => {
 
 		const { data, error } = await supabase
 			.from('clients')
-			.select('*')
+			.select(
+				`
+			*,
+			consultant:users (*)
+		  `
+			)
 			.eq('id', id)
 			.single()
 
@@ -473,6 +478,53 @@ export const getClientTempById = async (id: string) => {
 		return normalizeClientData(data)
 	} catch (error) {
 		console.log('ERROR FETCHING CLIENT', error)
+		throw error
+	}
+}
+
+export const updateClientTailored = async (id: string, tailored: boolean) => {
+	try {
+		const supabase = await createClient()
+
+		const { error } = await supabase
+			.from('clients')
+			.update({ tailored })
+			.eq('id', id)
+
+		if (error) {
+			throw new Error(
+				`Failed to update client tailored flag: ${error.message}`
+			)
+		}
+		console.log('Client tailored flag updated successfully to:', tailored)
+		return { success: true }
+	} catch (error) {
+		console.error('UPDATE CLIENT TAILORED ERROR:', error)
+		throw error
+	}
+}
+
+export const updateClientConsultant = async (
+	id: string,
+	consultantId: string | null
+) => {
+	try {
+		const supabase = await createClient()
+
+		const { error } = await supabase
+			.from('clients')
+			.update({ consultant: consultantId })
+			.eq('id', id)
+
+		if (error) {
+			throw new Error(
+				`Failed to update client consultant: ${error.message}`
+			)
+		}
+		console.log('Client consultant updated successfully to:', consultantId)
+		return { success: true }
+	} catch (error) {
+		console.error('UPDATE CLIENT CONSULTANT ERROR:', error)
 		throw error
 	}
 }

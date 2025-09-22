@@ -55,7 +55,8 @@ export const TenderEdit = ({
 	tender: TenderType
 	consultants: {
 		id: string
-		name: string
+		first_name: string
+		last_name: string
 	}[]
 }) => {
 	const {

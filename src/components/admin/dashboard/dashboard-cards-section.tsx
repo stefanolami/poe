@@ -153,7 +153,8 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 								<li key={index}>
 									<Link href={`/admin/clients/${client.id}`}>
 										<span>
-											{client.name} {client.family_name}
+											{client.first_name}{' '}
+											{client.last_name}
 											{client.org_name &&
 												` - ${client.org_name}`}
 										</span>

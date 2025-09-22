@@ -1,16 +1,40 @@
 'use client'
 
-import { ClientType } from '@/lib/types'
+import { ClientWithConsultantType } from '@/lib/types'
+import { useState, useTransition } from 'react'
+import { updateClientTailored, updateClientConsultant } from '@/actions/clients'
+import {
+	addClientToConsultant,
+	removeClientFromConsultant,
+} from '@/actions/consultants'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select'
 
 type SelectionItemType = {
 	value: string
 	geography: string[]
 }
 
-const ClientSingle = ({ client }: { client: ClientType }) => {
+const ClientSingle = ({
+	client,
+	consultants,
+}: {
+	client: ClientWithConsultantType
+	consultants?: { id: string; first_name: string; last_name: string }[]
+}) => {
+	const [isPending, startTransition] = useTransition()
+	const [tailored, setTailored] = useState<boolean>(!!client.tailored)
+	const [consultantId, setConsultantId] = useState<string | 'none' | ''>(
+		(client.consultant?.id as string | undefined) || 'none'
+	)
 	const {
-		name,
-		family_name,
+		first_name,
+		last_name,
 		email,
 		org_name,
 		created_at,
@@ -18,11 +42,11 @@ const ClientSingle = ({ client }: { client: ClientType }) => {
 		project,
 		referrer,
 		additional_emails,
-		/* vehicles_type,
+		account_status,
+		vehicles_type,
 		vehicles_contract,
 		charging_stations_type,
 		charging_stations_contract,
-		pif, */
 	} = client
 
 	console.log('CLIENT:', client)
@@ -31,7 +55,7 @@ const ClientSingle = ({ client }: { client: ClientType }) => {
 		<div className="font-jose mb-20">
 			<div className="flex flex-row items-center justify-between w-full">
 				<h1 className="text-white font-jose text-2xl">
-					Client - {name} {family_name}{' '}
+					Client - {first_name} {last_name}{' '}
 					<span className="capitalize">({org_name})</span>
 				</h1>
 				{/* <button className="invisible shadow-md hover:shadow-xl hover:scale-[1.02] bg-primary-light hover:bg-primary-light/90 text-white w-40 py-2">
@@ -43,7 +67,7 @@ const ClientSingle = ({ client }: { client: ClientType }) => {
 				<div className="flex flex-col gap-2">
 					<span className="block text-xl">Name</span>
 					<span className="block text-base">
-						{name} {family_name}
+						{first_name} {last_name}
 					</span>
 				</div>
 				<div className="flex flex-col gap-2">
@@ -85,19 +109,117 @@ const ClientSingle = ({ client }: { client: ClientType }) => {
 					<span className="block text-xl">Referrer</span>
 					<span className="block text-base">{referrer}</span>
 				</div>
-				<div className="flex flex-col gap-2">
+				{/* <div className="flex flex-col gap-2">
 					<span className="block text-xl">Last Payment</span>
 					<span className="block text-base">12/02/2025</span>
-				</div>
+				</div> */}
 				<div className="flex flex-col gap-2">
 					<span className="block text-xl">Account Active</span>
-					<span className="block text-base">YES</span>
+					<span className="block text-base">{account_status}</span>
+				</div>
+				<div className="flex flex-col gap-2"></div>
+				<div className="flex flex-col gap-2">
+					<span className="block text-xl invisible">Tailoring</span>
+					<label className="inline-flex items-center gap-3 cursor-pointer select-none">
+						<input
+							type="checkbox"
+							checked={tailored}
+							disabled={isPending}
+							onChange={() => {
+								const next = !tailored
+								setTailored(next) // optimistic
+								startTransition(async () => {
+									try {
+										await updateClientTailored(
+											client.id,
+											next
+										)
+										console.log('Toggled tailored to', next)
+									} catch (err) {
+										console.error(
+											'Failed to toggle tailored',
+											err
+										)
+										setTailored(!next) // revert
+									}
+								})
+							}}
+							className="custom-checkbox cursor-pointer"
+							/* 						className="h-5 w-5 appearance-none rounded border border-white/40 bg-white/10 checked:bg-primary-light checked:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light/50"
+							 */
+						/>
+						<span className="text-base">Tailored</span>
+					</label>
 				</div>
 				<div className="flex flex-col gap-2">
-					<span className="block text-xl">Followed By</span>
-					<span className="block text-base">Consultant name</span>
+					{tailored && (
+						<div className="max-w-xs">
+							<span className="block text-xl mb-1">
+								Followed By
+							</span>
+							<Select
+								disabled={isPending}
+								onValueChange={(val) => {
+									const next =
+										val === 'none' ? null : (val as string)
+									const prev =
+										consultantId === 'none'
+											? null
+											: consultantId
+									setConsultantId(val as string)
+									startTransition(async () => {
+										try {
+											// 1) Update client record
+											await updateClientConsultant(
+												client.id,
+												next
+											)
+											// 2) Update consultant users' clients[]
+											if (prev && prev !== next) {
+												await removeClientFromConsultant(
+													prev,
+													client.id
+												)
+											}
+											if (next && prev !== next) {
+												await addClientToConsultant(
+													next,
+													client.id
+												)
+											}
+										} catch (err) {
+											console.error(
+												'Failed to update consultant links',
+												err
+											)
+										}
+									})
+								}}
+								value={consultantId}
+							>
+								<SelectTrigger className="bg-white text-primary">
+									<SelectValue placeholder="Select consultant" />
+								</SelectTrigger>
+								<SelectContent className="bg-white text-primary font-jose">
+									<SelectItem value="none">
+										No Consultant
+									</SelectItem>
+									{consultants?.map((c) => (
+										<SelectItem
+											key={c.id}
+											value={c.id}
+										>
+											{c.first_name} {c.last_name}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+						</div>
+					)}
 				</div>
 			</div>
+			{/* Tailored toggle */}
+
 			<h2 className="text-white font-jose text-xl mt-12">
 				Selection Info
 			</h2>
@@ -106,7 +228,7 @@ const ClientSingle = ({ client }: { client: ClientType }) => {
 					- Grants
 				</h3>
 				<div className="flex flex-col gap-2 pl-3">
-					<span className="block text-xl">
+					<span className="block text-lg">
 						Infrastructure Deployment
 					</span>
 					<span className="block text-base">
@@ -116,13 +238,49 @@ const ClientSingle = ({ client }: { client: ClientType }) => {
 					</span>
 				</div>
 				<div className="flex flex-col gap-2">
-					<span className="block text-xl">
+					<span className="block text-lg">
 						Innovation Driven Projects
 					</span>
 					<span className="block text-base">
 						{(project as SelectionItemType[])
 							.map((d) => d.value)
 							.join(', ') || '--'}
+					</span>
+				</div>
+			</div>
+			<div className="text-white font-jose text-sm grid grid-cols-2 gap-4 mt-6 space-y-2 max-w-[800px]">
+				<h3 className="text-white font-jose text-xl col-span-2">
+					- Procurement Tenders
+				</h3>
+				<div className="flex flex-col gap-2 pl-3">
+					<span className="block text-lg">E-Vehicles</span>
+					<span className="block text-base">
+						{(vehicles_type as SelectionItemType[])
+							.map((d) => d.value)
+							.join(', ') || '--'}
+					</span>
+				</div>
+				<div className="flex flex-col gap-2">
+					<span className="block text-lg">E-Vehicles Contracts</span>
+					<span className="block text-base">
+						{(vehicles_contract as string[]).join(', ') || '--'}
+					</span>
+				</div>
+				<div className="flex flex-col gap-2 pl-3">
+					<span className="block text-lg">Charging Stations</span>
+					<span className="block text-base">
+						{(charging_stations_type as SelectionItemType[])
+							.map((d) => d.value)
+							.join(', ') || '--'}
+					</span>
+				</div>
+				<div className="flex flex-col gap-2">
+					<span className="block text-lg">
+						Charging Stations Contracts
+					</span>
+					<span className="block text-base">
+						{(charging_stations_contract as string[]).join(', ') ||
+							'--'}
 					</span>
 				</div>
 			</div>

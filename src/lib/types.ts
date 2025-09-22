@@ -81,9 +81,9 @@ export type ClientType = {
 	created_at: string
 	deployment?: Json | null
 	email: string
-	family_name: string
+	last_name: string
 	id: string
-	name: string
+	first_name: string
 	org_name?: string | null
 	pif?: Json | null
 	project?: Json | null
@@ -92,6 +92,8 @@ export type ClientType = {
 	vehicles_contract?: string[] | null
 	vehicles_type?: Json | null
 	additional_emails?: string[] | null
+	tailored?: boolean
+	account_status: string
 }
 
 export type ClientTempType = {
@@ -140,10 +142,10 @@ export type ClientDataType = {
 	created_at: string
 	deployment: ClientDataJsonType[] | null
 	email: string
-	family_name: string
+	last_name: string
 	geography?: string[] | null
 	id: string
-	name: string
+	first_name: string
 	org_name: string | null
 	pif: ClientDataJsonType[] | null
 	project: ClientDataJsonType[] | null
@@ -168,8 +170,8 @@ export type DashboardDataType = {
 		| {
 				created_at: string
 				id: string
-				name: string
-				family_name: string
+				first_name: string
+				last_name: string
 				org_name?: string | null
 		  }[]
 		| []
@@ -250,9 +252,9 @@ export type GrantWithConsultantType = {
 	call_title: string | null
 	consultant: {
 		id: string
-		name: string
+		first_name: string
 		email: string
-		family_name: string
+		last_name: string
 		created_at: string
 		clients: string[] | null
 	} | null
@@ -282,9 +284,9 @@ export type TenderWithConsultantType = {
 	awarding_authority: string
 	consultant: {
 		id: string
-		name: string
+		first_name: string
 		email: string
-		family_name: string
+		last_name: string
 		created_at: string
 		clients: string[] | null
 	} | null
@@ -307,6 +309,17 @@ export type TenderWithConsultantType = {
 	sent: boolean
 	tailored_assessment: TailoredAssessmentType[] | null
 	value: string
+}
+
+export type ClientWithConsultantType = ClientType & {
+	consultant: {
+		id: string
+		first_name: string
+		email: string
+		last_name: string
+		created_at: string
+		clients: string[] | null
+	} | null
 }
 
 export type Geography = {

@@ -10,8 +10,8 @@ export const SubscriptionSingle = async ({ id }: SubscriptionSingleProps) => {
 	const client = subscription.client_id
 		? {
 				id: subscription.client_id,
-				name: subscription.client_name,
-				family_name: subscription.client_family_name,
+				first_name: subscription.client_first_name,
+				last_name: subscription.client_last_name,
 				email: subscription.client_email,
 			}
 		: null
@@ -35,7 +35,7 @@ export const SubscriptionSingle = async ({ id }: SubscriptionSingleProps) => {
 								className="underline hover:text-primary-light"
 								href={`/admin/clients/${client.id}`}
 							>
-								{[client.name, client.family_name]
+								{[client.first_name, client.last_name]
 									.filter(Boolean)
 									.join(' ') ||
 									client.email ||

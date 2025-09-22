@@ -50,8 +50,8 @@ const CreateAccountForm = () => {
 	const form = useForm<CreateAccountType>({
 		resolver: zodResolver(createAccountSchema),
 		defaultValues: {
-			name: '',
-			familyName: '',
+			firstName: '',
+			lastName: '',
 			orgName: '',
 			email: '',
 			password: '',
@@ -158,7 +158,7 @@ const CreateAccountForm = () => {
 				>
 					<FormField
 						control={form.control}
-						name="name"
+						name="firstName"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel className="text-sm md:text-base lg:text-lg">
@@ -179,7 +179,7 @@ const CreateAccountForm = () => {
 
 					<FormField
 						control={form.control}
-						name="familyName"
+						name="lastName"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel className="text-sm md:text-base lg:text-lg">

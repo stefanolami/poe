@@ -56,7 +56,12 @@ const TenderSingle = ({
 	clients,
 }: {
 	tender: TenderWithConsultantType
-	clients?: { id: string; name: string; email: string; family_name: string }[]
+	clients?: {
+		id: string
+		first_name: string
+		email: string
+		last_name: string
+	}[]
 }) => {
 	const [isLoading, setIsLoading] = useState(false)
 
@@ -290,7 +295,7 @@ const TenderSingle = ({
 					<span className="block text-xl">Consultant</span>
 					<span className="block text-base">
 						{consultant
-							? `${consultant.name} ${consultant.family_name}`
+							? `${consultant.first_name} ${consultant.last_name}`
 							: '-'}
 					</span>
 				</div>
@@ -519,7 +524,7 @@ const TenderSingle = ({
 																					client.email
 																				}
 																			>
-																				{`${client.name} ${client.family_name} - (${client.email})`}
+																				{`${client.first_name} ${client.last_name} - (${client.email})`}
 																			</SelectItem>
 																		)
 																	)}

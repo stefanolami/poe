@@ -26,8 +26,8 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 	const form = useForm<UpdateAccountType>({
 		resolver: zodResolver(updateAccountSchema),
 		defaultValues: {
-			name: clientData.name,
-			familyName: clientData.family_name,
+			firstName: clientData.first_name,
+			lastName: clientData.last_name,
 			orgName: clientData.org_name ?? undefined,
 			email: clientData.email,
 			additionalEmails: clientData.additional_emails ?? [],
@@ -92,7 +92,7 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 				>
 					<FormField
 						control={form.control}
-						name="name"
+						name="firstName"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel className="text-sm md:text-base lg:text-lg">
@@ -113,7 +113,7 @@ const EditAccountForm = ({ clientData }: { clientData: ClientDataType }) => {
 
 					<FormField
 						control={form.control}
-						name="familyName"
+						name="lastName"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel className="text-sm md:text-base lg:text-lg">

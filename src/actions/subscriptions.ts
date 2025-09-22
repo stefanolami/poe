@@ -87,8 +87,8 @@ export async function fetchSubscriptions(): Promise<AdminSubscriptionRow[]> {
 // Combined fetch with client email (and names) to avoid client-side joins in components
 export interface AdminSubscriptionWithClient extends AdminSubscriptionRow {
 	client_email: string | null
-	client_name: string | null
-	client_family_name: string | null
+	client_first_name: string | null
+	client_last_name: string | null
 }
 
 export async function fetchSubscriptionsWithClients(): Promise<
@@ -98,15 +98,15 @@ export async function fetchSubscriptionsWithClients(): Promise<
 	const { data, error } = await supabase
 		.from('subscriptions')
 		.select(
-			'id, client_id, period_start, period_end, auto_renew, status, created_at, clients:client_id ( email, name, family_name )'
+			'id, client_id, period_start, period_end, auto_renew, status, created_at, clients:client_id ( email, first_name, last_name )'
 		)
 		.order('created_at', { ascending: false })
 	if (error) throw error
 	interface RawRow extends AdminSubscriptionRow {
 		clients?: {
 			email: string | null
-			name: string | null
-			family_name: string | null
+			first_name: string | null
+			last_name: string | null
 		}
 	}
 	return (data as RawRow[]).map((row) => ({
@@ -118,8 +118,8 @@ export async function fetchSubscriptionsWithClients(): Promise<
 		status: row.status,
 		created_at: row.created_at,
 		client_email: row.clients?.email ?? null,
-		client_name: row.clients?.name ?? null,
-		client_family_name: row.clients?.family_name ?? null,
+		client_first_name: row.clients?.first_name ?? null,
+		client_last_name: row.clients?.last_name ?? null,
 	}))
 }
 
@@ -154,7 +154,7 @@ export async function getSubscriptionWithClient(id: string) {
 	const { data, error } = await supabase
 		.from('subscriptions')
 		.select(
-			'id, client_id, period_start, period_end, auto_renew, status, created_at, clients:client_id ( email, name, family_name )'
+			'id, client_id, period_start, period_end, auto_renew, status, created_at, clients:client_id ( email, first_name, last_name )'
 		)
 		.eq('id', id)
 		.single()
@@ -162,16 +162,16 @@ export async function getSubscriptionWithClient(id: string) {
 	interface JoinedRow extends AdminSubscriptionRow {
 		clients?: {
 			email: string | null
-			name: string | null
-			family_name: string | null
+			first_name: string | null
+			last_name: string | null
 		}
 	}
 	const row = data as JoinedRow
 	return {
 		...row,
 		client_email: row.clients?.email ?? null,
-		client_name: row.clients?.name ?? null,
-		client_family_name: row.clients?.family_name ?? null,
+		client_first_name: row.clients?.first_name ?? null,
+		client_last_name: row.clients?.last_name ?? null,
 	}
 }
 

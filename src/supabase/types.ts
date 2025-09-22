@@ -47,18 +47,20 @@ export type Database = {
           additional_emails: string[] | null
           charging_stations_contract: string[] | null
           charging_stations_type: Json | null
+          consultant: string | null
           created_at: string
           current_subscription: string | null
           deployment: Json | null
           email: string
-          family_name: string
+          first_name: string
           id: string
-          name: string
-          org_name: string | null
+          last_name: string
+          org_name: string
           pif: Json | null
           project: Json | null
           referrer: string | null
           sector: string | null
+          tailored: boolean
           vehicles_contract: string[] | null
           vehicles_type: Json | null
         }
@@ -67,18 +69,20 @@ export type Database = {
           additional_emails?: string[] | null
           charging_stations_contract?: string[] | null
           charging_stations_type?: Json | null
+          consultant?: string | null
           created_at?: string
           current_subscription?: string | null
           deployment?: Json | null
           email: string
-          family_name: string
+          first_name: string
           id: string
-          name: string
-          org_name?: string | null
+          last_name: string
+          org_name: string
           pif?: Json | null
           project?: Json | null
           referrer?: string | null
           sector?: string | null
+          tailored?: boolean
           vehicles_contract?: string[] | null
           vehicles_type?: Json | null
         }
@@ -87,22 +91,31 @@ export type Database = {
           additional_emails?: string[] | null
           charging_stations_contract?: string[] | null
           charging_stations_type?: Json | null
+          consultant?: string | null
           created_at?: string
           current_subscription?: string | null
           deployment?: Json | null
           email?: string
-          family_name?: string
+          first_name?: string
           id?: string
-          name?: string
-          org_name?: string | null
+          last_name?: string
+          org_name?: string
           pif?: Json | null
           project?: Json | null
           referrer?: string | null
           sector?: string | null
+          tailored?: boolean
           vehicles_contract?: string[] | null
           vehicles_type?: Json | null
         }
         Relationships: [
+          {
+            foreignKeyName: "clients_consultant_fkey"
+            columns: ["consultant"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "clients_current_subscription_fkey"
             columns: ["current_subscription"]
@@ -162,25 +175,25 @@ export type Database = {
           clients: string[] | null
           created_at: string
           email: string
-          family_name: string
+          first_name: string
           id: string
-          name: string
+          last_name: string
         }
         Insert: {
           clients?: string[] | null
           created_at?: string
           email: string
-          family_name: string
+          first_name: string
           id: string
-          name: string
+          last_name: string
         }
         Update: {
           clients?: string[] | null
           created_at?: string
           email?: string
-          family_name?: string
+          first_name?: string
           id?: string
-          name?: string
+          last_name?: string
         }
         Relationships: []
       }

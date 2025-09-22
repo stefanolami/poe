@@ -15,11 +15,11 @@ const AccountView = ({ clientData }: { clientData: ClientDataType }) => {
 			<dl className="space-y-3 text-sm md:text-base">
 				<div className="flex justify-between">
 					<dt className="text-primary/70">First name</dt>
-					<dd>{clientData.name || '-'}</dd>
+					<dd>{clientData.first_name || '-'}</dd>
 				</div>
 				<div className="flex justify-between">
 					<dt className="text-primary/70">Last name</dt>
-					<dd>{clientData.family_name || '-'}</dd>
+					<dd>{clientData.last_name || '-'}</dd>
 				</div>
 				<div className="flex justify-between">
 					<dt className="text-primary/70">Organization</dt>

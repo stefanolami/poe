@@ -28,9 +28,9 @@ const TenderPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 
 	const formattedClients = clients?.map((client) => ({
 		id: client.id,
-		name: client.name,
+		first_name: client.first_name,
 		email: client.email,
-		family_name: client.family_name,
+		last_name: client.last_name,
 	}))
 
 	return (

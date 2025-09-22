@@ -1,10 +1,5 @@
 // app/(app)/(auth)/auth/error/page.tsx
 'use client'
-import type { Metadata } from 'next'
-export const metadata: Metadata = {
-	title: 'Auth Error | POE',
-	description: 'We encountered an authentication error.',
-}
 
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'

@@ -24,7 +24,8 @@ const TendersConsultant = ({
 	form: UseFormReturn<CreateTendersType>
 	consultants: {
 		id: string
-		name: string
+		first_name: string
+		last_name: string
 	}[]
 	isSubmitting: boolean
 }) => {
@@ -52,7 +53,8 @@ const TendersConsultant = ({
 										key={consultant.id}
 										value={consultant.id}
 									>
-										{consultant.name}
+										{consultant.first_name}{' '}
+										{consultant.last_name}
 									</SelectItem>
 								))}
 								{/* <SelectItem

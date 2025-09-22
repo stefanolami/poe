@@ -24,8 +24,8 @@ const AlertPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 	const formattedClients = clients?.map((client) => ({
 		id: client.id,
 		email: client.email,
-		name: client.name,
-		family_name: client.family_name,
+		first_name: client.first_name,
+		last_name: client.last_name,
 	}))
 
 	return (

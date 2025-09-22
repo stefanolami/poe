@@ -142,7 +142,7 @@ export const getUserById = async (id: string) => {
 				user: data,
 				clients: clientData.map((client) => ({
 					id: client.id,
-					name: `${client.name} ${client.family_name || ''}`.trim(),
+					name: `${client.first_name} ${client.last_name || ''}`.trim(),
 					org: client.org_name,
 					email: client.email,
 					created_at: client.created_at,
