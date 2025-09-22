@@ -1,6 +1,13 @@
 'use server'
 
-import { CreateAlertType, CreateGrantType, UpdateGrantType } from '@/lib/types'
+import {
+	CreateAlertType,
+	CreateGrantType,
+	UpdateGrantType,
+	ClientType,
+	GrantType,
+} from '@/lib/types'
+import { buildGrantEmailSubject } from '@/lib/utils'
 import { createClient } from '@/supabase/server'
 import {
 	sendGrant,
@@ -372,7 +379,6 @@ export const sendGrantAlert = async (grantId: string) => {
 			throw new Error(clientsError?.message || 'No clients found')
 		}
 
-		const emailSubject = `POE Alert - Grant - ${grantData.call_title || grantData.grant_programme}`
 		const alertSubject = `${grantData.call_title || grantData.grant_programme}`
 
 		let attachments: ({
@@ -399,17 +405,28 @@ export const sendGrantAlert = async (grantId: string) => {
 		}
 		console.log('ATTACHMENTS DONE')
 
-		const clientsList = clientsData.map((client) => {
-			return {
-				email: client.email as string,
-				referrer: client.referrer as string | null,
-				cc: (Array.isArray(client.additional_emails)
-					? (client.additional_emails as string[]).filter(
-							(e) => !!e && e.trim().length > 0
-						)
-					: []) as string[],
-			}
-		})
+		type ClientLite = Pick<
+			ClientType,
+			| 'email'
+			| 'referrer'
+			| 'vehicles_type'
+			| 'charging_stations_type'
+			| 'pif'
+			| 'deployment'
+			| 'project'
+			| 'additional_emails'
+		>
+
+		const clientsList = clientsData.map((client: ClientLite) => ({
+			email: client.email as string,
+			referrer: client.referrer as string | null,
+			cc: (Array.isArray(client.additional_emails)
+				? (client.additional_emails as string[]).filter(
+						(e) => !!e && e.trim().length > 0
+					)
+				: []) as string[],
+			data: client,
+		}))
 
 		const assessments = grantData.tailored_assessment as
 			| {
@@ -442,10 +459,14 @@ export const sendGrantAlert = async (grantId: string) => {
 
 		if (normalRecipients && normalRecipients.length > 0) {
 			for (const client of normalRecipients) {
+				const personalizedSubject = buildGrantEmailSubject(
+					grantData as GrantType,
+					client.data
+				)
 				if (client.referrer === 'charIn') {
 					await sendGrantCharIn(
 						client.email,
-						emailSubject,
+						personalizedSubject,
 						grantData,
 						attachments,
 						client.cc
@@ -454,7 +475,7 @@ export const sendGrantAlert = async (grantId: string) => {
 				} else {
 					await sendGrant(
 						client.email,
-						emailSubject,
+						personalizedSubject,
 						grantData,
 						attachments,
 						client.cc
@@ -468,10 +489,14 @@ export const sendGrantAlert = async (grantId: string) => {
 			for (let i = 0; i < tailoredRecipients.length; i++) {
 				const to = tailoredRecipients[i].email
 				const assessment = tailoredAssessments[i]
+				const personalizedSubject = buildGrantEmailSubject(
+					grantData as GrantType,
+					tailoredRecipients[i].data
+				)
 				if (tailoredRecipients[i].referrer === 'charIn') {
 					await sendGrantTailoredCharIn(
 						to,
-						emailSubject,
+						personalizedSubject,
 						grantData,
 						assessment,
 						attachments,
@@ -481,7 +506,7 @@ export const sendGrantAlert = async (grantId: string) => {
 				} else {
 					await sendGrantTailored(
 						to,
-						emailSubject,
+						personalizedSubject,
 						grantData,
 						assessment,
 						attachments,

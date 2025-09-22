@@ -5,6 +5,8 @@ import {
 	ClientDataJsonType,
 	ClientDataType,
 	SelectionDataEmobilityType,
+	ClientType,
+	GrantType,
 } from './types'
 import { SelectableItem } from '@/store/store.types'
 
@@ -146,4 +148,63 @@ export async function fileToAttachment(file: {
 		filename: file.filename,
 		content: file.content.toString('base64'),
 	}
+}
+
+// Build a personalized email subject for a grant alert
+// Format: "POE Alert - GB / BG - Call Title" (or grant programme if call title missing)
+export function buildGrantEmailSubject(
+	grant: Pick<GrantType, 'geography' | 'call_title' | 'grant_programme'>,
+	client: Partial<
+		Pick<
+			ClientType,
+			| 'vehicles_type'
+			| 'charging_stations_type'
+			| 'pif'
+			| 'deployment'
+			| 'project'
+			| 'email'
+		>
+	>
+) {
+	const title = grant.call_title || grant.grant_programme || 'Grant'
+
+	// Collect all client geography codes from nested selection arrays
+	const collectCodes = (arr: unknown): string[] => {
+		if (!Array.isArray(arr)) return []
+		try {
+			return (
+				arr as Array<{
+					geographies?: { value: string; label?: string }[]
+				}>
+			)
+				.flatMap((item) => item?.geographies || [])
+				.map((g) => g.value)
+				.filter(Boolean)
+		} catch {
+			return []
+		}
+	}
+
+	const clientGeoCodes = new Set<string>([
+		...collectCodes(client.vehicles_type as unknown[]),
+		...collectCodes(client.charging_stations_type as unknown[]),
+		...collectCodes(client.pif as unknown[]),
+		...collectCodes(client.deployment as unknown[]),
+		...collectCodes(client.project as unknown[]),
+	])
+
+	// Intersect with grant geographies, preserving the grant order
+	const intersection = (grant.geography || []).filter((code) =>
+		clientGeoCodes.has(code)
+	)
+
+	const parts = ['POE Alert']
+	if (intersection.length > 0) {
+		const displayCodes = intersection.map((code) =>
+			code === 'euAdmin' ? 'EU' : code
+		)
+		parts.push(displayCodes.join(' / '))
+	}
+	parts.push(title)
+	return parts.join(' - ')
 }
