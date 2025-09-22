@@ -2,9 +2,8 @@ import type { Metadata } from 'next'
 import HomeComponent from '@/components/home/home'
 
 export const metadata: Metadata = {
-	title: 'Home | POE',
-	description:
-		'POE e-mobility platform connecting clients, consultants, grants, and tenders.',
+	title: 'POE',
+	description: 'POE - Public Opportunities Essentials',
 }
 
 export default function HomePage() {
