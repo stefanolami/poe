@@ -75,6 +75,7 @@ const TendersEmailCharin = ({
 					{`
 					@media only screen and (max-width: 600px) {
 						.container { width: 100% !important; }
+						.containerInner { padding: 0 16px !important; }
 						.col-title, .cta-col { display: block !important; width: 100% !important; }
 						.col-title { text-align: center !important; }
 						.header-title { font-size: 18px !important; line-height: 28px !important; padding: 12px 8px 4px !important; }
@@ -198,7 +199,10 @@ const TendersEmailCharin = ({
 							</Column>
 						</Row>
 					</Section>
-					<Container style={containerInner}>
+					<Container
+						style={containerInner}
+						className="containerInner"
+					>
 						{/* 1. Greeting and intro */}
 						<Section style={mainBody}>
 							<Text style={paragraph}>
@@ -520,8 +524,7 @@ const containerOuter: React.CSSProperties = {
 }
 
 const containerInner: React.CSSProperties = {
-	width: '80%',
-	margin: '40px auto 0',
+	width: '100%',
 }
 const topStrip: React.CSSProperties = {
 	backgroundColor: '#00334d',

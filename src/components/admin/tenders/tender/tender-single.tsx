@@ -161,7 +161,7 @@ const TenderSingle = ({
 					variant: 'default',
 				})
 				setTimeout(() => {
-					router.push(`/admin/grants/`)
+					router.push(`/admin/tenders/`)
 				}, 1000)
 			}
 
