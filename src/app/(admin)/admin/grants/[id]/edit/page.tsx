@@ -18,7 +18,22 @@ const GrantEditPage = async ({
 }) => {
 	const { id } = await params
 
-	const consultants = await getConsultants()
+	const consultantsRaw = await getConsultants()
+	type ConsultantRow = {
+		id: string
+		first_name?: string | null
+		last_name?: string | null
+		email?: string | null
+	}
+	const consultants = (
+		(consultantsRaw as ConsultantRow[] | null | undefined) || []
+	).map((c: ConsultantRow) => ({
+		id: c.id,
+		name:
+			[c.first_name, c.last_name].filter(Boolean).join(' ') ||
+			c.email ||
+			'Unnamed',
+	}))
 
 	const grant = await getGrant(id)
 	const formattedGrant = {

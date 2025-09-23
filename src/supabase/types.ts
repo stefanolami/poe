@@ -408,7 +408,7 @@ export type Database = {
             foreignKeyName: "tenders_consultant_fkey"
             columns: ["consultant"]
             isOneToOne: false
-            referencedRelation: "consultants"
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]

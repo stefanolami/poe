@@ -24,7 +24,6 @@ import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/hooks/use-toast'
 import {
 	CreateGrantsTailoredAssessmentType,
-	FormattedGrantType,
 	GrantWithConsultantType,
 } from '@/lib/types'
 import { formatDeadline, formatGeography } from '@/lib/utils'
@@ -38,7 +37,7 @@ import { FaTrashAlt } from 'react-icons/fa'
 import DocViewerComponent from '../../doc-viewer'
 import ButtonWithAlert from '@/components/button-alert'
 import LoadingOverlay from '@/components/loading-overlay'
-import EmailPreviewButton from '@/components/emails/email-preview-button'
+import GrantEmailPreviewButton from '@/components/emails/grant-email-preview-button'
 import { useAuthStore } from '@/store/auth-store'
 import { useShallow } from 'zustand/shallow'
 import { canSendAlert } from '@/lib/permissions'
@@ -98,10 +97,7 @@ const GrantSingle = ({
 
 	const isSubmitting = form.formState.isSubmitting
 
-	const formattedGrant: FormattedGrantType = {
-		...grant,
-		consultant: grant.consultant?.id ?? undefined,
-	}
+	// formatted preview payload previously used for email preview
 
 	const submitHandler: SubmitHandler<
 		CreateGrantsTailoredAssessmentType
@@ -693,8 +689,27 @@ const GrantSingle = ({
 								disabled={isLoading || isSubmitting}
 								buttonClass="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
 							>
-								<EmailPreviewButton
-									emailData={formattedGrant}
+								<GrantEmailPreviewButton
+									emailData={{
+										geography,
+										value,
+										alert_purpose,
+										awarding_authority,
+										deadline,
+										in_brief,
+										sector,
+										call_title,
+										grant_programme,
+										programme_purpose,
+										instrument_type,
+										reference_number,
+										further_details,
+										files,
+										tailored_assessment,
+										consultant: consultant?.id ?? undefined,
+										deployment: deployment ?? undefined,
+										project: project ?? undefined,
+									}}
 									disabled={isLoading || isSubmitting}
 								/>
 							</ButtonWithAlert>
@@ -708,8 +723,27 @@ const GrantSingle = ({
 						>
 							Filter Clients
 						</Button>
-						<EmailPreviewButton
-							emailData={formattedGrant}
+						<GrantEmailPreviewButton
+							emailData={{
+								geography,
+								value,
+								alert_purpose,
+								awarding_authority,
+								deadline,
+								in_brief,
+								sector,
+								call_title,
+								grant_programme,
+								programme_purpose,
+								instrument_type,
+								reference_number,
+								further_details,
+								files,
+								tailored_assessment,
+								consultant: consultant?.id ?? undefined,
+								deployment: deployment ?? undefined,
+								project: project ?? undefined,
+							}}
 							disabled={isLoading || isSubmitting}
 						/>
 					</div>

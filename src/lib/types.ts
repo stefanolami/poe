@@ -369,6 +369,16 @@ export type FormattedTenderType = {
 	stations_contracts?: string[] | undefined | null
 }
 
+export type TenderEmailProps = {
+	tender: FormattedTenderType
+	client: {
+		id: string
+		orgName: string
+		tailored: boolean
+	}
+	previewText: string
+}
+
 export type FormattedGrantTypeNull = {
 	geography: string[]
 	value: string

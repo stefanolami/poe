@@ -6,11 +6,11 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '../ui/dialog'
-import EmailPreviewComponent from './email-preview'
-import { FormattedGrantType } from '@/lib/types'
 import { Button } from '../ui/button'
+import GrantsEmailPreviewComponent from './grants-email-preview'
+import { FormattedGrantType } from '@/lib/types'
 
-const EmailPreviewButton = ({
+const GrantEmailPreviewButton = ({
 	emailData,
 	disabled = false,
 }: {
@@ -36,10 +36,10 @@ const EmailPreviewButton = ({
 				<DialogHeader>
 					<DialogTitle className="hidden">Email Preview</DialogTitle>
 				</DialogHeader>
-				<EmailPreviewComponent emailData={emailData} />
+				<GrantsEmailPreviewComponent emailData={emailData} />
 			</DialogContent>
 		</Dialog>
 	)
 }
 
-export default EmailPreviewButton
+export default GrantEmailPreviewButton

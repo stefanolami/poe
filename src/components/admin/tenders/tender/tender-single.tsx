@@ -1,10 +1,5 @@
 'use client'
 
-import {
-	addGrantsTailoredAssessments,
-	filterGrantClients,
-	sendGrantAlert,
-} from '@/actions/grants'
 import { Button } from '@/components/ui/button'
 import {
 	Form,
@@ -25,9 +20,7 @@ import { toast } from '@/hooks/use-toast'
 import {
 	CreateGrantsTailoredAssessmentType,
 	CreateTendersTailoredAssessmentType,
-	FormattedGrantType,
 	FormattedTenderType,
-	GrantWithConsultantType,
 	TenderWithConsultantType,
 } from '@/lib/types'
 import { formatDeadline, formatGeography } from '@/lib/utils'
@@ -41,7 +34,7 @@ import { FaTrashAlt } from 'react-icons/fa'
 import DocViewerComponent from '../../doc-viewer'
 import ButtonWithAlert from '@/components/button-alert'
 import LoadingOverlay from '@/components/loading-overlay'
-import EmailPreviewButton from '@/components/emails/email-preview-button'
+import TenderEmailPreviewButton from '@/components/emails/tender-email-preview-button'
 import { useAuthStore } from '@/store/auth-store'
 import { useShallow } from 'zustand/shallow'
 import { canSendAlert } from '@/lib/permissions'
@@ -49,6 +42,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import {
 	addTendersTailoredAssessments,
 	filterTenderClients,
+	sendTenderAlert,
 } from '@/actions/tenders'
 
 const TenderSingle = ({
@@ -157,7 +151,7 @@ const TenderSingle = ({
 	const handleSend = async () => {
 		try {
 			setIsLoading(true)
-			const response = await sendGrantAlert(id)
+			const response = await sendTenderAlert(id)
 			setIsLoading(false)
 
 			if (response) {
@@ -690,7 +684,7 @@ const TenderSingle = ({
 				</div>
 				{authInitialized ? (
 					<div className="grid grid-cols-4 col-span-2 gap-4">
-						{/* {showSend && (
+						{showSend && (
 							<ButtonWithAlert
 								buttonText="Send"
 								dialogText="Are you sure you want to send this Grant alert?"
@@ -699,12 +693,12 @@ const TenderSingle = ({
 								disabled={isLoading || isSubmitting}
 								buttonClass="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
 							>
-								<EmailPreviewButton
-									emailData={formattedGrant}
+								<TenderEmailPreviewButton
+									emailData={formattedTender}
 									disabled={isLoading || isSubmitting}
 								/>
 							</ButtonWithAlert>
-						)} */}
+						)}
 						<Button
 							disabled={isLoading || isSubmitting}
 							variant="default"
@@ -714,10 +708,10 @@ const TenderSingle = ({
 						>
 							Filter Clients
 						</Button>
-						{/* <EmailPreviewButton
-							emailData={formattedGrant}
+						<TenderEmailPreviewButton
+							emailData={formattedTender}
 							disabled={isLoading || isSubmitting}
-						/> */}
+						/>
 					</div>
 				) : (
 					<div className="grid grid-cols-4 col-span-2 gap-4">

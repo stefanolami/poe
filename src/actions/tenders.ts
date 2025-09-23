@@ -1,7 +1,21 @@
 'use server'
 
-import { CreateTendersType, UpdateTenderType } from '@/lib/types'
+import {
+	CreateAlertType,
+	CreateTendersType,
+	UpdateTenderType,
+	ClientType,
+	TenderType,
+} from '@/lib/types'
 import { createClient } from '@/supabase/server'
+import { buildTenderEmailSubject } from '@/lib/utils'
+import {
+	sendTender,
+	sendTenderCharIn,
+	sendTenderTailored,
+	sendTenderTailoredCharIn,
+} from './email'
+import { createAlert } from './alerts'
 /* import {
 	sendGrant,
 	sendGrantCharIn,
@@ -190,7 +204,7 @@ export const getTender = async (id: string) => {
 			.select(
 				`
     *,
-    consultant:consultants (*)
+    consultant:users (*)
   `
 			)
 			.eq('id', id)
@@ -372,20 +386,19 @@ export const sendTenderAlert = async (tenderId: string) => {
 			throw new Error(clientsError?.message || 'No clients found')
 		}
 
-		/* const emailSubject = `POE Alert - Grant - ${grantData.call_title || grantData.grant_programme}`
-		const alertSubject = `${grantData.call_title || grantData.grant_programme}`
+		const alertSubject = `${tenderData.programme}`
 
 		let attachments: ({
 			filename: string | undefined
 			content: Buffer<ArrayBuffer>
 		} | null)[] = []
 
-		if (grantData.files && grantData.files.length > 0) {
+		if (tenderData.files && tenderData.files.length > 0) {
 			attachments = await Promise.all(
-				(grantData.files || []).map(async (filePath) => {
+				(tenderData.files || []).map(async (filePath) => {
 					const { data, error } = await supabase.storage
 						.from('documents')
-						.download(filePath.replace('/grants/', 'grants/'))
+						.download(filePath.replace('/tenders/', 'tenders/'))
 
 					if (error) return null
 
@@ -399,14 +412,32 @@ export const sendTenderAlert = async (tenderId: string) => {
 		}
 		console.log('ATTACHMENTS DONE')
 
-		const clientsList = clientsData.map((client) => {
-			return {
-				email: client.email,
-				referrer: client.referrer,
-			}
-		})
+		type ClientLite = Pick<
+			ClientType,
+			| 'email'
+			| 'id'
+			| 'org_name'
+			| 'referrer'
+			| 'vehicles_type'
+			| 'charging_stations_type'
+			| 'pif'
+			| 'deployment'
+			| 'project'
+			| 'additional_emails'
+		>
 
-		const assessments = grantData.tailored_assessment as
+		const clientsList = clientsData.map((client: ClientLite) => ({
+			email: client.email as string,
+			referrer: client.referrer as string | null,
+			cc: (Array.isArray(client.additional_emails)
+				? (client.additional_emails as string[]).filter(
+						(e) => !!e && e.trim().length > 0
+					)
+				: []) as string[],
+			data: client,
+		}))
+
+		const assessments = tenderData.tailored_assessment as
 			| {
 					client: string
 					relevance: string
@@ -437,20 +468,28 @@ export const sendTenderAlert = async (tenderId: string) => {
 
 		if (normalRecipients && normalRecipients.length > 0) {
 			for (const client of normalRecipients) {
+				const personalizedSubject = buildTenderEmailSubject(
+					tenderData as TenderType,
+					client.data
+				)
 				if (client.referrer === 'charIn') {
-					await sendGrantCharIn(
+					await sendTenderCharIn(
 						client.email,
-						emailSubject,
-						grantData,
-						attachments
+						personalizedSubject,
+						tenderData,
+						attachments,
+						client.cc,
+						client.data
 					)
 					await sleep(600)
 				} else {
-					await sendGrant(
+					await sendTender(
 						client.email,
-						emailSubject,
-						grantData,
-						attachments
+						personalizedSubject,
+						tenderData,
+						attachments,
+						client.cc,
+						client.data
 					)
 					await sleep(600)
 				}
@@ -461,52 +500,60 @@ export const sendTenderAlert = async (tenderId: string) => {
 			for (let i = 0; i < tailoredRecipients.length; i++) {
 				const to = tailoredRecipients[i].email
 				const assessment = tailoredAssessments[i]
+				const personalizedSubject = buildTenderEmailSubject(
+					tenderData as TenderType,
+					tailoredRecipients[i].data
+				)
 				if (tailoredRecipients[i].referrer === 'charIn') {
-					await sendGrantTailoredCharIn(
+					await sendTenderTailoredCharIn(
 						to,
-						emailSubject,
-						grantData,
+						personalizedSubject,
+						tenderData,
 						assessment,
-						attachments
+						attachments,
+						tailoredRecipients[i].cc,
+						tailoredRecipients[i].data
 					)
 					await sleep(600)
 				} else {
-					await sendGrantTailored(
+					await sendTenderTailored(
 						to,
-						emailSubject,
-						grantData,
+						personalizedSubject,
+						tenderData,
 						assessment,
-						attachments
+						attachments,
+						tailoredRecipients[i].cc,
+						tailoredRecipients[i].data
 					)
 					await sleep(600)
 				}
 			}
 		}
-		console.log('GRANT SENT')
+		console.log('TENDER SENT')
 
 		const { error: updateError } = await supabase
-			.from('grants')
+			.from('tenders')
 			.update({ sent: true })
-			.eq('id', grantId)
+			.eq('id', tenderId)
 
 		if (updateError) {
 			throw new Error(updateError.message)
 		}
 
-		console.log('GRANT ALERT SENT')
+		console.log('TENDER ALERT SENT')
 
 		const alert: CreateAlertType = {
 			subject: alertSubject,
-			entity_type: 'grant',
-			entity_id: grantId,
+			entity_type: 'tender',
+			entity_id: tenderId,
 			matched_clients: matchedClients,
 		}
 
 		await createAlert(alert)
 
-		return { success: true } */
+		return { success: true }
 	} catch (error) {
-		console.log('ERROR SENDING GRANT ALERT', error)
+		console.log('ERROR SENDING TENDER ALERT', error)
 		throw error
 	}
 }

@@ -7,6 +7,7 @@ import {
 	SelectionDataEmobilityType,
 	ClientType,
 	GrantType,
+	TenderType,
 } from './types'
 import { SelectableItem } from '@/store/store.types'
 
@@ -201,6 +202,63 @@ export function buildGrantEmailSubject(
 	const parts = ['POE Alert']
 	if (intersection.length > 0) {
 		const displayCodes = intersection.map((code) =>
+			code === 'euAdmin' ? 'EU' : code
+		)
+		parts.push(displayCodes.join(' / '))
+	}
+	parts.push(title)
+	return parts.join(' - ')
+}
+
+// Build a personalized email subject for a tender alert
+// Format: "POE Alert - GB / BG - Programme"
+export function buildTenderEmailSubject(
+	tender: Pick<TenderType, 'geography' | 'programme'>,
+	client: Partial<
+		Pick<
+			ClientType,
+			| 'vehicles_type'
+			| 'charging_stations_type'
+			| 'pif'
+			| 'deployment'
+			| 'project'
+			| 'email'
+		>
+	>
+) {
+	const title = tender.programme || 'Tender'
+
+	const collectCodes = (arr: unknown): string[] => {
+		if (!Array.isArray(arr)) return []
+		try {
+			return (
+				arr as Array<{
+					geographies?: { value: string; label?: string }[]
+				}>
+			)
+				.flatMap((item) => item?.geographies || [])
+				.map((g) => g.value)
+				.filter(Boolean)
+		} catch {
+			return []
+		}
+	}
+
+	const clientGeoCodes = new Set<string>([
+		...collectCodes(client.vehicles_type as unknown[]),
+		...collectCodes(client.charging_stations_type as unknown[]),
+		...collectCodes(client.pif as unknown[]),
+		...collectCodes(client.deployment as unknown[]),
+		...collectCodes(client.project as unknown[]),
+	])
+
+	const intersection = (tender.geography || []).filter((code: string) =>
+		clientGeoCodes.has(code)
+	)
+
+	const parts = ['POE Alert']
+	if (intersection.length > 0) {
+		const displayCodes = intersection.map((code: string) =>
 			code === 'euAdmin' ? 'EU' : code
 		)
 		parts.push(displayCodes.join(' / '))

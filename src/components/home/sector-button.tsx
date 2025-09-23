@@ -13,7 +13,7 @@ const SectorButton = ({
 }) => {
 	const hoverVariants = {
 		rest: { scale: 1 },
-		hover: { scale: 1.04 },
+		hover: { scale: 1.02 },
 	}
 
 	return (
