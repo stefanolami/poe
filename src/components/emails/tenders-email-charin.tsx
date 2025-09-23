@@ -13,7 +13,6 @@ import {
 	Link,
 	Hr,
 } from '@react-email/components'
-import { BookOpenText, Mail, User } from 'lucide-react'
 // Local props for this email template. These mirror the mapped props passed by the senders.
 type DeadlineTuple = [string, string, string]
 type FurtherDetailsTuple = [string, string, string]
@@ -204,7 +203,7 @@ const TendersEmailCharin = ({
 						className="containerInner"
 					>
 						{/* 1. Greeting and intro */}
-						<Section style={mainBody}>
+						<Section /* style={mainBody} */>
 							<Text style={paragraph}>
 								Dear {org_name} Team Member,
 							</Text>
@@ -237,7 +236,6 @@ const TendersEmailCharin = ({
 						{/* 3. Deadlines table */}
 						<Section
 							style={{
-								padding: '0 34px 10px',
 								marginBottom: '30px',
 							}}
 						>
@@ -280,7 +278,7 @@ const TendersEmailCharin = ({
 						</Section>
 
 						{/* 4. In brief */}
-						<Section style={mainBody}>
+						<Section /* style={mainBody} */>
 							<Text style={fieldLabel}>In Brief</Text>
 							<Text style={paragraph}>{in_brief}</Text>
 							{tailored ? (
@@ -374,7 +372,7 @@ const TendersEmailCharin = ({
 							</>
 						) : null}
 						{tailored && (
-							<Section style={mainBody}>
+							<Section /* style={mainBody} */>
 								<Text style={paragraph}>
 									For additional questions or support, please
 									contact:{' '}
@@ -419,7 +417,10 @@ const TendersEmailCharin = ({
 													rel="noopener noreferrer"
 													className="cta-button"
 												>
-													<Mail
+													{/* eslint-disable-next-line @next/next/no-img-element */}
+													<img
+														src={`${baseUrl}logos/lucide/mail.png`}
+														alt="Contact Us"
 														style={ctaButtonIcon}
 													/>
 													CONTACT US
@@ -434,15 +435,18 @@ const TendersEmailCharin = ({
 											}}
 										>
 											<Link
-												href={
-													'https://www.consultingontap.com/account'
-												}
+												href={`https://www.poeontap.com/account/${clientId}`}
 												style={ctaButton}
 												target="_blank"
 												rel="noopener noreferrer"
 												className="cta-button"
 											>
-												<User style={ctaButtonIcon} />
+												{/* eslint-disable-next-line @next/next/no-img-element */}
+												<img
+													src={`${baseUrl}logos/lucide/user.png`}
+													alt="Your Account"
+													style={ctaButtonIcon}
+												/>
 												ACCESS YOUR ACCOUNT
 											</Link>
 										</td>
@@ -460,7 +464,10 @@ const TendersEmailCharin = ({
 												rel="noopener noreferrer"
 												className="cta-button"
 											>
-												<BookOpenText
+												{/* eslint-disable-next-line @next/next/no-img-element */}
+												<img
+													src={`${baseUrl}logos/lucide/book-open-text.png`}
+													alt="Our Services"
 													style={ctaButtonIcon}
 												/>
 												OUR SERVICES
@@ -598,11 +605,11 @@ const waveInner: React.CSSProperties = {
 	lineHeight: 0,
 	transform: 'rotate(180deg)',
 }
-const mainBody: React.CSSProperties = {
+/* const mainBody: React.CSSProperties = {
 	fontFamily: fontStack,
 	color: '#333333',
 	padding: '30px 34px 10px',
-}
+} */
 const paragraph: React.CSSProperties = {
 	fontSize: 14,
 	lineHeight: '20px',
