@@ -22,6 +22,7 @@ type TenderEmailCharInProps = {
 	geography: string[]
 	awarding_authority?: string
 	programme: string
+	value?: string
 	alert_purpose?: string
 	programme_purpose?: string
 	instrument_type?: string
@@ -47,6 +48,7 @@ const TendersEmailCharin = ({
 	geography,
 	awarding_authority,
 	programme,
+	value,
 	alert_purpose,
 	deadline,
 	in_brief,
@@ -217,12 +219,13 @@ const TendersEmailCharin = ({
 						<Hr style={divider} />
 
 						{/* 2. Key information fields */}
-						<Section style={keyInfoSection}>
+						<Section>
 							{renderField('Geography(-ies):', geoText)}
 							{renderField(
 								'Awarding Authority:',
 								awarding_authority
 							)}
+							{renderField('Value:', value)}
 							{renderField('Grant Programme:', programme)}
 							{renderField(
 								'Programme Purpose:',
@@ -516,7 +519,6 @@ const TendersEmailCharin = ({
 }
 
 // Shared styles (copied from grants-email-new where applicable)
-const fontStack = 'Arial,Helvetica,sans-serif'
 const bodyStyle: React.CSSProperties = {
 	margin: 0,
 	padding: 0,
@@ -525,18 +527,18 @@ const bodyStyle: React.CSSProperties = {
 	fontFamily: 'Josefin Sans, sans-serif',
 }
 const containerOuter: React.CSSProperties = {
-	backgroundColor: '#ffffff',
+	backgroundColor: '#EAEAEA',
 	maxWidth: '600px',
 	width: '100%',
 }
 
 const containerInner: React.CSSProperties = {
 	width: '100%',
+	marginTop: '30px',
 }
 const topStrip: React.CSSProperties = {
 	backgroundColor: '#00334d',
 	color: '#ffffff',
-	fontFamily: fontStack,
 	fontSize: 11,
 	fontWeight: 700,
 	textTransform: 'uppercase',
@@ -556,7 +558,6 @@ const gradientHeader: React.CSSProperties = {
 	color: '#ffffff',
 	position: 'relative',
 	padding: '11px 0 0',
-	fontFamily: fontStack,
 }
 const logoLeftCol: React.CSSProperties = {
 	width: '33.33%',
@@ -624,12 +625,6 @@ const fieldLabel: React.CSSProperties = {
 	fontWeight: 700,
 	fontSize: 14,
 	margin: '0 0 8px',
-	fontFamily: fontStack,
-}
-const keyInfoSection: React.CSSProperties = {
-	fontFamily: fontStack,
-	color: '#333333',
-	padding: '0 34px 10px',
 }
 const fieldValue: React.CSSProperties = {
 	fontSize: 14,
@@ -665,7 +660,6 @@ const linkCell: React.CSSProperties = {
 
 const ctaRow: React.CSSProperties = { padding: '0 34px 12px' }
 const ctaButton: React.CSSProperties = {
-	fontFamily: fontStack,
 	fontSize: 12,
 	lineHeight: '18px',
 	display: 'inline-flex',
@@ -683,7 +677,6 @@ const ctaButton: React.CSSProperties = {
 const ctaButtonIcon: React.CSSProperties = { width: '16px', height: '16px' }
 
 const footerSection: React.CSSProperties = {
-	fontFamily: fontStack,
 	fontSize: 11,
 	color: '#666666',
 	padding: '20px 34px 28px',

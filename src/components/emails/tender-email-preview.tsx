@@ -45,6 +45,7 @@ const TenderEmailPreviewComponent = ({
 				<TendersEmailCharin
 					clientId={'1234-5678'}
 					org_name={'Acme'}
+					value={emailData.value}
 					geography={emailData.geography}
 					awarding_authority={emailData.awarding_authority}
 					programme={emailData.programme}

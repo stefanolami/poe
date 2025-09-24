@@ -14,6 +14,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select'
+import { toast } from '@/hooks/use-toast'
 
 type SelectionItemType = {
 	value: string
@@ -187,11 +188,23 @@ const ClientSingle = ({
 													client.id
 												)
 											}
+											toast({
+												title: 'Success!',
+												description:
+													'Consultant assigned successfully',
+												variant: 'default',
+											})
 										} catch (err) {
 											console.error(
 												'Failed to update consultant links',
 												err
 											)
+											toast({
+												title: 'Error',
+												description:
+													'Consultant assignment failed',
+												variant: 'default',
+											})
 										}
 									})
 								}}

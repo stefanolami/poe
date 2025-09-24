@@ -161,6 +161,7 @@ function mapTenderToEmailProps(tender, tailored = false, assessment, client) {
 		geography: tender.geography,
 		awarding_authority: tender.awarding_authority,
 		programme: tender.programme,
+		value: tender.value,
 		programme_purpose: tender.programme_purpose,
 		instrument_type: tender.instrument_type,
 		alert_purpose: tender.alert_purpose,
