@@ -317,7 +317,6 @@ const TendersEmailCharin = ({
 							<>
 								<Section
 									style={{
-										padding: '0 34px 20px',
 										marginBottom: '30px',
 									}}
 								>
@@ -391,7 +390,7 @@ const TendersEmailCharin = ({
 
 						{/* CTAs: same as grants-email-new; for tailored=true hide only Contact Us */}
 						<Section
-							style={ctaRow}
+							/* style={ctaRow} */
 							className="cta-row"
 						>
 							{/* Centered inner table so buttons sit together in the middle on desktop */}
@@ -658,7 +657,7 @@ const linkCell: React.CSSProperties = {
 	textDecoration: 'underline',
 }
 
-const ctaRow: React.CSSProperties = { padding: '0 34px 12px' }
+/* const ctaRow: React.CSSProperties = { padding: '0 34px 12px' } */
 const ctaButton: React.CSSProperties = {
 	fontSize: 12,
 	lineHeight: '18px',
@@ -674,7 +673,11 @@ const ctaButton: React.CSSProperties = {
 	textTransform: 'uppercase',
 	backgroundColor: '#AAD278',
 }
-const ctaButtonIcon: React.CSSProperties = { width: '16px', height: '16px' }
+const ctaButtonIcon: React.CSSProperties = {
+	width: '16px',
+	height: '16px',
+	marginRight: '4px',
+}
 
 const footerSection: React.CSSProperties = {
 	fontSize: 11,

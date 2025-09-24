@@ -13,18 +13,18 @@ const SectorButton = ({
 }) => {
 	const hoverVariants = {
 		rest: { scale: 1 },
-		hover: { scale: 1.02 },
+		hover: { scale: 1 },
 	}
 
 	return (
 		<motion.button
-			className="relative flex flex-row items-center justify-center gap-3 bg-secondary hover:brightness-95 shadow-md hover:shadow-xl overflow-hidden text-white w-40 md:w-64 xl:w-96 h-9 md:h-14 xl:h-20"
+			className="relative flex flex-row items-center justify-center bg-secondary hover:brightness-95 shadow-md hover:shadow-xl overflow-hidden text-white w-40 md:w-64 xl:w-96 h-9 md:h-14 xl:h-20"
 			initial="rest"
 			whileHover="hover"
 			onClick={() => handler && handler()}
 		>
 			<motion.span
-				className="relative z-10 h-2/3 aspect-square"
+				className="relative z-10 h-full aspect-square -ml-4"
 				variants={hoverVariants}
 				transition={{
 					type: 'spring',
@@ -43,7 +43,12 @@ const SectorButton = ({
 					fill
 				/>
 			</motion.span>
-			<div className="relative h-full flex items-center w-auto">
+			<div className="relative h-full flex flex-col justify-center items-center w-auto">
+				{text === 'Aviation' && (
+					<motion.span className="invisible z-10 -mb-2 font-unna font-bold text-[10px] md:text-sm lg:text-sm xl:text-base">
+						Coming Soon
+					</motion.span>
+				)}
 				<motion.span
 					className="relative z-10 font-unna font-bold text-base md:text-2xl xl:text-4xl"
 					variants={hoverVariants}
@@ -56,12 +61,13 @@ const SectorButton = ({
 				>
 					{text}
 				</motion.span>
+				{text === 'Aviation' && (
+					<motion.span className="z-10 -mt-2 font-unna font-bold text-[10px] md:text-sm lg:text-sm xl:text-base">
+						Coming Soon
+					</motion.span>
+				)}
 			</div>
-			{text === 'Aviation' && (
-				<motion.span className="absolute -bottom-[2px] md:bottom-0 z-10 font-unna font-bold text-[10px] md:text-sm lg:text-sm xl:text-lg">
-					Coming Soon
-				</motion.span>
-			)}
+
 			{/* <motion.span
 				className="absolute right-4 md:text-3xl xl:text-5xl"
 				animate={controlsIcon}

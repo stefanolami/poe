@@ -157,7 +157,7 @@ const TenderSingle = ({
 			if (response) {
 				toast({
 					title: 'Success!',
-					description: 'Grant alert sent successfully',
+					description: 'Tender alert sent successfully',
 					variant: 'default',
 				})
 				setTimeout(() => {

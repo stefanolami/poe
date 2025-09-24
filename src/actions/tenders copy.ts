@@ -4,8 +4,9 @@ import {
 	CreateAlertType,
 	CreateTendersType,
 	UpdateTenderType,
+	ClientType,
+	TenderType,
 } from '@/lib/types'
-import { Json } from '@/supabase/types'
 import { createClient } from '@/supabase/server'
 import { buildTenderEmailSubject } from '@/lib/utils'
 import {
@@ -342,227 +343,221 @@ export const addTendersTailoredAssessments = async (
 		throw error
 	}
 }
-// ...existing code...
-
-// Simple bounded concurrency helper
-async function runWithConcurrency<T>(
-	items: T[],
-	limit: number,
-	worker: (item: T, index: number) => Promise<void>
-) {
-	const queue = [...items.entries()]
-	const running: Promise<void>[] = []
-	async function runNext() {
-		const next = queue.shift()
-		if (!next) return
-		const [idx, item] = next
-		await worker(item, idx)
-		await runNext()
-	}
-	for (let i = 0; i < Math.min(limit, queue.length); i++) {
-		running.push(runNext())
-	}
-	await Promise.all(running)
-}
 
 export const sendTenderAlert = async (tenderId: string) => {
 	try {
 		const supabase = await createClient()
 
-		// 1) Recompute matched clients
 		const { error: rpcError } = await supabase.rpc(
 			'update_tender_clients_call',
 			{
 				tender_id: tenderId,
 			}
 		)
-		if (rpcError) throw new Error(rpcError.message)
+		if (rpcError) {
+			throw new Error(rpcError.message)
+		}
+		console.log('RPC CALL DONE')
 
-		// 2) Load tender
-		const { data: tenderData, error: tenderError } = await supabase
+		const { data: tenderData, error } = await supabase
 			.from('tenders')
 			.select('*')
 			.eq('id', tenderId)
 			.single()
-		if (tenderError) throw new Error(tenderError.message)
+
+		if (error) {
+			throw new Error(error.message)
+		}
+		console.log('TENDER CALL DONE')
 
 		const matchedClients = tenderData?.matched_clients
-		if (!matchedClients || matchedClients.length === 0) {
-			throw new Error('No matched clients found')
-		}
 
-		// 3) Fetch matched clients (pull only needed columns)
+		if (!matchedClients || matchedClients.length === 0)
+			throw new Error('No matched clients found')
+
 		const { data: clientsData, error: clientsError } = await supabase
 			.from('clients')
-			.select(
-				`id,email,referrer,org_name,additional_emails,vehicles_type,charging_stations_type,deployment,project,pif`
-			)
-			.in('id', matchedClients as string[])
-		if (clientsError || !clientsData)
-			throw new Error(clientsError?.message || 'Error fetching clients')
+			.select('*')
+			.in('id', matchedClients)
 
-		// 4) Prepare attachments once
-		let attachments: { filename?: string; content: Buffer }[] = []
-		if (tenderData.files?.length) {
-			const downloads = await Promise.all(
-				tenderData.files.map(async (filePath: string) => {
-					const path = filePath.replace('/tenders/', 'tenders/')
+		console.log('CLIENTS CALL DONE')
+
+		if (clientsError || !clientsData || clientsData.length === 0) {
+			throw new Error(clientsError?.message || 'No clients found')
+		}
+
+		const alertSubject = `${tenderData.programme}`
+
+		let attachments: ({
+			filename: string | undefined
+			content: Buffer<ArrayBuffer>
+		} | null)[] = []
+
+		if (tenderData.files && tenderData.files.length > 0) {
+			attachments = await Promise.all(
+				(tenderData.files || []).map(async (filePath) => {
 					const { data, error } = await supabase.storage
 						.from('documents')
-						.download(path)
-					if (error || !data) return null
-					const buf = Buffer.from(await data.arrayBuffer())
-					// Safety cap if extremely large (optional):
-					// if (buf.length > 6_000_000) return null
+						.download(filePath.replace('/tenders/', 'tenders/'))
+
+					if (error) return null
+
+					const buffer = await data.arrayBuffer()
 					return {
 						filename: filePath.split('/').pop(),
-						content: buf,
+						content: Buffer.from(buffer),
 					}
 				})
 			)
-			const cleaned: { filename?: string; content: Buffer }[] = []
-			for (const d of downloads) {
-				if (d)
-					cleaned.push({ filename: d.filename, content: d.content })
-			}
-			attachments = cleaned
+		}
+		console.log('ATTACHMENTS DONE')
+
+		type ClientLite = Pick<
+			ClientType,
+			| 'email'
+			| 'id'
+			| 'org_name'
+			| 'referrer'
+			| 'vehicles_type'
+			| 'charging_stations_type'
+			| 'pif'
+			| 'deployment'
+			| 'project'
+			| 'additional_emails'
+		>
+
+		const clientsList = clientsData.map((client: ClientLite) => ({
+			email: client.email as string,
+			referrer: client.referrer as string | null,
+			cc: (Array.isArray(client.additional_emails)
+				? (client.additional_emails as string[]).filter(
+						(e) => !!e && e.trim().length > 0
+					)
+				: []) as string[],
+			data: client,
+		}))
+
+		const assessments = tenderData.tailored_assessment as
+			| {
+					client: string
+					relevance: string
+					next_steps: string
+			  }[]
+			| []
+		const tailoredEmails = assessments?.map(
+			(assessment) => assessment.client
+		)
+
+		// Split emails into tailored and normal
+		const tailoredRecipients = clientsList.filter((client) =>
+			tailoredEmails?.includes(client.email)
+		)
+		const normalRecipients = clientsList.filter(
+			(client) => !tailoredEmails?.includes(client.email)
+		)
+
+		// For tailored, match each email to its assessment
+		const tailoredAssessments = tailoredRecipients.map(
+			(client) => assessments.find((a) => a.client === client.email) || {}
+		)
+		console.log('RECIPIENTS SPLIT DONE')
+
+		function sleep(ms: number) {
+			return new Promise((resolve) => setTimeout(resolve, ms))
 		}
 
-		// 5) Build recipient descriptors (normal + tailored split)
-		const assessments =
-			(tenderData.tailored_assessment as
-				| { client: string; relevance: string; next_steps: string }[]
-				| undefined) || []
-		type ClientRow = {
-			id: string
-			email: string
-			referrer: string | null
-			org_name: string | null
-			additional_emails: string[] | null
-			vehicles_type: unknown | null
-			charging_stations_type: unknown | null
-			deployment: unknown | null
-			project: unknown | null
-			pif: unknown | null
-		}
-
-		const recipients = (clientsData as ClientRow[]).map((c) => {
-			const assessment = assessments.find((a) => a.client === c.email)
-			const clientShape: Partial<
-				Pick<
-					import('@/lib/types').ClientType,
-					| 'email'
-					| 'vehicles_type'
-					| 'charging_stations_type'
-					| 'pif'
-					| 'deployment'
-					| 'project'
-				>
-			> = {
-				email: c.email,
-				vehicles_type: c.vehicles_type as Json | null,
-				charging_stations_type: c.charging_stations_type as Json | null,
-				pif: c.pif as Json | null,
-				deployment: c.deployment as Json | null,
-				project: c.project as Json | null,
-			}
-			return {
-				client: c,
-				email: c.email,
-				referrer: c.referrer,
-				cc: (Array.isArray(c.additional_emails)
-					? c.additional_emails
-					: []
-				).filter((e) => !!e),
-				tailored: !!assessment,
-				assessment,
-				subject: buildTenderEmailSubject(tenderData, clientShape),
-			}
-		})
-
-		const normalRecipients = recipients.filter((r) => !r.tailored)
-		const tailoredRecipients = recipients.filter((r) => r.tailored)
-
-		// 6) Email send (concurrent)
-		const CONCURRENCY = 5 // adjust as needed
-
-		// Worker for normal
-		const sendNormal = async (r: (typeof normalRecipients)[number]) => {
-			if (r.referrer === 'charIn') {
-				await sendTenderCharIn(
-					r.email,
-					r.subject,
-					tenderData,
-					attachments,
-					r.cc,
-					r.client
+		if (normalRecipients && normalRecipients.length > 0) {
+			for (const client of normalRecipients) {
+				const personalizedSubject = buildTenderEmailSubject(
+					tenderData as TenderType,
+					client.data
 				)
-			} else {
-				await sendTender(
-					r.email,
-					r.subject,
-					tenderData,
-					attachments,
-					r.cc,
-					r.client
-				)
-			}
-		}
-
-		// Worker for tailored
-		const sendTailored = async (r: (typeof tailoredRecipients)[number]) => {
-			if (r.referrer === 'charIn') {
-				await sendTenderTailoredCharIn(
-					r.email,
-					r.subject,
-					tenderData,
-					r.assessment,
-					attachments,
-					r.cc,
-					r.client
-				)
-			} else {
-				await sendTenderTailored(
-					r.email,
-					r.subject,
-					tenderData,
-					r.assessment,
-					attachments,
-					r.cc,
-					r.client
-				)
+				if (client.referrer === 'charIn') {
+					await sendTenderCharIn(
+						client.email,
+						personalizedSubject,
+						tenderData,
+						attachments,
+						client.cc,
+						client.data
+					)
+					await sleep(600)
+				} else {
+					await sendTender(
+						client.email,
+						personalizedSubject,
+						tenderData,
+						attachments,
+						client.cc,
+						client.data
+					)
+					await sleep(600)
+				}
 			}
 		}
 
-		await Promise.all([
-			runWithConcurrency(normalRecipients, CONCURRENCY, sendNormal),
-			runWithConcurrency(tailoredRecipients, CONCURRENCY, sendTailored),
-		])
+		if (tailoredRecipients && tailoredRecipients.length > 0) {
+			for (let i = 0; i < tailoredRecipients.length; i++) {
+				const to = tailoredRecipients[i].email
+				const assessment = tailoredAssessments[i]
+				const personalizedSubject = buildTenderEmailSubject(
+					tenderData as TenderType,
+					tailoredRecipients[i].data
+				)
+				if (tailoredRecipients[i].referrer === 'charIn') {
+					await sendTenderTailoredCharIn(
+						to,
+						personalizedSubject,
+						tenderData,
+						assessment,
+						attachments,
+						tailoredRecipients[i].cc,
+						tailoredRecipients[i].data
+					)
+					await sleep(600)
+				} else {
+					await sendTenderTailored(
+						to,
+						personalizedSubject,
+						tenderData,
+						assessment,
+						attachments,
+						tailoredRecipients[i].cc,
+						tailoredRecipients[i].data
+					)
+					await sleep(600)
+				}
+			}
+		}
+		console.log('TENDER SENT')
 
-		// 7) Mark as sent
 		const { error: updateError } = await supabase
 			.from('tenders')
 			.update({ sent: true })
 			.eq('id', tenderId)
-		if (updateError) throw new Error(updateError.message)
 
-		// 8) Create alert log
+		if (updateError) {
+			throw new Error(updateError.message)
+		}
+
+		console.log('TENDER ALERT SENT')
+
 		const alert: CreateAlertType = {
-			subject: tenderData.programme,
+			subject: alertSubject,
 			entity_type: 'tender',
 			entity_id: tenderId,
 			matched_clients: matchedClients,
 		}
+
 		await createAlert(alert)
 
 		return { success: true }
-	} catch (e) {
-		console.error('ERROR SENDING TENDER ALERT', e)
-		throw e
+	} catch (error) {
+		console.log('ERROR SENDING TENDER ALERT', error)
+		throw error
 	}
 }
 
-// ...existing code...
 export const filterTenderClients = async (tenderId: string) => {
 	try {
 		const supabase = await createClient()
