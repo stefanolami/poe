@@ -44,6 +44,7 @@ import {
 	filterTenderClients,
 	sendTenderAlert,
 } from '@/actions/tenders'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const TenderSingle = ({
 	tender,
@@ -93,6 +94,8 @@ const TenderSingle = ({
 		intro,
 		subject_matter,
 		pre_launch,
+		call_title,
+		reference_number,
 	} = tender
 
 	const router = useRouter()
@@ -128,12 +131,13 @@ const TenderSingle = ({
 		vehicles_contracts,
 		stations,
 		stations_contracts,
+		call_title,
+		reference_number,
 	}
 
 	const submitHandler: SubmitHandler<
 		CreateGrantsTailoredAssessmentType
 	> = async (data) => {
-		console.log('DATA', data)
 		try {
 			const response = await addTendersTailoredAssessments(
 				id,
@@ -151,8 +155,6 @@ const TenderSingle = ({
 					router.refresh()
 				}, 1000)
 			}
-
-			console.log(response)
 
 			return response
 		} catch (error) {
@@ -190,8 +192,6 @@ const TenderSingle = ({
 					router.push(`/admin/tenders/`)
 				}, 1000)
 			}
-
-			console.log(response)
 
 			return response
 		} catch (error) {
@@ -258,7 +258,7 @@ const TenderSingle = ({
 		<div className="font-jose mb-20">
 			<div className="flex flex-row items-center justify-between w-full">
 				<h1 className="text-white font-jose text-2xl">
-					Tender - {tender.programme_title ?? ''}
+					Tender - {call_title ? call_title : programme_title}
 				</h1>
 				<button
 					disabled={isLoading || isSubmitting}
@@ -268,519 +268,639 @@ const TenderSingle = ({
 					Edit
 				</button>
 			</div>
-			<div className="text-white font-jose text-sm grid grid-cols-2 gap-4 mt-12 space-y-2 max-w-[800px]">
-				<div className="flex flex-col gap-2 col-span-2">
-					<span className="block text-xl">Geography</span>
-					<span className="block text-base">
-						{formatGeography(geography)}
-					</span>
-				</div>
-				<div className="flex flex-col gap-2">
-					<span className="block text-xl">Sector</span>
-					<span className="block text-base">{sector}</span>
-				</div>
-				<div className="flex flex-col gap-2">
-					<span className="block text-xl">Value</span>
-					<span className="block text-base">{value}</span>
-				</div>
-				<div className="flex flex-col gap-2">
-					<span className="block text-xl">Programme Title</span>
-					<span className="block text-base">
-						{programme_title ?? '-'}
-					</span>
-				</div>
-				<div className="flex flex-col gap-2 col-span-2">
-					<span className="block text-xl">Geography Details</span>
-					<span className="block text-base">
-						{geography_details ? geography_details : '-'}
-					</span>
-				</div>
-				<div className="flex flex-col gap-2">
-					<span className="block text-xl">Internal Deadline</span>
-					<span className="block text-base">
-						{internal_deadline
-							? new Date(internal_deadline).toLocaleDateString(
-									'en-GB'
-								)
-							: '-'}
-					</span>
-				</div>
-				<div className="flex flex-col gap-2 col-span-2">
-					<span className="block text-xl">Intro</span>
-					<span className="block text-base">{intro || '-'}</span>
-				</div>
-				<div className="flex flex-col gap-2 col-span-2">
-					<span className="block text-xl">Subject Matter</span>
-					<span className="block text-base">
-						{subject_matter || '-'}
-					</span>
-				</div>
-				<div className="flex flex-col gap-2">
-					<span className="block text-xl">Pre-launch</span>
-					<span className="block text-base">
-						{pre_launch ? 'Yes' : 'No'}
-					</span>
-				</div>
-				<div className="flex flex-col gap-2">
-					<span className="block text-xl">Alert Purpose</span>
-					<span className="block text-base">
-						{alert_purpose ? alert_purpose : '-'}
-					</span>
-				</div>
-				<div className="flex flex-col gap-2">
-					<span className="block text-xl">Programme Purpose</span>
-					<span className="block text-base">
-						{programme_purpose ? programme_purpose : '-'}
-					</span>
-				</div>
-				<div className="flex flex-col gap-2">
-					<span className="block text-xl">Instrument Type</span>
-					<span className="block text-base">
-						{instrument_type ? instrument_type : '-'}
-					</span>
-				</div>
-				<div className="flex flex-col gap-2">
-					<span className="block text-xl">Awarding Authority</span>
-					<span className="block text-base">
-						{awarding_authority ? awarding_authority : '-'}
-					</span>
-				</div>
-				<div className="flex flex-col gap-2">
-					<span className="block text-xl">Consultant</span>
-					<span className="block text-base">
-						{consultant
-							? `${consultant.first_name} ${consultant.last_name}`
-							: '-'}
-					</span>
-				</div>
-				{/* <Divider /> */}
-				<div className="flex flex-col gap-2 col-span-2">
-					<span className="block text-xl">In Brief</span>
-					<span className="block text-base">
-						{in_brief ? in_brief : '-'}
-					</span>
-				</div>
-				<div className="flex flex-col gap-2 col-span-2">
-					<span className="block text-xl">Deadline</span>
-					{deadline.map((d, index) => (
-						<span
-							key={index}
-							className="block text-base"
-						>
-							{formatDeadline(d)}
-						</span>
-					))}
-				</div>
-				<div className="flex flex-col gap-2 col-span-2">
-					<span className="block text-xl">Further Details</span>
-					{further_details && further_details.length > 0 ? (
-						further_details.map((details, index) => {
-							const detail = details.split('///')
-							return (
-								<span
-									key={index}
-									className="block text-base"
-								>
-									{new Date(detail[0]).toLocaleDateString(
-										'en-GB',
-										{
-											day: '2-digit',
-											month: '2-digit',
-											year: 'numeric',
-										}
-									)}
-									{' - '}
-									<Link href={detail[1]}>{detail[1]}</Link>
-									{' - '}
-									{detail[2]}
-								</span>
-							)
-						})
-					) : (
-						<span className="block text-base">-</span>
-					)}
-				</div>
-				<div className="col-span-2">
-					<span className="block text-xl mb-2">Documents</span>
-					{files && files.length > 0 ? (
-						<ul className="list-disc pl-5 space-y-2">
-							{files.map((file, index) => (
-								<li key={index}>
-									<DocViewerComponent
-										docName={file.slice(8)}
-										doc={[
-											{
-												uri: `https://wgbitmetlwsyukgoortd.supabase.co/storage/v1/object/public/documents${file}`,
-											},
-										]}
-									/>
-									{/* <a
-										href={`https://wgbitmetlwsyukgoortd.supabase.co/storage/v1/object/public/documents${file}`}
-										target="_blank"
-										className="underline text-base"
-									>
-										{file.slice(8)}
-									</a> */}
-								</li>
-							))}
-						</ul>
-					) : (
-						<span className="block text-base">-</span>
-					)}
-				</div>
-				<div className="flex flex-col gap-2">
-					<span className="block text-xl">E-Vehicles</span>
-					<span className="block text-base">
-						{vehicles && vehicles.length > 0
-							? vehicles.join(', ')
-							: '-'}
-					</span>
-				</div>
-				<div className="flex flex-col gap-2">
-					<span className="block text-xl">E-Vehicles Contracts</span>
-					<span className="block text-base">
-						{vehicles_contracts && vehicles_contracts.length > 0
-							? vehicles_contracts.join(', ')
-							: '-'}
-					</span>
-				</div>
-				<div className="flex flex-col gap-2">
-					<span className="block text-xl">Charging Stations</span>
-					<span className="block text-base">
-						{stations && stations.length > 0
-							? stations.join(', ')
-							: '-'}
-					</span>
-				</div>
-				<div className="flex flex-col gap-2">
-					<span className="block text-xl">
-						Charging Stations Contracts
-					</span>
-					<span className="block text-base">
-						{stations_contracts && stations_contracts.length > 0
-							? stations_contracts.join(', ')
-							: '-'}
-					</span>
-				</div>
-				<div className="flex flex-col gap-2 col-span-2">
-					<span className="block text-xl">Tailored Assessment</span>
-					{tailored_assessment && tailored_assessment.length > 0 ? (
-						tailored_assessment.map((assessment, index) => {
-							const a = assessment as {
-								client: string
-								relevance: string
-								next_steps: string
-							}
-							console.log('assessment', assessment)
-							return (
-								<div
-									key={index}
-									className="text-base"
-								>
-									<span className="block text-base">
-										<strong className="text-lg">
-											Client
-										</strong>{' '}
-										- {a.client}
-									</span>
-									<span className="block text-base">
-										<strong className="text-lg">
-											Relevance
-										</strong>{' '}
-										- {a.relevance}
-									</span>
-									<span className="block text-base">
-										<strong className="text-lg">
-											Next Steps
-										</strong>{' '}
-										- {a.next_steps}
-									</span>
+
+			<div className="text-white font-jose text-sm grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 max-w-[1000px]">
+				{/* Overview */}
+				<Card className="bg-white/5 border-white/10 text-white">
+					<CardHeader>
+						<CardTitle className="text-xl">Overview</CardTitle>
+					</CardHeader>
+					<CardContent className="grid grid-cols-2 gap-3">
+						<div>
+							<div className="text-muted-foreground">Sector</div>
+							<div className="text-base">{sector}</div>
+						</div>
+						<div>
+							<div className="text-muted-foreground">
+								Pre-launch
+							</div>
+							<div className="text-base">
+								{pre_launch ? 'Yes' : 'No'}
+							</div>
+						</div>
+						<div>
+							<div className="text-muted-foreground">Value</div>
+							<div className="text-base">{value}</div>
+						</div>
+						<div>
+							<div className="text-muted-foreground">
+								Reference Number
+							</div>
+							<div className="text-base">
+								{reference_number ? reference_number : '-'}
+							</div>
+						</div>
+						<div className="col-span-2">
+							<div className="text-muted-foreground">
+								Consultant
+							</div>
+							<div className="text-base">
+								{consultant
+									? `${consultant.first_name} ${consultant.last_name}`
+									: '-'}
+							</div>
+						</div>
+					</CardContent>
+				</Card>
+
+				{/* Programme & Authority */}
+				<Card className="bg-white/5 border-white/10 text-white">
+					<CardHeader>
+						<CardTitle className="text-xl">
+							Administrative Details
+						</CardTitle>
+					</CardHeader>
+					<CardContent className="grid grid-cols-2 gap-3">
+						<div>
+							<div className="text-muted-foreground">
+								Call Title
+							</div>
+							<div className="text-base">
+								{call_title ? call_title : '-'}
+							</div>
+						</div>
+						<div>
+							<div className="text-muted-foreground">
+								Programme Title
+							</div>
+							<div className="text-base">
+								{programme_title ? programme_title : '-'}
+							</div>
+						</div>
+						<div>
+							<div className="text-muted-foreground">
+								Programme Purpose
+							</div>
+							<div className="text-base">
+								{programme_purpose ? programme_purpose : '-'}
+							</div>
+						</div>
+						<div>
+							<div className="text-muted-foreground">
+								Alert Purpose
+							</div>
+							<div className="text-base">
+								{alert_purpose ? alert_purpose : '-'}
+							</div>
+						</div>
+						<div>
+							<div className="text-muted-foreground">
+								Instrument Type
+							</div>
+							<div className="text-base">
+								{instrument_type ? instrument_type : '-'}
+							</div>
+						</div>
+						<div>
+							<div className="text-muted-foreground">
+								Awarding Authority
+							</div>
+							<div className="text-base">
+								{awarding_authority ? awarding_authority : '-'}
+							</div>
+						</div>
+					</CardContent>
+				</Card>
+
+				{/* Geography */}
+				<Card className="bg-white/5 border-white/10 text-white">
+					<CardHeader>
+						<CardTitle className="text-xl">Geography</CardTitle>
+					</CardHeader>
+					<CardContent className="space-y-2">
+						<div>
+							<div className="text-muted-foreground">Regions</div>
+							<div className="text-base">
+								{formatGeography(geography)}
+							</div>
+						</div>
+						<div>
+							<div className="text-muted-foreground">
+								Geography Details
+							</div>
+							<div className="text-base">
+								{geography_details ? geography_details : '-'}
+							</div>
+						</div>
+					</CardContent>
+				</Card>
+
+				{/* Scheduling */}
+				<Card className="bg-white/5 border-white/10 text-white">
+					<CardHeader>
+						<CardTitle className="text-xl">Scheduling</CardTitle>
+					</CardHeader>
+					<CardContent className="space-y-2">
+						<div className="grid grid-cols-2 gap-3">
+							<div>
+								<div className="text-muted-foreground">
+									Internal Deadline
 								</div>
-							)
-						})
-					) : (
-						<span className="block text-base">-</span>
-					)}
-				</div>
-				<div className="col-span-2">
-					<Form {...form}>
-						<form
-							onSubmit={form.handleSubmit(submitHandler, (e) =>
-								console.log(e)
-							)}
-							className=""
-						>
-							<FormField
-								control={form.control}
-								name="tailored_assessment"
-								render={({ field }) => (
-									<FormItem className="col-span-2">
-										<FormControl>
-											<div className="space-y-4">
-												{(
-													(field.value ?? []) as [
-														string,
-														string,
-														string,
-													][]
-												).map((detail, index) => (
-													<div
-														className="flex flex-row justify-start items-start gap-6 my-8"
-														key={index}
-													>
-														<div className="flex flex-col w-full gap-4 items-start">
-															<Select
-																disabled={
-																	isSubmitting ||
-																	isLoading
-																}
-																value={
-																	detail[0] ??
-																	''
-																}
-																onValueChange={(
-																	val
-																) => {
-																	const updated =
-																		[
-																			...(field.value ??
-																				[]),
-																		]
-																	updated[
-																		index
-																	] = [
-																		val,
-																		detail[1] ??
-																			'',
-																		detail[2] ??
-																			'',
-																	]
-																	field.onChange(
-																		updated
-																	)
-																}}
-															>
-																<FormControl>
-																	<SelectTrigger className="bg-white text-primary">
-																		<SelectValue placeholder="Select a client" />
-																	</SelectTrigger>
-																</FormControl>
-																<SelectContent className="bg-white text-primary font-jose">
-																	{clients?.map(
-																		(
-																			client
-																		) => (
-																			<SelectItem
-																				key={
-																					client.id
-																				}
-																				value={
-																					client.email
-																				}
-																			>
-																				{`${client.first_name} ${client.last_name} - (${client.email})`}
-																			</SelectItem>
-																		)
-																	)}
-																</SelectContent>
-															</Select>
-															<Textarea
-																disabled={
-																	isSubmitting ||
-																	isLoading
-																}
-																placeholder="Relevance"
-																value={
-																	detail[1] ||
-																	''
-																}
-																onChange={(
-																	e
-																) => {
-																	const updated =
-																		[
-																			...(field.value ??
-																				[]),
-																		]
-																	updated[
-																		index
-																	][1] =
-																		e.target.value
-																	field.onChange(
-																		updated
-																	)
-																}}
-																className="bg-white text-primary min-h-[150px]"
-															/>
-															<Textarea
-																disabled={
-																	isSubmitting ||
-																	isLoading
-																}
-																placeholder="Next Steps"
-																value={
-																	detail[2] ||
-																	''
-																}
-																onChange={(
-																	e
-																) => {
-																	const updated =
-																		[
-																			...(field.value ??
-																				[]),
-																		]
-																	updated[
-																		index
-																	][2] =
-																		e.target.value
-																	field.onChange(
-																		updated
-																	)
-																}}
-																className="bg-white text-primary min-h-[150px]"
-															/>
-															{/* <input
-																				type="file"
-																				multiple
-																				onChange={(
-																					e
-																				) => {
-																					const updated =
-																						[
-																							...(field.value ??
-																								[]),
-																						]
-																					updated[
-																						index
-																					][3] = e
-																						.target
-																						.files
-																						? Array.from(
-																								e
-																									.target
-																									.files
-																							)
-																						: []
-																					field.onChange(
-																						updated
-																					)
-																				}}
-																				className="bg-white text-primary"
-																			/> */}
-														</div>
-														<Button
-															variant="destructive"
-															type="button"
-															onClick={() => {
-																const updated =
-																	(
-																		field.value ??
-																		[]
-																	).filter(
-																		(
-																			//eslint-disable-next-line
-																			_: any,
-																			i: number
-																		) =>
-																			i !==
-																			index
-																	)
-																field.onChange(
-																	updated
-																)
-															}}
-															className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
-														>
-															<FaTrashAlt className="h-4 w-4" />
-														</Button>
-													</div>
-												))}
-												<div className="space-x-4">
-													<Button
-														disabled={
-															isLoading ||
-															isSubmitting
-														}
-														variant="default"
-														type="button"
-														onClick={() =>
-															field.onChange([
-																...(field.value ??
-																	[]),
-																['', '', ''], // default empty row
-															])
-														}
-														className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
-													>
-														Add Tailored Assessment
-													</Button>
-													{Array.isArray(
-														field.value
-													) &&
-														field.value.length >
-															0 && (
-															<Button
-																disabled={
-																	isLoading ||
-																	isSubmitting
-																}
-																variant="default"
-																type="submit"
-																className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5 px-8"
-															>
-																Save
-															</Button>
-														)}
+								<div className="text-base">
+									{internal_deadline
+										? new Date(
+												internal_deadline
+											).toLocaleDateString('en-GB')
+										: '-'}
+								</div>
+							</div>
+						</div>
+						<div>
+							<div className="text-muted-foreground">
+								Deadlines
+							</div>
+							<div className="space-y-1">
+								{deadline.map((d, index) => (
+									<div
+										key={index}
+										className="text-base"
+									>
+										{formatDeadline(d)}
+									</div>
+								))}
+							</div>
+						</div>
+					</CardContent>
+				</Card>
+
+				{/* Narrative */}
+				<Card className="bg-white/5 border-white/10 text-white md:col-span-2">
+					<CardHeader>
+						<CardTitle className="text-xl">Email Brief</CardTitle>
+					</CardHeader>
+					<CardContent className="grid grid-cols-1 gap-3">
+						<div>
+							<div className="text-muted-foreground">Intro</div>
+							<div className="text-base">{intro || '-'}</div>
+						</div>
+						<div>
+							<div className="text-muted-foreground">
+								Subject Matter
+							</div>
+							<div className="text-base">
+								{subject_matter || '-'}
+							</div>
+						</div>
+						<div>
+							<div className="text-muted-foreground">
+								In Brief
+							</div>
+							<div className="text-base">
+								{in_brief ? in_brief : '-'}
+							</div>
+						</div>
+					</CardContent>
+				</Card>
+
+				{/* E-Mobility */}
+				<Card className="bg-white/5 border-white/10 text-white">
+					<CardHeader>
+						<CardTitle className="text-xl">E-Mobility</CardTitle>
+					</CardHeader>
+					<CardContent className="grid grid-cols-2 gap-3">
+						<div>
+							<div className="text-muted-foreground">
+								E-Vehicles
+							</div>
+							<div className="text-base">
+								{vehicles && vehicles.length > 0
+									? vehicles.join(', ')
+									: '-'}
+							</div>
+						</div>
+						<div>
+							<div className="text-muted-foreground">
+								E-Vehicles Contracts
+							</div>
+							<div className="text-base">
+								{vehicles_contracts &&
+								vehicles_contracts.length > 0
+									? vehicles_contracts.join(', ')
+									: '-'}
+							</div>
+						</div>
+						<div>
+							<div className="text-muted-foreground">
+								Charging Stations
+							</div>
+							<div className="text-base">
+								{stations && stations.length > 0
+									? stations.join(', ')
+									: '-'}
+							</div>
+						</div>
+						<div>
+							<div className="text-muted-foreground">
+								Charging Stations Contracts
+							</div>
+							<div className="text-base">
+								{stations_contracts &&
+								stations_contracts.length > 0
+									? stations_contracts.join(', ')
+									: '-'}
+							</div>
+						</div>
+					</CardContent>
+				</Card>
+
+				{/* Further Details */}
+				<Card className="bg-white/5 border-white/10 text-white md:col-span-2">
+					<CardHeader>
+						<CardTitle className="text-xl">
+							Further Details
+						</CardTitle>
+					</CardHeader>
+					<CardContent>
+						{further_details && further_details.length > 0 ? (
+							<div className="space-y-2">
+								{further_details.map((details, index) => {
+									const detail = details.split('///')
+									return (
+										<div
+											key={index}
+											className="text-base"
+										>
+											{new Date(
+												detail[0]
+											).toLocaleDateString('en-GB', {
+												day: '2-digit',
+												month: '2-digit',
+												year: 'numeric',
+											})}
+											{' - '}
+											<Link href={detail[1]}>
+												{detail[1]}
+											</Link>
+											{' - '}
+											{detail[2]}
+										</div>
+									)
+								})}
+							</div>
+						) : (
+							<div className="text-base">-</div>
+						)}
+					</CardContent>
+				</Card>
+
+				{/* Documents */}
+				<Card className="bg-white/5 border-white/10 text-white md:col-span-2">
+					<CardHeader>
+						<CardTitle className="text-xl mb-2">
+							Documents
+						</CardTitle>
+					</CardHeader>
+					<CardContent>
+						{files && files.length > 0 ? (
+							<ul className="list-disc pl-5 space-y-2">
+								{files.map((file, index) => (
+									<li key={index}>
+										<DocViewerComponent
+											docName={file.slice(8)}
+											doc={[
+												{
+													uri: `https://wgbitmetlwsyukgoortd.supabase.co/storage/v1/object/public/documents${file}`,
+												},
+											]}
+										/>
+									</li>
+								))}
+							</ul>
+						) : (
+							<div className="text-base">-</div>
+						)}
+					</CardContent>
+				</Card>
+
+				{/* Tailored Assessment */}
+				<Card className="bg-white/5 border-white/10 text-white md:col-span-2">
+					<CardHeader>
+						<CardTitle className="text-xl">
+							Tailored Assessment
+						</CardTitle>
+					</CardHeader>
+					<CardContent className="space-y-4">
+						{tailored_assessment &&
+						tailored_assessment.length > 0 ? (
+							<div className="space-y-3">
+								{tailored_assessment.map(
+									(assessment, index) => {
+										const a = assessment as {
+											client: string
+											relevance: string
+											next_steps: string
+										}
+										return (
+											<div
+												key={index}
+												className="text-base"
+											>
+												<div>
+													<strong className="text-lg">
+														Client
+													</strong>{' '}
+													- {a.client}
+												</div>
+												<div>
+													<strong className="text-lg">
+														Relevance
+													</strong>{' '}
+													- {a.relevance}
+												</div>
+												<div>
+													<strong className="text-lg">
+														Next Steps
+													</strong>{' '}
+													- {a.next_steps}
 												</div>
 											</div>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
+										)
+									}
 								)}
-							/>
-						</form>
-					</Form>
-				</div>
-				{authInitialized ? (
-					<div className="grid grid-cols-4 col-span-2 gap-4">
-						{showSend && (
-							<ButtonWithAlert
-								buttonText="Send"
-								dialogText="Are you sure you want to send this Grant alert?"
-								confirmText="Send"
-								action={handleSend}
-								disabled={isLoading || isSubmitting}
-								buttonClass="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+							</div>
+						) : (
+							<div className="text-base">-</div>
+						)}
+
+						<Form {...form}>
+							<form
+								onSubmit={form.handleSubmit(
+									submitHandler,
+									(e) => console.log(e)
+								)}
 							>
+								<FormField
+									control={form.control}
+									name="tailored_assessment"
+									render={({ field }) => (
+										<FormItem className="col-span-2">
+											<FormControl>
+												<div className="space-y-4">
+													{(
+														(field.value ?? []) as [
+															string,
+															string,
+															string,
+														][]
+													).map((detail, index) => (
+														<div
+															className="flex flex-row justify-start items-start gap-6 my-8"
+															key={index}
+														>
+															<div className="flex flex-col w-full gap-4 items-start">
+																<Select
+																	disabled={
+																		isSubmitting ||
+																		isLoading
+																	}
+																	value={
+																		detail[0] ??
+																		''
+																	}
+																	onValueChange={(
+																		val
+																	) => {
+																		const updated =
+																			[
+																				...(field.value ??
+																					[]),
+																			]
+																		updated[
+																			index
+																		] = [
+																			val,
+																			detail[1] ??
+																				'',
+																			detail[2] ??
+																				'',
+																		]
+																		field.onChange(
+																			updated
+																		)
+																	}}
+																>
+																	<FormControl>
+																		<SelectTrigger className="bg-white text-primary">
+																			<SelectValue placeholder="Select a client" />
+																		</SelectTrigger>
+																	</FormControl>
+																	<SelectContent className="bg-white text-primary font-jose">
+																		{clients?.map(
+																			(
+																				client
+																			) => (
+																				<SelectItem
+																					key={
+																						client.id
+																					}
+																					value={
+																						client.email
+																					}
+																				>
+																					{`${client.first_name} ${client.last_name} - (${client.email})`}
+																				</SelectItem>
+																			)
+																		)}
+																	</SelectContent>
+																</Select>
+																<Textarea
+																	disabled={
+																		isSubmitting ||
+																		isLoading
+																	}
+																	placeholder="Relevance"
+																	value={
+																		detail[1] ||
+																		''
+																	}
+																	onChange={(
+																		e
+																	) => {
+																		const updated =
+																			[
+																				...(field.value ??
+																					[]),
+																			]
+																		updated[
+																			index
+																		][1] =
+																			e.target.value
+																		field.onChange(
+																			updated
+																		)
+																	}}
+																	className="bg-white text-primary min-h-[150px]"
+																/>
+																<Textarea
+																	disabled={
+																		isSubmitting ||
+																		isLoading
+																	}
+																	placeholder="Next Steps"
+																	value={
+																		detail[2] ||
+																		''
+																	}
+																	onChange={(
+																		e
+																	) => {
+																		const updated =
+																			[
+																				...(field.value ??
+																					[]),
+																			]
+																		updated[
+																			index
+																		][2] =
+																			e.target.value
+																		field.onChange(
+																			updated
+																		)
+																	}}
+																	className="bg-white text-primary min-h-[150px]"
+																/>
+															</div>
+															<Button
+																variant="destructive"
+																type="button"
+																onClick={() => {
+																	const updated =
+																		(
+																			(field.value ??
+																				[]) as [
+																				string,
+																				string,
+																				string,
+																			][]
+																		).filter(
+																			(
+																				_,
+																				i
+																			) =>
+																				i !==
+																				index
+																		)
+																	field.onChange(
+																		updated
+																	)
+																}}
+																className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+															>
+																<FaTrashAlt className="h-4 w-4" />
+															</Button>
+														</div>
+													))}
+													<div className="space-x-4">
+														<Button
+															disabled={
+																isLoading ||
+																isSubmitting
+															}
+															variant="default"
+															type="button"
+															onClick={() =>
+																field.onChange([
+																	...(field.value ??
+																		[]),
+																	[
+																		'',
+																		'',
+																		'',
+																	],
+																])
+															}
+															className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+														>
+															Add Tailored
+															Assessment
+														</Button>
+														{Array.isArray(
+															field.value
+														) &&
+															field.value.length >
+																0 && (
+																<Button
+																	disabled={
+																		isLoading ||
+																		isSubmitting
+																	}
+																	variant="default"
+																	type="submit"
+																	className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5 px-8"
+																>
+																	Save
+																</Button>
+															)}
+													</div>
+												</div>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</form>
+						</Form>
+					</CardContent>
+				</Card>
+
+				{/* Actions */}
+				<Card className="bg-white/5 border-white/10 text-white md:col-span-2">
+					<CardHeader>
+						<CardTitle className="text-xl">Actions</CardTitle>
+					</CardHeader>
+					<CardContent>
+						{authInitialized ? (
+							<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+								{showSend && (
+									<ButtonWithAlert
+										buttonText="Send"
+										dialogText="Are you sure you want to send this Grant alert?"
+										confirmText="Send"
+										action={handleSend}
+										disabled={isLoading || isSubmitting}
+										buttonClass="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+									>
+										<TenderEmailPreviewButton
+											emailData={formattedTender}
+											disabled={isLoading || isSubmitting}
+										/>
+									</ButtonWithAlert>
+								)}
+								<Button
+									disabled={isLoading || isSubmitting}
+									variant="default"
+									type="button"
+									className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
+									onClick={handleFilterClients}
+								>
+									Filter Clients
+								</Button>
 								<TenderEmailPreviewButton
 									emailData={formattedTender}
 									disabled={isLoading || isSubmitting}
 								/>
-							</ButtonWithAlert>
+							</div>
+						) : (
+							<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+								<Skeleton className="h-9" />
+								<Skeleton className="h-9" />
+								<Skeleton className="h-9" />
+							</div>
 						)}
-						<Button
-							disabled={isLoading || isSubmitting}
-							variant="default"
-							type="button"
-							className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
-							onClick={handleFilterClients}
-						>
-							Filter Clients
-						</Button>
-						<TenderEmailPreviewButton
-							emailData={formattedTender}
-							disabled={isLoading || isSubmitting}
-						/>
-					</div>
-				) : (
-					<div className="grid grid-cols-4 col-span-2 gap-4">
-						<Skeleton className="h-9" />
-						<Skeleton className="h-9" />
-						<Skeleton className="h-9" />
-					</div>
-				)}
+					</CardContent>
+				</Card>
 			</div>
+
 			{isLoading && <LoadingOverlay />}
 		</div>
 	)

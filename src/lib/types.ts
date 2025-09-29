@@ -318,6 +318,7 @@ export type TenderWithConsultantType = {
 	geography: string[]
 	geography_details: string
 	programme_title: string | null
+	call_title: string | null
 	id: string
 	in_brief: string
 	instrument_type: string | null
@@ -385,6 +386,7 @@ export type FormattedTenderType = {
 	in_brief: string
 	sector: string
 	programme_title: string | null
+	call_title: string | null
 	programme_purpose: string | null
 	instrument_type: string | null
 	geography_details?: string | undefined
@@ -400,6 +402,7 @@ export type FormattedTenderType = {
 	vehicles_contracts?: string[] | undefined | null
 	stations?: string[] | undefined | null
 	stations_contracts?: string[] | undefined | null
+	reference_number?: string | null
 }
 
 export type TenderEmailProps = {
