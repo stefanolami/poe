@@ -21,7 +21,7 @@ type TenderEmailCharInProps = {
 	previewText?: string
 	geography: string[]
 	awarding_authority?: string
-	programme: string
+	programme_title: string
 	value?: string
 	alert_purpose?: string
 	programme_purpose?: string
@@ -47,7 +47,7 @@ const TendersEmailCharin = ({
 	previewText = 'Procurement Tender Alert from POE',
 	geography,
 	awarding_authority,
-	programme,
+	programme_title,
 	value,
 	alert_purpose,
 	deadline,
@@ -226,7 +226,7 @@ const TendersEmailCharin = ({
 								awarding_authority
 							)}
 							{renderField('Value:', value)}
-							{renderField('Grant Programme:', programme)}
+							{renderField('Programme Title:', programme_title)}
 							{renderField(
 								'Programme Purpose:',
 								programme_purpose

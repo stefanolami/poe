@@ -36,6 +36,13 @@ import TendersConsultant from '../form-fields/tenders-consultant'
 import TendersDeadline from '../form-fields/tenders-deadline'
 import TendersFurtherDetails from '../form-fields/tenders-further-details'
 import TendersFormEmobility from '../tenders-form-emobility'
+import { CalendarIcon } from 'lucide-react'
+import { Calendar } from '@/components/ui/calendar'
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from '@/components/ui/popover'
 
 const SECTORS = [
 	{
@@ -65,7 +72,7 @@ export const TenderEdit = ({
 		consultant,
 		sector,
 		value,
-		programme,
+		programme_title,
 		alert_purpose,
 		programme_purpose,
 		instrument_type,
@@ -75,6 +82,17 @@ export const TenderEdit = ({
 		further_details,
 		files,
 		tailored_assessment,
+		geography_details,
+		internal_deadline,
+		intro,
+		subject_matter,
+		pre_launch,
+		call_title,
+		reference_number,
+		vehicles,
+		vehicles_contracts,
+		stations,
+		stations_contracts,
 	} = tender
 
 	const [filesArray, setFilesArray] = useState(files || [])
@@ -98,16 +116,27 @@ export const TenderEdit = ({
 			//@ts-expect-error id is a string in the form, but consultant is an object in the grant
 			consultant: consultant ? consultant.id : '',
 			sector: sector || '',
-			programme: programme || '',
+			call_title: call_title || '',
+			programme_title: programme_title || '',
+			reference_number: reference_number || '',
 			value: value || '',
 			alert_purpose: alert_purpose || '',
 			programme_purpose: programme_purpose || '',
 			instrument_type: instrument_type || '',
 			awarding_authority: awarding_authority || '',
+			geography_details: geography_details || '',
+			internal_deadline: internal_deadline || '',
+			intro: intro || '',
+			subject_matter: subject_matter || '',
+			pre_launch: pre_launch || false,
 			deadline: formattedDeadline || [['', '', '']],
 			in_brief: in_brief || '',
 			further_details: formattedFurtherDetails || [],
 			tailored_assessment: formattedTailoredAssessment || [],
+			vehicles: vehicles || [],
+			vehicles_contracts: vehicles_contracts || [],
+			stations: stations || [],
+			stations_contracts: stations_contracts || [],
 		},
 	})
 
@@ -169,7 +198,7 @@ export const TenderEdit = ({
 
 	return (
 		<div className="form w-full mb-16">
-			<div className="grid grid-cols-2 items-start gap-4 text-white font-jose text-2xl mb-16">
+			<div className="grid grid-cols-2 items-start gap-4 text-white font-jose text-2xl mb-24">
 				<h1 className="">Edit Tender</h1>
 				<h1>
 					{
@@ -186,7 +215,34 @@ export const TenderEdit = ({
 					className=""
 				>
 					<div className="grid grid-cols-2 gap-4">
-						<div className="grid grid-cols-2 items-center text-white font-jose gap-x-3 gap-y-2">
+						<div className="relative grid grid-cols-2 items-center text-white font-jose gap-x-3 gap-y-2">
+							<FormField
+								control={form.control}
+								name="pre_launch"
+								render={({ field }) => (
+									<FormItem className="absolute -top-14 left-0">
+										<FormControl>
+											<label className="inline-flex items-center gap-3 cursor-pointer select-none">
+												<input
+													type="checkbox"
+													className=" custom-checkbox cursor-pointer"
+													checked={field.value}
+													onChange={(e) =>
+														field.onChange(
+															e.target.checked
+														)
+													}
+													disabled={isSubmitting}
+												/>
+												<span className="text-base">
+													Pre Launch
+												</span>
+											</label>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
 							<FormField
 								control={form.control}
 								name="geography"
@@ -204,6 +260,24 @@ export const TenderEdit = ({
 												options={geographiesArray}
 												disabled={isSubmitting}
 												defaultValue={field.value}
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="geography_details"
+								render={({ field }) => (
+									<FormItem className="col-span-2">
+										<FormLabel>Geography Details</FormLabel>
+										<FormControl>
+											<Input
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary"
 											/>
 										</FormControl>
 										<FormMessage className="text-red-500 text-sm" />
@@ -259,10 +333,64 @@ export const TenderEdit = ({
 							/>
 							<FormField
 								control={form.control}
-								name="programme"
+								name="call_title"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Programme</FormLabel>
+										<FormLabel>Call Title</FormLabel>
+										<FormControl>
+											<Input
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm text-nowrap" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="programme_title"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Programme Title</FormLabel>
+										<FormControl>
+											<Input
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="subject_matter"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Subject Matter</FormLabel>
+										<FormControl>
+											<Input
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="reference_number"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Reference Number</FormLabel>
 										<FormControl>
 											<Input
 												disabled={isSubmitting}
@@ -349,10 +477,99 @@ export const TenderEdit = ({
 									</FormItem>
 								)}
 							/>
+							<FormField
+								control={form.control}
+								name="internal_deadline"
+								render={({ field }) => (
+									<FormItem className="flex flex-col justify-start">
+										<FormLabel className="my-1">
+											Internal Deadline
+										</FormLabel>
+										<FormControl>
+											<Popover>
+												<PopoverTrigger asChild>
+													<Button
+														variant={'outline'}
+														className="pl-3 text-left font-normal bg-white hover:bg-white text-primary hover:text-primary"
+														disabled={isSubmitting}
+													>
+														{field.value ? (
+															new Date(
+																field.value
+															).toLocaleDateString(
+																'it-IT'
+															)
+														) : (
+															<span>Date</span>
+														)}
+														<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+													</Button>
+												</PopoverTrigger>
+												<PopoverContent
+													className="w-auto p-0"
+													align="start"
+												>
+													<Calendar
+														className="bg-white text-primary"
+														mode="single"
+														selected={
+															field.value
+																? new Date(
+																		field.value
+																	)
+																: undefined
+														}
+														onSelect={(d) => {
+															if (!d)
+																return field.onChange(
+																	''
+																)
+															const nd = new Date(
+																d.getFullYear(),
+																d.getMonth(),
+																d.getDate(),
+																12,
+																0,
+																0,
+																0
+															)
+															field.onChange(
+																nd.toISOString()
+															)
+														}}
+														disabled={(date) =>
+															date < new Date()
+														}
+													/>
+												</PopoverContent>
+											</Popover>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
 							<TendersConsultant
 								form={form}
 								consultants={consultants}
 								isSubmitting={isSubmitting}
+							/>
+							<FormField
+								control={form.control}
+								name="intro"
+								render={({ field }) => (
+									<FormItem className="col-span-2">
+										<FormLabel>Intro</FormLabel>
+										<FormControl>
+											<Textarea
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary min-h-28"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
 							/>
 							<FormField
 								control={form.control}

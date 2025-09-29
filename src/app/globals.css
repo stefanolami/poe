@@ -69,7 +69,7 @@
 	#grants-table-header-sent {
 		@apply w-[10%];
 	}
-	#grants-table-header-grant_programme {
+	#grants-table-header-programme_title {
 		@apply w-1/4;
 	}
 	#grants-table-header-geography {

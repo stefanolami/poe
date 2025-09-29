@@ -71,7 +71,7 @@ const GrantSingle = ({
 		sector,
 		value,
 		call_title,
-		grant_programme,
+		programme_title,
 		alert_purpose,
 		programme_purpose,
 		instrument_type,
@@ -86,6 +86,11 @@ const GrantSingle = ({
 		tailored_assessment,
 		deployment,
 		project,
+		geography_details,
+		internal_deadline,
+		intro,
+		subject_matter,
+		pre_launch,
 	} = grant
 
 	const router = useRouter()
@@ -227,10 +232,7 @@ const GrantSingle = ({
 		<div className="font-jose mb-20">
 			<div className="flex flex-row items-center justify-between w-full">
 				<h1 className="text-white font-jose text-2xl">
-					Grant -{' '}
-					{grant.call_title
-						? grant.call_title
-						: grant.grant_programme}
+					Grant - {call_title ? call_title : programme_title}
 				</h1>
 				<button
 					disabled={isLoading || isSubmitting}
@@ -262,9 +264,41 @@ const GrantSingle = ({
 					</span>
 				</div>
 				<div className="flex flex-col gap-2">
-					<span className="block text-xl">Grant Programme</span>
+					<span className="block text-xl">Programme Title</span>
 					<span className="block text-base">
-						{grant_programme ? grant_programme : '-'}
+						{programme_title ? programme_title : '-'}
+					</span>
+				</div>
+				<div className="flex flex-col gap-2 col-span-2">
+					<span className="block text-xl">Geography Details</span>
+					<span className="block text-base">
+						{geography_details ? geography_details : '-'}
+					</span>
+				</div>
+				<div className="flex flex-col gap-2">
+					<span className="block text-xl">Internal Deadline</span>
+					<span className="block text-base">
+						{internal_deadline
+							? new Date(internal_deadline).toLocaleDateString(
+									'en-GB'
+								)
+							: '-'}
+					</span>
+				</div>
+				<div className="flex flex-col gap-2 col-span-2">
+					<span className="block text-xl">Intro</span>
+					<span className="block text-base">{intro || '-'}</span>
+				</div>
+				<div className="flex flex-col gap-2 col-span-2">
+					<span className="block text-xl">Subject Matter</span>
+					<span className="block text-base">
+						{subject_matter || '-'}
+					</span>
+				</div>
+				<div className="flex flex-col gap-2">
+					<span className="block text-xl">Pre-launch</span>
+					<span className="block text-base">
+						{pre_launch ? 'Yes' : 'No'}
 					</span>
 				</div>
 				<div className="flex flex-col gap-2">
@@ -694,12 +728,13 @@ const GrantSingle = ({
 										geography,
 										value,
 										alert_purpose,
-										awarding_authority,
+										awarding_authority:
+											awarding_authority ?? '',
 										deadline,
 										in_brief,
 										sector,
 										call_title,
-										grant_programme,
+										programme_title,
 										programme_purpose,
 										instrument_type,
 										reference_number,
@@ -728,12 +763,12 @@ const GrantSingle = ({
 								geography,
 								value,
 								alert_purpose,
-								awarding_authority,
+								awarding_authority: awarding_authority ?? '',
 								deadline,
 								in_brief,
 								sector,
 								call_title,
-								grant_programme,
+								programme_title,
 								programme_purpose,
 								instrument_type,
 								reference_number,

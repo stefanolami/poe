@@ -30,6 +30,7 @@ const TendersFormEmobility = ({
 								onValueChange={field.onChange}
 								variant="default"
 								selectAll={false}
+								defaultValue={field.value}
 								options={[
 									{
 										value: 'cars',
@@ -86,6 +87,7 @@ const TendersFormEmobility = ({
 								onValueChange={field.onChange}
 								variant="default"
 								selectAll={false}
+								defaultValue={field.value}
 								options={[
 									{
 										value: 'purchase',
@@ -126,6 +128,7 @@ const TendersFormEmobility = ({
 								onValueChange={field.onChange}
 								variant="default"
 								selectAll={false}
+								defaultValue={field.value}
 								options={[
 									{
 										value: 'bikesCars',
@@ -174,6 +177,7 @@ const TendersFormEmobility = ({
 								onValueChange={field.onChange}
 								variant="default"
 								selectAll={false}
+								defaultValue={field.value}
 								options={[
 									{
 										value: 'exchange',

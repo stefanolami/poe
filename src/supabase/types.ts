@@ -201,84 +201,194 @@ export type Database = {
         Row: {
           alert_purpose: string
           amendments: string[] | null
-          awarding_authority: string
-          call_title: string | null
+          awarding_authority: string | null
+          call_title: string
           consultant: string | null
           created_at: string
-          deadline: string[]
+          deadline: string[] | null
           deployment: string[] | null
           files: string[] | null
           further_details: string[] | null
           geography: string[]
-          grant_programme: string | null
+          geography_details: string
           id: string
           in_brief: string
           instrument_type: string | null
+          internal_deadline: string | null
+          intro: string | null
           matched_clients: string[] | null
+          pre_launch: boolean
           programme_purpose: string | null
+          programme_title: string | null
           project: string[] | null
           reference_number: string | null
           sector: string
           sent: boolean
+          subject_matter: string | null
           tailored_assessment: Json[] | null
-          value: string
+          value: string | null
         }
         Insert: {
           alert_purpose: string
           amendments?: string[] | null
-          awarding_authority: string
-          call_title?: string | null
+          awarding_authority?: string | null
+          call_title: string
           consultant?: string | null
           created_at?: string
-          deadline: string[]
+          deadline?: string[] | null
           deployment?: string[] | null
           files?: string[] | null
           further_details?: string[] | null
           geography: string[]
-          grant_programme?: string | null
+          geography_details: string
           id?: string
           in_brief: string
           instrument_type?: string | null
+          internal_deadline?: string | null
+          intro?: string | null
           matched_clients?: string[] | null
+          pre_launch: boolean
           programme_purpose?: string | null
+          programme_title?: string | null
           project?: string[] | null
           reference_number?: string | null
           sector: string
           sent?: boolean
+          subject_matter?: string | null
           tailored_assessment?: Json[] | null
-          value: string
+          value?: string | null
         }
         Update: {
           alert_purpose?: string
           amendments?: string[] | null
-          awarding_authority?: string
-          call_title?: string | null
+          awarding_authority?: string | null
+          call_title?: string
           consultant?: string | null
           created_at?: string
-          deadline?: string[]
+          deadline?: string[] | null
           deployment?: string[] | null
           files?: string[] | null
           further_details?: string[] | null
           geography?: string[]
-          grant_programme?: string | null
+          geography_details?: string
           id?: string
           in_brief?: string
           instrument_type?: string | null
+          internal_deadline?: string | null
+          intro?: string | null
           matched_clients?: string[] | null
+          pre_launch?: boolean
           programme_purpose?: string | null
+          programme_title?: string | null
           project?: string[] | null
           reference_number?: string | null
           sector?: string
           sent?: boolean
+          subject_matter?: string | null
           tailored_assessment?: Json[] | null
-          value?: string
+          value?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "grants_consultant_fkey"
             columns: ["consultant"]
             isOneToOne: false
-            referencedRelation: "consultants"
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      investments: {
+        Row: {
+          alert_purpose: string
+          amendments: string[] | null
+          awarding_authority: string | null
+          call_title: string
+          consultant: string | null
+          created_at: string
+          deadline: string[] | null
+          files: string[] | null
+          further_details: string[] | null
+          geography: string[]
+          geography_details: string
+          id: string
+          in_brief: string
+          instrument_type: string | null
+          internal_deadline: string | null
+          intro: string | null
+          matched_clients: string[] | null
+          pre_launch: boolean
+          programme_purpose: string | null
+          programme_title: string | null
+          reference_number: string | null
+          sector: string
+          sent: boolean
+          subject_matter: string | null
+          tailored_assessment: Json[] | null
+          value: string | null
+        }
+        Insert: {
+          alert_purpose: string
+          amendments?: string[] | null
+          awarding_authority?: string | null
+          call_title: string
+          consultant?: string | null
+          created_at?: string
+          deadline?: string[] | null
+          files?: string[] | null
+          further_details?: string[] | null
+          geography: string[]
+          geography_details: string
+          id?: string
+          in_brief: string
+          instrument_type?: string | null
+          internal_deadline?: string | null
+          intro?: string | null
+          matched_clients?: string[] | null
+          pre_launch: boolean
+          programme_purpose?: string | null
+          programme_title?: string | null
+          reference_number?: string | null
+          sector: string
+          sent?: boolean
+          subject_matter?: string | null
+          tailored_assessment?: Json[] | null
+          value?: string | null
+        }
+        Update: {
+          alert_purpose?: string
+          amendments?: string[] | null
+          awarding_authority?: string | null
+          call_title?: string
+          consultant?: string | null
+          created_at?: string
+          deadline?: string[] | null
+          files?: string[] | null
+          further_details?: string[] | null
+          geography?: string[]
+          geography_details?: string
+          id?: string
+          in_brief?: string
+          instrument_type?: string | null
+          internal_deadline?: string | null
+          intro?: string | null
+          matched_clients?: string[] | null
+          pre_launch?: boolean
+          programme_purpose?: string | null
+          programme_title?: string | null
+          reference_number?: string | null
+          sector?: string
+          sent?: boolean
+          subject_matter?: string | null
+          tailored_assessment?: Json[] | null
+          value?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "investments_consultant_fkey"
+            columns: ["consultant"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -331,75 +441,96 @@ export type Database = {
         Row: {
           alert_purpose: string
           amendments: string[] | null
-          awarding_authority: string
+          awarding_authority: string | null
+          call_title: string
           consultant: string | null
           created_at: string
-          deadline: string[]
+          deadline: string[] | null
           files: string[] | null
           further_details: string[] | null
           geography: string[]
+          geography_details: string
           id: string
           in_brief: string
-          instrument_type: string
+          instrument_type: string | null
+          internal_deadline: string | null
+          intro: string | null
           matched_clients: string[] | null
-          programme: string
-          programme_purpose: string
+          pre_launch: boolean
+          programme_purpose: string | null
+          programme_title: string | null
+          reference_number: string | null
           sector: string
           sent: boolean
           stations: string[] | null
           stations_contracts: string[] | null
+          subject_matter: string | null
           tailored_assessment: Json[] | null
-          value: string
+          value: string | null
           vehicles: string[] | null
           vehicles_contracts: string[] | null
         }
         Insert: {
           alert_purpose: string
           amendments?: string[] | null
-          awarding_authority: string
+          awarding_authority?: string | null
+          call_title: string
           consultant?: string | null
           created_at?: string
-          deadline: string[]
+          deadline?: string[] | null
           files?: string[] | null
           further_details?: string[] | null
           geography: string[]
+          geography_details: string
           id?: string
           in_brief: string
-          instrument_type: string
+          instrument_type?: string | null
+          internal_deadline?: string | null
+          intro?: string | null
           matched_clients?: string[] | null
-          programme: string
-          programme_purpose: string
+          pre_launch: boolean
+          programme_purpose?: string | null
+          programme_title?: string | null
+          reference_number?: string | null
           sector: string
           sent?: boolean
           stations?: string[] | null
           stations_contracts?: string[] | null
+          subject_matter?: string | null
           tailored_assessment?: Json[] | null
-          value: string
+          value?: string | null
           vehicles?: string[] | null
           vehicles_contracts?: string[] | null
         }
         Update: {
           alert_purpose?: string
           amendments?: string[] | null
-          awarding_authority?: string
+          awarding_authority?: string | null
+          call_title?: string
           consultant?: string | null
           created_at?: string
-          deadline?: string[]
+          deadline?: string[] | null
           files?: string[] | null
           further_details?: string[] | null
           geography?: string[]
+          geography_details?: string
           id?: string
           in_brief?: string
-          instrument_type?: string
+          instrument_type?: string | null
+          internal_deadline?: string | null
+          intro?: string | null
           matched_clients?: string[] | null
-          programme?: string
-          programme_purpose?: string
+          pre_launch?: boolean
+          programme_purpose?: string | null
+          programme_title?: string | null
+          reference_number?: string | null
           sector?: string
           sent?: boolean
           stations?: string[] | null
           stations_contracts?: string[] | null
+          subject_matter?: string | null
           tailored_assessment?: Json[] | null
-          value?: string
+          value?: string | null
           vehicles?: string[] | null
           vehicles_contracts?: string[] | null
         }

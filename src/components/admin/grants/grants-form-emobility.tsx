@@ -30,6 +30,7 @@ const GrantsFormEmobility = ({
 								onValueChange={field.onChange}
 								variant="default"
 								selectAll={false}
+								defaultValue={field.value}
 								options={[
 									{
 										value: '234Wheelers',
@@ -70,6 +71,7 @@ const GrantsFormEmobility = ({
 								onValueChange={field.onChange}
 								variant="default"
 								selectAll={false}
+								defaultValue={field.value}
 								options={[
 									{
 										value: '234Wheelers',

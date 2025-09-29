@@ -35,6 +35,13 @@ import { createGrant } from '@/actions/grants'
 import GrantsFormEmobility from './grants-form-emobility'
 import { FaFolderOpen } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from '@/components/ui/popover'
+import { CalendarIcon } from 'lucide-react'
+import { Calendar } from '@/components/ui/calendar'
 
 const SECTORS = [
 	{
@@ -63,13 +70,18 @@ export const GrantsForm = ({
 		resolver: zodResolver(createGrantSchema),
 		defaultValues: {
 			call_title: '',
-			grant_programme: '',
+			programme_title: '',
 			value: '',
 			alert_purpose: '',
 			programme_purpose: '',
 			instrument_type: '',
 			awarding_authority: '',
 			reference_number: '',
+			geography_details: '',
+			internal_deadline: '',
+			intro: '',
+			subject_matter: '',
+			pre_launch: false,
 			deadline: [['', '', '']],
 			in_brief: '',
 			further_details: [],
@@ -127,7 +139,7 @@ export const GrantsForm = ({
 
 	return (
 		<div className="w-full mb-16">
-			<div className="grid grid-cols-2 items-start gap-4 text-white font-jose text-2xl mb-16">
+			<div className="grid grid-cols-2 items-start gap-4 text-white font-jose text-2xl mb-24">
 				<h1 className="">Create New Grant</h1>
 				<h1>
 					{
@@ -144,7 +156,34 @@ export const GrantsForm = ({
 					className=""
 				>
 					<div className="grid grid-cols-2 gap-4">
-						<div className="grid grid-cols-2 items-center text-white font-jose gap-x-3 gap-y-2">
+						<div className="relative grid grid-cols-2 items-center text-white font-jose gap-x-3 gap-y-2">
+							<FormField
+								control={form.control}
+								name="pre_launch"
+								render={({ field }) => (
+									<FormItem className="absolute -top-14 left-0">
+										<FormControl>
+											<label className="inline-flex items-center gap-3 cursor-pointer select-none">
+												<input
+													type="checkbox"
+													className=" custom-checkbox cursor-pointer"
+													checked={field.value}
+													onChange={(e) =>
+														field.onChange(
+															e.target.checked
+														)
+													}
+													disabled={isSubmitting}
+												/>
+												<span className="text-base">
+													Pre Launch
+												</span>
+											</label>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
 							<FormField
 								control={form.control}
 								name="geography"
@@ -161,6 +200,24 @@ export const GrantsForm = ({
 												maxCount={10}
 												options={geographiesArray}
 												disabled={isSubmitting}
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="geography_details"
+								render={({ field }) => (
+									<FormItem className="col-span-2">
+										<FormLabel>Geography Details</FormLabel>
+										<FormControl>
+											<Input
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary"
 											/>
 										</FormControl>
 										<FormMessage className="text-red-500 text-sm" />
@@ -234,10 +291,46 @@ export const GrantsForm = ({
 							/>
 							<FormField
 								control={form.control}
-								name="grant_programme"
+								name="programme_title"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Grant Programme</FormLabel>
+										<FormLabel>Programme Title</FormLabel>
+										<FormControl>
+											<Input
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="subject_matter"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Subject Matter</FormLabel>
+										<FormControl>
+											<Input
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="reference_number"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Reference Number</FormLabel>
 										<FormControl>
 											<Input
 												disabled={isSubmitting}
@@ -326,17 +419,69 @@ export const GrantsForm = ({
 							/>
 							<FormField
 								control={form.control}
-								name="reference_number"
+								name="internal_deadline"
 								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Reference Number</FormLabel>
+									<FormItem className="flex flex-col justify-start">
+										<FormLabel className="my-1">
+											Internal Deadline
+										</FormLabel>
 										<FormControl>
-											<Input
-												disabled={isSubmitting}
-												placeholder=""
-												{...field}
-												className="bg-white text-primary"
-											/>
+											<Popover>
+												<PopoverTrigger asChild>
+													<Button
+														variant={'outline'}
+														className="pl-3 text-left font-normal bg-white hover:bg-white text-primary hover:text-primary"
+													>
+														{field.value ? (
+															new Date(
+																field.value
+															).toLocaleDateString(
+																'it-IT'
+															)
+														) : (
+															<span>Date</span>
+														)}
+														<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+													</Button>
+												</PopoverTrigger>
+												<PopoverContent
+													className="w-auto p-0"
+													align="start"
+												>
+													<Calendar
+														className="bg-white text-primary"
+														mode="single"
+														selected={
+															field.value
+																? new Date(
+																		field.value
+																	)
+																: undefined
+														}
+														onSelect={(d) => {
+															if (!d)
+																return field.onChange(
+																	''
+																)
+															const nd = new Date(
+																d.getFullYear(),
+																d.getMonth(),
+																d.getDate(),
+																12,
+																0,
+																0,
+																0
+															)
+															field.onChange(
+																nd.toISOString()
+															)
+														}}
+														disabled={(date) =>
+															date < new Date()
+														}
+													/>
+												</PopoverContent>
+											</Popover>
 										</FormControl>
 										<FormMessage className="text-red-500 text-sm" />
 									</FormItem>
@@ -346,6 +491,24 @@ export const GrantsForm = ({
 								form={form}
 								consultants={consultants}
 								isSubmitting={isSubmitting}
+							/>
+							<FormField
+								control={form.control}
+								name="intro"
+								render={({ field }) => (
+									<FormItem className="col-span-2">
+										<FormLabel>Intro</FormLabel>
+										<FormControl>
+											<Textarea
+												disabled={isSubmitting}
+												placeholder=""
+												{...field}
+												className="bg-white text-primary min-h-28"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-500 text-sm" />
+									</FormItem>
+								)}
 							/>
 							<FormField
 								control={form.control}

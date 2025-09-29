@@ -24,7 +24,7 @@ export const getDashboardData = async () => {
 
 		const { data: grantsData, error: grantsError } = await supabase
 			.from('grants')
-			.select('created_at, id, call_title, grant_programme')
+			.select('created_at, id, call_title, programme_title')
 			.gte('created_at', threeMonthsAgoISO)
 			.order('created_at', { ascending: false })
 

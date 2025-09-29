@@ -72,7 +72,7 @@ const TenderSingle = ({
 		geography,
 		sector,
 		value,
-		programme,
+		programme_title,
 		alert_purpose,
 		programme_purpose,
 		instrument_type,
@@ -88,6 +88,11 @@ const TenderSingle = ({
 		vehicles_contracts,
 		stations,
 		stations_contracts,
+		geography_details,
+		internal_deadline,
+		intro,
+		subject_matter,
+		pre_launch,
 	} = tender
 
 	const router = useRouter()
@@ -100,8 +105,29 @@ const TenderSingle = ({
 	const isSubmitting = form.formState.isSubmitting
 
 	const formattedTender: FormattedTenderType = {
-		...tender,
+		geography,
+		value,
+		alert_purpose,
+		awarding_authority: awarding_authority ?? '',
+		deadline,
+		in_brief,
+		sector,
+		programme_title: tender.programme_title,
+		programme_purpose,
+		instrument_type,
+		geography_details: tender.geography_details,
+		internal_deadline: tender.internal_deadline,
+		intro: tender.intro,
+		subject_matter: tender.subject_matter,
+		pre_launch: tender.pre_launch,
+		further_details,
+		files,
+		tailored_assessment: tender.tailored_assessment ?? undefined,
 		consultant: tender.consultant?.id ?? undefined,
+		vehicles,
+		vehicles_contracts,
+		stations,
+		stations_contracts,
 	}
 
 	const submitHandler: SubmitHandler<
@@ -232,7 +258,7 @@ const TenderSingle = ({
 		<div className="font-jose mb-20">
 			<div className="flex flex-row items-center justify-between w-full">
 				<h1 className="text-white font-jose text-2xl">
-					Tender - {tender.programme}
+					Tender - {tender.programme_title ?? ''}
 				</h1>
 				<button
 					disabled={isLoading || isSubmitting}
@@ -258,8 +284,42 @@ const TenderSingle = ({
 					<span className="block text-base">{value}</span>
 				</div>
 				<div className="flex flex-col gap-2">
-					<span className="block text-xl">Programme</span>
-					<span className="block text-base">{programme}</span>
+					<span className="block text-xl">Programme Title</span>
+					<span className="block text-base">
+						{programme_title ?? '-'}
+					</span>
+				</div>
+				<div className="flex flex-col gap-2 col-span-2">
+					<span className="block text-xl">Geography Details</span>
+					<span className="block text-base">
+						{geography_details ? geography_details : '-'}
+					</span>
+				</div>
+				<div className="flex flex-col gap-2">
+					<span className="block text-xl">Internal Deadline</span>
+					<span className="block text-base">
+						{internal_deadline
+							? new Date(internal_deadline).toLocaleDateString(
+									'en-GB'
+								)
+							: '-'}
+					</span>
+				</div>
+				<div className="flex flex-col gap-2 col-span-2">
+					<span className="block text-xl">Intro</span>
+					<span className="block text-base">{intro || '-'}</span>
+				</div>
+				<div className="flex flex-col gap-2 col-span-2">
+					<span className="block text-xl">Subject Matter</span>
+					<span className="block text-base">
+						{subject_matter || '-'}
+					</span>
+				</div>
+				<div className="flex flex-col gap-2">
+					<span className="block text-xl">Pre-launch</span>
+					<span className="block text-base">
+						{pre_launch ? 'Yes' : 'No'}
+					</span>
 				</div>
 				<div className="flex flex-col gap-2">
 					<span className="block text-xl">Alert Purpose</span>

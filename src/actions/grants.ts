@@ -50,8 +50,8 @@ export const createGrant = async (formData: CreateGrantType) => {
 
 		const formattedData = {
 			geography: formData.geography,
-			call_title: formData.call_title,
-			grant_programme: formData.grant_programme,
+			call_title: formData.call_title ?? '',
+			programme_title: formData.programme_title ?? '',
 			alert_purpose: formData.alert_purpose,
 			programme_purpose: formData.programme_purpose,
 			instrument_type: formData.instrument_type,
@@ -61,6 +61,11 @@ export const createGrant = async (formData: CreateGrantType) => {
 			further_details: flatFurtherDetails,
 			in_brief: formData.in_brief,
 			value: formData.value,
+			geography_details: formData.geography_details ?? '',
+			internal_deadline: formData.internal_deadline ?? null,
+			intro: formData.intro ?? null,
+			subject_matter: formData.subject_matter ?? null,
+			pre_launch: formData.pre_launch ?? false,
 			consultant:
 				formData.consultant === 'clear' ? null : formData.consultant,
 			sector: formData.sector,
@@ -121,8 +126,8 @@ export const updateGrant = async (id: string, formData: UpdateGrantType) => {
 
 		const formattedData = {
 			geography: formData.geography,
-			call_title: formData.call_title,
-			grant_programme: formData.grant_programme,
+			call_title: formData.call_title ?? '',
+			programme_title: formData.programme_title ?? '',
 			alert_purpose: formData.alert_purpose,
 			programme_purpose: formData.programme_purpose,
 			instrument_type: formData.instrument_type,
@@ -132,6 +137,11 @@ export const updateGrant = async (id: string, formData: UpdateGrantType) => {
 			further_details: flatFurtherDetails,
 			in_brief: formData.in_brief,
 			value: formData.value,
+			geography_details: formData.geography_details ?? '',
+			internal_deadline: formData.internal_deadline ?? null,
+			intro: formData.intro ?? null,
+			subject_matter: formData.subject_matter ?? null,
+			pre_launch: formData.pre_launch ?? false,
 			consultant:
 				formData.consultant === 'clear' ? null : formData.consultant,
 			sector: formData.sector,
@@ -177,8 +187,8 @@ export const getGrants = async () => {
 			sent: grant.sent,
 			geography: grant.geography.join(', '),
 			call_title: grant.call_title,
-			grant_programme: grant.grant_programme,
-			deadline: grant.deadline[0].split('///')[0],
+			programme_title: grant.programme_title,
+			internal_deadline: grant.internal_deadline,
 		}))
 
 		return formattedData
@@ -197,7 +207,7 @@ export const getGrant = async (id: string) => {
 			.select(
 				`
     *,
-    consultant:consultants (*)
+    consultant:users (*)
   `
 			)
 			.eq('id', id)
@@ -379,7 +389,7 @@ export const sendGrantAlert = async (grantId: string) => {
 			throw new Error(clientsError?.message || 'No clients found')
 		}
 
-		const alertSubject = `${grantData.call_title || grantData.grant_programme}`
+		const alertSubject = `${grantData.call_title || grantData.programme_title}`
 
 		let attachments: ({
 			filename: string | undefined

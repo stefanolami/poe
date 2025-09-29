@@ -56,15 +56,22 @@ export const createTender = async (formData: CreateTendersType) => {
 
 		const formattedData = {
 			geography: formData.geography,
-			programme: formData.programme,
+			call_title: formData.call_title ?? '',
+			programme_title: formData.programme_title ?? '',
 			alert_purpose: formData.alert_purpose,
 			programme_purpose: formData.programme_purpose,
 			instrument_type: formData.instrument_type,
 			awarding_authority: formData.awarding_authority,
+			reference_number: formData.reference_number,
 			deadline: flatDeadline,
 			further_details: flatFurtherDetails,
 			in_brief: formData.in_brief,
 			value: formData.value,
+			geography_details: formData.geography_details ?? '',
+			internal_deadline: formData.internal_deadline ?? null,
+			intro: formData.intro ?? null,
+			subject_matter: formData.subject_matter ?? null,
+			pre_launch: formData.pre_launch ?? false,
 			consultant:
 				formData.consultant === 'clear' ? null : formData.consultant,
 			sector: formData.sector,
@@ -127,15 +134,22 @@ export const updateTender = async (id: string, formData: UpdateTenderType) => {
 
 		const formattedData = {
 			geography: formData.geography,
-			programme: formData.programme,
+			call_title: formData.call_title ?? '',
+			programme_title: formData.programme_title ?? '',
 			alert_purpose: formData.alert_purpose,
 			programme_purpose: formData.programme_purpose,
 			instrument_type: formData.instrument_type,
 			awarding_authority: formData.awarding_authority,
+			reference_number: formData.reference_number,
 			deadline: flatDeadline,
 			further_details: flatFurtherDetails,
 			in_brief: formData.in_brief,
 			value: formData.value,
+			geography_details: formData.geography_details ?? '',
+			internal_deadline: formData.internal_deadline ?? null,
+			intro: formData.intro ?? null,
+			subject_matter: formData.subject_matter ?? null,
+			pre_launch: formData.pre_launch ?? false,
 			consultant:
 				formData.consultant === 'clear' ? null : formData.consultant,
 			sector: formData.sector,
@@ -183,8 +197,8 @@ export const getTenders = async () => {
 			sent: tender.sent,
 			geography: tender.geography.join(', '),
 			awarding_authority: tender.awarding_authority,
-			programme: tender.programme,
-			deadline: tender.deadline[0].split('///')[0],
+			programme_title: tender.programme_title,
+			internal_deadline: tender.internal_deadline,
 		}))
 
 		return formattedData
@@ -548,7 +562,8 @@ export const sendTenderAlert = async (tenderId: string) => {
 
 		// 8) Create alert log
 		const alert: CreateAlertType = {
-			subject: tenderData.programme,
+			subject:
+				tenderData.programme_title ?? tenderData.call_title ?? 'Tender',
 			entity_type: 'tender',
 			entity_id: tenderId,
 			matched_clients: matchedClients,

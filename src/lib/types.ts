@@ -180,7 +180,7 @@ export type DashboardDataType = {
 				created_at: string
 				id: string
 				call_title?: string | null
-				grant_programme?: string | null
+				programme_title?: string | null
 		  }[]
 		| []
 	alerts:
@@ -196,7 +196,7 @@ export type DashboardDataType = {
 export type GrantType = {
 	alert_purpose: string
 	amendments: string[] | null
-	awarding_authority: string
+	awarding_authority: string | null
 	call_title: string | null
 	consultant: string | null
 	created_at: string
@@ -205,16 +205,21 @@ export type GrantType = {
 	files: string[] | null
 	further_details: string[] | null
 	geography: string[]
-	grant_programme: string | null
+	geography_details: string
+	programme_title: string | null
 	id: string
 	in_brief: string
 	instrument_type: string | null
+	internal_deadline: string | null
+	intro: string | null
 	matched_clients: string[] | null
+	pre_launch: boolean
 	programme_purpose: string | null
 	project: string[] | null
 	reference_number: string | null
 	sector: string
 	sent: boolean
+	subject_matter: string | null
 	tailored_assessment: TailoredAssessmentType[] | null
 	value: string
 }
@@ -222,7 +227,8 @@ export type GrantType = {
 export type TenderType = {
 	alert_purpose: string
 	amendments: string[] | null
-	awarding_authority: string
+	awarding_authority: string | null
+	call_title: string | null
 	consultant: string | null
 	created_at: string
 	deadline: string[]
@@ -233,14 +239,20 @@ export type TenderType = {
 	files: string[] | null
 	further_details: string[] | null
 	geography: string[]
-	programme: string
+	geography_details: string
+	programme_title: string | null
 	id: string
 	in_brief: string
-	instrument_type: string
+	instrument_type: string | null
+	internal_deadline: string | null
+	intro: string | null
 	matched_clients: string[] | null
-	programme_purpose: string
+	pre_launch: boolean
+	programme_purpose: string | null
+	reference_number: string | null
 	sector: string
 	sent: boolean
+	subject_matter: string | null
 	tailored_assessment: TailoredAssessmentType[] | null
 	value: string
 }
@@ -248,7 +260,7 @@ export type TenderType = {
 export type GrantWithConsultantType = {
 	alert_purpose: string
 	amendments: string[] | null
-	awarding_authority: string
+	awarding_authority: string | null
 	call_title: string | null
 	consultant: {
 		id: string
@@ -264,16 +276,21 @@ export type GrantWithConsultantType = {
 	files: string[] | null
 	further_details: string[] | null
 	geography: string[]
-	grant_programme: string | null
+	geography_details: string
+	programme_title: string | null
 	id: string
 	in_brief: string
 	instrument_type: string | null
+	internal_deadline: string | null
+	intro: string | null
 	matched_clients: string[] | null
+	pre_launch: boolean
 	programme_purpose: string | null
 	project: string[] | null
 	reference_number: string | null
 	sector: string
 	sent: boolean
+	subject_matter: string | null
 	tailored_assessment: TailoredAssessmentType[] | null
 	value: string
 }
@@ -281,7 +298,7 @@ export type GrantWithConsultantType = {
 export type TenderWithConsultantType = {
 	alert_purpose: string
 	amendments: string[] | null
-	awarding_authority: string
+	awarding_authority: string | null
 	consultant: {
 		id: string
 		first_name: string
@@ -299,14 +316,20 @@ export type TenderWithConsultantType = {
 	files: string[] | null
 	further_details: string[] | null
 	geography: string[]
-	programme: string
+	geography_details: string
+	programme_title: string | null
 	id: string
 	in_brief: string
-	instrument_type: string
+	instrument_type: string | null
+	internal_deadline: string | null
+	intro: string | null
 	matched_clients: string[] | null
-	programme_purpose: string
+	pre_launch: boolean
+	programme_purpose: string | null
+	reference_number: string | null
 	sector: string
 	sent: boolean
+	subject_matter: string | null
 	tailored_assessment: TailoredAssessmentType[] | null
 	value: string
 }
@@ -336,10 +359,15 @@ export type FormattedGrantType = {
 	in_brief: string
 	sector: string
 	call_title?: string | undefined | null
-	grant_programme?: string | undefined | null
+	programme_title?: string | undefined | null
 	programme_purpose?: string | undefined | null
 	instrument_type?: string | undefined | null
 	reference_number?: string | undefined | null
+	geography_details?: string | undefined
+	internal_deadline?: string | undefined | null
+	intro?: string | undefined | null
+	subject_matter?: string | undefined | null
+	pre_launch?: boolean | undefined
 	further_details?: string[] | undefined | null
 	files?: string[] | undefined | null
 	tailored_assessment?: TailoredAssessmentType[] | undefined | null
@@ -356,9 +384,14 @@ export type FormattedTenderType = {
 	deadline: string[]
 	in_brief: string
 	sector: string
-	programme: string
-	programme_purpose: string
-	instrument_type: string
+	programme_title: string | null
+	programme_purpose: string | null
+	instrument_type: string | null
+	geography_details?: string | undefined
+	internal_deadline?: string | undefined | null
+	intro?: string | undefined | null
+	subject_matter?: string | undefined | null
+	pre_launch?: boolean | undefined
 	further_details?: string[] | undefined | null
 	files?: string[] | undefined | null
 	tailored_assessment?: TailoredAssessmentType[] | undefined | null
@@ -544,10 +577,15 @@ export type UpdateGrantType = {
 	deployment?: string[] | undefined
 	project?: string[] | undefined
 	call_title?: string | undefined
-	grant_programme?: string | undefined
+	programme_title?: string | undefined
 	programme_purpose?: string | undefined
 	instrument_type?: string | undefined
 	reference_number?: string | undefined
+	geography_details?: string | undefined
+	internal_deadline?: string | undefined
+	intro?: string | undefined
+	subject_matter?: string | undefined
+	pre_launch?: boolean | undefined
 	further_details?: string[][] | undefined
 	files?: File[] | undefined
 	oldFiles?: string[] | undefined
@@ -567,9 +605,16 @@ export type UpdateTenderType = {
 	vehicles_contracts?: string[] | undefined
 	stations?: string[] | undefined
 	stations_contracts?: string[] | undefined
-	programme: string
+	call_title?: string | undefined
+	programme_title?: string | undefined
 	programme_purpose: string
 	instrument_type: string
+	reference_number?: string | undefined
+	geography_details?: string | undefined
+	internal_deadline?: string | undefined
+	intro?: string | undefined
+	subject_matter?: string | undefined
+	pre_launch?: boolean | undefined
 	further_details?: string[][] | undefined
 	files?: File[] | undefined
 	oldFiles?: string[] | undefined

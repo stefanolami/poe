@@ -122,7 +122,7 @@ export const createGrantSchema = z
 	.object({
 		geography: z.array(z.string().min(2, 'Geography is required')),
 		call_title: z.string().optional(),
-		grant_programme: z.string().optional(),
+		programme_title: z.string().optional(),
 		alert_purpose: z.string().min(2, 'Alert purpose is required'),
 		programme_purpose: z.string().optional(),
 		instrument_type: z.string().optional(),
@@ -131,6 +131,11 @@ export const createGrantSchema = z
 		deadline: z.array(z.array(z.string())),
 		in_brief: z.string().min(2, 'In brief is required'),
 		value: z.string(),
+		geography_details: z.string().optional(),
+		internal_deadline: z.string().optional(),
+		intro: z.string().optional(),
+		subject_matter: z.string().optional(),
+		pre_launch: z.boolean().optional(),
 		further_details: z.array(z.array(z.string())).optional(),
 		files: z
 			.array(
@@ -145,7 +150,7 @@ export const createGrantSchema = z
 		deployment: z.array(z.string()).optional(),
 		project: z.array(z.string()).optional(),
 	})
-	.refine((data) => data.call_title || data.grant_programme, {
+	.refine((data) => data.call_title || data.programme_title, {
 		message: 'Either Call Title or Grant Programme must be provided',
 		path: ['call_title'],
 	})
@@ -167,16 +172,21 @@ export const createGrantsTailoredAssessmentSchema = z.object({
 export const createTendersSchema = z
 	.object({
 		geography: z.array(z.string().min(2, 'Geography is required')),
-		//call_title: z.string().optional(),
-		programme: z.string(),
+		call_title: z.string().optional(),
+		programme_title: z.string().optional(),
 		alert_purpose: z.string().min(2, 'Alert purpose is required'),
 		programme_purpose: z.string(),
 		instrument_type: z.string(),
 		awarding_authority: z.string().min(2, 'Awarding authority is required'),
-		//reference_number: z.string().optional(),
+		reference_number: z.string().optional(),
 		deadline: z.array(z.array(z.string())),
 		in_brief: z.string().min(2, 'In brief is required'),
 		value: z.string(),
+		geography_details: z.string().optional(),
+		internal_deadline: z.string().optional(),
+		intro: z.string().optional(),
+		subject_matter: z.string().optional(),
+		pre_launch: z.boolean().optional(),
 		further_details: z.array(z.array(z.string())).optional(),
 		files: z
 			.array(

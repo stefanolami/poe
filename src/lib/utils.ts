@@ -154,7 +154,7 @@ export async function fileToAttachment(file: {
 // Build a personalized email subject for a grant alert
 // Format: "POE Alert - GB / BG - Call Title" (or grant programme if call title missing)
 export function buildGrantEmailSubject(
-	grant: Pick<GrantType, 'geography' | 'call_title' | 'grant_programme'>,
+	grant: Pick<GrantType, 'geography' | 'call_title' | 'programme_title'>,
 	client: Partial<
 		Pick<
 			ClientType,
@@ -167,7 +167,7 @@ export function buildGrantEmailSubject(
 		>
 	>
 ) {
-	const title = grant.call_title || grant.grant_programme || 'Grant'
+	const title = grant.call_title || grant.programme_title || 'Grant'
 
 	// Collect all client geography codes from nested selection arrays
 	const collectCodes = (arr: unknown): string[] => {
@@ -213,7 +213,7 @@ export function buildGrantEmailSubject(
 // Build a personalized email subject for a tender alert
 // Format: "POE Alert - GB / BG - Programme"
 export function buildTenderEmailSubject(
-	tender: Pick<TenderType, 'geography' | 'programme'>,
+	tender: Pick<TenderType, 'geography' | 'programme_title'>,
 	client: Partial<
 		Pick<
 			ClientType,
@@ -226,7 +226,7 @@ export function buildTenderEmailSubject(
 		>
 	>
 ) {
-	const title = tender.programme || 'Tender'
+	const title = tender.programme_title || 'Tender'
 
 	const collectCodes = (arr: unknown): string[] => {
 		if (!Array.isArray(arr)) return []

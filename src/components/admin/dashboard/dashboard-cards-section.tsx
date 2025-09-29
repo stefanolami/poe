@@ -207,7 +207,7 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 										<span>
 											{grant.call_title
 												? grant.call_title
-												: grant.grant_programme}
+												: grant.programme_title}
 										</span>
 									</Link>
 								</li>

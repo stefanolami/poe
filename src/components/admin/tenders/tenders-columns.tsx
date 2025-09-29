@@ -11,8 +11,8 @@ export type Tender = {
 	sent: boolean
 	geography: string
 	awarding_authority: string
-	programme: string
-	deadline: string
+	programme_title: string | null
+	internal_deadline: string | null
 }
 
 export const columns: ColumnDef<Tender>[] = [
@@ -34,7 +34,7 @@ export const columns: ColumnDef<Tender>[] = [
 		},
 	},
 	{
-		accessorKey: 'programme',
+		accessorKey: 'programme_title',
 		header: ({ column }) => {
 			return (
 				<Button
@@ -44,7 +44,7 @@ export const columns: ColumnDef<Tender>[] = [
 					}
 					className="px-0"
 				>
-					Grant Programme
+					Programme Title
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			)
@@ -68,7 +68,7 @@ export const columns: ColumnDef<Tender>[] = [
 		},
 	},
 	{
-		accessorKey: 'deadline',
+		accessorKey: 'internal_deadline',
 		header: ({ column }) => {
 			return (
 				<Button
@@ -78,18 +78,19 @@ export const columns: ColumnDef<Tender>[] = [
 					}
 					className="px-0"
 				>
-					Deadline
+					Internal Deadline
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			)
 		},
-		cell: ({ getValue }) => (
-			<span>
-				{getValue()
-					? new Date(getValue() as Date).toLocaleDateString('en-GB')
-					: 'N/A'}
-			</span>
-		),
+		cell: ({ getValue }) => {
+			const v = getValue() as string | null
+			return (
+				<span>
+					{v ? new Date(v).toLocaleDateString('en-GB') : 'N/A'}
+				</span>
+			)
+		},
 	},
 	{
 		accessorKey: 'sent',

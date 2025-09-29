@@ -160,7 +160,7 @@ function mapTenderToEmailProps(tender, tailored = false, assessment, client) {
 	const props = {
 		geography: tender.geography,
 		awarding_authority: tender.awarding_authority,
-		programme: tender.programme,
+		programme_title: tender.programme_title,
 		value: tender.value,
 		programme_purpose: tender.programme_purpose,
 		instrument_type: tender.instrument_type,
