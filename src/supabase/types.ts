@@ -583,6 +583,10 @@ export type Database = {
         Args: { grant_id: string }
         Returns: undefined
       }
+      update_investment_clients_call: {
+        Args: { investment_id: string }
+        Returns: undefined
+      }
       update_tender_clients_call: {
         Args: { tender_id: string }
         Returns: undefined

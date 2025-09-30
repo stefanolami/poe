@@ -2,15 +2,15 @@
 
 import {
 	CreateAlertType,
-	CreateGrantType,
-	UpdateGrantType,
 	ClientType,
 	GrantType,
+	CreateInvestmentsType,
+	UpdateInvestmentType,
 } from '@/lib/types'
 import { buildGrantEmailSubject } from '@/lib/utils'
-import { runWithConcurrency } from '@/lib/concurrency'
-import { fetchAttachments } from '@/lib/attachments'
 import { Json } from '@/supabase/types'
+import { fetchAttachments } from '@/lib/attachments'
+import { runWithConcurrency } from '@/lib/concurrency'
 import { createClient } from '@/supabase/server'
 import {
 	sendGrant,
@@ -20,7 +20,7 @@ import {
 } from './email'
 import { createAlert } from './alerts'
 
-export const createGrant = async (formData: CreateGrantType) => {
+export const createInvestments = async (formData: CreateInvestmentsType) => {
 	try {
 		const supabase = await createClient()
 
@@ -72,13 +72,11 @@ export const createGrant = async (formData: CreateGrantType) => {
 			consultant:
 				formData.consultant === 'clear' ? null : formData.consultant,
 			sector: formData.sector,
-			deployment: formData.deployment,
-			project: formData.project,
 			files: uploadedFilePaths,
 		}
 
 		const { data, error } = await supabase
-			.from('grants')
+			.from('investments')
 			.insert(formattedData)
 			.select()
 
@@ -88,12 +86,15 @@ export const createGrant = async (formData: CreateGrantType) => {
 
 		return data
 	} catch (error) {
-		console.log('ERROR CREATING GRANT', error)
+		console.log('ERROR CREATING INVESTMENT', error)
 		throw error
 	}
 }
 
-export const updateGrant = async (id: string, formData: UpdateGrantType) => {
+export const updateInvestment = async (
+	id: string,
+	formData: UpdateInvestmentType
+) => {
 	try {
 		const supabase = await createClient()
 
@@ -148,15 +149,13 @@ export const updateGrant = async (id: string, formData: UpdateGrantType) => {
 			consultant:
 				formData.consultant === 'clear' ? null : formData.consultant,
 			sector: formData.sector,
-			deployment: formData.deployment,
-			project: formData.project,
 			files: filesArray,
 		}
 
 		console.log('FORMATTED DATA', formattedData)
 
 		const { data, error } = await supabase
-			.from('grants')
+			.from('investments')
 			.update(formattedData)
 			.eq('id', id)
 			.select()
@@ -167,17 +166,17 @@ export const updateGrant = async (id: string, formData: UpdateGrantType) => {
 
 		return data
 	} catch (error) {
-		console.log('ERROR UPDATING GRANT', error)
+		console.log('ERROR UPDATING INVESTMENT', error)
 		throw error
 	}
 }
 
-export const getGrants = async () => {
+export const getInvestments = async () => {
 	try {
 		const supabase = await createClient()
 
 		const { data, error } = await supabase
-			.from('grants')
+			.from('investments')
 			.select('*')
 			.order('created_at', { ascending: false })
 
@@ -196,17 +195,17 @@ export const getGrants = async () => {
 
 		return formattedData
 	} catch (error) {
-		console.log('ERROR FETCHING GRANTS', error)
+		console.log('ERROR FETCHING INVESTMENTS', error)
 		throw error
 	}
 }
 
-export const getGrant = async (id: string) => {
+export const getInvestment = async (id: string) => {
 	try {
 		const supabase = await createClient()
 
 		const { data, error } = await supabase
-			.from('grants')
+			.from('investments')
 			.select(
 				`
     *,
@@ -222,66 +221,19 @@ export const getGrant = async (id: string) => {
 
 		return data
 	} catch (error) {
-		console.log('ERROR FETCHING GRANT', error)
+		console.log('ERROR FETCHING INVESTMENT', error)
 		throw error
 	}
 }
 
-/* export const matchGrant = async ({
-	geography,
-	deployment,
-	project,
-}: {
-	geography: string[]
-	deployment?: string[] | null
-	project?: string[] | null
-}) => {
-	try {
-		const supabase = await createClient()
-
-		// Step 1: Fetch clients that overlap in geography
-		const { data: geoClients, error } = await supabase
-			.from('clients')
-			.select('*')
-			.overlaps('geography', geography)
-
-		if (error) {
-			throw new Error('Error fetching clients: ' + error.message)
-		}
-
-		console.log('GEO CLIENTS', geoClients)
-
-		// Step 2: Filter those clients for deployment/project overlap (if arrays provided)
-		const filteredClients = (geoClients ?? []).filter((client) => {
-			const deploymentMatch =
-				deployment && deployment.length > 0
-					? client.deployment?.some((d: string) =>
-							deployment.includes(d)
-						)
-					: false
-			const projectMatch =
-				project && project.length > 0
-					? client.project?.some((p: string) => project.includes(p))
-					: false
-			// Must match geography AND (deployment OR project)
-			return deploymentMatch || projectMatch
-		})
-
-		return filteredClients
-	} catch (error) {
-		console.log('ERROR MATCHING GRANT', error)
-		throw error
-	}
-} */
-
-export const addGrantsTailoredAssessments = async (
-	grantId: string,
+export const addInvestmentsTailoredAssessments = async (
+	investmentId: string,
 	assessments: [string, string, string][]
 ) => {
 	try {
 		const supabase = await createClient()
 
-		console.log('assessments', assessments, grantId)
+		console.log('assessments', assessments, investmentId)
 
 		const assessmentsObjectArray = assessments.map((assessment) => ({
 			client: assessment[0],
@@ -290,9 +242,9 @@ export const addGrantsTailoredAssessments = async (
 		}))
 
 		const { data: existingData, error: existingError } = await supabase
-			.from('grants')
+			.from('investments')
 			.select('tailored_assessment')
-			.eq('id', grantId)
+			.eq('id', investmentId)
 			.single()
 
 		if (existingError) {
@@ -332,11 +284,11 @@ export const addGrantsTailoredAssessments = async (
 			}
 		}
 		const { data, error } = await supabase
-			.from('grants')
+			.from('investments')
 			.update({
 				tailored_assessment: updatedAssessments,
 			})
-			.eq('id', grantId)
+			.eq('id', investmentId)
 			.select('*')
 
 		if (error) {
@@ -350,31 +302,31 @@ export const addGrantsTailoredAssessments = async (
 	}
 }
 
-export const sendGrantAlert = async (grantId: string) => {
+export const sendInvestmentAlert = async (investmentId: string) => {
 	try {
 		const supabase = await createClient()
 
-		// 1) Recompute matched clients via RPC
+		// 1) RPC to recompute matches
 		const { error: rpcError } = await supabase.rpc(
-			'update_grant_clients_call',
-			{ grant_id: grantId }
+			'update_investment_clients_call',
+			{ investment_id: investmentId }
 		)
 		if (rpcError) throw new Error(rpcError.message)
 
-		// 2) Load grant
-		const { data: grantData, error: grantError } = await supabase
-			.from('grants')
+		// 2) Fetch investment
+		const { data: investmentData, error: invError } = await supabase
+			.from('investments')
 			.select('*')
-			.eq('id', grantId)
+			.eq('id', investmentId)
 			.single()
-		if (grantError) throw new Error(grantError.message)
+		if (invError) throw new Error(invError.message)
 
-		const matchedClients = grantData?.matched_clients
+		const matchedClients = investmentData?.matched_clients
 		if (!matchedClients || matchedClients.length === 0) {
 			throw new Error('No matched clients found')
 		}
 
-		// 3) Fetch matched clients with lean projection
+		// 3) Fetch clients (lean)
 		const { data: clientsData, error: clientsError } = await supabase
 			.from('clients')
 			.select(
@@ -384,16 +336,16 @@ export const sendGrantAlert = async (grantId: string) => {
 		if (clientsError || !clientsData)
 			throw new Error(clientsError?.message || 'Error fetching clients')
 
-		// 4) Prepare attachments via helper
+		// 4) Attachments via shared helper
 		const attachments = await fetchAttachments(
-			(grantData.files as string[] | null) ?? null,
+			(investmentData.files as string[] | null) ?? null,
 			'/grants/',
 			'grants/'
 		)
 
-		// 5) Build recipient descriptors
+		// 5) Build recipients (investments currently reusing grant email templates/subject)
 		const assessments =
-			(grantData.tailored_assessment as
+			(investmentData.tailored_assessment as
 				| { client: string; relevance: string; next_steps: string }[]
 				| undefined) || []
 
@@ -441,7 +393,7 @@ export const sendGrantAlert = async (grantId: string) => {
 				tailored: !!assessment,
 				assessment,
 				subject: buildGrantEmailSubject(
-					grantData as GrantType,
+					investmentData as unknown as GrantType,
 					clientShape as ClientType
 				),
 			}
@@ -457,7 +409,7 @@ export const sendGrantAlert = async (grantId: string) => {
 				await sendGrantCharIn(
 					r.email,
 					r.subject,
-					grantData,
+					investmentData,
 					attachments,
 					r.cc
 				)
@@ -465,7 +417,7 @@ export const sendGrantAlert = async (grantId: string) => {
 				await sendGrant(
 					r.email,
 					r.subject,
-					grantData,
+					investmentData,
 					attachments,
 					r.cc
 				)
@@ -477,7 +429,7 @@ export const sendGrantAlert = async (grantId: string) => {
 				await sendGrantTailoredCharIn(
 					r.email,
 					r.subject,
-					grantData,
+					investmentData,
 					r.assessment,
 					attachments,
 					r.cc
@@ -486,7 +438,7 @@ export const sendGrantAlert = async (grantId: string) => {
 				await sendGrantTailored(
 					r.email,
 					r.subject,
-					grantData,
+					investmentData,
 					r.assessment,
 					attachments,
 					r.cc
@@ -501,34 +453,36 @@ export const sendGrantAlert = async (grantId: string) => {
 
 		// 6) Mark as sent
 		const { error: updateError } = await supabase
-			.from('grants')
+			.from('investments')
 			.update({ sent: true })
-			.eq('id', grantId)
+			.eq('id', investmentId)
 		if (updateError) throw new Error(updateError.message)
 
 		// 7) Create alert log
 		const alert: CreateAlertType = {
 			subject:
-				grantData.call_title || grantData.programme_title || 'Grant',
-			entity_type: 'grant',
-			entity_id: grantId,
+				investmentData.call_title ||
+				investmentData.programme_title ||
+				'Investment',
+			entity_type: 'investment',
+			entity_id: investmentId,
 			matched_clients: matchedClients,
 		}
 		await createAlert(alert)
 
 		return { success: true }
 	} catch (error) {
-		console.log('ERROR SENDING GRANT ALERT', error)
+		console.log('ERROR SENDING INVESTMENT ALERT', error)
 		throw error
 	}
 }
 
-export const filterGrantClients = async (grantId: string) => {
+export const filterInvestmentClients = async (investmentId: string) => {
 	try {
 		const supabase = await createClient()
 
-		const { error } = await supabase.rpc('update_grant_clients_call', {
-			grant_id: grantId,
+		const { error } = await supabase.rpc('update_investment_clients_call', {
+			investment_id: investmentId,
 		})
 		if (error) {
 			throw new Error(error.message)
@@ -536,7 +490,7 @@ export const filterGrantClients = async (grantId: string) => {
 		console.log('FILTERED CLIENTS', error)
 		return error
 	} catch (error) {
-		console.log('ERROR FILTERING GRANT CLIENTS', error)
+		console.log('ERROR FILTERING INVESTMENT CLIENTS', error)
 		throw error
 	}
 }

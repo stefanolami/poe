@@ -154,14 +154,6 @@ export const createGrantSchema = z
 		message: 'Either Call Title or Grant Programme must be provided',
 		path: ['call_title'],
 	})
-	.refine(
-		(data) =>
-			JSON.stringify(data.deadline) !== JSON.stringify([['', '', '']]),
-		{
-			message: 'Deadline is required',
-			path: ['deadline'],
-		}
-	)
 
 export const createGrantsTailoredAssessmentSchema = z.object({
 	tailored_assessment: z
@@ -169,48 +161,69 @@ export const createGrantsTailoredAssessmentSchema = z.object({
 		.optional(),
 })
 
-export const createTendersSchema = z
-	.object({
-		geography: z.array(z.string().min(2, 'Geography is required')),
-		call_title: z.string().optional(),
-		programme_title: z.string().optional(),
-		alert_purpose: z.string().min(2, 'Alert purpose is required'),
-		programme_purpose: z.string(),
-		instrument_type: z.string(),
-		awarding_authority: z.string().min(2, 'Awarding authority is required'),
-		reference_number: z.string().optional(),
-		deadline: z.array(z.array(z.string())),
-		in_brief: z.string().min(2, 'In brief is required'),
-		value: z.string(),
-		geography_details: z.string().optional(),
-		internal_deadline: z.string().optional(),
-		intro: z.string().optional(),
-		subject_matter: z.string().optional(),
-		pre_launch: z.boolean().optional(),
-		further_details: z.array(z.array(z.string())).optional(),
-		files: z
-			.array(
-				z.instanceof(File, {
-					message: 'Must be a valid file',
-				})
-			)
-			.optional(),
-		tailored_assessment: z.array(z.array(z.string())).optional(),
-		consultant: z.string().optional(),
-		sector: z.string().min(2, 'Sector is required'),
-		vehicles: z.array(z.string()).optional(),
-		vehicles_contracts: z.array(z.string()).optional(),
-		stations: z.array(z.string()).optional(),
-		stations_contracts: z.array(z.string()).optional(),
-	})
-	.refine(
-		(data) =>
-			JSON.stringify(data.deadline) !== JSON.stringify([['', '', '']]),
-		{
-			message: 'Deadline is required',
-			path: ['deadline'],
-		}
-	)
+export const createTendersSchema = z.object({
+	geography: z.array(z.string().min(2, 'Geography is required')),
+	call_title: z.string().optional(),
+	programme_title: z.string().optional(),
+	alert_purpose: z.string().min(2, 'Alert purpose is required'),
+	programme_purpose: z.string(),
+	instrument_type: z.string(),
+	awarding_authority: z.string().min(2, 'Awarding authority is required'),
+	reference_number: z.string().optional(),
+	deadline: z.array(z.array(z.string())),
+	in_brief: z.string().min(2, 'In brief is required'),
+	value: z.string(),
+	geography_details: z.string().optional(),
+	internal_deadline: z.string().optional(),
+	intro: z.string().optional(),
+	subject_matter: z.string().optional(),
+	pre_launch: z.boolean().optional(),
+	further_details: z.array(z.array(z.string())).optional(),
+	files: z
+		.array(
+			z.instanceof(File, {
+				message: 'Must be a valid file',
+			})
+		)
+		.optional(),
+	tailored_assessment: z.array(z.array(z.string())).optional(),
+	consultant: z.string().optional(),
+	sector: z.string().min(2, 'Sector is required'),
+	vehicles: z.array(z.string()).optional(),
+	vehicles_contracts: z.array(z.string()).optional(),
+	stations: z.array(z.string()).optional(),
+	stations_contracts: z.array(z.string()).optional(),
+})
+
+export const createInvestmentsSchema = z.object({
+	geography: z.array(z.string().min(2, 'Geography is required')),
+	call_title: z.string().optional(),
+	programme_title: z.string().optional(),
+	alert_purpose: z.string().min(2, 'Alert purpose is required'),
+	programme_purpose: z.string(),
+	instrument_type: z.string(),
+	awarding_authority: z.string().min(2, 'Awarding authority is required'),
+	reference_number: z.string().optional(),
+	deadline: z.array(z.array(z.string())),
+	in_brief: z.string().min(2, 'In brief is required'),
+	value: z.string(),
+	geography_details: z.string().optional(),
+	internal_deadline: z.string().optional(),
+	intro: z.string().optional(),
+	subject_matter: z.string().optional(),
+	pre_launch: z.boolean().optional(),
+	further_details: z.array(z.array(z.string())).optional(),
+	files: z
+		.array(
+			z.instanceof(File, {
+				message: 'Must be a valid file',
+			})
+		)
+		.optional(),
+	tailored_assessment: z.array(z.array(z.string())).optional(),
+	consultant: z.string().optional(),
+	sector: z.string().min(2, 'Sector is required'),
+})
 
 // Subscriptions
 export const subscriptionIdSchema = z.string().uuid('Invalid subscription id')

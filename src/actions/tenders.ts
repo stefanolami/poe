@@ -14,6 +14,8 @@ import {
 	sendTenderTailored,
 	sendTenderTailoredCharIn,
 } from './email'
+import { runWithConcurrency } from '@/lib/concurrency'
+import { fetchAttachments } from '@/lib/attachments'
 import { createAlert } from './alerts'
 /* import {
 	sendGrant,
@@ -358,27 +360,6 @@ export const addTendersTailoredAssessments = async (
 }
 // ...existing code...
 
-// Simple bounded concurrency helper
-async function runWithConcurrency<T>(
-	items: T[],
-	limit: number,
-	worker: (item: T, index: number) => Promise<void>
-) {
-	const queue = [...items.entries()]
-	const running: Promise<void>[] = []
-	async function runNext() {
-		const next = queue.shift()
-		if (!next) return
-		const [idx, item] = next
-		await worker(item, idx)
-		await runNext()
-	}
-	for (let i = 0; i < Math.min(limit, queue.length); i++) {
-		running.push(runNext())
-	}
-	await Promise.all(running)
-}
-
 export const sendTenderAlert = async (tenderId: string) => {
 	try {
 		const supabase = await createClient()
@@ -415,32 +396,12 @@ export const sendTenderAlert = async (tenderId: string) => {
 		if (clientsError || !clientsData)
 			throw new Error(clientsError?.message || 'Error fetching clients')
 
-		// 4) Prepare attachments once
-		let attachments: { filename?: string; content: Buffer }[] = []
-		if (tenderData.files?.length) {
-			const downloads = await Promise.all(
-				tenderData.files.map(async (filePath: string) => {
-					const path = filePath.replace('/tenders/', 'tenders/')
-					const { data, error } = await supabase.storage
-						.from('documents')
-						.download(path)
-					if (error || !data) return null
-					const buf = Buffer.from(await data.arrayBuffer())
-					// Safety cap if extremely large (optional):
-					// if (buf.length > 6_000_000) return null
-					return {
-						filename: filePath.split('/').pop(),
-						content: buf,
-					}
-				})
-			)
-			const cleaned: { filename?: string; content: Buffer }[] = []
-			for (const d of downloads) {
-				if (d)
-					cleaned.push({ filename: d.filename, content: d.content })
-			}
-			attachments = cleaned
-		}
+		// 4) Prepare attachments once (shared helper)
+		const attachments = await fetchAttachments(
+			(tenderData.files as string[] | null) ?? null,
+			'/tenders/',
+			'tenders/'
+		)
 
 		// 5) Build recipient descriptors (normal + tailored split)
 		const assessments =

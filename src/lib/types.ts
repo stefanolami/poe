@@ -3,6 +3,7 @@ import {
 	createAccountSchema,
 	createGrantSchema,
 	createGrantsTailoredAssessmentSchema,
+	createInvestmentsSchema,
 	createTendersSchema,
 	createUserSchema,
 	forgotPasswordSchema,
@@ -24,6 +25,12 @@ export type CreateGrantsTailoredAssessmentType = z.infer<
 export type CreateTendersType = z.infer<typeof createTendersSchema>
 
 export type CreateTendersTailoredAssessmentType = z.infer<
+	typeof createGrantsTailoredAssessmentSchema
+>
+
+export type CreateInvestmentsType = z.infer<typeof createInvestmentsSchema>
+
+export type CreateInvestmentsTailoredAssessmentType = z.infer<
 	typeof createGrantsTailoredAssessmentSchema
 >
 
@@ -579,6 +586,31 @@ export type UpdateGrantType = {
 	in_brief: string
 	deployment?: string[] | undefined
 	project?: string[] | undefined
+	call_title?: string | undefined
+	programme_title?: string | undefined
+	programme_purpose?: string | undefined
+	instrument_type?: string | undefined
+	reference_number?: string | undefined
+	geography_details?: string | undefined
+	internal_deadline?: string | undefined
+	intro?: string | undefined
+	subject_matter?: string | undefined
+	pre_launch?: boolean | undefined
+	further_details?: string[][] | undefined
+	files?: File[] | undefined
+	oldFiles?: string[] | undefined
+	tailored_assessment?: string[][] | undefined
+	consultant?: string | undefined
+}
+
+export type UpdateInvestmentType = {
+	sector: string
+	value: string
+	geography: string[]
+	alert_purpose: string
+	awarding_authority: string
+	deadline: string[][]
+	in_brief: string
 	call_title?: string | undefined
 	programme_title?: string | undefined
 	programme_purpose?: string | undefined
