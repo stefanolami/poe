@@ -17,7 +17,7 @@ const GrantsEmailCharIn = ({ grant }: { grant: FormattedGrantType }) => {
 	const {
 		geography,
 		call_title,
-		grant_programme,
+		programme_title,
 		alert_purpose,
 		programme_purpose,
 		instrument_type,
@@ -89,7 +89,7 @@ const GrantsEmailCharIn = ({ grant }: { grant: FormattedGrantType }) => {
 								marginTop: '50px',
 							}}
 						>
-							{call_title || grant_programme}
+							{call_title || programme_title}
 						</Heading>
 					</Section>
 
@@ -110,12 +110,12 @@ const GrantsEmailCharIn = ({ grant }: { grant: FormattedGrantType }) => {
 							</>
 						)}
 
-						{grant_programme && (
+						{programme_title && (
 							<>
 								<Text style={fieldTitle}>
 									<strong>GRANT PROGRAMME</strong>
 								</Text>
-								<Text style={fieldText}>{grant_programme}</Text>
+								<Text style={fieldText}>{programme_title}</Text>
 							</>
 						)}
 
@@ -186,7 +186,7 @@ const GrantsEmailCharIn = ({ grant }: { grant: FormattedGrantType }) => {
 						<Text style={fieldTitle}>
 							<strong>DEADLINE(S)</strong>
 						</Text>
-						{deadline.map((date, index) => (
+						{(deadline ?? []).map((date, index) => (
 							<Text
 								key={index}
 								style={fieldText}

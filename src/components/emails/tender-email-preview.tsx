@@ -45,14 +45,16 @@ const TenderEmailPreviewComponent = ({
 				<TendersEmailCharin
 					clientId={'1234-5678'}
 					org_name={'Acme'}
-					value={emailData.value}
+					value={emailData.value ?? undefined}
 					geography={emailData.geography}
-					awarding_authority={emailData.awarding_authority}
+					awarding_authority={
+						emailData.awarding_authority ?? undefined
+					}
 					programme_title={emailData.programme_title ?? ''}
-					alert_purpose={emailData.alert_purpose}
+					alert_purpose={emailData.alert_purpose ?? undefined}
 					programme_purpose={emailData.programme_purpose ?? undefined}
 					instrument_type={emailData.instrument_type ?? undefined}
-					in_brief={emailData.in_brief}
+					in_brief={emailData.in_brief ?? undefined}
 					deadline={deadlineTuples}
 					further_details={furtherDetailsTuples}
 					tailored={false}

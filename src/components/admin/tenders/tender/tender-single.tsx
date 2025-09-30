@@ -118,7 +118,7 @@ const TenderSingle = ({
 		programme_title: tender.programme_title,
 		programme_purpose,
 		instrument_type,
-		geography_details: tender.geography_details,
+		geography_details: tender.geography_details ?? undefined,
 		internal_deadline: tender.internal_deadline,
 		intro: tender.intro,
 		subject_matter: tender.subject_matter,
@@ -420,7 +420,7 @@ const TenderSingle = ({
 								Deadlines
 							</div>
 							<div className="space-y-1">
-								{deadline.map((d, index) => (
+								{deadline?.map((d, index) => (
 									<div
 										key={index}
 										className="text-base"

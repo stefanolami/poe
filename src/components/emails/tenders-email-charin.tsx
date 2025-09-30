@@ -250,7 +250,7 @@ const TendersEmailCharin = ({
 								className="responsive-table"
 							>
 								<tbody>
-									{deadline.map((d, i) => {
+									{(deadline ?? []).map((d, i) => {
 										const [dateIso, time, note] = d
 										const dateStr = dateIso
 											? new Date(

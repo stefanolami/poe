@@ -20,7 +20,7 @@ import {
 } from './email'
 import { createAlert } from './alerts'
 
-export const createInvestments = async (formData: CreateInvestmentsType) => {
+export const createInvestment = async (formData: CreateInvestmentsType) => {
 	try {
 		const supabase = await createClient()
 

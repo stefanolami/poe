@@ -44,9 +44,37 @@ export const getDashboardData = async () => {
 			throw new Error(alertsError.message)
 		}
 
+		const { data: tendersData, error: tendersError } = await supabase
+			.from('tenders')
+			.select('created_at, id, call_title, programme_title')
+			.gte('created_at', threeMonthsAgoISO)
+			.order('created_at', { ascending: false })
+
+		if (tendersError) {
+			console.error('ERROR FETCHING TENDERS FOR DASHBOARD', tendersError)
+			throw new Error(tendersError.message)
+		}
+
+		const { data: investmentsData, error: investmentsError } =
+			await supabase
+				.from('investments')
+				.select('created_at, id, call_title, programme_title')
+				.gte('created_at', threeMonthsAgoISO)
+				.order('created_at', { ascending: false })
+
+		if (investmentsError) {
+			console.error(
+				'ERROR FETCHING INVESTMENTS FOR DASHBOARD',
+				investmentsError
+			)
+			throw new Error(investmentsError.message)
+		}
+
 		return {
 			clients: clientsData ?? [],
 			grants: grantsData ?? [],
+			tenders: tendersData ?? [],
+			investments: investmentsData ?? [],
 			alerts: alertsData ?? [],
 		}
 	} catch (error) {

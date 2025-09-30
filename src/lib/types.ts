@@ -190,6 +190,22 @@ export type DashboardDataType = {
 				programme_title?: string | null
 		  }[]
 		| []
+	tenders:
+		| {
+				created_at: string
+				id: string
+				call_title?: string | null
+				programme_title?: string | null
+		  }[]
+		| []
+	investments:
+		| {
+				created_at: string
+				id: string
+				call_title?: string | null
+				programme_title?: string | null
+		  }[]
+		| []
 	alerts:
 		| {
 				created_at: string
@@ -264,22 +280,14 @@ export type TenderType = {
 	value: string
 }
 
-export type GrantWithConsultantType = {
+export type InvestmentType = {
 	alert_purpose: string
 	amendments: string[] | null
 	awarding_authority: string | null
 	call_title: string | null
-	consultant: {
-		id: string
-		first_name: string
-		email: string
-		last_name: string
-		created_at: string
-		clients: string[] | null
-	} | null
+	consultant: string | null
 	created_at: string
-	deadline: string[]
-	deployment: string[] | null
+	deadline: string[] | null
 	files: string[] | null
 	further_details: string[] | null
 	geography: string[]
@@ -287,6 +295,35 @@ export type GrantWithConsultantType = {
 	programme_title: string | null
 	id: string
 	in_brief: string
+	instrument_type: string | null
+	internal_deadline: string | null
+	intro: string | null
+	matched_clients: string[] | null
+	pre_launch: boolean
+	programme_purpose: string | null
+	reference_number: string | null
+	sector: string
+	sent: boolean
+	subject_matter: string | null
+	tailored_assessment: TailoredAssessmentType[] | null
+	value: string
+}
+
+export type GrantWithConsultantType = {
+	alert_purpose: string
+	amendments: string[] | null
+	awarding_authority: string | null
+	call_title: string | null
+	created_at: string
+	deadline: string[] | null
+	deployment: string[] | null
+	files: string[] | null
+	further_details: string[] | null
+	geography: string[]
+	geography_details: string | null
+	programme_title: string | null
+	id: string
+	in_brief: string | null
 	instrument_type: string | null
 	internal_deadline: string | null
 	intro: string | null
@@ -299,13 +336,7 @@ export type GrantWithConsultantType = {
 	sent: boolean
 	subject_matter: string | null
 	tailored_assessment: TailoredAssessmentType[] | null
-	value: string
-}
-
-export type TenderWithConsultantType = {
-	alert_purpose: string
-	amendments: string[] | null
-	awarding_authority: string | null
+	value: string | null
 	consultant: {
 		id: string
 		first_name: string
@@ -314,8 +345,23 @@ export type TenderWithConsultantType = {
 		created_at: string
 		clients: string[] | null
 	} | null
+}
+
+export type TenderWithConsultantType = {
+	consultant: {
+		id: string
+		first_name: string
+		email: string
+		last_name: string
+		created_at: string
+		clients: string[] | null
+	} | null
+	alert_purpose: string
+	amendments: string[] | null
+	awarding_authority: string | null
+	call_title: string | null
 	created_at: string
-	deadline: string[]
+	deadline: string[] | null
 	vehicles: string[] | null
 	vehicles_contracts: string[] | null
 	stations: string[] | null
@@ -323,11 +369,10 @@ export type TenderWithConsultantType = {
 	files: string[] | null
 	further_details: string[] | null
 	geography: string[]
-	geography_details: string
+	geography_details: string | null
 	programme_title: string | null
-	call_title: string | null
 	id: string
-	in_brief: string
+	in_brief: string | null
 	instrument_type: string | null
 	internal_deadline: string | null
 	intro: string | null
@@ -339,7 +384,43 @@ export type TenderWithConsultantType = {
 	sent: boolean
 	subject_matter: string | null
 	tailored_assessment: TailoredAssessmentType[] | null
-	value: string
+	value: string | null
+}
+
+export type InvestmentWithConsultantType = {
+	consultant: {
+		id: string
+		first_name: string
+		email: string
+		last_name: string
+		created_at: string
+		clients: string[] | null
+	} | null
+	alert_purpose: string
+	amendments: string[] | null
+	awarding_authority: string | null
+	call_title: string | null
+	created_at: string
+	deadline: string[] | null
+	files: string[] | null
+	further_details: string[] | null
+	geography: string[]
+	geography_details: string | null
+	programme_title: string | null
+	id: string
+	in_brief: string | null
+	instrument_type: string | null
+	internal_deadline: string | null
+	intro: string | null
+	matched_clients: string[] | null
+	pre_launch: boolean
+	programme_purpose: string | null
+	reference_number: string | null
+	sector: string
+	sent: boolean
+	subject_matter: string | null
+	tailored_assessment: TailoredAssessmentType[] | null
+	value: string | null
 }
 
 export type ClientWithConsultantType = ClientType & {
@@ -360,11 +441,11 @@ export type Geography = {
 
 export type FormattedGrantType = {
 	geography: string[]
-	value: string
-	alert_purpose: string
-	awarding_authority: string
-	deadline: string[]
-	in_brief: string
+	value: string | null
+	alert_purpose: string | null
+	awarding_authority: string | null
+	deadline: string[] | null
+	in_brief: string | null
 	sector: string
 	call_title?: string | undefined | null
 	programme_title?: string | undefined | null
@@ -386,11 +467,11 @@ export type FormattedGrantType = {
 
 export type FormattedTenderType = {
 	geography: string[]
-	value: string
-	alert_purpose: string
-	awarding_authority: string
-	deadline: string[]
-	in_brief: string
+	value: string | null
+	alert_purpose: string | null
+	awarding_authority: string | null
+	deadline: string[] | null
+	in_brief: string | null
 	sector: string
 	programme_title: string | null
 	call_title: string | null
@@ -409,6 +490,30 @@ export type FormattedTenderType = {
 	vehicles_contracts?: string[] | undefined | null
 	stations?: string[] | undefined | null
 	stations_contracts?: string[] | undefined | null
+	reference_number?: string | null
+}
+
+export type FormattedInvestmentType = {
+	geography: string[]
+	value: string | null
+	alert_purpose: string | null
+	awarding_authority: string | null
+	deadline: string[] | null
+	in_brief: string | null
+	sector: string
+	programme_title: string | null | undefined
+	call_title: string | null | undefined
+	programme_purpose: string | null | undefined
+	instrument_type: string | null | undefined
+	geography_details?: string | undefined
+	internal_deadline?: string | undefined | null
+	intro?: string | undefined | null
+	subject_matter?: string | undefined | null
+	pre_launch?: boolean | undefined
+	further_details?: string[] | undefined | null
+	files?: string[] | undefined | null
+	tailored_assessment?: TailoredAssessmentType[] | undefined | null
+	consultant?: string | undefined | null
 	reference_number?: string | null
 }
 

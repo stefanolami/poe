@@ -15,9 +15,9 @@ import Link from 'next/link'
 import { DashboardDataType } from '@/lib/types'
 
 export function DashboardCardSection({ data }: { data: DashboardDataType }) {
-	const [timeRange, setTimeRange] = useState('3d')
+	const [timeRange, setTimeRange] = useState<'3d' | '1w' | '1m'>('3d')
 
-	const { clients, grants, alerts } = data
+	const { clients, grants, tenders, investments, alerts } = data
 
 	console.log('DashboardCardSection data:', data)
 
@@ -32,16 +32,25 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 
 			switch (timeRange) {
 				case '3d':
-					timeLimit = new Date(now.setDate(now.getDate() - 3))
+					timeLimit = new Date(
+						now.getTime() - 3 * 24 * 60 * 60 * 1000
+					)
 					break
-				case '2d':
-					timeLimit = new Date(now.setDate(now.getDate() - 2))
+				case '1w':
+					timeLimit = new Date(
+						now.getTime() - 7 * 24 * 60 * 60 * 1000
+					)
 					break
-				case '1d':
-					timeLimit = new Date(now.setDate(now.getDate() - 1))
+				case '1m':
+					// Approximate 1 month as 30 days for this dashboard metric
+					timeLimit = new Date(
+						now.getTime() - 30 * 24 * 60 * 60 * 1000
+					)
 					break
 				default:
-					timeLimit = new Date(now.setDate(now.getDate() - 3))
+					timeLimit = new Date(
+						now.getTime() - 3 * 24 * 60 * 60 * 1000
+					)
 			}
 
 			return itemDate >= timeLimit
@@ -61,12 +70,12 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 
 	const getPeriodIncrease = (
 		data: { created_at: string }[],
-		timeRange: string
+		timeRange: '3d' | '1w' | '1m'
 	): number => {
 		const now = new Date()
 
 		// Determine period length in days
-		const days = timeRange === '1d' ? 1 : timeRange === '2d' ? 2 : 3
+		const days = timeRange === '3d' ? 3 : timeRange === '1w' ? 7 : 30
 
 		// Current period
 		const periodStart = new Date(now)
@@ -96,6 +105,8 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 	}
 	const clientsIncrease = getPeriodIncrease(clients, timeRange)
 	const grantsIncrease = getPeriodIncrease(grants, timeRange)
+	const tendersIncrease = getPeriodIncrease(tenders, timeRange)
+	const investmentsIncrease = getPeriodIncrease(investments, timeRange)
 	const alertsIncrease = getPeriodIncrease(alerts, timeRange)
 	return (
 		<div>
@@ -103,13 +114,16 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 				<ToggleGroup
 					type="single"
 					value={timeRange}
-					onValueChange={setTimeRange}
+					onValueChange={(v) => {
+						if (!v) return
+						setTimeRange(v as '3d' | '1w' | '1m')
+					}}
 					variant="outline"
 					className="w-full mt-4 md:mt-0 md:w-fit ml-auto"
 				>
-					<ToggleGroupItem value="3d">Last 3 days</ToggleGroupItem>
-					<ToggleGroupItem value="2d">Last 2 days</ToggleGroupItem>
-					<ToggleGroupItem value="1d">Last 1 day</ToggleGroupItem>
+					<ToggleGroupItem value="3d">3 days</ToggleGroupItem>
+					<ToggleGroupItem value="1w">1 week</ToggleGroupItem>
+					<ToggleGroupItem value="1m">1 month</ToggleGroupItem>
 				</ToggleGroup>
 			</div>
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
@@ -208,6 +222,109 @@ export function DashboardCardSection({ data }: { data: DashboardDataType }) {
 											{grant.call_title
 												? grant.call_title
 												: grant.programme_title}
+										</span>
+									</Link>
+								</li>
+							))}
+						</ul>
+					</CardFooter>
+				</Card>
+
+				{/* Latest Tenders (after Grants) */}
+				<Card className="@container/card h-full w-full">
+					<Link href="/admin/tenders">
+						<CardHeader>
+							<CardDescription className="flex flex-row items-center justify-between">
+								<span>Latest Tenders</span>
+								<Badge variant="outline">
+									{tendersIncrease === Infinity ? (
+										<>
+											<Minus />
+											<Minus className="-ml-[10px]" />
+										</>
+									) : (
+										<>
+											{Math.round(tendersIncrease) >
+												0 && <TrendingUp />}
+											{Math.round(tendersIncrease) <
+												0 && <TrendingDown />}
+											{Math.round(tendersIncrease) ==
+												0 && <Equal />}
+											<span className="ml-2">
+												{tendersIncrease > 0 ? '+' : ''}
+												{tendersIncrease.toFixed(1)}%
+											</span>
+										</>
+									)}
+								</Badge>
+							</CardDescription>
+							<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+								{filterDataByTimeRange(tenders).length || 0}
+							</CardTitle>
+						</CardHeader>
+					</Link>
+					<CardFooter className="flex-col items-start gap-1.5 text-sm">
+						<ul>
+							{tenders.slice(0, 3).map((tender, index) => (
+								<li key={index}>
+									<Link href={`/admin/tenders/${tender.id}`}>
+										<span>
+											{tender.call_title
+												? tender.call_title
+												: tender.programme_title}
+										</span>
+									</Link>
+								</li>
+							))}
+						</ul>
+					</CardFooter>
+				</Card>
+
+				{/* Latest Investments (after Tenders) */}
+				<Card className="@container/card h-full w-full">
+					<Link href="/admin/investments">
+						<CardHeader>
+							<CardDescription className="flex flex-row items-center justify-between">
+								<span>Latest Investments</span>
+								<Badge variant="outline">
+									{investmentsIncrease === Infinity ? (
+										<>
+											<Minus />
+											<Minus className="-ml-[10px]" />
+										</>
+									) : (
+										<>
+											{Math.round(investmentsIncrease) >
+												0 && <TrendingUp />}
+											{Math.round(investmentsIncrease) <
+												0 && <TrendingDown />}
+											{Math.round(investmentsIncrease) ==
+												0 && <Equal />}
+											<span className="ml-2">
+												{investmentsIncrease > 0
+													? '+'
+													: ''}
+												{investmentsIncrease.toFixed(1)}
+												%
+											</span>
+										</>
+									)}
+								</Badge>
+							</CardDescription>
+							<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+								{filterDataByTimeRange(investments).length || 0}
+							</CardTitle>
+						</CardHeader>
+					</Link>
+					<CardFooter className="flex-col items-start gap-1.5 text-sm">
+						<ul>
+							{investments.slice(0, 3).map((inv, index) => (
+								<li key={index}>
+									<Link href={`/admin/investments/${inv.id}`}>
+										<span>
+											{inv.call_title
+												? inv.call_title
+												: inv.programme_title}
 										</span>
 									</Link>
 								</li>

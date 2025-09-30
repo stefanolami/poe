@@ -6,18 +6,18 @@ import { ArrowUpDown } from 'lucide-react'
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Tender = {
+export type Investment = {
 	id: string
 	sent: boolean
 	geography: string
-	awarding_authority: string | null
+	call_title: string | null
 	programme_title: string | null
 	internal_deadline: string | null
 }
 
-export const columns: ColumnDef<Tender>[] = [
+export const columns: ColumnDef<Investment>[] = [
 	{
-		accessorKey: 'awarding_authority',
+		accessorKey: 'call_title',
 		header: ({ column }) => {
 			return (
 				<Button

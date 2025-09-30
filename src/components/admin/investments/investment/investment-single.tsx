@@ -1,10 +1,5 @@
 'use client'
 
-import {
-	addGrantsTailoredAssessments,
-	filterGrantClients,
-	sendGrantAlert,
-} from '@/actions/grants'
 import { Button } from '@/components/ui/button'
 import {
 	Form,
@@ -23,9 +18,9 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/hooks/use-toast'
 import {
-	CreateGrantsTailoredAssessmentType,
-	FormattedGrantType,
-	GrantWithConsultantType,
+	CreateInvestmentsTailoredAssessmentType,
+	FormattedInvestmentType,
+	InvestmentWithConsultantType,
 } from '@/lib/types'
 import { formatDeadline, formatGeography } from '@/lib/utils'
 import { createGrantsTailoredAssessmentSchema } from '@/lib/zod-schemas'
@@ -44,12 +39,17 @@ import { useShallow } from 'zustand/shallow'
 import { canSendAlert } from '@/lib/permissions'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+	addInvestmentsTailoredAssessments,
+	filterInvestmentClients,
+	sendInvestmentAlert,
+} from '@/actions/investments'
 
-const GrantSingle = ({
-	grant,
+const InvestmentSingle = ({
+	investment,
 	clients,
 }: {
-	grant: GrantWithConsultantType
+	investment: InvestmentWithConsultantType
 	clients?: {
 		id: string
 		first_name: string
@@ -86,18 +86,16 @@ const GrantSingle = ({
 		further_details,
 		files,
 		tailored_assessment,
-		deployment,
-		project,
 		geography_details,
 		internal_deadline,
 		intro,
 		subject_matter,
 		pre_launch,
-	} = grant
+	} = investment
 
 	const router = useRouter()
 
-	const form = useForm<CreateGrantsTailoredAssessmentType>({
+	const form = useForm<CreateInvestmentsTailoredAssessmentType>({
 		resolver: zodResolver(createGrantsTailoredAssessmentSchema),
 		defaultValues: {},
 	})
@@ -105,7 +103,7 @@ const GrantSingle = ({
 	const isSubmitting = form.formState.isSubmitting
 
 	// formatted payload for email preview
-	const formattedGrant: FormattedGrantType = {
+	const formattedInvestment: FormattedInvestmentType = {
 		geography,
 		value,
 		alert_purpose,
@@ -127,16 +125,14 @@ const GrantSingle = ({
 		files,
 		tailored_assessment: tailored_assessment ?? undefined,
 		consultant: consultant?.id ?? undefined,
-		deployment: deployment ?? undefined,
-		project: project ?? undefined,
 	}
 
 	const submitHandler: SubmitHandler<
-		CreateGrantsTailoredAssessmentType
+		CreateInvestmentsTailoredAssessmentType
 	> = async (data) => {
 		console.log('DATA', data)
 		try {
-			const response = await addGrantsTailoredAssessments(
+			const response = await addInvestmentsTailoredAssessments(
 				id,
 				data.tailored_assessment ?? []
 			)
@@ -178,17 +174,17 @@ const GrantSingle = ({
 	const handleSend = async () => {
 		try {
 			setIsLoading(true)
-			const response = await sendGrantAlert(id)
+			const response = await sendInvestmentAlert(id)
 			setIsLoading(false)
 
 			if (response) {
 				toast({
 					title: 'Success!',
-					description: 'Grant alert sent successfully',
+					description: 'Investment alert sent successfully',
 					variant: 'default',
 				})
 				setTimeout(() => {
-					router.push(`/admin/grants/`)
+					router.push(`/admin/investments/`)
 				}, 1000)
 			}
 
@@ -218,7 +214,7 @@ const GrantSingle = ({
 	const handleFilterClients = async () => {
 		try {
 			setIsLoading(true)
-			const response = await filterGrantClients(id)
+			const response = await filterInvestmentClients(id)
 
 			if (!response) {
 				toast({
@@ -259,12 +255,14 @@ const GrantSingle = ({
 		<div className="font-jose mb-20">
 			<div className="flex flex-row items-center justify-between w-full">
 				<h1 className="text-white font-jose text-2xl">
-					Grant - {call_title ? call_title : programme_title}
+					Investment - {call_title ? call_title : programme_title}
 				</h1>
 				<button
 					disabled={isLoading || isSubmitting}
 					className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-primary-light hover:bg-primary-light/90 text-white w-40 py-2"
-					onClick={() => router.replace(`/admin/grants/${id}/edit`)}
+					onClick={() =>
+						router.replace(`/admin/investments/${id}/edit`)
+					}
 				>
 					Edit
 				</button>
@@ -458,37 +456,6 @@ const GrantSingle = ({
 							</div>
 							<div className="text-base">
 								{in_brief ? in_brief : '-'}
-							</div>
-						</div>
-					</CardContent>
-				</Card>
-
-				{/* Deployment & Project */}
-				<Card className="bg-white/5 border-white/10 text-white">
-					<CardHeader>
-						<CardTitle className="text-xl">
-							Deployment & Project
-						</CardTitle>
-					</CardHeader>
-					<CardContent className="grid grid-cols-1 gap-3">
-						<div>
-							<div className="text-muted-foreground">
-								Grants Deployment
-							</div>
-							<div className="text-base">
-								{deployment && deployment.length > 0
-									? deployment.join(', ')
-									: '-'}
-							</div>
-						</div>
-						<div>
-							<div className="text-muted-foreground">
-								Grants Innovative Project
-							</div>
-							<div className="text-base">
-								{project && project.length > 0
-									? project.join(', ')
-									: '-'}
 							</div>
 						</div>
 					</CardContent>
@@ -852,7 +819,7 @@ const GrantSingle = ({
 										buttonClass="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
 									>
 										<GrantEmailPreviewButton
-											emailData={formattedGrant}
+											emailData={formattedInvestment}
 											disabled={isLoading || isSubmitting}
 										/>
 									</ButtonWithAlert>
@@ -867,7 +834,7 @@ const GrantSingle = ({
 									Filter Clients
 								</Button>
 								<GrantEmailPreviewButton
-									emailData={formattedGrant}
+									emailData={formattedInvestment}
 									disabled={isLoading || isSubmitting}
 								/>
 							</div>
@@ -887,7 +854,7 @@ const GrantSingle = ({
 	)
 }
 
-export default GrantSingle
+export default InvestmentSingle
 
 /* const Divider = () => (
 	<div className="border-t border-white my-4 w-4/5 col-span-2" />
