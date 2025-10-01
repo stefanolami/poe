@@ -14,9 +14,9 @@ import { Json } from '@/supabase/types'
 import { createClient } from '@/supabase/server'
 import {
 	sendGrant,
-	sendGrantCharIn,
+	sendGrantCharin,
 	sendGrantTailored,
-	sendGrantTailoredCharIn,
+	sendGrantTailoredCharin,
 } from './email'
 import { createAlert } from './alerts'
 
@@ -24,9 +24,16 @@ export const createGrant = async (formData: CreateGrantType) => {
 	try {
 		const supabase = await createClient()
 
-		const flatDeadline = formData.deadline.map((element) =>
-			element.join('///')
+		// Normalize deadline: drop empty triplets and set null if none remain
+		const filteredDeadline = (formData.deadline || []).filter(
+			(triplet) =>
+				Array.isArray(triplet) &&
+				triplet.some((v) => (v || '').trim() !== '')
 		)
+		const flatDeadline =
+			filteredDeadline.length > 0
+				? filteredDeadline.map((element) => element.join('///'))
+				: null
 		const flatFurtherDetails = formData.further_details?.map((element) =>
 			element.join('///')
 		)
@@ -97,9 +104,15 @@ export const updateGrant = async (id: string, formData: UpdateGrantType) => {
 	try {
 		const supabase = await createClient()
 
-		const flatDeadline = formData.deadline.map((element) =>
-			element.join('///')
+		const filteredDeadline = (formData.deadline || []).filter(
+			(triplet) =>
+				Array.isArray(triplet) &&
+				triplet.some((v) => (v || '').trim() !== '')
 		)
+		const flatDeadline =
+			filteredDeadline.length > 0
+				? filteredDeadline.map((element) => element.join('///'))
+				: null
 		const flatFurtherDetails = formData.further_details?.map((element) =>
 			element.join('///')
 		)
@@ -356,7 +369,7 @@ export const sendGrantAlert = async (grantId: string) => {
 
 		// 1) Recompute matched clients via RPC
 		const { error: rpcError } = await supabase.rpc(
-			'update_grant_clients_call',
+			'refresh_grants_matched_clients',
 			{ grant_id: grantId }
 		)
 		if (rpcError) throw new Error(rpcError.message)
@@ -453,13 +466,14 @@ export const sendGrantAlert = async (grantId: string) => {
 		const CONCURRENCY = 5
 
 		const sendNormal = async (r: (typeof normalRecipients)[number]) => {
-			if (r.referrer === 'charIn') {
-				await sendGrantCharIn(
+			if (r.referrer === 'charin') {
+				await sendGrantCharin(
 					r.email,
 					r.subject,
 					grantData,
 					attachments,
-					r.cc
+					r.cc,
+					r.client
 				)
 			} else {
 				await sendGrant(
@@ -473,8 +487,8 @@ export const sendGrantAlert = async (grantId: string) => {
 		}
 
 		const sendTailored = async (r: (typeof tailoredRecipients)[number]) => {
-			if (r.referrer === 'charIn') {
-				await sendGrantTailoredCharIn(
+			if (r.referrer === 'charin') {
+				await sendGrantTailoredCharin(
 					r.email,
 					r.subject,
 					grantData,
@@ -527,7 +541,7 @@ export const filterGrantClients = async (grantId: string) => {
 	try {
 		const supabase = await createClient()
 
-		const { error } = await supabase.rpc('update_grant_clients_call', {
+		const { error } = await supabase.rpc('refresh_grants_matched_clients', {
 			grant_id: grantId,
 		})
 		if (error) {

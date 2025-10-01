@@ -14,37 +14,26 @@ const TenderEmailPreviewComponent = ({
 
 	useEffect(() => {
 		const generatePreview = async () => {
-			const toTuple = (
-				val: string | [string, string, string]
-			): [string, string, string] => {
-				if (Array.isArray(val)) return val
-				const parts = val.split('///')
-				return [parts[0] || '', parts[1] || '', parts[2] || '']
-			}
+			// Normalize values to string[] expected by the template
+			const deadlineStrings: string[] = (emailData.deadline || []).map(
+				(d) =>
+					Array.isArray(d)
+						? `${d[0] || ''}///${d[1] || ''}///${d[2] || ''}`
+						: String(d)
+			)
 
-			const deadlineTuples: [string, string, string][] = (
-				emailData.deadline || []
-			).map((d) => toTuple(d as unknown as string))
-
-			const furtherDetailsRaw: string[] = Array.isArray(
+			const furtherDetailsStrings: string[] = Array.isArray(
 				emailData.further_details
 			)
 				? (emailData.further_details as unknown as string[])
 				: []
-			const furtherDetailsTuples: [string, string, string][] =
-				furtherDetailsRaw.map((r) => {
-					const parts = (r || '').split('///')
-					return [parts[0] || '', parts[1] || '', parts[2] || ''] as [
-						string,
-						string,
-						string,
-					]
-				})
 
 			const html = await render(
 				<TendersEmailCharin
 					clientId={'1234-5678'}
 					org_name={'Acme'}
+					call_title={emailData.call_title}
+					geography_details={emailData.geography_details}
 					value={emailData.value ?? undefined}
 					geography={emailData.geography}
 					awarding_authority={
@@ -55,8 +44,8 @@ const TenderEmailPreviewComponent = ({
 					programme_purpose={emailData.programme_purpose ?? undefined}
 					instrument_type={emailData.instrument_type ?? undefined}
 					in_brief={emailData.in_brief ?? undefined}
-					deadline={deadlineTuples}
-					further_details={furtherDetailsTuples}
+					deadline={deadlineStrings}
+					further_details={furtherDetailsStrings}
 					tailored={false}
 				/>
 			)

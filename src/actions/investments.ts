@@ -13,10 +13,10 @@ import { fetchAttachments } from '@/lib/attachments'
 import { runWithConcurrency } from '@/lib/concurrency'
 import { createClient } from '@/supabase/server'
 import {
-	sendGrant,
-	sendGrantCharIn,
-	sendGrantTailored,
-	sendGrantTailoredCharIn,
+	sendInvestment,
+	sendInvestmentCharin,
+	sendInvestmentTailored,
+	sendInvestmentTailoredCharin,
 } from './email'
 import { createAlert } from './alerts'
 
@@ -24,9 +24,15 @@ export const createInvestment = async (formData: CreateInvestmentsType) => {
 	try {
 		const supabase = await createClient()
 
-		const flatDeadline = formData.deadline.map((element) =>
-			element.join('///')
+		const filteredDeadline = (formData.deadline || []).filter(
+			(triplet) =>
+				Array.isArray(triplet) &&
+				triplet.some((v) => (v || '').trim() !== '')
 		)
+		const flatDeadline =
+			filteredDeadline.length > 0
+				? filteredDeadline.map((element) => element.join('///'))
+				: null
 		const flatFurtherDetails = formData.further_details?.map((element) =>
 			element.join('///')
 		)
@@ -98,9 +104,15 @@ export const updateInvestment = async (
 	try {
 		const supabase = await createClient()
 
-		const flatDeadline = formData.deadline.map((element) =>
-			element.join('///')
+		const filteredDeadline = (formData.deadline || []).filter(
+			(triplet) =>
+				Array.isArray(triplet) &&
+				triplet.some((v) => (v || '').trim() !== '')
 		)
+		const flatDeadline =
+			filteredDeadline.length > 0
+				? filteredDeadline.map((element) => element.join('///'))
+				: null
 		const flatFurtherDetails = formData.further_details?.map((element) =>
 			element.join('///')
 		)
@@ -308,7 +320,7 @@ export const sendInvestmentAlert = async (investmentId: string) => {
 
 		// 1) RPC to recompute matches
 		const { error: rpcError } = await supabase.rpc(
-			'update_investment_clients_call',
+			'refresh_investments_matched_clients',
 			{ investment_id: investmentId }
 		)
 		if (rpcError) throw new Error(rpcError.message)
@@ -405,43 +417,47 @@ export const sendInvestmentAlert = async (investmentId: string) => {
 		const CONCURRENCY = 5
 
 		const sendNormal = async (r: (typeof normalRecipients)[number]) => {
-			if (r.referrer === 'charIn') {
-				await sendGrantCharIn(
+			if (r.referrer === 'charin') {
+				await sendInvestmentCharin(
 					r.email,
 					r.subject,
 					investmentData,
 					attachments,
-					r.cc
+					r.cc,
+					r.client
 				)
 			} else {
-				await sendGrant(
+				await sendInvestment(
 					r.email,
 					r.subject,
 					investmentData,
 					attachments,
-					r.cc
+					r.cc,
+					r.client
 				)
 			}
 		}
 
 		const sendTailored = async (r: (typeof tailoredRecipients)[number]) => {
-			if (r.referrer === 'charIn') {
-				await sendGrantTailoredCharIn(
+			if (r.referrer === 'charin') {
+				await sendInvestmentTailoredCharin(
 					r.email,
 					r.subject,
 					investmentData,
 					r.assessment,
 					attachments,
-					r.cc
+					r.cc,
+					r.client
 				)
 			} else {
-				await sendGrantTailored(
+				await sendInvestmentTailored(
 					r.email,
 					r.subject,
 					investmentData,
 					r.assessment,
 					attachments,
-					r.cc
+					r.cc,
+					r.client
 				)
 			}
 		}
@@ -481,9 +497,12 @@ export const filterInvestmentClients = async (investmentId: string) => {
 	try {
 		const supabase = await createClient()
 
-		const { error } = await supabase.rpc('update_investment_clients_call', {
-			investment_id: investmentId,
-		})
+		const { error } = await supabase.rpc(
+			'refresh_investments_matched_clients',
+			{
+				investment_id: investmentId,
+			}
+		)
 		if (error) {
 			throw new Error(error.message)
 		}

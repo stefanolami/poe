@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { FormattedInvestmentType } from '@/lib/types'
 import {
 	Html,
 	Head,
@@ -13,58 +14,47 @@ import {
 	Link,
 	Hr,
 } from '@react-email/components'
-// Local props for this email template. These mirror the mapped props passed by the senders.
+
+// Local tuples, mirroring tenders/grants charin
 type DeadlineTuple = [string, string, string]
 type FurtherDetailsTuple = [string, string, string]
 
-type TenderEmailCharinProps = {
+export type InvestmentsEmailCharinProps = {
+	investment: FormattedInvestmentType
 	previewText?: string
-	geography: string[]
-	call_title?: string | null
-	geography_details?: string | null
-	awarding_authority?: string
-	programme_title: string
-	value?: string
-	alert_purpose?: string
-	programme_purpose?: string
-	instrument_type?: string
-	in_brief?: string
-	deadline: string[]
-	further_details?: string[] | null
+	clientId?: string
+	org_name?: string | null
 	tailored?: boolean
 	relevance?: string | null
 	next_steps?: string | null
-	// New: client metadata to display on the top strip
-	clientId?: string
-	org_name?: string | null
 }
-
-// Email template for Procurement Tenders alerts.
-// Mirrors the visual framework of grants-email-new (header/footer/CTAs),
-// but renders Tender-specific content and conditional tailored sections.
 
 const baseUrl = 'https://www.poeontap.com/'
 
-const TendersEmailCharin = ({
-	previewText = 'Procurement Tender Alert from POE',
-	geography,
-	call_title,
-	geography_details,
-	awarding_authority,
-	programme_title,
-	value,
-	alert_purpose,
-	deadline,
-	in_brief,
-	instrument_type,
-	programme_purpose,
-	relevance,
-	next_steps,
-	further_details,
-	tailored,
+const InvestmentsEmailCharin = ({
+	investment,
+	previewText = 'Investment Alert from POE',
 	clientId,
 	org_name,
-}: TenderEmailCharinProps) => {
+	tailored,
+	relevance,
+	next_steps,
+}: InvestmentsEmailCharinProps) => {
+	const {
+		geography,
+		call_title,
+		programme_title,
+		alert_purpose,
+		programme_purpose,
+		instrument_type,
+		awarding_authority,
+		geography_details,
+		deadline,
+		in_brief,
+		value,
+		further_details,
+	} = investment
+
 	const geoText = geography.join(', ')
 	const deadlineRows: DeadlineTuple[] = (deadline ?? []).map((d) => {
 		const [dateIso = '', time = '', note = ''] = d.split('///')
@@ -112,17 +102,17 @@ const TendersEmailCharin = ({
 				</style>
 				<style>
 					{`
-            @import url('https://fonts.googleapis.com/css2?family=Unna:wght@700&display=swap');
-            *{
-            font-family: 'Unna', serif;
-            }`}
+			@import url('https://fonts.googleapis.com/css2?family=Unna:wght@700&display=swap');
+			*{
+			font-family: 'Unna', serif;
+			}`}
 				</style>
 				<style>
 					{`
-            @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100..700&display=swap');
-            *{
-            font-family: 'Josefin Sans', sans-serif;
-            }`}
+			@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100..700&display=swap');
+			*{
+			font-family: 'Josefin Sans', sans-serif;
+			}`}
 				</style>
 			</Head>
 			<Preview>{previewText}</Preview>
@@ -188,7 +178,7 @@ const TendersEmailCharin = ({
 									style={centerTitle}
 									className="header-title"
 								>
-									PROCUREMENT TENDER ALERT
+									INVESTMENT ALERT
 								</Text>
 							</Column>
 						</Row>
@@ -217,7 +207,7 @@ const TendersEmailCharin = ({
 						className="containerInner"
 					>
 						{/* 1. Greeting and intro */}
-						<Section /* style={mainBody} */>
+						<Section>
 							<Text style={paragraph}>
 								Dear {org_name} Team Member,
 							</Text>
@@ -238,21 +228,30 @@ const TendersEmailCharin = ({
 								geography_details || undefined
 							)}
 							{renderField(
-								'Awarding Authority:',
-								awarding_authority
-							)}
-							{renderField('Value:', value)}
-							{renderField('Programme Title:', programme_title)}
-							{renderField(
 								'Call Title:',
 								call_title || undefined
 							)}
 							{renderField(
-								'Programme Purpose:',
-								programme_purpose
+								'Awarding Authority:',
+								awarding_authority || undefined
 							)}
-							{renderField('Instrument Type:', instrument_type)}
-							{renderField('POE Alert Purpose:', alert_purpose)}
+							{renderField('Value:', value || undefined)}
+							{renderField(
+								'Programme Title:',
+								programme_title || undefined
+							)}
+							{renderField(
+								'Programme Purpose:',
+								programme_purpose || undefined
+							)}
+							{renderField(
+								'Instrument Type:',
+								instrument_type || undefined
+							)}
+							{renderField(
+								'POE Alert Purpose:',
+								alert_purpose || undefined
+							)}
 						</Section>
 						<Hr style={divider} />
 
@@ -305,7 +304,7 @@ const TendersEmailCharin = ({
 						)}
 
 						{/* 4. In brief */}
-						<Section /* style={mainBody} */>
+						<Section>
 							<Text style={fieldLabel}>In Brief</Text>
 							<Text style={paragraph}>{in_brief}</Text>
 							{tailored ? (
@@ -334,7 +333,6 @@ const TendersEmailCharin = ({
 							) : null}
 						</Section>
 						<Hr style={divider} />
-						{/* 5. Conditional tailored sections */}
 
 						{/* 6. Links / Documents / Further Details */}
 						{further_details && further_details.length > 0 ? (
@@ -394,7 +392,7 @@ const TendersEmailCharin = ({
 							</>
 						) : null}
 						{tailored && (
-							<Section /* style={mainBody} */>
+							<Section>
 								<Text style={paragraph}>
 									For additional questions or support, please
 									contact:{' '}
@@ -408,12 +406,8 @@ const TendersEmailCharin = ({
 							</Section>
 						)}
 
-						{/* CTAs: same as grants-email-new; for tailored=true hide only Contact Us */}
-						<Section
-							/* style={ctaRow} */
-							className="cta-row"
-						>
-							{/* Centered inner table so buttons sit together in the middle on desktop */}
+						{/* CTAs */}
+						<Section className="cta-row">
 							<table
 								role="presentation"
 								cellPadding={0}
@@ -500,7 +494,7 @@ const TendersEmailCharin = ({
 							</table>
 						</Section>
 					</Container>
-					{/* Footer (same as grants-email-new) */}
+					{/* Footer */}
 					<Section style={footerSection}>
 						<Text style={footerLead}>
 							POE (Time&Place Consulting) Central Office Team:{' '}
@@ -537,7 +531,9 @@ const TendersEmailCharin = ({
 	)
 }
 
-// Shared styles (copied from grants-email-new where applicable)
+export default InvestmentsEmailCharin
+
+// Shared styles copied from tenders/grants charin
 const bodyStyle: React.CSSProperties = {
 	margin: 0,
 	padding: 0,
@@ -569,10 +565,6 @@ const topStripLeft: React.CSSProperties = {
 	padding: '12px 18px',
 	textAlign: 'left' as const,
 }
-/* const topStripRight: React.CSSProperties = {
-	padding: '12px 18px',
-	textAlign: 'right' as const,
-} */
 const gradientHeader: React.CSSProperties = {
 	background: 'linear-gradient(180deg,#00374B 0%,#6AA5B9 55%,#AAD278 100%)',
 	color: '#ffffff',
@@ -626,11 +618,6 @@ const waveInner: React.CSSProperties = {
 	lineHeight: 0,
 	transform: 'rotate(180deg)',
 }
-/* const mainBody: React.CSSProperties = {
-	fontFamily: fontStack,
-	color: '#333333',
-	padding: '30px 34px 10px',
-} */
 const paragraph: React.CSSProperties = {
 	fontSize: 14,
 	lineHeight: '20px',
@@ -678,7 +665,6 @@ const linkCell: React.CSSProperties = {
 	textDecoration: 'underline',
 }
 
-/* const ctaRow: React.CSSProperties = { padding: '0 34px 12px' } */
 const ctaButton: React.CSSProperties = {
 	fontSize: 12,
 	lineHeight: '18px',
@@ -744,5 +730,3 @@ function renderField(label: string, value?: string) {
 		</table>
 	)
 }
-
-export default TendersEmailCharin

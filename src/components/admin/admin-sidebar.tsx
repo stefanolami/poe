@@ -47,7 +47,7 @@ const ITEMS = [
 	},
 	{
 		title: 'Investment Financing',
-		url: '/admin/investment-financing',
+		url: '/admin/investments',
 		icon: Banknote,
 	},
 	{

@@ -10,18 +10,18 @@ import { createClient } from '@/supabase/server'
 import { buildTenderEmailSubject } from '@/lib/utils'
 import {
 	sendTender,
-	sendTenderCharIn,
+	sendTenderCharin,
 	sendTenderTailored,
-	sendTenderTailoredCharIn,
+	sendTenderTailoredCharin,
 } from './email'
 import { runWithConcurrency } from '@/lib/concurrency'
 import { fetchAttachments } from '@/lib/attachments'
 import { createAlert } from './alerts'
 /* import {
 	sendGrant,
-	sendGrantCharIn,
+	sendGrantCharin,
 	sendGrantTailored,
-	sendGrantTailoredCharIn,
+	sendGrantTailoredCharin,
 } from './email'
 import { createAlert } from './alerts' */
 
@@ -29,9 +29,15 @@ export const createTender = async (formData: CreateTendersType) => {
 	try {
 		const supabase = await createClient()
 
-		const flatDeadline = formData.deadline.map((element) =>
-			element.join('///')
+		const filteredDeadline = (formData.deadline || []).filter(
+			(triplet) =>
+				Array.isArray(triplet) &&
+				triplet.some((v) => (v || '').trim() !== '')
 		)
+		const flatDeadline =
+			filteredDeadline.length > 0
+				? filteredDeadline.map((element) => element.join('///'))
+				: null
 		const flatFurtherDetails = formData.further_details?.map((element) =>
 			element.join('///')
 		)
@@ -104,9 +110,15 @@ export const updateTender = async (id: string, formData: UpdateTenderType) => {
 	try {
 		const supabase = await createClient()
 
-		const flatDeadline = formData.deadline.map((element) =>
-			element.join('///')
+		const filteredDeadline = (formData.deadline || []).filter(
+			(triplet) =>
+				Array.isArray(triplet) &&
+				triplet.some((v) => (v || '').trim() !== '')
 		)
+		const flatDeadline =
+			filteredDeadline.length > 0
+				? filteredDeadline.map((element) => element.join('///'))
+				: null
 		const flatFurtherDetails = formData.further_details?.map((element) =>
 			element.join('///')
 		)
@@ -366,7 +378,7 @@ export const sendTenderAlert = async (tenderId: string) => {
 
 		// 1) Recompute matched clients
 		const { error: rpcError } = await supabase.rpc(
-			'update_tender_clients_call',
+			'refresh_tenders_matched_clients',
 			{
 				tender_id: tenderId,
 			}
@@ -463,8 +475,8 @@ export const sendTenderAlert = async (tenderId: string) => {
 
 		// Worker for normal
 		const sendNormal = async (r: (typeof normalRecipients)[number]) => {
-			if (r.referrer === 'charIn') {
-				await sendTenderCharIn(
+			if (r.referrer === 'charin') {
+				await sendTenderCharin(
 					r.email,
 					r.subject,
 					tenderData,
@@ -486,8 +498,8 @@ export const sendTenderAlert = async (tenderId: string) => {
 
 		// Worker for tailored
 		const sendTailored = async (r: (typeof tailoredRecipients)[number]) => {
-			if (r.referrer === 'charIn') {
-				await sendTenderTailoredCharIn(
+			if (r.referrer === 'charin') {
+				await sendTenderTailoredCharin(
 					r.email,
 					r.subject,
 					tenderData,
@@ -543,9 +555,12 @@ export const filterTenderClients = async (tenderId: string) => {
 	try {
 		const supabase = await createClient()
 
-		const { error } = await supabase.rpc('update_tender_clients_call', {
-			tender_id: tenderId,
-		})
+		const { error } = await supabase.rpc(
+			'refresh_tenders_matched_clients',
+			{
+				tender_id: tenderId,
+			}
+		)
 		if (error) {
 			throw new Error(error.message)
 		}

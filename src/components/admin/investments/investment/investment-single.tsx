@@ -33,7 +33,7 @@ import { FaTrashAlt } from 'react-icons/fa'
 import DocViewerComponent from '../../doc-viewer'
 import ButtonWithAlert from '@/components/button-alert'
 import LoadingOverlay from '@/components/loading-overlay'
-import GrantEmailPreviewButton from '@/components/emails/grant-email-preview-button'
+import InvestmentEmailPreviewButton from '@/components/emails/investment-email-preview-button'
 import { useAuthStore } from '@/store/auth-store'
 import { useShallow } from 'zustand/shallow'
 import { canSendAlert } from '@/lib/permissions'
@@ -812,13 +812,13 @@ const InvestmentSingle = ({
 								{showSend && (
 									<ButtonWithAlert
 										buttonText="Send"
-										dialogText="Are you sure you want to send this Grant alert?"
+										dialogText="Are you sure you want to send this Investment alert?"
 										confirmText="Send"
 										action={handleSend}
 										disabled={isLoading || isSubmitting}
 										buttonClass="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
 									>
-										<GrantEmailPreviewButton
+										<InvestmentEmailPreviewButton
 											emailData={formattedInvestment}
 											disabled={isLoading || isSubmitting}
 										/>
@@ -833,7 +833,7 @@ const InvestmentSingle = ({
 								>
 									Filter Clients
 								</Button>
-								<GrantEmailPreviewButton
+								<InvestmentEmailPreviewButton
 									emailData={formattedInvestment}
 									disabled={isLoading || isSubmitting}
 								/>

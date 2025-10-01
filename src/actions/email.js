@@ -3,9 +3,10 @@
 import { MailerSend, EmailParams, Sender, Recipient } from 'mailersend'
 import GrantsEmail from '@/components/emails/grants-email'
 import GrantsEmailTailored from '@/components/emails/grants-email-tailored'
-import GrantsEmailTailoredCharIn from '@/components/emails/grants-email-tailored-charin'
-import GrantsEmailCharIn from '@/components/emails/grants-email-charin'
-import TendersEmailCharIn from '@/components/emails/tenders-email-charin'
+import GrantsEmailTailoredCharin from '@/components/emails/grants-email-tailored-charin'
+import GrantsEmailCharin from '@/components/emails/grants-email-charin'
+import TendersEmailCharin from '@/components/emails/tenders-email-charin'
+import InvestmentsEmailCharin from '@/components/emails/investments-email-charin'
 import { render } from '@react-email/components'
 import { fileToAttachment } from '@/lib/utils'
 import AccountRecapEmail from '@/components/emails/account-recap'
@@ -39,14 +40,21 @@ export async function sendGrant(to, subject, grant, attachments, cc = []) {
 	}
 }
 
-export async function sendGrantCharIn(
+export async function sendGrantCharin(
 	to,
 	subject,
 	grant,
 	attachments,
-	cc = []
+	cc = [],
+	client
 ) {
-	const emailHtml = await render(<GrantsEmailCharIn grant={grant} />)
+	const emailHtml = await render(
+		<GrantsEmailCharin
+			grant={grant}
+			clientId={client?.id || client?.email}
+			org_name={client?.org_name || null}
+		/>
+	)
 	if (attachments && attachments.length > 0) {
 		const bufferAttachments = await Promise.all(
 			attachments.filter(Boolean).map((a) => fileToAttachment(a))
@@ -107,7 +115,7 @@ export async function sendGrantTailored(
 	}
 }
 
-export async function sendGrantTailoredCharIn(
+export async function sendGrantTailoredCharin(
 	to,
 	subject,
 	grant,
@@ -116,7 +124,7 @@ export async function sendGrantTailoredCharIn(
 	cc = []
 ) {
 	const emailHtml = await render(
-		<GrantsEmailTailoredCharIn
+		<GrantsEmailTailoredCharin
 			grant={grant}
 			assessment={assessment}
 		/>
@@ -159,6 +167,8 @@ function mapTenderToEmailProps(tender, tailored = false, assessment, client) {
 			: []
 	const props = {
 		geography: tender.geography,
+		call_title: tender.call_title,
+		geography_details: tender.geography_details,
 		awarding_authority: tender.awarding_authority,
 		programme_title: tender.programme_title,
 		value: tender.value,
@@ -180,6 +190,50 @@ function mapTenderToEmailProps(tender, tailored = false, assessment, client) {
 	return props
 }
 
+function mapInvestmentToEmailProps(
+	investment,
+	tailored = false,
+	assessment,
+	client
+) {
+	const mapDeadline = (arr) =>
+		Array.isArray(arr)
+			? arr.map((d) => {
+					if (Array.isArray(d)) return d
+					if (typeof d === 'string') return d.split('///')
+					return []
+				})
+			: []
+	const mapFurther = (arr) =>
+		Array.isArray(arr)
+			? arr.map((r) => (typeof r === 'string' ? r.split('///') : r))
+			: []
+	const props = {
+		investment,
+		// also flatten the core fields for consistency with grants/tenders charin
+		geography: investment.geography,
+		call_title: investment.call_title,
+		geography_details: investment.geography_details,
+		awarding_authority: investment.awarding_authority,
+		programme_title: investment.programme_title,
+		value: investment.value,
+		programme_purpose: investment.programme_purpose,
+		instrument_type: investment.instrument_type,
+		alert_purpose: investment.alert_purpose,
+		in_brief: investment.in_brief,
+		deadline: mapDeadline(investment.deadline),
+		further_details: mapFurther(investment.further_details),
+		tailored: !!tailored,
+		clientId: client?.id || client?.email || undefined,
+		org_name: client?.org_name || null,
+	}
+	if (tailored && assessment) {
+		props.relevance = assessment.relevance || null
+		props.next_steps = assessment.next_steps || null
+	}
+	return props
+}
+
 export async function sendTender(
 	to,
 	subject,
@@ -189,7 +243,7 @@ export async function sendTender(
 	client
 ) {
 	const emailHtml = await render(
-		<TendersEmailCharIn
+		<TendersEmailCharin
 			{...mapTenderToEmailProps(tender, false, undefined, client)}
 		/>
 	)
@@ -216,7 +270,7 @@ export async function sendTender(
 	}
 }
 
-export async function sendTenderCharIn(
+export async function sendTenderCharin(
 	to,
 	subject,
 	tender,
@@ -225,7 +279,7 @@ export async function sendTenderCharIn(
 	client
 ) {
 	const emailHtml = await render(
-		<TendersEmailCharIn
+		<TendersEmailCharin
 			{...mapTenderToEmailProps(tender, false, undefined, client)}
 		/>
 	)
@@ -262,7 +316,7 @@ export async function sendTenderTailored(
 	client
 ) {
 	const emailHtml = await render(
-		<TendersEmailCharIn
+		<TendersEmailCharin
 			{...mapTenderToEmailProps(tender, true, assessment, client)}
 		/>
 	)
@@ -289,7 +343,7 @@ export async function sendTenderTailored(
 	}
 }
 
-export async function sendTenderTailoredCharIn(
+export async function sendTenderTailoredCharin(
 	to,
 	subject,
 	tender,
@@ -299,7 +353,7 @@ export async function sendTenderTailoredCharIn(
 	client
 ) {
 	const emailHtml = await render(
-		<TendersEmailCharIn
+		<TendersEmailCharin
 			{...mapTenderToEmailProps(tender, true, assessment, client)}
 		/>
 	)
@@ -324,6 +378,118 @@ export async function sendTenderTailoredCharIn(
 			.setHtml(emailHtml)
 		return await mailerSend.email.send(emailParams)
 	}
+}
+
+// Investments email senders (CharIN template)
+export async function sendInvestment(
+	to,
+	subject,
+	investment,
+	attachments,
+	cc = [],
+	client
+) {
+	const emailHtml = await render(
+		<InvestmentsEmailCharin
+			{...mapInvestmentToEmailProps(investment, false, undefined, client)}
+		/>
+	)
+	if (attachments && attachments.length > 0) {
+		const bufferAttachments = await Promise.all(
+			(attachments || []).filter(Boolean).map((a) => fileToAttachment(a))
+		)
+		const emailParams = new EmailParams()
+			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
+			.setSubject(subject)
+			.setHtml(emailHtml)
+			.setAttachments(bufferAttachments)
+		return await mailerSend.email.send(emailParams)
+	} else {
+		const emailParams = new EmailParams()
+			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
+			.setSubject(subject)
+			.setHtml(emailHtml)
+		return await mailerSend.email.send(emailParams)
+	}
+}
+
+export async function sendInvestmentCharin(
+	to,
+	subject,
+	investment,
+	attachments,
+	cc = [],
+	client
+) {
+	return await sendInvestment(
+		to,
+		subject,
+		investment,
+		attachments,
+		cc,
+		client
+	)
+}
+
+export async function sendInvestmentTailored(
+	to,
+	subject,
+	investment,
+	assessment,
+	attachments,
+	cc = [],
+	client
+) {
+	const emailHtml = await render(
+		<InvestmentsEmailCharin
+			{...mapInvestmentToEmailProps(investment, true, assessment, client)}
+		/>
+	)
+	if (attachments && attachments.length > 0) {
+		const bufferAttachments = await Promise.all(
+			(attachments || []).map((a) => fileToAttachment(a))
+		)
+		const emailParams = new EmailParams()
+			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
+			.setSubject(subject)
+			.setHtml(emailHtml)
+			.setAttachments(bufferAttachments)
+		return await mailerSend.email.send(emailParams)
+	} else {
+		const emailParams = new EmailParams()
+			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
+			.setSubject(subject)
+			.setHtml(emailHtml)
+		return await mailerSend.email.send(emailParams)
+	}
+}
+
+export async function sendInvestmentTailoredCharin(
+	to,
+	subject,
+	investment,
+	assessment,
+	attachments,
+	cc = [],
+	client
+) {
+	return await sendInvestmentTailored(
+		to,
+		subject,
+		investment,
+		assessment,
+		attachments,
+		cc,
+		client
+	)
 }
 
 export async function sendAccountRecap(to, data, total, id) {

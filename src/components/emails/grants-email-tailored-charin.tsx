@@ -13,7 +13,7 @@ import {
 	Column,
 } from '@react-email/components'
 
-const GrantsEmailTailoredCharIn = ({
+const GrantsEmailTailoredCharin = ({
 	grant,
 	assessment,
 }: {
@@ -326,7 +326,7 @@ const GrantsEmailTailoredCharIn = ({
 	)
 }
 
-export default GrantsEmailTailoredCharIn
+export default GrantsEmailTailoredCharin
 
 const Divider = () => {
 	return (

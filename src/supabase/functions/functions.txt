@@ -1,0 +1,184 @@
+BEGIN
+  UPDATE grants
+  SET matched_clients = (
+    SELECT array_agg(id)
+    FROM clients
+    WHERE 
+    (
+        EXISTS (
+          SELECT 1 FROM jsonb_array_elements(deployment) AS d
+          WHERE d->>'value' = ANY(NEW.deployment)
+            AND (d->'geography') ?| NEW.geography
+        )
+        OR
+        EXISTS (
+          SELECT 1 FROM jsonb_array_elements(project) AS p
+          WHERE p->>'value' = ANY(NEW.project)
+            AND (p->'geography') ?| NEW.geography
+        )
+    )
+  )
+  WHERE id = NEW.id;
+
+  RETURN NEW;
+END;
+
+DECLARE
+  grant_record RECORD;
+BEGIN
+  -- Fetch the grant row
+  SELECT * INTO grant_record FROM grants WHERE id = grant_id;
+
+  -- Update matched_clients with matching client IDs
+  UPDATE grants
+  SET matched_clients = (
+    SELECT array_agg(id)
+    FROM clients
+    WHERE (
+      EXISTS (
+        SELECT 1 FROM jsonb_array_elements(deployment) AS d
+        WHERE
+          d->>'value' = ANY(grant_record.deployment)
+          AND EXISTS (
+            SELECT 1 FROM jsonb_array_elements(d->'geographies') AS g
+            WHERE g->>'value' = ANY(grant_record.geography)
+          )
+      )
+      OR
+      EXISTS (
+        SELECT 1 FROM jsonb_array_elements(project) AS p
+        WHERE
+          p->>'value' = ANY(grant_record.project)
+          AND EXISTS (
+            SELECT 1 FROM jsonb_array_elements(p->'geographies') AS g
+            WHERE g->>'value' = ANY(grant_record.geography)
+          )
+      )
+    )
+  )
+  WHERE id = grant_id;
+END;
+
+BEGIN
+  UPDATE investments
+  SET matched_clients = (
+    SELECT array_agg(id)
+    FROM clients
+    WHERE EXISTS (
+      SELECT 1
+      FROM jsonb_array_elements(COALESCE(clients.pif, '[]'::jsonb)) AS pf
+      WHERE pf->>'value' = 'pif'
+        AND EXISTS (
+          SELECT 1
+          FROM jsonb_array_elements(pf->'geographies') AS g
+          WHERE g->>'value' = ANY (COALESCE(NEW.geography, ARRAY[]::text[]))
+        )
+    )
+  )
+  WHERE id = NEW.id;
+
+  RETURN NEW;
+END;
+
+DECLARE
+  investment_record RECORD;
+BEGIN
+  SELECT * INTO investment_record FROM investments WHERE id = investment_id;
+
+  UPDATE investments
+  SET matched_clients = (
+    SELECT array_agg(id)
+    FROM clients
+    WHERE EXISTS (
+      SELECT 1
+      FROM jsonb_array_elements(COALESCE(clients.pif, '[]'::jsonb)) AS pf
+      WHERE pf->>'value' = 'pif'
+        AND EXISTS (
+          SELECT 1
+          FROM jsonb_array_elements(pf->'geographies') AS g
+          WHERE g->>'value' = ANY (COALESCE(investment_record.geography, ARRAY[]::text[]))
+        )
+    )
+  )
+  WHERE id = investment_id;
+END;
+
+begin
+  update public.tenders t
+  set matched_clients = (
+    select array_agg(c.id)
+    from public.clients c
+    where
+      (
+        exists (
+          select 1
+          from jsonb_array_elements(c.vehicles_type) as v
+          where v->>'value' = any(coalesce(new.vehicles, array[]::text[]))
+            and exists (
+              select 1
+              from jsonb_array_elements(coalesce(v->'geographies', '[]'::jsonb)) as g
+              where g->>'value' = any(coalesce(new.geography, array[]::text[]))
+            )
+        )
+        and coalesce(c.vehicles_contract, array[]::text[]) && coalesce(new.vehicles_contracts, array[]::text[])
+      )
+      or
+      (
+        exists (
+          select 1
+          from jsonb_array_elements(c.charging_stations_type) as s
+          where s->>'value' = any(coalesce(new.stations, array[]::text[]))
+            and exists (
+              select 1
+              from jsonb_array_elements(coalesce(s->'geographies', '[]'::jsonb)) as g
+              where g->>'value' = any(coalesce(new.geography, array[]::text[]))
+            )
+        )
+        and coalesce(c.charging_stations_contract, array[]::text[]) && coalesce(new.stations_contracts, array[]::text[])
+      )
+  )
+  where t.id = new.id;
+
+  return new;
+end;
+
+declare
+  t_record public.tenders%rowtype;
+begin
+  select * into t_record from public.tenders where id = tender_id;
+
+  update public.tenders t
+  set matched_clients = (
+    select array_agg(c.id)
+    from public.clients c
+    where
+      (
+        exists (
+          select 1
+          from jsonb_array_elements(c.vehicles_type) as v
+          where v->>'value' = any(coalesce(t_record.vehicles, array[]::text[]))
+            and exists (
+              select 1
+              from jsonb_array_elements(coalesce(v->'geographies', '[]'::jsonb)) as g
+              where g->>'value' = any(coalesce(t_record.geography, array[]::text[]))
+            )
+        )
+        and coalesce(c.vehicles_contract, array[]::text[]) && coalesce(t_record.vehicles_contracts, array[]::text[])
+      )
+      or
+      (
+        exists (
+          select 1
+          from jsonb_array_elements(c.charging_stations_type) as s
+          where s->>'value' = any(coalesce(t_record.stations, array[]::text[]))
+            and exists (
+              select 1
+              from jsonb_array_elements(coalesce(s->'geographies', '[]'::jsonb)) as g
+              where g->>'value' = any(coalesce(t_record.geography, array[]::text[]))
+            )
+        )
+        and coalesce(c.charging_stations_contract, array[]::text[]) && coalesce(t_record.stations_contracts, array[]::text[])
+      )
+  )
+  where t.id = tender_id;
+end;

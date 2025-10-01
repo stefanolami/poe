@@ -1,20 +1,27 @@
 'use client'
 
 import { render } from '@react-email/render'
-import { FormattedGrantType } from '@/lib/types'
+import { FormattedInvestmentType } from '@/lib/types'
 import { useEffect, useState } from 'react'
-import GrantsEmailCharin from './grants-email-charin'
+import InvestmentsEmailCharin from './investments-email-charin'
 
-const GrantsEmailPreviewComponent = ({
+const InvestmentsEmailPreviewComponent = ({
 	emailData,
 }: {
-	emailData: FormattedGrantType
+	emailData: FormattedInvestmentType
 }) => {
 	const [emailHtml, setEmailHtml] = useState<string>('')
 
 	useEffect(() => {
 		const generatePreview = async () => {
-			const html = await render(<GrantsEmailCharin grant={emailData} />)
+			const html = await render(
+				<InvestmentsEmailCharin
+					investment={emailData}
+					clientId={'1234-5678'}
+					org_name={'Acme'}
+					tailored={false}
+				/>
+			)
 			setEmailHtml(html)
 		}
 		generatePreview()
@@ -28,4 +35,4 @@ const GrantsEmailPreviewComponent = ({
 	)
 }
 
-export default GrantsEmailPreviewComponent
+export default InvestmentsEmailPreviewComponent

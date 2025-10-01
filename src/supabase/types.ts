@@ -579,15 +579,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      update_grant_clients_call: {
+      refresh_grants_matched_clients: {
         Args: { grant_id: string }
         Returns: undefined
       }
-      update_investment_clients_call: {
+      refresh_investments_matched_clients: {
         Args: { investment_id: string }
         Returns: undefined
       }
-      update_tender_clients_call: {
+      refresh_tenders_matched_clients: {
         Args: { tender_id: string }
         Returns: undefined
       }
