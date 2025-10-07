@@ -20,7 +20,10 @@ async function buildAccountMagicLink(client) {
 	try {
 		if (!client?.email) return null
 		const supabase = await createAdminClient()
-		const redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.poeontap.com'}/account/${client?.id || 'link'}`
+		const base =
+			process.env.NEXT_PUBLIC_SITE_URL || 'https://www.poeontap.com'
+		// Route all magic-link callbacks through the client handler which supports fragment tokens
+		const redirectTo = `${base}/auth/callback?next=%2Faccount`
 		const { data, error } = await supabase.auth.admin.generateLink({
 			type: 'magiclink',
 			email: client.email,

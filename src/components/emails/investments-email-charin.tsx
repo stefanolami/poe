@@ -456,7 +456,7 @@ const InvestmentsEmailCharin = ({
 											<Link
 												href={
 													accountLink ||
-													`https://www.poeontap.com/account/${clientId}`
+													`https://www.poeontap.com/account`
 												}
 												style={ctaButton}
 												target="_blank"
