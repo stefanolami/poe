@@ -24,6 +24,8 @@ export type InvestmentsEmailCharinProps = {
 	previewText?: string
 	clientId?: string
 	org_name?: string | null
+	// Optional: direct magic-link for account access
+	accountLink?: string
 	tailored?: boolean
 	relevance?: string | null
 	next_steps?: string | null
@@ -36,6 +38,7 @@ const InvestmentsEmailCharin = ({
 	previewText = 'Investment Alert from POE',
 	clientId,
 	org_name,
+	accountLink,
 	tailored,
 	relevance,
 	next_steps,
@@ -451,7 +454,10 @@ const InvestmentsEmailCharin = ({
 											}}
 										>
 											<Link
-												href={`https://www.poeontap.com/account/${clientId}`}
+												href={
+													accountLink ||
+													`https://www.poeontap.com/account/${clientId}`
+												}
 												style={ctaButton}
 												target="_blank"
 												rel="noopener noreferrer"

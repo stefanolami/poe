@@ -25,6 +25,8 @@ type GrantsEmailCharinProps = {
 	// Client metadata (optional for backward compatibility)
 	clientId?: string
 	org_name?: string | null
+	// Optional: direct magic-link for account access
+	accountLink?: string
 	// Optional tailored extras (mirrors tender template behavior)
 	tailored?: boolean
 	relevance?: string | null
@@ -38,6 +40,7 @@ const GrantsEmailCharin = ({
 	previewText = 'Grant Alert from POE',
 	clientId,
 	org_name,
+	accountLink,
 	tailored,
 	relevance,
 	next_steps,
@@ -454,7 +457,10 @@ const GrantsEmailCharin = ({
 											}}
 										>
 											<Link
-												href={`https://www.poeontap.com/account/${clientId}`}
+												href={
+													accountLink ||
+													`https://www.poeontap.com/account/${clientId}`
+												}
 												style={ctaButton}
 												target="_blank"
 												rel="noopener noreferrer"

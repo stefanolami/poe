@@ -10,10 +10,32 @@ import InvestmentsEmailCharin from '@/components/emails/investments-email-charin
 import { render } from '@react-email/components'
 import { fileToAttachment } from '@/lib/utils'
 import AccountRecapEmail from '@/components/emails/account-recap'
+import { createAdminClient } from '@/supabase/server'
 
 const mailerSend = new MailerSend({
 	apiKey: process.env.MAILERSEND_API_KEY || '',
 })
+
+async function buildAccountMagicLink(client) {
+	try {
+		if (!client?.email) return null
+		const supabase = await createAdminClient()
+		const redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.poeontap.com'}/account/${client?.id || 'link'}`
+		const { data, error } = await supabase.auth.admin.generateLink({
+			type: 'magiclink',
+			email: client.email,
+			options: { redirectTo },
+		})
+		if (error) {
+			console.error('Failed to generate magic link:', error)
+			return null
+		}
+		return data?.properties?.action_link || null
+	} catch (err) {
+		console.error('Magic link generation error:', err)
+		return null
+	}
+}
 
 export async function sendGrant(to, subject, grant, attachments, cc = []) {
 	const emailHtml = await render(<GrantsEmail grant={grant} />)
@@ -48,11 +70,13 @@ export async function sendGrantCharin(
 	cc = [],
 	client
 ) {
+	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
 		<GrantsEmailCharin
 			grant={grant}
 			clientId={client?.id || client?.email}
 			org_name={client?.org_name || null}
+			accountLink={accountLink || undefined}
 		/>
 	)
 	if (attachments && attachments.length > 0) {
@@ -242,9 +266,11 @@ export async function sendTender(
 	cc = [],
 	client
 ) {
+	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
 		<TendersEmailCharin
 			{...mapTenderToEmailProps(tender, false, undefined, client)}
+			accountLink={accountLink || undefined}
 		/>
 	)
 	if (attachments && attachments.length > 0) {
@@ -278,9 +304,11 @@ export async function sendTenderCharin(
 	cc = [],
 	client
 ) {
+	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
 		<TendersEmailCharin
 			{...mapTenderToEmailProps(tender, false, undefined, client)}
+			accountLink={accountLink || undefined}
 		/>
 	)
 	if (attachments && attachments.length > 0) {
@@ -315,9 +343,11 @@ export async function sendTenderTailored(
 	cc = [],
 	client
 ) {
+	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
 		<TendersEmailCharin
 			{...mapTenderToEmailProps(tender, true, assessment, client)}
+			accountLink={accountLink || undefined}
 		/>
 	)
 	if (attachments && attachments.length > 0) {
@@ -352,9 +382,11 @@ export async function sendTenderTailoredCharin(
 	cc = [],
 	client
 ) {
+	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
 		<TendersEmailCharin
 			{...mapTenderToEmailProps(tender, true, assessment, client)}
+			accountLink={accountLink || undefined}
 		/>
 	)
 	if (attachments && attachments.length > 0) {
@@ -389,9 +421,11 @@ export async function sendInvestment(
 	cc = [],
 	client
 ) {
+	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
 		<InvestmentsEmailCharin
 			{...mapInvestmentToEmailProps(investment, false, undefined, client)}
+			accountLink={accountLink || undefined}
 		/>
 	)
 	if (attachments && attachments.length > 0) {
@@ -444,9 +478,11 @@ export async function sendInvestmentTailored(
 	cc = [],
 	client
 ) {
+	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
 		<InvestmentsEmailCharin
 			{...mapInvestmentToEmailProps(investment, true, assessment, client)}
+			accountLink={accountLink || undefined}
 		/>
 	)
 	if (attachments && attachments.length > 0) {

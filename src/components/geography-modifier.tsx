@@ -40,7 +40,7 @@ export default function GeographyModifier() {
 				onOpenChange={setIsOpen}
 			>
 				<SheetTrigger asChild>
-					<button className="w-full bg-primary border-2 border-primary text-white flex items-center justify-between px-4 py-2 h-10 md:h-12 xl:h-16 hover:bg-primary/90 transition-all duration-200 rounded-lg shadow-sm hover:shadow-md group">
+					<button className="w-full bg-primary border-2 border-primary text-white flex items-center justify-between px-4 py-2 h-10 md:h-12 xl:h-16 hover:bg-primary/95 transition-all duration-200 rounded-lg shadow-sm hover:shadow-md group">
 						<div className="flex items-center gap-3">
 							<div className="p-1.5 bg-white/20 rounded-full group-hover:bg-white/30 transition-colors">
 								<MapPin className="h-4 w-4 lg:h-5 lg:w-5 text-white" />

@@ -37,6 +37,8 @@ type TenderEmailCharinProps = {
 	// New: client metadata to display on the top strip
 	clientId?: string
 	org_name?: string | null
+	// Optional: direct magic-link for account access
+	accountLink?: string
 }
 
 // Email template for Procurement Tenders alerts.
@@ -64,6 +66,7 @@ const TendersEmailCharin = ({
 	tailored,
 	clientId,
 	org_name,
+	accountLink,
 }: TenderEmailCharinProps) => {
 	const geoText = geography.join(', ')
 	const deadlineRows: DeadlineTuple[] = (deadline ?? []).map((d) => {
@@ -457,7 +460,10 @@ const TendersEmailCharin = ({
 											}}
 										>
 											<Link
-												href={`https://www.poeontap.com/account/${clientId}`}
+												href={
+													accountLink ||
+													`https://www.poeontap.com/account/${clientId}`
+												}
 												style={ctaButton}
 												target="_blank"
 												rel="noopener noreferrer"
