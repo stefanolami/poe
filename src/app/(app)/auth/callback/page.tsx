@@ -75,7 +75,7 @@ export default function AuthCallbackPage() {
 
 	return (
 		<div className="min-h-[60vh] flex items-center justify-center">
-			<p className="text-sm text-muted-foreground">Finalizing sign-in…</p>
+			<p className="text-base text-muted-foreground">Signing-in…</p>
 		</div>
 	)
 }
