@@ -89,10 +89,12 @@ export const GrantsForm = ({
 		},
 	})
 
+	const preLaunch = form.watch('pre_launch')
+
 	const isSubmitting = form.formState.isSubmitting
 
 	const submitHandler: SubmitHandler<CreateGrantType> = async (data) => {
-		console.log('DATA', data)
+		console.log('deadline', typeof data.internal_deadline)
 		try {
 			const response = await createGrant(data)
 
@@ -403,7 +405,9 @@ export const GrantsForm = ({
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>
-											Awarding Authority
+											{preLaunch
+												? 'Awarding Authority (optional in pre-launch)'
+												: 'Awarding Authority'}
 										</FormLabel>
 										<FormControl>
 											<Input

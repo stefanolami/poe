@@ -141,6 +141,8 @@ export const GrantEdit = ({
 		},
 	})
 
+	const preLaunch = form.watch('pre_launch')
+
 	const isSubmitting = form.formState.isSubmitting
 
 	const handleFileDelete = (file: string) => {
@@ -464,7 +466,9 @@ export const GrantEdit = ({
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>
-											Awarding Authority
+											{preLaunch
+												? 'Awarding Authority (optional in pre-launch)'
+												: 'Awarding Authority'}
 										</FormLabel>
 										<FormControl>
 											<Input

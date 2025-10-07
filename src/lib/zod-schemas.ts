@@ -118,38 +118,57 @@ export const updatePasswordSchema = z
 		path: ['confirmPassword'],
 	})
 
+// Grants: conditional schema based on pre_launch
+const grantBase = {
+	geography: z.array(z.string().min(2, 'Required')),
+	call_title: z.string().optional(),
+	programme_title: z.string().optional(),
+	alert_purpose: z.string().min(2, 'Required'),
+	programme_purpose: z.string().optional(),
+	instrument_type: z.string().optional(),
+	reference_number: z.string().optional(),
+	deadline: z.array(z.array(z.string())), // content validated server-side; allow empty triplets
+	in_brief: z.string().min(2, 'Required'),
+	geography_details: z.string().min(2, 'Required'),
+	internal_deadline: z.string().min(2, 'Required'),
+	intro: z.string().optional(),
+	subject_matter: z.string().optional(),
+	further_details: z.array(z.array(z.string())).optional(),
+	files: z
+		.array(
+			z.instanceof(File, {
+				message: 'Must be a valid file',
+			})
+		)
+		.optional(),
+	tailored_assessment: z.array(z.array(z.string())).optional(),
+	consultant: z.string().optional(),
+	sector: z.string().min(2, 'Required'),
+	deployment: z.array(z.string()).optional(),
+	project: z.array(z.string()).optional(),
+}
+
+const createGrantSchemaPre = z.object({
+	...grantBase,
+	// Relaxed requirements in pre-launch (value and awarding_authority optional)
+	value: z.string().optional(),
+	awarding_authority: z.string().optional(),
+	pre_launch: z.literal(true),
+})
+
+const createGrantSchemaLaunch = z.object({
+	...grantBase,
+	// Stricter requirements in launch mode
+	value: z.string().min(1, 'Required'),
+	awarding_authority: z.string().min(2, 'Required'),
+	pre_launch: z.literal(false),
+})
+
 export const createGrantSchema = z
-	.object({
-		geography: z.array(z.string().min(2, 'Geography is required')),
-		call_title: z.string().optional(),
-		programme_title: z.string().optional(),
-		alert_purpose: z.string().min(2, 'Alert purpose is required'),
-		programme_purpose: z.string().optional(),
-		instrument_type: z.string().optional(),
-		awarding_authority: z.string().min(2, 'Awarding authority is required'),
-		reference_number: z.string().optional(),
-		deadline: z.array(z.array(z.string())),
-		in_brief: z.string().min(2, 'In brief is required'),
-		value: z.string(),
-		geography_details: z.string().optional(),
-		internal_deadline: z.string().optional(),
-		intro: z.string().optional(),
-		subject_matter: z.string().optional(),
-		pre_launch: z.boolean().optional(),
-		further_details: z.array(z.array(z.string())).optional(),
-		files: z
-			.array(
-				z.instanceof(File, {
-					message: 'Must be a valid file',
-				})
-			)
-			.optional(),
-		tailored_assessment: z.array(z.array(z.string())).optional(),
-		consultant: z.string().optional(),
-		sector: z.string().min(2, 'Sector is required'),
-		deployment: z.array(z.string()).optional(),
-		project: z.array(z.string()).optional(),
-	})
+	.discriminatedUnion('pre_launch', [
+		createGrantSchemaPre,
+		createGrantSchemaLaunch,
+	])
 	.refine((data) => data.call_title || data.programme_title, {
 		message: 'Either Call Title or Grant Programme must be provided',
 		path: ['call_title'],
@@ -161,23 +180,19 @@ export const createGrantsTailoredAssessmentSchema = z.object({
 		.optional(),
 })
 
-export const createTendersSchema = z.object({
-	geography: z.array(z.string().min(2, 'Geography is required')),
+// Tenders: conditional schema based on pre_launch
+const tenderBase = {
+	geography: z.array(z.string().min(2, 'Required')),
 	call_title: z.string().optional(),
 	programme_title: z.string().optional(),
-	alert_purpose: z.string().min(2, 'Alert purpose is required'),
-	programme_purpose: z.string(),
-	instrument_type: z.string(),
-	awarding_authority: z.string().min(2, 'Awarding authority is required'),
+	alert_purpose: z.string().min(2, 'Required'),
 	reference_number: z.string().optional(),
 	deadline: z.array(z.array(z.string())),
-	in_brief: z.string().min(2, 'In brief is required'),
-	value: z.string(),
-	geography_details: z.string().optional(),
-	internal_deadline: z.string().optional(),
+	in_brief: z.string().min(2, 'Required'),
+	geography_details: z.string().min(2, 'Required'),
+	internal_deadline: z.string().min(2, 'Required'),
 	intro: z.string().optional(),
 	subject_matter: z.string().optional(),
-	pre_launch: z.boolean().optional(),
 	further_details: z.array(z.array(z.string())).optional(),
 	files: z
 		.array(
@@ -188,30 +203,51 @@ export const createTendersSchema = z.object({
 		.optional(),
 	tailored_assessment: z.array(z.array(z.string())).optional(),
 	consultant: z.string().optional(),
-	sector: z.string().min(2, 'Sector is required'),
+	sector: z.string().min(2, 'Required'),
 	vehicles: z.array(z.string()).optional(),
 	vehicles_contracts: z.array(z.string()).optional(),
 	stations: z.array(z.string()).optional(),
 	stations_contracts: z.array(z.string()).optional(),
+}
+
+const createTendersSchemaPre = z.object({
+	...tenderBase,
+	// Relaxed in pre-launch
+	value: z.string().optional(),
+	programme_purpose: z.string().optional(),
+	instrument_type: z.string().optional(),
+	awarding_authority: z.string().optional(),
+	pre_launch: z.literal(true),
 })
 
-export const createInvestmentsSchema = z.object({
-	geography: z.array(z.string().min(2, 'Geography is required')),
+const createTendersSchemaLaunch = z.object({
+	...tenderBase,
+	// Stricter in launch
+	value: z.string().min(1, 'Required'),
+	programme_purpose: z.string().min(1, 'Required'),
+	instrument_type: z.string().min(1, 'Required'),
+	awarding_authority: z.string().min(2, 'Required'),
+	pre_launch: z.literal(false),
+})
+
+export const createTendersSchema = z.discriminatedUnion('pre_launch', [
+	createTendersSchemaPre,
+	createTendersSchemaLaunch,
+])
+
+// Investments: conditional schema based on pre_launch
+const investmentBase = {
+	geography: z.array(z.string().min(2, 'Required')),
 	call_title: z.string().optional(),
 	programme_title: z.string().optional(),
-	alert_purpose: z.string().min(2, 'Alert purpose is required'),
-	programme_purpose: z.string(),
-	instrument_type: z.string(),
-	awarding_authority: z.string().min(2, 'Awarding authority is required'),
+	alert_purpose: z.string().min(2, 'Required'),
 	reference_number: z.string().optional(),
 	deadline: z.array(z.array(z.string())),
-	in_brief: z.string().min(2, 'In brief is required'),
-	value: z.string(),
-	geography_details: z.string().optional(),
-	internal_deadline: z.string().optional(),
+	in_brief: z.string().min(2, 'Required'),
+	geography_details: z.string().min(2, 'Required'),
+	internal_deadline: z.string().min(2, 'Required'),
 	intro: z.string().optional(),
 	subject_matter: z.string().optional(),
-	pre_launch: z.boolean().optional(),
 	further_details: z.array(z.array(z.string())).optional(),
 	files: z
 		.array(
@@ -222,8 +258,31 @@ export const createInvestmentsSchema = z.object({
 		.optional(),
 	tailored_assessment: z.array(z.array(z.string())).optional(),
 	consultant: z.string().optional(),
-	sector: z.string().min(2, 'Sector is required'),
+	sector: z.string().min(2, 'Required'),
+}
+
+const createInvestmentsSchemaPre = z.object({
+	...investmentBase,
+	value: z.string().optional(),
+	programme_purpose: z.string().optional(),
+	instrument_type: z.string().optional(),
+	awarding_authority: z.string().optional(),
+	pre_launch: z.literal(true),
 })
+
+const createInvestmentsSchemaLaunch = z.object({
+	...investmentBase,
+	value: z.string().min(1, 'Required'),
+	programme_purpose: z.string().min(1, 'Required'),
+	instrument_type: z.string().min(1, 'Required'),
+	awarding_authority: z.string().min(2, 'Required'),
+	pre_launch: z.literal(false),
+})
+
+export const createInvestmentsSchema = z.discriminatedUnion('pre_launch', [
+	createInvestmentsSchemaPre,
+	createInvestmentsSchemaLaunch,
+])
 
 // Subscriptions
 export const subscriptionIdSchema = z.string().uuid('Invalid subscription id')

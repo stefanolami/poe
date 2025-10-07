@@ -129,6 +129,8 @@ export const InvestmentEdit = ({
 		},
 	})
 
+	const preLaunch = form.watch('pre_launch')
+
 	const isSubmitting = form.formState.isSubmitting
 
 	const handleFileDelete = (file: string) => {
@@ -411,7 +413,11 @@ export const InvestmentEdit = ({
 								name="programme_purpose"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Programme Purpose</FormLabel>
+										<FormLabel>
+											{preLaunch
+												? 'Programme Purpose (optional in pre-launch)'
+												: 'Programme Purpose'}
+										</FormLabel>
 										<FormControl>
 											<Input
 												disabled={isSubmitting}
@@ -429,7 +435,11 @@ export const InvestmentEdit = ({
 								name="instrument_type"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Instrument Type</FormLabel>
+										<FormLabel>
+											{preLaunch
+												? 'Instrument Type (optional in pre-launch)'
+												: 'Instrument Type'}
+										</FormLabel>
 										<FormControl>
 											<Input
 												disabled={isSubmitting}
@@ -448,7 +458,9 @@ export const InvestmentEdit = ({
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>
-											Awarding Authority
+											{preLaunch
+												? 'Awarding Authority (optional in pre-launch)'
+												: 'Awarding Authority'}
 										</FormLabel>
 										<FormControl>
 											<Input

@@ -683,10 +683,10 @@ export type TailoredAssessmentType = {
 
 export type UpdateGrantType = {
 	sector: string
-	value: string
+	value?: string
 	geography: string[]
 	alert_purpose: string
-	awarding_authority: string
+	awarding_authority?: string
 	deadline: string[][]
 	in_brief: string
 	deployment?: string[] | undefined
@@ -710,10 +710,10 @@ export type UpdateGrantType = {
 
 export type UpdateInvestmentType = {
 	sector: string
-	value: string
+	value?: string
 	geography: string[]
 	alert_purpose: string
-	awarding_authority: string
+	awarding_authority?: string
 	deadline: string[][]
 	in_brief: string
 	call_title?: string | undefined
@@ -735,10 +735,10 @@ export type UpdateInvestmentType = {
 
 export type UpdateTenderType = {
 	sector: string
-	value: string
+	value?: string
 	geography: string[]
 	alert_purpose: string
-	awarding_authority: string
+	awarding_authority?: string
 	deadline: string[][]
 	in_brief: string
 	vehicles?: string[] | undefined
@@ -747,8 +747,8 @@ export type UpdateTenderType = {
 	stations_contracts?: string[] | undefined
 	call_title?: string | undefined
 	programme_title?: string | undefined
-	programme_purpose: string
-	instrument_type: string
+	programme_purpose?: string
+	instrument_type?: string
 	reference_number?: string | undefined
 	geography_details?: string | undefined
 	internal_deadline?: string | undefined

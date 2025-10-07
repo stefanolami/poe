@@ -90,6 +90,8 @@ export const TendersForm = ({
 		},
 	})
 
+	const preLaunch = form.watch('pre_launch')
+
 	const isSubmitting = form.formState.isSubmitting
 
 	const submitHandler: SubmitHandler<CreateTendersType> = async (data) => {
@@ -367,7 +369,11 @@ export const TendersForm = ({
 								name="programme_purpose"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Programme Purpose</FormLabel>
+										<FormLabel>
+											{preLaunch
+												? 'Programme Purpose (optional in pre-launch)'
+												: 'Programme Purpose'}
+										</FormLabel>
 										<FormControl>
 											<Input
 												disabled={isSubmitting}
@@ -385,7 +391,11 @@ export const TendersForm = ({
 								name="instrument_type"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Instrument Type</FormLabel>
+										<FormLabel>
+											{preLaunch
+												? 'Instrument Type (optional in pre-launch)'
+												: 'Instrument Type'}
+										</FormLabel>
 										<FormControl>
 											<Input
 												disabled={isSubmitting}
@@ -404,7 +414,9 @@ export const TendersForm = ({
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>
-											Awarding Authority
+											{preLaunch
+												? 'Awarding Authority (optional in pre-launch)'
+												: 'Awarding Authority'}
 										</FormLabel>
 										<FormControl>
 											<Input
