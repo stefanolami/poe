@@ -24,9 +24,9 @@ export default function AuthErrorPage() {
 				return {
 					title: 'Invalid Link',
 					message:
-						'The verification link appears to be incomplete or corrupted. Please use the full link from your email.',
-					action: 'Request New Link',
-					actionLink: '/forgot-password',
+						'The verification link appears to be incomplete or corrupted. Please access your account manually from the link below.',
+					action: 'Login',
+					actionLink: '/login',
 				}
 			case 'missing-code':
 				return {
