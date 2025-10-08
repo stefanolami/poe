@@ -1,6 +1,5 @@
 import Footer from '@/components/footer'
 import Header from '@/components/header/header'
-import '../globals.css'
 import HashErrorListener from '@/components/auth/hash-error-listener'
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {

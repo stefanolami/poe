@@ -131,14 +131,14 @@ export default function AuthErrorPage() {
 						</Link>
 					</Button>
 
-					<div className="text-center">
+					{/* <div className="text-center">
 						<Link
 							href="/login"
 							className="text-sm text-primary hover:text-primary/80 underline"
 						>
 							Or go to login page
 						</Link>
-					</div>
+					</div> */}
 				</div>
 
 				<div className="text-center">

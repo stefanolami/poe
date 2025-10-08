@@ -3,7 +3,7 @@ import { RenderMounted } from '@/components/render-mounted'
 import { jose, unna } from '@/app/fonts'
 import { Suspense } from 'react'
 import Loading from '@/components/loading'
-import './globals.css'
+import '@/app/globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import { AuthProvider } from '@/components/auth/auth-provider'
 

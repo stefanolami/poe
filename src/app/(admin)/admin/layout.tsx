@@ -1,4 +1,3 @@
-import '../../globals.css'
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { AdminSidebar } from '@/components/admin/admin-sidebar'
 import { Suspense } from 'react'
