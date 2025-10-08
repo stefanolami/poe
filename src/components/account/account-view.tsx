@@ -29,7 +29,7 @@ const AccountView = ({ clientData }: { clientData: ClientDataType }) => {
 				<div className="flex justify-between">
 					<dt className="text-primary/70">Email</dt>
 					<dd className="ml-1 text-right break-all">
-						stefanolami90@gmail.com
+						{clientData.email || '-'}
 					</dd>
 				</div>
 				<div className="flex flex-col gap-1">
