@@ -77,7 +77,7 @@ export const InvestmentsForm = ({
 		},
 	})
 
-	const preLaunch = form.watch('pre_launch')
+	//const preLaunch = form.watch('pre_launch')
 
 	const isSubmitting = form.formState.isSubmitting
 
@@ -352,11 +352,7 @@ export const InvestmentsForm = ({
 								name="programme_purpose"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>
-											{preLaunch
-												? 'Programme Purpose (optional in pre-launch)'
-												: 'Programme Purpose'}
-										</FormLabel>
+										<FormLabel>Programme Purpose</FormLabel>
 										<FormControl>
 											<Input
 												disabled={isSubmitting}
@@ -374,11 +370,7 @@ export const InvestmentsForm = ({
 								name="instrument_type"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>
-											{preLaunch
-												? 'Instrument Type (optional in pre-launch)'
-												: 'Instrument Type'}
-										</FormLabel>
+										<FormLabel>Instrument Type</FormLabel>
 										<FormControl>
 											<Input
 												disabled={isSubmitting}
@@ -397,9 +389,7 @@ export const InvestmentsForm = ({
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>
-											{preLaunch
-												? 'Awarding Authority (optional in pre-launch)'
-												: 'Awarding Authority'}
+											Awarding Authority
 										</FormLabel>
 										<FormControl>
 											<Input
