@@ -1,12 +1,12 @@
 'use server'
 
 import { MailerSend, EmailParams, Sender, Recipient } from 'mailersend'
-import GrantsEmail from '@/components/emails/grants-email'
+import GrantsEmail from '@/components/emails/opportunities/grants-email'
 import GrantsEmailTailored from '@/components/emails/grants-email-tailored'
 import GrantsEmailTailoredCharin from '@/components/emails/grants-email-tailored-charin'
-import GrantsEmailCharin from '@/components/emails/grants-email-charin'
-import TendersEmailCharin from '@/components/emails/tenders-email-charin'
-import InvestmentsEmailCharin from '@/components/emails/investments-email-charin'
+import GrantsEmailCharin from '@/components/emails/opportunities/grants-email-charin'
+import TendersEmailCharin from '@/components/emails/opportunities/tenders-email-charin'
+import InvestmentsEmailCharin from '@/components/emails/opportunities/investments-email-charin'
 import { render } from '@react-email/components'
 import { fileToAttachment } from '@/lib/utils'
 import AccountRecapEmail from '@/components/emails/account-recap'
@@ -40,8 +40,48 @@ async function buildAccountMagicLink(client) {
 	}
 }
 
-export async function sendGrant(to, subject, grant, attachments, cc = []) {
+/* export async function sendGrant(to, subject, grant, attachments, cc = []) {
 	const emailHtml = await render(<GrantsEmail grant={grant} />)
+	if (attachments && attachments.length > 0) {
+		const bufferAttachments = await Promise.all(
+			attachments.filter(Boolean).map((a) => fileToAttachment(a))
+		)
+		const emailParams = new EmailParams()
+			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
+			.setSubject(subject)
+			.setHtml(emailHtml)
+			.setAttachments(bufferAttachments)
+		return await mailerSend.email.send(emailParams)
+	} else {
+		const emailParams = new EmailParams()
+			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
+			.setSubject(subject)
+			.setHtml(emailHtml)
+		return await mailerSend.email.send(emailParams)
+	}
+} */
+
+export async function sendGrant(
+	to,
+	subject,
+	grant,
+	attachments,
+	cc = [],
+	client
+) {
+	const accountLink = await buildAccountMagicLink(client)
+	const emailHtml = await render(
+		<GrantsEmail
+			grant={grant}
+			clientId={client?.id || null}
+			org_name={client?.org_name || null}
+			accountLink={accountLink || undefined}
+		/>
+	)
 	if (attachments && attachments.length > 0) {
 		const bufferAttachments = await Promise.all(
 			attachments.filter(Boolean).map((a) => fileToAttachment(a))
@@ -77,7 +117,7 @@ export async function sendGrantCharin(
 	const emailHtml = await render(
 		<GrantsEmailCharin
 			grant={grant}
-			clientId={client?.id || client?.email}
+			clientId={client?.id || null}
 			org_name={client?.org_name || null}
 			accountLink={accountLink || undefined}
 		/>

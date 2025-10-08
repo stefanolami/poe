@@ -5,16 +5,16 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from '../ui/dialog'
-import { Button } from '../ui/button'
-import InvestmentsEmailPreviewComponent from './investments-email-preview'
-import { FormattedInvestmentType } from '@/lib/types'
+} from '../../ui/dialog'
+import EmailPreviewComponent from './tender-email-preview'
+import { FormattedTenderType } from '@/lib/types'
+import { Button } from '../../ui/button'
 
-const InvestmentEmailPreviewButton = ({
+const TenderEmailPreviewButton = ({
 	emailData,
 	disabled = false,
 }: {
-	emailData: FormattedInvestmentType
+	emailData: FormattedTenderType
 	disabled?: boolean
 }) => {
 	return (
@@ -36,10 +36,10 @@ const InvestmentEmailPreviewButton = ({
 				<DialogHeader>
 					<DialogTitle className="hidden">Email Preview</DialogTitle>
 				</DialogHeader>
-				<InvestmentsEmailPreviewComponent emailData={emailData} />
+				<EmailPreviewComponent emailData={emailData} />
 			</DialogContent>
 		</Dialog>
 	)
 }
 
-export default InvestmentEmailPreviewButton
+export default TenderEmailPreviewButton

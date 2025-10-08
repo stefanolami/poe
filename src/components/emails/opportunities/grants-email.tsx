@@ -35,7 +35,7 @@ type GrantsEmailCharinProps = {
 
 const baseUrl = 'https://www.poeontap.com/'
 
-const GrantsEmailCharin = ({
+const GrantsEmail = ({
 	grant,
 	previewText = 'Grant Alert from POE',
 	clientId,
@@ -160,10 +160,10 @@ const GrantsEmailCharin = ({
 								className="col-right"
 							>
 								<Img
-									src={`${baseUrl}logos/charin-logo.png`}
+									src={`${baseUrl}logos/consulting-white.png`}
 									alt="Charin Logo"
-									width={77}
-									height={60}
+									width={160}
+									height={42}
 									style={{
 										...logoImg,
 										marginRight: 0,
@@ -459,7 +459,7 @@ const GrantsEmailCharin = ({
 											<Link
 												href={
 													accountLink ||
-													`https://www.poeontap.com/account`
+													`https://www.poeontap.com`
 												}
 												style={ctaButton}
 												target="_blank"
@@ -540,7 +540,7 @@ const GrantsEmailCharin = ({
 	)
 }
 
-export default GrantsEmailCharin
+export default GrantsEmail
 
 // Shared styles copied from tenders-email-charin
 const bodyStyle: React.CSSProperties = {
@@ -552,7 +552,7 @@ const bodyStyle: React.CSSProperties = {
 }
 const containerOuter: React.CSSProperties = {
 	background:
-		'linear-gradient(180deg, rgba(170,210,120,0.12) 0%, rgba(0,55,75,0.12) 100%)',
+		'linear-gradient(180deg, rgba(53,75,131,0.2) 0%, rgba(39,51,90,0.2) 100%)',
 	maxWidth: '600px',
 	width: '100%',
 }
@@ -562,7 +562,7 @@ const containerInner: React.CSSProperties = {
 	marginTop: '30px',
 }
 const topStrip: React.CSSProperties = {
-	backgroundColor: '#00334d',
+	backgroundColor: '#354B83',
 	color: '#ffffff',
 	fontSize: 11,
 	fontWeight: 700,
@@ -575,7 +575,7 @@ const topStripLeft: React.CSSProperties = {
 	textAlign: 'left' as const,
 }
 const gradientHeader: React.CSSProperties = {
-	background: 'linear-gradient(180deg,#00374B 0%,#6AA5B9 55%,#AAD278 100%)',
+	background: 'linear-gradient(180deg,#354B83 0%, #27335A 100%)',
 	color: '#ffffff',
 	position: 'relative',
 	padding: '11px 0 0',
@@ -609,7 +609,7 @@ const centerTitle: React.CSSProperties = {
 	lineHeight: '26px',
 	fontWeight: 800,
 	letterSpacing: '.5px',
-	color: '#00334d',
+	color: '#fff',
 	margin: 0,
 }
 const waveWrapper: React.CSSProperties = {

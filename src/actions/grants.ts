@@ -481,7 +481,8 @@ export const sendGrantAlert = async (grantId: string) => {
 					r.subject,
 					grantData,
 					attachments,
-					r.cc
+					r.cc,
+					r.client
 				)
 			}
 		}

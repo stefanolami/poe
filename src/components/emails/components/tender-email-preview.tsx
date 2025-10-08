@@ -3,7 +3,7 @@
 import { render } from '@react-email/render'
 import { FormattedTenderType } from '@/lib/types'
 import { useEffect, useState } from 'react'
-import TendersEmailCharin from './tenders-email-charin'
+import TendersEmailCharin from '../opportunities/tenders-email-charin'
 
 const TenderEmailPreviewComponent = ({
 	emailData,

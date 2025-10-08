@@ -3,7 +3,7 @@
 import { render } from '@react-email/render'
 import { FormattedInvestmentType } from '@/lib/types'
 import { useEffect, useState } from 'react'
-import InvestmentsEmailCharin from './investments-email-charin'
+import InvestmentsEmailCharin from '../opportunities/investments-email-charin'
 
 const InvestmentsEmailPreviewComponent = ({
 	emailData,

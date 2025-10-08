@@ -3,7 +3,7 @@
 import { render } from '@react-email/render'
 import { FormattedGrantType } from '@/lib/types'
 import { useEffect, useState } from 'react'
-import GrantsEmailCharin from './grants-email-charin'
+import GrantsEmailCharin from '../opportunities/grants-email-charin'
 
 const GrantsEmailPreviewComponent = ({
 	emailData,
