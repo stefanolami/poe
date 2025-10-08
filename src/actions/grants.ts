@@ -12,12 +12,7 @@ import { runWithConcurrency } from '@/lib/concurrency'
 import { fetchAttachments } from '@/lib/attachments'
 import { Json } from '@/supabase/types'
 import { createClient } from '@/supabase/server'
-import {
-	sendGrant,
-	sendGrantCharin,
-	sendGrantTailored,
-	sendGrantTailoredCharin,
-} from './email'
+import { sendGrant, sendGrantCharin } from './email'
 import { createAlert } from './alerts'
 
 export const createGrant = async (formData: CreateGrantType) => {
@@ -489,22 +484,24 @@ export const sendGrantAlert = async (grantId: string) => {
 
 		const sendTailored = async (r: (typeof tailoredRecipients)[number]) => {
 			if (r.referrer === 'charin') {
-				await sendGrantTailoredCharin(
+				await sendGrantCharin(
 					r.email,
 					r.subject,
 					grantData,
-					r.assessment,
 					attachments,
-					r.cc
+					r.cc,
+					r.client,
+					r.assessment
 				)
 			} else {
-				await sendGrantTailored(
+				await sendGrant(
 					r.email,
 					r.subject,
 					grantData,
-					r.assessment,
 					attachments,
-					r.cc
+					r.cc,
+					r.client,
+					r.assessment
 				)
 			}
 		}

@@ -19,7 +19,7 @@ import {
 type DeadlineTuple = [string, string, string]
 type FurtherDetailsTuple = [string, string, string]
 
-export type InvestmentsEmailCharinProps = {
+export type InvestmentsEmailProps = {
 	investment: FormattedInvestmentType
 	previewText?: string
 	clientId?: string
@@ -34,14 +34,14 @@ export type InvestmentsEmailCharinProps = {
 
 const baseUrl = 'https://www.poeontap.com/'
 
-const InvestmentsEmailCharin = ({
+const InvestmentsEmail = ({
 	investment,
-	previewText = 'Investment Alert from POE',
+	previewText = 'Investment Financing Alert from POE',
 	clientId,
 	org_name,
 	accountLink,
 	assessment,
-}: InvestmentsEmailCharinProps) => {
+}: InvestmentsEmailProps) => {
 	const {
 		geography,
 		call_title,
@@ -180,7 +180,7 @@ const InvestmentsEmailCharin = ({
 									style={centerTitle}
 									className="header-title"
 								>
-									INVESTMENT ALERT
+									INVESTMENT FINANCING ALERT
 								</Text>
 							</Column>
 						</Row>
@@ -536,9 +536,9 @@ const InvestmentsEmailCharin = ({
 	)
 }
 
-export default InvestmentsEmailCharin
+export default InvestmentsEmail
 
-// Shared styles copied from tenders/grants charin
+// Shared styles (copied from charin, gradients updated to POE colors)
 const bodyStyle: React.CSSProperties = {
 	margin: 0,
 	padding: 0,
@@ -548,7 +548,7 @@ const bodyStyle: React.CSSProperties = {
 }
 const containerOuter: React.CSSProperties = {
 	background:
-		'linear-gradient(180deg, rgba(170,210,120,0.12) 0%, rgba(0,55,75,0.12) 100%)',
+		'linear-gradient(180deg, rgba(53,75,131,0.2) 0%, rgba(39,51,90,0.2) 100%)',
 	maxWidth: '600px',
 	width: '100%',
 }
@@ -558,7 +558,7 @@ const containerInner: React.CSSProperties = {
 	marginTop: '30px',
 }
 const topStrip: React.CSSProperties = {
-	backgroundColor: '#00334d',
+	backgroundColor: '#354B83',
 	color: '#ffffff',
 	fontSize: 11,
 	fontWeight: 700,
@@ -571,7 +571,7 @@ const topStripLeft: React.CSSProperties = {
 	textAlign: 'left' as const,
 }
 const gradientHeader: React.CSSProperties = {
-	background: 'linear-gradient(180deg,#00374B 0%,#6AA5B9 55%,#AAD278 100%)',
+	background: 'linear-gradient(180deg,#354B83 0%, #27335A 100%)',
 	color: '#ffffff',
 	position: 'relative',
 	padding: '11px 0 0',
@@ -605,7 +605,7 @@ const centerTitle: React.CSSProperties = {
 	lineHeight: '26px',
 	fontWeight: 800,
 	letterSpacing: '.5px',
-	color: '#00334d',
+	color: '#fff',
 	margin: 0,
 }
 const waveWrapper: React.CSSProperties = {

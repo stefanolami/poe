@@ -3,7 +3,7 @@
 import { render } from '@react-email/render'
 import { FormattedGrantType } from '@/lib/types'
 import { useEffect, useState } from 'react'
-import GrantsEmailCharin from '../opportunities/grants-email-charin'
+import GrantsEmail from '../opportunities/grants-email'
 
 const GrantsEmailPreviewComponent = ({
 	emailData,
@@ -14,7 +14,7 @@ const GrantsEmailPreviewComponent = ({
 
 	useEffect(() => {
 		const generatePreview = async () => {
-			const html = await render(<GrantsEmailCharin grant={emailData} />)
+			const html = await render(<GrantsEmail grant={emailData} />)
 			setEmailHtml(html)
 		}
 		generatePreview()

@@ -2,10 +2,10 @@
 
 import { MailerSend, EmailParams, Sender, Recipient } from 'mailersend'
 import GrantsEmail from '@/components/emails/opportunities/grants-email'
-import GrantsEmailTailored from '@/components/emails/grants-email-tailored'
-import GrantsEmailTailoredCharin from '@/components/emails/grants-email-tailored-charin'
 import GrantsEmailCharin from '@/components/emails/opportunities/grants-email-charin'
+import TendersEmail from '@/components/emails/opportunities/tenders-email'
 import TendersEmailCharin from '@/components/emails/opportunities/tenders-email-charin'
+import InvestmentsEmail from '@/components/emails/opportunities/investments-email'
 import InvestmentsEmailCharin from '@/components/emails/opportunities/investments-email-charin'
 import { render } from '@react-email/components'
 import { fileToAttachment } from '@/lib/utils'
@@ -71,12 +71,14 @@ export async function sendGrant(
 	grant,
 	attachments,
 	cc = [],
-	client
+	client,
+	assessment
 ) {
 	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
 		<GrantsEmail
 			grant={grant}
+			assessment={assessment || null}
 			clientId={client?.id || null}
 			org_name={client?.org_name || null}
 			accountLink={accountLink || undefined}
@@ -111,12 +113,14 @@ export async function sendGrantCharin(
 	grant,
 	attachments,
 	cc = [],
-	client
+	client,
+	assessment
 ) {
 	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
 		<GrantsEmailCharin
 			grant={grant}
+			assessment={assessment || null}
 			clientId={client?.id || null}
 			org_name={client?.org_name || null}
 			accountLink={accountLink || undefined}
@@ -151,12 +155,17 @@ export async function sendGrantTailored(
 	grant,
 	assessment,
 	attachments,
-	cc = []
+	cc = [],
+	client
 ) {
+	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
-		<GrantsEmailTailored
+		<GrantsEmail
 			grant={grant}
 			assessment={assessment}
+			clientId={client?.id || null}
+			org_name={client?.org_name || null}
+			accountLink={accountLink || undefined}
 		/>
 	)
 	if (attachments && attachments.length > 0) {
@@ -188,12 +197,17 @@ export async function sendGrantTailoredCharin(
 	grant,
 	assessment,
 	attachments,
-	cc = []
+	cc = [],
+	client
 ) {
+	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
-		<GrantsEmailTailoredCharin
+		<GrantsEmailCharin
 			grant={grant}
 			assessment={assessment}
+			clientId={client?.id || null}
+			org_name={client?.org_name || null}
+			accountLink={accountLink || undefined}
 		/>
 	)
 	if (attachments && attachments.length > 0) {
@@ -246,13 +260,10 @@ function mapTenderToEmailProps(tender, tailored = false, assessment, client) {
 		deadline: mapDeadline(tender.deadline),
 		further_details: mapFurther(tender.further_details),
 		tailored: !!tailored,
+		assessment: tailored && assessment ? assessment : null,
 		// pass client metadata through for display in template header
 		clientId: client?.id || client?.email || undefined,
 		org_name: client?.org_name || null,
-	}
-	if (tailored && assessment) {
-		props.relevance = assessment.relevance || null
-		props.next_steps = assessment.next_steps || null
 	}
 	return props
 }
@@ -291,12 +302,9 @@ function mapInvestmentToEmailProps(
 		deadline: mapDeadline(investment.deadline),
 		further_details: mapFurther(investment.further_details),
 		tailored: !!tailored,
+		assessment: tailored && assessment ? assessment : null,
 		clientId: client?.id || client?.email || undefined,
 		org_name: client?.org_name || null,
-	}
-	if (tailored && assessment) {
-		props.relevance = assessment.relevance || null
-		props.next_steps = assessment.next_steps || null
 	}
 	return props
 }
@@ -311,8 +319,8 @@ export async function sendTender(
 ) {
 	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
-		<TendersEmailCharin
-			{...mapTenderToEmailProps(tender, false, undefined, client)}
+		<TendersEmail
+			tender={mapTenderToEmailProps(tender, false, undefined, client)}
 			accountLink={accountLink || undefined}
 		/>
 	)
@@ -350,7 +358,7 @@ export async function sendTenderCharin(
 	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
 		<TendersEmailCharin
-			{...mapTenderToEmailProps(tender, false, undefined, client)}
+			tender={mapTenderToEmailProps(tender, false, undefined, client)}
 			accountLink={accountLink || undefined}
 		/>
 	)
@@ -388,8 +396,9 @@ export async function sendTenderTailored(
 ) {
 	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
-		<TendersEmailCharin
-			{...mapTenderToEmailProps(tender, true, assessment, client)}
+		<TendersEmail
+			tender={mapTenderToEmailProps(tender, true, assessment, client)}
+			assessment={assessment || null}
 			accountLink={accountLink || undefined}
 		/>
 	)
@@ -428,7 +437,8 @@ export async function sendTenderTailoredCharin(
 	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
 		<TendersEmailCharin
-			{...mapTenderToEmailProps(tender, true, assessment, client)}
+			tender={mapTenderToEmailProps(tender, true, assessment, client)}
+			assessment={assessment || null}
 			accountLink={accountLink || undefined}
 		/>
 	)
@@ -466,8 +476,13 @@ export async function sendInvestment(
 ) {
 	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
-		<InvestmentsEmailCharin
-			{...mapInvestmentToEmailProps(investment, false, undefined, client)}
+		<InvestmentsEmail
+			investment={mapInvestmentToEmailProps(
+				investment,
+				false,
+				undefined,
+				client
+			)}
 			accountLink={accountLink || undefined}
 		/>
 	)
@@ -502,14 +517,39 @@ export async function sendInvestmentCharin(
 	cc = [],
 	client
 ) {
-	return await sendInvestment(
-		to,
-		subject,
-		investment,
-		attachments,
-		cc,
-		client
+	const accountLink = await buildAccountMagicLink(client)
+	const emailHtml = await render(
+		<InvestmentsEmailCharin
+			investment={mapInvestmentToEmailProps(
+				investment,
+				false,
+				undefined,
+				client
+			)}
+			accountLink={accountLink || undefined}
+		/>
 	)
+	if (attachments && attachments.length > 0) {
+		const bufferAttachments = await Promise.all(
+			(attachments || []).filter(Boolean).map((a) => fileToAttachment(a))
+		)
+		const emailParams = new EmailParams()
+			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
+			.setSubject(subject)
+			.setHtml(emailHtml)
+			.setAttachments(bufferAttachments)
+		return await mailerSend.email.send(emailParams)
+	} else {
+		const emailParams = new EmailParams()
+			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
+			.setSubject(subject)
+			.setHtml(emailHtml)
+		return await mailerSend.email.send(emailParams)
+	}
 }
 
 export async function sendInvestmentTailored(
@@ -523,8 +563,14 @@ export async function sendInvestmentTailored(
 ) {
 	const accountLink = await buildAccountMagicLink(client)
 	const emailHtml = await render(
-		<InvestmentsEmailCharin
-			{...mapInvestmentToEmailProps(investment, true, assessment, client)}
+		<InvestmentsEmail
+			investment={mapInvestmentToEmailProps(
+				investment,
+				true,
+				assessment,
+				client
+			)}
+			assessment={assessment || null}
 			accountLink={accountLink || undefined}
 		/>
 	)
@@ -560,15 +606,40 @@ export async function sendInvestmentTailoredCharin(
 	cc = [],
 	client
 ) {
-	return await sendInvestmentTailored(
-		to,
-		subject,
-		investment,
-		assessment,
-		attachments,
-		cc,
-		client
+	const accountLink = await buildAccountMagicLink(client)
+	const emailHtml = await render(
+		<InvestmentsEmailCharin
+			investment={mapInvestmentToEmailProps(
+				investment,
+				true,
+				assessment,
+				client
+			)}
+			assessment={assessment || null}
+			accountLink={accountLink || undefined}
+		/>
 	)
+	if (attachments && attachments.length > 0) {
+		const bufferAttachments = await Promise.all(
+			(attachments || []).map((a) => fileToAttachment(a))
+		)
+		const emailParams = new EmailParams()
+			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
+			.setSubject(subject)
+			.setHtml(emailHtml)
+			.setAttachments(bufferAttachments)
+		return await mailerSend.email.send(emailParams)
+	} else {
+		const emailParams = new EmailParams()
+			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setTo([new Recipient(to)])
+			.setCc((cc || []).map((addr) => new Recipient(addr)))
+			.setSubject(subject)
+			.setHtml(emailHtml)
+		return await mailerSend.email.send(emailParams)
+	}
 }
 
 export async function sendAccountRecap(to, data, total, id) {

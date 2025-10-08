@@ -28,9 +28,10 @@ type GrantsEmailCharinProps = {
 	// Optional: direct magic-link for account access
 	accountLink?: string
 	// Optional tailored extras (mirrors tender template behavior)
-	tailored?: boolean
-	relevance?: string | null
-	next_steps?: string | null
+	assessment?: {
+		relevance?: string | null
+		next_steps?: string | null
+	} | null
 }
 
 const baseUrl = 'https://www.poeontap.com/'
@@ -41,9 +42,7 @@ const GrantsEmailCharin = ({
 	clientId,
 	org_name,
 	accountLink,
-	tailored,
-	relevance,
-	next_steps,
+	assessment,
 }: GrantsEmailCharinProps) => {
 	const {
 		geography,
@@ -313,12 +312,12 @@ const GrantsEmailCharin = ({
 						<Section>
 							<Text style={fieldLabel}>In Brief</Text>
 							<Text style={paragraph}>{in_brief}</Text>
-							{tailored ? (
+							{assessment ? (
 								<>
 									<Text style={fieldLabel}>Relevance</Text>
-									{relevance ? (
+									{assessment.relevance ? (
 										<Text style={paragraph}>
-											{relevance}
+											{assessment.relevance}
 										</Text>
 									) : (
 										<Text style={paragraph}>
@@ -326,9 +325,9 @@ const GrantsEmailCharin = ({
 										</Text>
 									)}
 									<Text style={fieldLabel}>Next Steps</Text>
-									{next_steps ? (
+									{assessment.next_steps ? (
 										<Text style={paragraph}>
-											{next_steps}
+											{assessment.next_steps}
 										</Text>
 									) : (
 										<Text style={paragraph}>
@@ -397,7 +396,7 @@ const GrantsEmailCharin = ({
 								<Hr style={divider} />
 							</>
 						) : null}
-						{tailored && (
+						{assessment && (
 							<Section>
 								<Text style={paragraph}>
 									For additional questions or support, please
@@ -424,7 +423,7 @@ const GrantsEmailCharin = ({
 							>
 								<tbody>
 									<tr>
-										{!tailored && (
+										{!assessment && (
 											<td
 												className="cta-btn-td"
 												style={{

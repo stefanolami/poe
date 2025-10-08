@@ -3,7 +3,7 @@
 import { render } from '@react-email/render'
 import { FormattedTenderType } from '@/lib/types'
 import { useEffect, useState } from 'react'
-import TendersEmailCharin from '../opportunities/tenders-email-charin'
+import TendersEmail from '../opportunities/tenders-email'
 
 const TenderEmailPreviewComponent = ({
 	emailData,
@@ -28,25 +28,17 @@ const TenderEmailPreviewComponent = ({
 				? (emailData.further_details as unknown as string[])
 				: []
 
+			const previewTender = {
+				...emailData,
+				deadline: deadlineStrings,
+				further_details: furtherDetailsStrings,
+			}
+
 			const html = await render(
-				<TendersEmailCharin
+				<TendersEmail
+					tender={previewTender}
 					clientId={'1234-5678'}
 					org_name={'Acme'}
-					call_title={emailData.call_title}
-					geography_details={emailData.geography_details}
-					value={emailData.value ?? undefined}
-					geography={emailData.geography}
-					awarding_authority={
-						emailData.awarding_authority ?? undefined
-					}
-					programme_title={emailData.programme_title ?? ''}
-					alert_purpose={emailData.alert_purpose ?? undefined}
-					programme_purpose={emailData.programme_purpose ?? undefined}
-					instrument_type={emailData.instrument_type ?? undefined}
-					in_brief={emailData.in_brief ?? undefined}
-					deadline={deadlineStrings}
-					further_details={furtherDetailsStrings}
-					tailored={false}
 				/>
 			)
 			setEmailHtml(html)

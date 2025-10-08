@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { FormattedInvestmentType } from '@/lib/types'
 import {
 	Html,
 	Head,
@@ -14,18 +13,20 @@ import {
 	Link,
 	Hr,
 } from '@react-email/components'
-
-// Local tuples, mirroring tenders/grants charin
+import { FormattedTenderType } from '@/lib/types'
+// Local props for this email template. These mirror the mapped props passed by the senders.
 type DeadlineTuple = [string, string, string]
 type FurtherDetailsTuple = [string, string, string]
 
-export type InvestmentsEmailCharinProps = {
-	investment: FormattedInvestmentType
+type TenderEmailProps = {
+	tender: FormattedTenderType
 	previewText?: string
+	// Client metadata (optional for backward compatibility)
 	clientId?: string
 	org_name?: string | null
 	// Optional: direct magic-link for account access
 	accountLink?: string
+	// Optional tailored extras
 	assessment?: {
 		relevance?: string | null
 		next_steps?: string | null
@@ -34,14 +35,14 @@ export type InvestmentsEmailCharinProps = {
 
 const baseUrl = 'https://www.poeontap.com/'
 
-const InvestmentsEmailCharin = ({
-	investment,
-	previewText = 'Investment Alert from POE',
+const TendersEmail = ({
+	tender,
+	previewText = 'Procurement Tender Alert from POE',
 	clientId,
 	org_name,
 	accountLink,
 	assessment,
-}: InvestmentsEmailCharinProps) => {
+}: TenderEmailProps) => {
 	const {
 		geography,
 		call_title,
@@ -55,8 +56,7 @@ const InvestmentsEmailCharin = ({
 		in_brief,
 		value,
 		further_details,
-	} = investment
-
+	} = tender
 	const geoText = geography.join(', ')
 	const deadlineRows: DeadlineTuple[] = (deadline ?? []).map((d) => {
 		const [dateIso = '', time = '', note = ''] = d.split('///')
@@ -180,7 +180,7 @@ const InvestmentsEmailCharin = ({
 									style={centerTitle}
 									className="header-title"
 								>
-									INVESTMENT ALERT
+									PROCUREMENT TENDER ALERT
 								</Text>
 							</Column>
 						</Row>
@@ -209,7 +209,7 @@ const InvestmentsEmailCharin = ({
 						className="containerInner"
 					>
 						{/* 1. Greeting and intro */}
-						<Section>
+						<Section /* style={mainBody} */>
 							<Text style={paragraph}>
 								Dear {org_name} Team Member,
 							</Text>
@@ -230,10 +230,6 @@ const InvestmentsEmailCharin = ({
 								geography_details || undefined
 							)}
 							{renderField(
-								'Call Title:',
-								call_title || undefined
-							)}
-							{renderField(
 								'Awarding Authority:',
 								awarding_authority || undefined
 							)}
@@ -241,6 +237,10 @@ const InvestmentsEmailCharin = ({
 							{renderField(
 								'Programme Title:',
 								programme_title || undefined
+							)}
+							{renderField(
+								'Call Title:',
+								call_title || undefined
 							)}
 							{renderField(
 								'Programme Purpose:',
@@ -306,7 +306,7 @@ const InvestmentsEmailCharin = ({
 						)}
 
 						{/* 4. In brief */}
-						<Section>
+						<Section /* style={mainBody} */>
 							<Text style={fieldLabel}>In Brief</Text>
 							<Text style={paragraph}>{in_brief}</Text>
 							{assessment ? (
@@ -335,6 +335,7 @@ const InvestmentsEmailCharin = ({
 							) : null}
 						</Section>
 						<Hr style={divider} />
+						{/* 5. Conditional tailored sections */}
 
 						{/* 6. Links / Documents / Further Details */}
 						{further_details && further_details.length > 0 ? (
@@ -394,7 +395,7 @@ const InvestmentsEmailCharin = ({
 							</>
 						) : null}
 						{assessment && (
-							<Section>
+							<Section /* style={mainBody} */>
 								<Text style={paragraph}>
 									For additional questions or support, please
 									contact:{' '}
@@ -408,8 +409,12 @@ const InvestmentsEmailCharin = ({
 							</Section>
 						)}
 
-						{/* CTAs */}
-						<Section className="cta-row">
+						{/* CTAs: same as grants-email-new; for tailored=true hide only Contact Us */}
+						<Section
+							/* style={ctaRow} */
+							className="cta-row"
+						>
+							{/* Centered inner table so buttons sit together in the middle on desktop */}
 							<table
 								role="presentation"
 								cellPadding={0}
@@ -499,7 +504,7 @@ const InvestmentsEmailCharin = ({
 							</table>
 						</Section>
 					</Container>
-					{/* Footer */}
+					{/* Footer (same as grants-email) */}
 					<Section style={footerSection}>
 						<Text style={footerLead}>
 							POE (Time&Place Consulting) Central Office Team:{' '}
@@ -536,9 +541,9 @@ const InvestmentsEmailCharin = ({
 	)
 }
 
-export default InvestmentsEmailCharin
+export default TendersEmail
 
-// Shared styles copied from tenders/grants charin
+// Shared styles (copied from charin, gradients updated to POE colors)
 const bodyStyle: React.CSSProperties = {
 	margin: 0,
 	padding: 0,
@@ -548,7 +553,7 @@ const bodyStyle: React.CSSProperties = {
 }
 const containerOuter: React.CSSProperties = {
 	background:
-		'linear-gradient(180deg, rgba(170,210,120,0.12) 0%, rgba(0,55,75,0.12) 100%)',
+		'linear-gradient(180deg, rgba(53,75,131,0.2) 0%, rgba(39,51,90,0.2) 100%)',
 	maxWidth: '600px',
 	width: '100%',
 }
@@ -558,7 +563,7 @@ const containerInner: React.CSSProperties = {
 	marginTop: '30px',
 }
 const topStrip: React.CSSProperties = {
-	backgroundColor: '#00334d',
+	backgroundColor: '#354B83',
 	color: '#ffffff',
 	fontSize: 11,
 	fontWeight: 700,
@@ -571,7 +576,7 @@ const topStripLeft: React.CSSProperties = {
 	textAlign: 'left' as const,
 }
 const gradientHeader: React.CSSProperties = {
-	background: 'linear-gradient(180deg,#00374B 0%,#6AA5B9 55%,#AAD278 100%)',
+	background: 'linear-gradient(180deg,#354B83 0%, #27335A 100%)',
 	color: '#ffffff',
 	position: 'relative',
 	padding: '11px 0 0',
@@ -605,7 +610,7 @@ const centerTitle: React.CSSProperties = {
 	lineHeight: '26px',
 	fontWeight: 800,
 	letterSpacing: '.5px',
-	color: '#00334d',
+	color: '#fff',
 	margin: 0,
 }
 const waveWrapper: React.CSSProperties = {
@@ -623,6 +628,11 @@ const waveInner: React.CSSProperties = {
 	lineHeight: 0,
 	transform: 'rotate(180deg)',
 }
+/* const mainBody: React.CSSProperties = {
+	fontFamily: fontStack,
+	color: '#333333',
+	padding: '30px 34px 10px',
+} */
 const paragraph: React.CSSProperties = {
 	fontSize: 14,
 	lineHeight: '20px',
@@ -670,6 +680,7 @@ const linkCell: React.CSSProperties = {
 	textDecoration: 'underline',
 }
 
+/* const ctaRow: React.CSSProperties = { padding: '0 34px 12px' } */
 const ctaButton: React.CSSProperties = {
 	fontSize: 12,
 	lineHeight: '18px',

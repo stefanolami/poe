@@ -3,7 +3,7 @@
 import { render } from '@react-email/render'
 import { FormattedInvestmentType } from '@/lib/types'
 import { useEffect, useState } from 'react'
-import InvestmentsEmailCharin from '../opportunities/investments-email-charin'
+import InvestmentsEmail from '../opportunities/investments-email'
 
 const InvestmentsEmailPreviewComponent = ({
 	emailData,
@@ -15,11 +15,13 @@ const InvestmentsEmailPreviewComponent = ({
 	useEffect(() => {
 		const generatePreview = async () => {
 			const html = await render(
-				<InvestmentsEmailCharin
-					investment={emailData}
-					clientId={'1234-5678'}
-					org_name={'Acme'}
-					tailored={false}
+				<InvestmentsEmail
+					{...{
+						investment: emailData,
+						clientId: '1234-5678',
+						org_name: 'Acme',
+						tailored: false,
+					}}
 				/>
 			)
 			setEmailHtml(html)

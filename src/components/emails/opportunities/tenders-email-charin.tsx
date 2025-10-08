@@ -13,32 +13,24 @@ import {
 	Link,
 	Hr,
 } from '@react-email/components'
+import { FormattedTenderType } from '@/lib/types'
 // Local props for this email template. These mirror the mapped props passed by the senders.
 type DeadlineTuple = [string, string, string]
 type FurtherDetailsTuple = [string, string, string]
 
 type TenderEmailCharinProps = {
+	tender: FormattedTenderType
 	previewText?: string
-	geography: string[]
-	call_title?: string | null
-	geography_details?: string | null
-	awarding_authority?: string
-	programme_title: string
-	value?: string
-	alert_purpose?: string
-	programme_purpose?: string
-	instrument_type?: string
-	in_brief?: string
-	deadline: string[]
-	further_details?: string[] | null
-	tailored?: boolean
-	relevance?: string | null
-	next_steps?: string | null
-	// New: client metadata to display on the top strip
+	// Client metadata (optional for backward compatibility)
 	clientId?: string
 	org_name?: string | null
 	// Optional: direct magic-link for account access
 	accountLink?: string
+	// Optional tailored extras (mirrors tender template behavior)
+	assessment?: {
+		relevance?: string | null
+		next_steps?: string | null
+	} | null
 }
 
 // Email template for Procurement Tenders alerts.
@@ -48,26 +40,27 @@ type TenderEmailCharinProps = {
 const baseUrl = 'https://www.poeontap.com/'
 
 const TendersEmailCharin = ({
+	tender,
 	previewText = 'Procurement Tender Alert from POE',
-	geography,
-	call_title,
-	geography_details,
-	awarding_authority,
-	programme_title,
-	value,
-	alert_purpose,
-	deadline,
-	in_brief,
-	instrument_type,
-	programme_purpose,
-	relevance,
-	next_steps,
-	further_details,
-	tailored,
 	clientId,
 	org_name,
 	accountLink,
+	assessment,
 }: TenderEmailCharinProps) => {
+	const {
+		geography,
+		call_title,
+		programme_title,
+		alert_purpose,
+		programme_purpose,
+		instrument_type,
+		awarding_authority,
+		geography_details,
+		deadline,
+		in_brief,
+		value,
+		further_details,
+	} = tender
 	const geoText = geography.join(', ')
 	const deadlineRows: DeadlineTuple[] = (deadline ?? []).map((d) => {
 		const [dateIso = '', time = '', note = ''] = d.split('///')
@@ -242,20 +235,29 @@ const TendersEmailCharin = ({
 							)}
 							{renderField(
 								'Awarding Authority:',
-								awarding_authority
+								awarding_authority || undefined
 							)}
-							{renderField('Value:', value)}
-							{renderField('Programme Title:', programme_title)}
+							{renderField('Value:', value || undefined)}
+							{renderField(
+								'Programme Title:',
+								programme_title || undefined
+							)}
 							{renderField(
 								'Call Title:',
 								call_title || undefined
 							)}
 							{renderField(
 								'Programme Purpose:',
-								programme_purpose
+								programme_purpose || undefined
 							)}
-							{renderField('Instrument Type:', instrument_type)}
-							{renderField('POE Alert Purpose:', alert_purpose)}
+							{renderField(
+								'Instrument Type:',
+								instrument_type || undefined
+							)}
+							{renderField(
+								'POE Alert Purpose:',
+								alert_purpose || undefined
+							)}
 						</Section>
 						<Hr style={divider} />
 
@@ -311,12 +313,12 @@ const TendersEmailCharin = ({
 						<Section /* style={mainBody} */>
 							<Text style={fieldLabel}>In Brief</Text>
 							<Text style={paragraph}>{in_brief}</Text>
-							{tailored ? (
+							{assessment ? (
 								<>
 									<Text style={fieldLabel}>Relevance</Text>
-									{relevance ? (
+									{assessment.relevance ? (
 										<Text style={paragraph}>
-											{relevance}
+											{assessment.relevance}
 										</Text>
 									) : (
 										<Text style={paragraph}>
@@ -324,9 +326,9 @@ const TendersEmailCharin = ({
 										</Text>
 									)}
 									<Text style={fieldLabel}>Next Steps</Text>
-									{next_steps ? (
+									{assessment.next_steps ? (
 										<Text style={paragraph}>
-											{next_steps}
+											{assessment.next_steps}
 										</Text>
 									) : (
 										<Text style={paragraph}>
@@ -396,7 +398,7 @@ const TendersEmailCharin = ({
 								<Hr style={divider} />
 							</>
 						) : null}
-						{tailored && (
+						{assessment && (
 							<Section /* style={mainBody} */>
 								<Text style={paragraph}>
 									For additional questions or support, please
@@ -427,7 +429,7 @@ const TendersEmailCharin = ({
 							>
 								<tbody>
 									<tr>
-										{!tailored && (
+										{!assessment && (
 											<td
 												className="cta-btn-td"
 												style={{
