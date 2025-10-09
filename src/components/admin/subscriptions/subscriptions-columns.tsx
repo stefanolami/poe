@@ -81,12 +81,10 @@ export const columns: ColumnDef<AdminSubscription>[] = [
 	},
 	{
 		accessorKey: 'auto_renew',
-		header: 'Auto',
+		header: 'Auto Renew',
 		cell: ({ getValue }) => (
-			<span
-				className={`uppercase text-xs font-semibold ${getValue() ? 'text-green-600' : 'text-red-500'}`}
-			>
-				{String(getValue())}
+			<span className={`capitalize`}>
+				{getValue() ? 'Enabled' : 'Disabled'}
 			</span>
 		),
 	},
@@ -105,7 +103,11 @@ export const columns: ColumnDef<AdminSubscription>[] = [
 			</Button>
 		),
 		cell: ({ getValue }) => (
-			<span className="capitalize">{String(getValue())}</span>
+			<span
+				className={`uppercase font-semibold ${getValue() == 'active' ? 'text-green-600' : 'text-red-500'}`}
+			>
+				{getValue() == 'active' ? 'Active' : 'Frozen'}
+			</span>
 		),
 	},
 	{

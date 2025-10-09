@@ -94,12 +94,12 @@ export const columns: ColumnDef<Tender>[] = [
 	},
 	{
 		accessorKey: 'sent',
-		header: 'Sent',
+		header: 'Alert',
 		cell: ({ getValue }) => (
 			<span
 				className={`uppercase ${getValue() == true ? 'text-green-500' : 'text-red-500'}`}
 			>
-				{String(getValue())}
+				{getValue() == true ? 'Sent' : 'Not Sent'}
 			</span>
 		),
 	},

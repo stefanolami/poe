@@ -54,7 +54,7 @@ export function SubscriptionsTable({ data }: { data: AdminSubscription[] }) {
 							{hg.headers.map((header) => (
 								<TableHead
 									key={header.id}
-									className="whitespace-nowrap"
+									className="text-base"
 								>
 									{header.isPlaceholder
 										? null
@@ -81,10 +81,7 @@ export function SubscriptionsTable({ data }: { data: AdminSubscription[] }) {
 								data-state={row.getIsSelected() && 'selected'}
 							>
 								{row.getVisibleCells().map((cell) => (
-									<TableCell
-										key={cell.id}
-										className="py-2 text-sm"
-									>
+									<TableCell key={cell.id}>
 										{flexRender(
 											cell.column.columnDef.cell,
 											cell.getContext()
