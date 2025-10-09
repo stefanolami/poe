@@ -2,7 +2,7 @@
 import { createClient } from '@/supabase/server'
 
 export interface AttachmentDescriptor {
-	filename?: string
+	filename: string
 	content: Buffer
 }
 
@@ -25,7 +25,8 @@ export async function fetchAttachments(
 				.download(normalized)
 			if (error || !data) return null
 			const buf = Buffer.from(await data.arrayBuffer())
-			return { filename: filePath.split('/').pop(), content: buf }
+			const fname = filePath.split('/').pop() || 'attachment'
+			return { filename: fname, content: buf }
 		})
 	)
 	const cleaned: AttachmentDescriptor[] = []

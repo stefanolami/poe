@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"baseUrl": ".",
 		"target": "ES2017",
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"allowJs": true,
@@ -20,7 +21,8 @@
 		],
 		"paths": {
 			"@/*": ["./src/*"]
-		}
+		},
+		"ignoreDeprecations": "5.0"
 	},
 	"include": [
 		"next-env.d.ts",
@@ -28,7 +30,6 @@
 		"**/*.tsx",
 		".next/types/**/*.ts",
 		"src/components/emails/email-1.tsx",
-		"src/actions/email.ts",
 		"src/components/loading.jsx"
 	],
 	"exclude": ["node_modules"]

@@ -14,6 +14,7 @@ import {
 	sendTenderTailored,
 	sendTenderTailoredCharin,
 } from './email'
+import type { RawTender } from '../lib/opportunity-types'
 import { runWithConcurrency } from '@/lib/concurrency'
 import { fetchAttachments } from '@/lib/attachments'
 import { createAlert } from './alerts'
@@ -393,6 +394,17 @@ export const sendTenderAlert = async (tenderId: string) => {
 			.single()
 		if (tenderError) throw new Error(tenderError.message)
 
+		// Treat DB row as RawTender (nullable friendly raw shape)
+		const rawTender: RawTender = tenderData as unknown as RawTender
+		// Normalize just enough for RawTender (leave full formatting to normalizeTender in sender)
+		const tenderForEmail: RawTender = {
+			...rawTender,
+			alert_purpose: rawTender.alert_purpose ?? null,
+			deadline: Array.isArray(rawTender.deadline)
+				? (rawTender.deadline as unknown[])
+				: rawTender.deadline,
+		}
+
 		const matchedClients = tenderData?.matched_clients
 		if (!matchedClients || matchedClients.length === 0) {
 			throw new Error('No matched clients found')
@@ -479,7 +491,7 @@ export const sendTenderAlert = async (tenderId: string) => {
 				await sendTenderCharin(
 					r.email,
 					r.subject,
-					tenderData,
+					tenderForEmail,
 					attachments,
 					r.cc,
 					r.client
@@ -488,7 +500,7 @@ export const sendTenderAlert = async (tenderId: string) => {
 				await sendTender(
 					r.email,
 					r.subject,
-					tenderData,
+					tenderForEmail,
 					attachments,
 					r.cc,
 					r.client
@@ -502,8 +514,8 @@ export const sendTenderAlert = async (tenderId: string) => {
 				await sendTenderTailoredCharin(
 					r.email,
 					r.subject,
-					tenderData,
-					r.assessment,
+					tenderForEmail,
+					r.assessment || null,
 					attachments,
 					r.cc,
 					r.client
@@ -512,8 +524,8 @@ export const sendTenderAlert = async (tenderId: string) => {
 				await sendTenderTailored(
 					r.email,
 					r.subject,
-					tenderData,
-					r.assessment,
+					tenderForEmail,
+					r.assessment || null,
 					attachments,
 					r.cc,
 					r.client

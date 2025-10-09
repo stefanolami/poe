@@ -417,11 +417,12 @@ export const sendInvestmentAlert = async (investmentId: string) => {
 		const CONCURRENCY = 5
 
 		const sendNormal = async (r: (typeof normalRecipients)[number]) => {
+			const loose = investmentData as unknown as { geography: string[] }
 			if (r.referrer === 'charin') {
 				await sendInvestmentCharin(
 					r.email,
 					r.subject,
-					investmentData,
+					loose,
 					attachments,
 					r.cc,
 					r.client
@@ -430,7 +431,7 @@ export const sendInvestmentAlert = async (investmentId: string) => {
 				await sendInvestment(
 					r.email,
 					r.subject,
-					investmentData,
+					loose,
 					attachments,
 					r.cc,
 					r.client
@@ -439,12 +440,13 @@ export const sendInvestmentAlert = async (investmentId: string) => {
 		}
 
 		const sendTailored = async (r: (typeof tailoredRecipients)[number]) => {
+			const loose = investmentData as unknown as { geography: string[] }
 			if (r.referrer === 'charin') {
 				await sendInvestmentTailoredCharin(
 					r.email,
 					r.subject,
-					investmentData,
-					r.assessment,
+					loose,
+					r.assessment || null,
 					attachments,
 					r.cc,
 					r.client
@@ -453,8 +455,8 @@ export const sendInvestmentAlert = async (investmentId: string) => {
 				await sendInvestmentTailored(
 					r.email,
 					r.subject,
-					investmentData,
-					r.assessment,
+					loose,
+					r.assessment || null,
 					attachments,
 					r.cc,
 					r.client

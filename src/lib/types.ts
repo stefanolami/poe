@@ -248,7 +248,7 @@ export type GrantType = {
 }
 
 export type TenderType = {
-	alert_purpose: string
+	alert_purpose: string | null
 	amendments: string[] | null
 	awarding_authority: string | null
 	call_title: string | null
