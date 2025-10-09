@@ -606,7 +606,7 @@ const centerTitle: React.CSSProperties = {
 	fontWeight: 800,
 	letterSpacing: '.5px',
 	color: '#00334d',
-	margin: 0,
+	margin: '20px 0 0',
 }
 const waveWrapper: React.CSSProperties = {
 	position: 'relative',

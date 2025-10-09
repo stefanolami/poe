@@ -16,9 +16,9 @@ export default function AuthErrorPage() {
 				return {
 					title: 'Verification Failed',
 					message:
-						'The verification link is invalid or has expired. Please request a new password reset.',
+						'The verification link is invalid or has expired. Please access your account manually from the link below.',
 					action: 'Try Again',
-					actionLink: '/forgot-password',
+					actionLink: '/login',
 				}
 			case 'missing-parameters':
 				return {
