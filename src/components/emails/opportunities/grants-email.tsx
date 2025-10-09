@@ -45,7 +45,6 @@ const GrantsEmail = ({
 	assessment,
 }: GrantsEmailCharinProps) => {
 	const {
-		geography,
 		call_title,
 		programme_title,
 		alert_purpose,
@@ -61,7 +60,6 @@ const GrantsEmail = ({
 		pre_launch,
 	} = grant
 
-	const geoText = geography.join(', ')
 	const deadlineRows: DeadlineTuple[] = (deadline ?? []).map((d) => {
 		const [dateIso = '', time = '', note = ''] = d.split('///')
 		return [dateIso, time, note]
@@ -229,9 +227,8 @@ const GrantsEmail = ({
 
 						{/* 2. Key information fields */}
 						<Section>
-							{renderField('Geography(-ies):', geoText)}
 							{renderField(
-								'Geography Details:',
+								'Geography(-ies):',
 								geography_details || undefined
 							)}
 							{renderField(

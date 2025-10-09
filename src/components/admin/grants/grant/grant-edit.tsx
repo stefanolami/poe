@@ -141,7 +141,7 @@ export const GrantEdit = ({
 		},
 	})
 
-	const preLaunch = form.watch('pre_launch')
+	//const preLaunch = form.watch('pre_launch')
 
 	const isSubmitting = form.formState.isSubmitting
 
@@ -466,9 +466,7 @@ export const GrantEdit = ({
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>
-											{preLaunch
-												? 'Awarding Authority (optional in pre-launch)'
-												: 'Awarding Authority'}
+											Awarding Authority
 										</FormLabel>
 										<FormControl>
 											<Input

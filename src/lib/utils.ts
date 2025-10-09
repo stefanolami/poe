@@ -204,7 +204,7 @@ export function buildGrantEmailSubject(
 		const displayCodes = intersection.map((code) =>
 			code === 'euAdmin' ? 'EU' : code
 		)
-		parts.push(displayCodes.join(' / '))
+		parts.push(displayCodes.join(' / ').concat(' ', 'Grant'))
 	}
 	parts.push(title)
 	return parts.join(' - ')
@@ -213,7 +213,7 @@ export function buildGrantEmailSubject(
 // Build a personalized email subject for a tender alert
 // Format: "POE Alert - GB / BG - Programme"
 export function buildTenderEmailSubject(
-	tender: Pick<TenderType, 'geography' | 'programme_title'>,
+	tender: Pick<TenderType, 'geography' | 'call_title'>,
 	client: Partial<
 		Pick<
 			ClientType,
@@ -226,7 +226,7 @@ export function buildTenderEmailSubject(
 		>
 	>
 ) {
-	const title = tender.programme_title || 'Tender'
+	const title = tender.call_title || 'Tender'
 
 	const collectCodes = (arr: unknown): string[] => {
 		if (!Array.isArray(arr)) return []
@@ -261,7 +261,66 @@ export function buildTenderEmailSubject(
 		const displayCodes = intersection.map((code: string) =>
 			code === 'euAdmin' ? 'EU' : code
 		)
-		parts.push(displayCodes.join(' / '))
+		parts.push(displayCodes.join(' / ').concat(' ', 'Procurement Tender'))
+	}
+	parts.push(title)
+	return parts.join(' - ')
+}
+
+export function buildInvestmentEmailSubject(
+	tender: Pick<TenderType, 'geography' | 'call_title'>,
+	client: Partial<
+		Pick<
+			ClientType,
+			| 'vehicles_type'
+			| 'charging_stations_type'
+			| 'pif'
+			| 'deployment'
+			| 'project'
+			| 'email'
+		>
+	>
+) {
+	const title = tender.call_title || 'Investment Financing Opportunity'
+
+	const collectCodes = (arr: unknown): string[] => {
+		if (!Array.isArray(arr)) return []
+		try {
+			return (
+				arr as Array<{
+					geographies?: { value: string; label?: string }[]
+				}>
+			)
+				.flatMap((item) => item?.geographies || [])
+				.map((g) => g.value)
+				.filter(Boolean)
+		} catch {
+			return []
+		}
+	}
+
+	const clientGeoCodes = new Set<string>([
+		...collectCodes(client.vehicles_type as unknown[]),
+		...collectCodes(client.charging_stations_type as unknown[]),
+		...collectCodes(client.pif as unknown[]),
+		...collectCodes(client.deployment as unknown[]),
+		...collectCodes(client.project as unknown[]),
+	])
+
+	const intersection = (tender.geography || []).filter((code: string) =>
+		clientGeoCodes.has(code)
+	)
+
+	const parts = ['POE Alert']
+	if (intersection.length > 0) {
+		const displayCodes = intersection.map((code: string) =>
+			code === 'euAdmin' ? 'EU' : code
+		)
+		parts.push(
+			displayCodes
+				.join(' / ')
+				.concat(' ', 'Investment Financing Opportunity')
+		)
 	}
 	parts.push(title)
 	return parts.join(' - ')

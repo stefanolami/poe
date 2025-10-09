@@ -7,7 +7,7 @@ import {
 	CreateInvestmentsType,
 	UpdateInvestmentType,
 } from '@/lib/types'
-import { buildGrantEmailSubject } from '@/lib/utils'
+import { buildInvestmentEmailSubject } from '@/lib/utils'
 import { Json } from '@/supabase/types'
 import { fetchAttachments } from '@/lib/attachments'
 import { runWithConcurrency } from '@/lib/concurrency'
@@ -404,7 +404,7 @@ export const sendInvestmentAlert = async (investmentId: string) => {
 				).filter((e) => !!e),
 				tailored: !!assessment,
 				assessment,
-				subject: buildGrantEmailSubject(
+				subject: buildInvestmentEmailSubject(
 					investmentData as unknown as GrantType,
 					clientShape as ClientType
 				),
