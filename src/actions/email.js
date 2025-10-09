@@ -1,2 +1,2 @@
-// Deprecated legacy JS file. Do not use.
-export {}
+// Re-export TypeScript implementation to ensure correct resolution in production bundlers
+export * from './email-impl'
