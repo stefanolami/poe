@@ -76,7 +76,9 @@ export const createInvestment = async (formData: CreateInvestmentsType) => {
 			subject_matter: formData.subject_matter ?? null,
 			pre_launch: formData.pre_launch ?? false,
 			consultant:
-				formData.consultant === 'clear' ? null : formData.consultant,
+				!formData.consultant || formData.consultant === 'clear'
+					? null
+					: formData.consultant,
 			sector: formData.sector,
 			files: uploadedFilePaths,
 		}
@@ -159,7 +161,9 @@ export const updateInvestment = async (
 			subject_matter: formData.subject_matter ?? null,
 			pre_launch: formData.pre_launch ?? false,
 			consultant:
-				formData.consultant === 'clear' ? null : formData.consultant,
+				!formData.consultant || formData.consultant === 'clear'
+					? null
+					: formData.consultant,
 			sector: formData.sector,
 			files: filesArray,
 		}

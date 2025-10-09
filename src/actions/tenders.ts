@@ -82,7 +82,9 @@ export const createTender = async (formData: CreateTendersType) => {
 			subject_matter: formData.subject_matter ?? null,
 			pre_launch: formData.pre_launch ?? false,
 			consultant:
-				formData.consultant === 'clear' ? null : formData.consultant,
+				!formData.consultant || formData.consultant === 'clear'
+					? null
+					: formData.consultant,
 			sector: formData.sector,
 			vehicles: formData.vehicles,
 			vehicles_contracts: formData.vehicles_contracts,
@@ -166,7 +168,9 @@ export const updateTender = async (id: string, formData: UpdateTenderType) => {
 			subject_matter: formData.subject_matter ?? null,
 			pre_launch: formData.pre_launch ?? false,
 			consultant:
-				formData.consultant === 'clear' ? null : formData.consultant,
+				!formData.consultant || formData.consultant === 'clear'
+					? null
+					: formData.consultant,
 			sector: formData.sector,
 			vehicles: formData.vehicles,
 			vehicles_contracts: formData.vehicles_contracts,

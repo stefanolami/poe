@@ -72,7 +72,9 @@ export const createGrant = async (formData: CreateGrantType) => {
 			subject_matter: formData.subject_matter ?? null,
 			pre_launch: formData.pre_launch ?? false,
 			consultant:
-				formData.consultant === 'clear' ? null : formData.consultant,
+				!formData.consultant || formData.consultant === 'clear'
+					? null
+					: formData.consultant,
 			sector: formData.sector,
 			deployment: formData.deployment,
 			project: formData.project,
@@ -154,7 +156,9 @@ export const updateGrant = async (id: string, formData: UpdateGrantType) => {
 			subject_matter: formData.subject_matter ?? null,
 			pre_launch: formData.pre_launch ?? false,
 			consultant:
-				formData.consultant === 'clear' ? null : formData.consultant,
+				!formData.consultant || formData.consultant === 'clear'
+					? null
+					: formData.consultant,
 			sector: formData.sector,
 			deployment: formData.deployment,
 			project: formData.project,
