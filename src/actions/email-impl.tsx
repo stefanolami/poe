@@ -32,7 +32,9 @@ const mailerSend = new MailerSend({
 	apiKey: process.env.MAILERSEND_API_KEY || '',
 })
 
-// (Removed LooseGrant / LooseInvestment in favor of unified Raw* types)
+const mailerSendCharIn = new MailerSend({
+	apiKey: process.env.MAILERSEND_CHARIN_API_KEY || '',
+})
 
 async function buildAccountMagicLink(client?: { email?: string | null }) {
 	try {
@@ -153,21 +155,21 @@ export async function sendGrantCharin(
 			})
 		)
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
 			.setAttachments(bufferAttachments)
-		return await mailerSend.email.send(emailParams)
+		return await mailerSendCharIn.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
-		return await mailerSend.email.send(emailParams)
+		return await mailerSendCharIn.email.send(emailParams)
 	}
 }
 
@@ -255,21 +257,21 @@ export async function sendTenderCharin(
 			})
 		)
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
 			.setAttachments(bufferAttachments)
-		return await mailerSend.email.send(emailParams)
+		return await mailerSendCharIn.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
-		return await mailerSend.email.send(emailParams)
+		return await mailerSendCharIn.email.send(emailParams)
 	}
 }
 
@@ -367,21 +369,21 @@ export async function sendTenderTailoredCharin(
 			})
 		)
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
 			.setAttachments(bufferAttachments)
-		return await mailerSend.email.send(emailParams)
+		return await mailerSendCharIn.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
-		return await mailerSend.email.send(emailParams)
+		return await mailerSendCharIn.email.send(emailParams)
 	}
 }
 
@@ -469,21 +471,21 @@ export async function sendInvestmentCharin(
 			})
 		)
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
 			.setAttachments(bufferAttachments)
-		return await mailerSend.email.send(emailParams)
+		return await mailerSendCharIn.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
-		return await mailerSend.email.send(emailParams)
+		return await mailerSendCharIn.email.send(emailParams)
 	}
 }
 
@@ -581,21 +583,21 @@ export async function sendInvestmentTailoredCharin(
 			})
 		)
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
 			.setAttachments(bufferAttachments)
-		return await mailerSend.email.send(emailParams)
+		return await mailerSendCharIn.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
 			.setHtml(emailHtml)
-		return await mailerSend.email.send(emailParams)
+		return await mailerSendCharIn.email.send(emailParams)
 	}
 }
 
