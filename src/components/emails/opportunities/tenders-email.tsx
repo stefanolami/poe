@@ -158,10 +158,10 @@ const TendersEmail = ({
 								className="col-right"
 							>
 								<Img
-									src={`${baseUrl}logos/charin-logo.png`}
+									src={`${baseUrl}logos/consulting-white.png`}
 									alt="Charin Logo"
-									width={77}
-									height={60}
+									width={160}
+									height={42}
 									style={{
 										...logoImg,
 										marginRight: 0,
@@ -181,7 +181,9 @@ const TendersEmail = ({
 									style={centerTitle}
 									className="header-title"
 								>
-									PROCUREMENT TENDER ALERT
+									{pre_launch
+										? 'PRE-LAUNCH PROCUREMENT TENDER ALERT'
+										: 'PROCUREMENT TENDER ALERT'}
 								</Text>
 							</Column>
 						</Row>
@@ -214,13 +216,7 @@ const TendersEmail = ({
 							<Text style={paragraph}>
 								Dear {org_name} Team Member,
 							</Text>
-							<Text style={paragraph}>
-								{intro
-									? intro
-									: pre_launch
-										? 'Please find here our alert regarding an upcoming opportunity. Information on this call has not been made publicly available yet.'
-										: 'Please find here an update alert regarding a published opportunity. The following has been amended in the call.'}
-							</Text>
+							<Text style={paragraph}>{intro}</Text>
 						</Section>
 						<Hr style={divider} />
 

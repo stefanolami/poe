@@ -180,7 +180,9 @@ const InvestmentsEmailCharin = ({
 									style={centerTitle}
 									className="header-title"
 								>
-									INVESTMENT ALERT
+									{pre_launch
+										? 'PRE-LAUNCH INVESTMENT FINANCING ALERT'
+										: 'INVESTMENT FINANCING ALERT'}
 								</Text>
 							</Column>
 						</Row>
@@ -213,13 +215,7 @@ const InvestmentsEmailCharin = ({
 							<Text style={paragraph}>
 								Dear {org_name} Team Member,
 							</Text>
-							<Text style={paragraph}>
-								{intro
-									? intro
-									: pre_launch
-										? 'Please find here our alert regarding an upcoming opportunity. Information on this call has not been made publicly available yet.'
-										: 'Please find here an update alert regarding a published opportunity. The following has been amended in the call.'}
-							</Text>
+							<Text style={paragraph}>{intro}</Text>
 						</Section>
 						<Hr style={divider} />
 
