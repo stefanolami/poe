@@ -215,7 +215,7 @@ export const getTenders = async () => {
 			id: tender.id,
 			sent: tender.sent,
 			geography: tender.geography.join(', '),
-			awarding_authority: tender.awarding_authority,
+			call_title: tender.call_title,
 			programme_title: tender.programme_title,
 			internal_deadline: tender.internal_deadline,
 		}))

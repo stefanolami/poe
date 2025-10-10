@@ -10,14 +10,14 @@ export type Tender = {
 	id: string
 	sent: boolean
 	geography: string
-	awarding_authority: string | null
+	call_title: string | null
 	programme_title: string | null
 	internal_deadline: string | null
 }
 
 export const columns: ColumnDef<Tender>[] = [
 	{
-		accessorKey: 'awarding_authority',
+		accessorKey: 'call_title',
 		header: ({ column }) => {
 			return (
 				<Button
