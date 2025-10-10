@@ -1,5 +1,24 @@
 import { z } from 'zod'
 
+// Helper: build an optional array of strings (trimmed) where
+// - empty strings are allowed during input
+// - non-empty strings must be valid emails
+// - the array emits a TOP-LEVEL error message when any entry is invalid
+// - empty strings are filtered out in the final output
+const optionalEmailArray = z
+	.array(z.string().transform((s) => s.trim()))
+	.optional()
+	.refine(
+		(arr) =>
+			(arr ?? []).every((s) =>
+				s === '' ? true : z.string().email().safeParse(s).success
+			),
+		{
+			message: 'Invalid email address',
+		}
+	)
+	.transform((arr) => (arr ? arr.filter((e) => e !== '') : undefined))
+
 export const createAccountSchema = z
 	.object({
 		firstName: z.string().min(1, 'First Name is required'),
@@ -10,9 +29,7 @@ export const createAccountSchema = z
 			.string()
 			.min(6, 'Password must be at least 6 characters long'),
 		confirmPassword: z.string().min(6, 'Confirm password is required'),
-		additionalEmails: z
-			.array(z.string().email('Invalid email address'))
-			.optional(),
+		additionalEmails: optionalEmailArray,
 		sector: z.string().optional(),
 		vehicles_type: z
 			.array(
@@ -92,9 +109,7 @@ export const updateAccountSchema = z.object({
 	lastName: z.string().min(1, 'Last Name is required'),
 	orgName: z.string().optional(),
 	email: z.string().email('Invalid email address'),
-	additionalEmails: z
-		.array(z.string().email('Invalid email address'))
-		.optional(),
+	additionalEmails: optionalEmailArray,
 })
 
 export const loginSchema = z.object({
@@ -348,9 +363,7 @@ export const updateSubscriptionSchema = z.object({
 
 export const sendOfferSchema = z.object({
 	email: z.string().email('Invalid email address'),
-	additionalEmails: z
-		.array(z.string().email('Invalid email address'))
-		.optional(),
+	additionalEmails: optionalEmailArray,
 })
 
 export const createUserSchema = z

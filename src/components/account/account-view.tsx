@@ -1,11 +1,10 @@
 'use client'
 
 import { ClientDataType } from '@/lib/types'
-import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
+import EditAccountComponent from './edit-account-component'
 
 const AccountView = ({ clientData }: { clientData: ClientDataType }) => {
-	const router = useRouter()
 	const [showAllEmails, setShowAllEmails] = useState(false)
 
 	return (
@@ -83,12 +82,13 @@ const AccountView = ({ clientData }: { clientData: ClientDataType }) => {
 					</dd>
 				</div>
 			</dl>
-			<button
+			{/* <button
 				className="text-xs md:text-sm bg-primary-light text-white hover:bg-primary-light/90 shadow-sm hover:shadow transition-transform hover:scale-[1.02] mt-6 px-6 py-2 w-full"
 				onClick={() => router.replace('/account/edit')}
 			>
 				Edit Details
-			</button>
+			</button> */}
+			<EditAccountComponent clientData={clientData} />
 		</div>
 	)
 }
