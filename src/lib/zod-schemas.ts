@@ -131,7 +131,7 @@ const grantBase = {
 	in_brief: z.string().min(2, 'Required'),
 	geography_details: z.string().min(2, 'Required'),
 	internal_deadline: z.string().min(2, 'Required'),
-	intro: z.string().optional(),
+	intro: z.string().min(2, 'Required'),
 	subject_matter: z.string().optional(),
 	further_details: z.array(z.array(z.string())).optional(),
 	files: z
@@ -166,13 +166,21 @@ const createGrantSchemaLaunch = z.object({
 
 export const createGrantSchema = z
 	.discriminatedUnion('pre_launch', [
+		// Override for launch: call_title is required when pre_launch is false
+		createGrantSchemaLaunch.extend({
+			call_title: z.string().min(1, 'Required'),
+		}),
 		createGrantSchemaPre,
-		createGrantSchemaLaunch,
 	])
-	.refine((data) => data.call_title || data.programme_title, {
-		message: 'Either Call Title or Grant Programme must be provided',
-		path: ['call_title'],
-	})
+	// In pre-launch, require at least one between call_title and subject_matter
+	.refine(
+		(data) =>
+			data.pre_launch ? !!(data.call_title || data.subject_matter) : true,
+		{
+			message: 'Provide Call Title or Subject Matter',
+			path: ['call_title'],
+		}
+	)
 
 export const createGrantsTailoredAssessmentSchema = z.object({
 	tailored_assessment: z
@@ -191,7 +199,7 @@ const tenderBase = {
 	in_brief: z.string().min(2, 'Required'),
 	geography_details: z.string().min(2, 'Required'),
 	internal_deadline: z.string().min(2, 'Required'),
-	intro: z.string().optional(),
+	intro: z.string().min(2, 'Required'),
 	subject_matter: z.string().optional(),
 	further_details: z.array(z.array(z.string())).optional(),
 	files: z
@@ -230,10 +238,23 @@ const createTendersSchemaLaunch = z.object({
 	pre_launch: z.literal(false),
 })
 
-export const createTendersSchema = z.discriminatedUnion('pre_launch', [
-	createTendersSchemaPre,
-	createTendersSchemaLaunch,
-])
+export const createTendersSchema = z
+	.discriminatedUnion('pre_launch', [
+		// Require call_title in launch
+		createTendersSchemaLaunch.extend({
+			call_title: z.string().min(1, 'Required'),
+		}),
+		createTendersSchemaPre,
+	])
+	// In pre-launch, require at least one between call_title and subject_matter
+	.refine(
+		(data) =>
+			data.pre_launch ? !!(data.call_title || data.subject_matter) : true,
+		{
+			message: 'Provide Call Title or Subject Matter',
+			path: ['call_title'],
+		}
+	)
 
 // Investments: conditional schema based on pre_launch
 const investmentBase = {
@@ -246,7 +267,7 @@ const investmentBase = {
 	in_brief: z.string().min(2, 'Required'),
 	geography_details: z.string().min(2, 'Required'),
 	internal_deadline: z.string().min(2, 'Required'),
-	intro: z.string().optional(),
+	intro: z.string().min(2, 'Required'),
 	subject_matter: z.string().optional(),
 	further_details: z.array(z.array(z.string())).optional(),
 	files: z
@@ -279,10 +300,23 @@ const createInvestmentsSchemaLaunch = z.object({
 	pre_launch: z.literal(false),
 })
 
-export const createInvestmentsSchema = z.discriminatedUnion('pre_launch', [
-	createInvestmentsSchemaPre,
-	createInvestmentsSchemaLaunch,
-])
+export const createInvestmentsSchema = z
+	.discriminatedUnion('pre_launch', [
+		// Require call_title in launch
+		createInvestmentsSchemaLaunch.extend({
+			call_title: z.string().min(1, 'Required'),
+		}),
+		createInvestmentsSchemaPre,
+	])
+	// In pre-launch, require at least one between call_title and subject_matter
+	.refine(
+		(data) =>
+			data.pre_launch ? !!(data.call_title || data.subject_matter) : true,
+		{
+			message: 'Provide Call Title or Subject Matter',
+			path: ['call_title'],
+		}
+	)
 
 // Subscriptions
 export const subscriptionIdSchema = z.string().uuid('Invalid subscription id')
