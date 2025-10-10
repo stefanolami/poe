@@ -437,7 +437,7 @@ const InvestmentsEmailCharin = ({
 												>
 													{/* eslint-disable-next-line @next/next/no-img-element */}
 													<img
-														src={`${baseUrl}logos/lucide/mail.png`}
+														src={`${baseUrl}logos/lucide/mail-charin.png`}
 														alt="Contact Us"
 														style={ctaButtonIcon}
 													/>
@@ -464,7 +464,7 @@ const InvestmentsEmailCharin = ({
 											>
 												{/* eslint-disable-next-line @next/next/no-img-element */}
 												<img
-													src={`${baseUrl}logos/lucide/user.png`}
+													src={`${baseUrl}logos/lucide/user-charin.png`}
 													alt="Your Account"
 													style={ctaButtonIcon}
 												/>
@@ -487,7 +487,7 @@ const InvestmentsEmailCharin = ({
 											>
 												{/* eslint-disable-next-line @next/next/no-img-element */}
 												<img
-													src={`${baseUrl}logos/lucide/book-open-text.png`}
+													src={`${baseUrl}logos/lucide/book-open-text-charin.png`}
 													alt="Our Services"
 													style={ctaButtonIcon}
 												/>

@@ -437,7 +437,7 @@ const InvestmentsEmail = ({
 												>
 													{/* eslint-disable-next-line @next/next/no-img-element */}
 													<img
-														src={`${baseUrl}logos/lucide/mail.png`}
+														src={`${baseUrl}logos/lucide/mail-poe.png`}
 														alt="Contact Us"
 														style={ctaButtonIcon}
 													/>
@@ -464,7 +464,7 @@ const InvestmentsEmail = ({
 											>
 												{/* eslint-disable-next-line @next/next/no-img-element */}
 												<img
-													src={`${baseUrl}logos/lucide/user.png`}
+													src={`${baseUrl}logos/lucide/user-poe.png`}
 													alt="Your Account"
 													style={ctaButtonIcon}
 												/>
@@ -487,7 +487,7 @@ const InvestmentsEmail = ({
 											>
 												{/* eslint-disable-next-line @next/next/no-img-element */}
 												<img
-													src={`${baseUrl}logos/lucide/book-open-text.png`}
+													src={`${baseUrl}logos/lucide/book-open-text-poe.png`}
 													alt="Our Services"
 													style={ctaButtonIcon}
 												/>
@@ -683,12 +683,13 @@ const ctaButton: React.CSSProperties = {
 	gap: '6px',
 	padding: '8px 10px',
 	textTransform: 'uppercase',
-	backgroundColor: '#AAD278',
+	backgroundColor: '#27335A',
 }
 const ctaButtonIcon: React.CSSProperties = {
 	width: '16px',
 	height: '16px',
 	marginRight: '4px',
+	color: '#ffffff',
 }
 
 const footerSection: React.CSSProperties = {
