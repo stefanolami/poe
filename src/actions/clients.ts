@@ -182,7 +182,7 @@ export const createClientTemp = async (
 			pif: data.pif ?? [],
 			deployment: data.deployment ?? [],
 			project: data.project ?? [],
-			referrer: 'charin',
+			referrer: 'poe',
 		}
 
 		// Safety: ensure no stray key sneaks in
