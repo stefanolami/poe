@@ -16,7 +16,8 @@ import InvestmentsEmailCharin from '../components/emails/opportunities/investmen
 import { render } from '@react-email/components'
 import { fileToAttachment } from '../lib/utils'
 import type { AttachmentDescriptor } from '../lib/attachments'
-import AccountRecapEmail from '../components/emails/account-recap'
+import AccountRecapEmail from '../components/emails/others/account-recap'
+import AccountRecapEmailCharin from '../components/emails/others/account-recap-charin'
 import { createAdminClient } from '../supabase/server'
 import type { AccountRecapType } from '../lib/types'
 import {
@@ -605,21 +606,43 @@ export async function sendAccountRecap(
 	to: string,
 	data: AccountRecapType,
 	total: number,
-	id: string
+	id: string,
+	options?: { brand?: 'poe' | 'charin' }
 ) {
+	const brand = options?.brand || 'poe'
 	const emailHtml = await render(
-		<AccountRecapEmail
-			data={data}
-			total={total}
-			id={id}
-		/>
+		brand === 'charin' ? (
+			<AccountRecapEmailCharin
+				data={data}
+				total={total}
+				id={id}
+			/>
+		) : (
+			<AccountRecapEmail
+				data={data}
+				total={total}
+				id={id}
+			/>
+		)
 	)
-	const emailParams = new EmailParams()
-		.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+	const fromSender =
+		brand === 'charin'
+			? new Sender('alerts@poeontap-charin.com', 'POE')
+			: new Sender('alerts@poeontap.com', 'POE')
+	const subject =
+		brand === 'charin'
+			? 'CharIN by POE - Your Account Recap'
+			: 'POE - Your Account Recap'
+
+	const params = new EmailParams()
+		.setFrom(fromSender)
 		.setTo([new Recipient(to)])
-		.setSubject('POE - Your Account Recap')
+		.setSubject(subject)
 		.setHtml(emailHtml)
-	return await mailerSend.email.send(emailParams)
+
+	return brand === 'charin'
+		? await mailerSendCharIn.email.send(params)
+		: await mailerSend.email.send(params)
 }
 /**
  * Deprecated legacy file. Do not use.

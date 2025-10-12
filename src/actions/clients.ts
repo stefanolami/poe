@@ -196,7 +196,9 @@ export const createClientTemp = async (
 		}
 		console.log('Client Temp account created successfully')
 
-		await sendAccountRecap(data.email, emailData, total, clientData.id)
+		await sendAccountRecap(data.email, emailData, total, clientData.id, {
+			brand: clientInsertData.referrer === 'charin' ? 'charin' : 'poe',
+		})
 
 		return clientData
 	} catch (error: unknown) {
