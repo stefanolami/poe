@@ -37,7 +37,7 @@ type TenderEmailCharinProps = {
 // Mirrors the visual framework of grants-email-new (header/footer/CTAs),
 // but renders Tender-specific content and conditional tailored sections.
 
-const baseUrl = 'https://www.poeontap.com/'
+const baseUrl = 'https://www.poeontap-charin.com/'
 
 const TendersEmailCharin = ({
 	tender,

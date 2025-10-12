@@ -34,7 +34,7 @@ type GrantsEmailCharinProps = {
 	} | null
 }
 
-const baseUrl = 'https://www.poeontap.com/'
+const baseUrl = 'https://www.poeontap-charin.com/'
 
 const GrantsEmailCharin = ({
 	grant,

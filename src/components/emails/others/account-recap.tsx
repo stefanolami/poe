@@ -47,21 +47,36 @@ const AccountRecapEmail = ({
 						.col-title { text-align: center !important; }
 						.header-title { font-size: 18px !important; line-height: 28px !important; padding: 12px 8px 4px !important; }
 						.logo-left-img { width: 140px !important; height: auto !important; }
-						.logo-right-img { width: 110px !important; height: auto !important; }
+						.logo-right-img { width: 55px !important; height: auto !important; }
+						.logo-left-img-footer { width: 110px !important; height: auto !important; }
+						.logo-right-img-footer { width: 110px !important; height: auto !important; }
 						.cta-col { padding: 8px 0 !important; }
 						.cta-row { padding: 0 12px 12px !important; text-align: center !important; }
-						.cta-button { display: flex !important; margin: auto !important; width: 220px !important; padding: 10px 12px !important; font-size: 12px !important; }
+						.cta-button { display: flex !important; margin: auto !important; width: 200px !important; padding: 10px 12px !important; font-size: 12px !important; }
+						/* Stack CTA cells vertically on mobile */
+						.cta-btn-td { display: block !important; width: 100% !important; padding: 6px 0 !important; }
+						.cta-btn-td .cta-button { width: 200px !important; margin: 2px auto !important; }
 						.stack-on-mobile { display: block !important; width: 100% !important; }
+								/* Stack data tables on mobile only */
+								.responsive-table thead { display: none !important; }
+								.responsive-table tr { display: block !important; margin-bottom: 10px !important; }
+								.responsive-table td, .responsive-table th { display: block !important; width: 100% !important; box-sizing: border-box !important; }
 					}
 				`}</style>
-				<style>{`
-					@import url('https://fonts.googleapis.com/css2?family=Unna:wght@700&display=swap');
-					* { font-family: 'Unna', serif; }
-				`}</style>
-				<style>{`
-					@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100..700&display=swap');
-					* { font-family: 'Josefin Sans', sans-serif; }
-				`}</style>
+				<style>
+					{`
+			@import url('https://fonts.googleapis.com/css2?family=Unna:wght@700&display=swap');
+			*{
+			font-family: 'Unna', serif;
+			}`}
+				</style>
+				<style>
+					{`
+			@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100..700&display=swap');
+			*{
+			font-family: 'Josefin Sans', sans-serif;
+			}`}
+				</style>
 			</Head>
 			<Preview>{previewText}</Preview>
 			<Body style={bodyStyle}>
@@ -78,24 +93,33 @@ const AccountRecapEmail = ({
 						</Row>
 					</Section>
 
-					{/* Gradient header */}
+					{/* Header */}
 					<Section style={gradientHeader}>
 						<Row>
-							<Column style={logoLeftCol}>
+							<Column
+								style={logoLeftCol}
+								className="col-left"
+							>
 								<Img
 									src={`${baseUrl}logos/poe-white.png`}
 									alt="POE Logo"
 									width={160}
 									height={34}
 									style={logoImg}
-									className="logo-left-img"
+									className="logo-img logo-left-img"
 								/>
 							</Column>
-							<Column style={logoSpacerCol}></Column>
-							<Column style={logoRightCol}>
+							<Column
+								style={logoSpacerCol}
+								className="col-spacer"
+							></Column>
+							<Column
+								style={logoRightCol}
+								className="col-right"
+							>
 								<Img
 									src={`${baseUrl}logos/consulting-white.png`}
-									alt="Consulting Logo"
+									alt="Charin Logo"
 									width={160}
 									height={42}
 									style={{
@@ -103,10 +127,11 @@ const AccountRecapEmail = ({
 										marginRight: 0,
 										marginLeft: 'auto',
 									}}
-									className="logo-right-img"
+									className="logo-img logo-right-img"
 								/>
 							</Column>
 						</Row>
+
 						<Row>
 							<Column
 								style={titleColWrapper}
@@ -154,10 +179,14 @@ const AccountRecapEmail = ({
 								account.
 							</Text>
 							<Row className="cta-row">
-								<Column className="cta-col">
+								<Column
+									className="cta-col"
+									align="center"
+									style={{ textAlign: 'center' }}
+								>
 									<Link
 										href={`${baseUrl}confirm-account/${id}`}
-										style={ctaButton}
+										style={ctaButtonTop}
 									>
 										Confirm Account
 									</Link>
@@ -165,10 +194,8 @@ const AccountRecapEmail = ({
 							</Row>
 						</Section>
 
-						<Hr style={divider} />
-
 						{/* Items */}
-						<Section>
+						{/* <Section>
 							{Object.keys(data).map((key, index) => {
 								if (
 									key !== 'typeOfVehicleContract' &&
@@ -278,6 +305,162 @@ const AccountRecapEmail = ({
 								}
 								return null
 							})}
+						</Section>*/}
+
+						<Section /* style={section} */>
+							{Object.keys(data).map((key, index) => {
+								if (
+									key !== 'typeOfVehicleContract' &&
+									key !== 'chargingStationsContract'
+								) {
+									const category =
+										selectionData.eMobility[
+											key as keyof typeof selectionData.eMobility
+										]
+									if (
+										data[key as keyof AccountRecapType]
+											.length > 0
+									) {
+										return (
+											<>
+												{index > 0 && (
+													<Hr style={divider} />
+												)}
+												<div key={index}>
+													<Text style={fieldTitle}>
+														{key == 'deployment'
+															? 'Grants Deployment'
+															: key == 'project'
+																? 'Grants Innovative Projects'
+																: category.label}
+													</Text>
+													<ul style={list}>
+														{data[
+															key as keyof AccountRecapType
+														].map((item, index) => (
+															<li key={index}>
+																<div
+																	style={
+																		listItemDiv
+																	}
+																>
+																	<Text
+																		style={{
+																			marginRight:
+																				'20px',
+																		}}
+																	>
+																		{removeParenthesesContent(
+																			item.label
+																		)}{' '}
+																		(
+																		{(
+																			item as PricedGeographicItem
+																		).geographies
+																			?.map(
+																				(
+																					geo
+																				) =>
+																					geo.label
+																			)
+																			.join(
+																				', '
+																			)}
+																		)
+																	</Text>
+																	<Text
+																		style={{
+																			marginLeft:
+																				'auto',
+																			whiteSpace:
+																				'nowrap',
+																		}}
+																	>
+																		€{' '}
+																		{
+																			(
+																				item as PricedGeographicItem
+																			)
+																				.price
+																		}{' '}
+																		/ year
+																	</Text>
+																</div>
+															</li>
+														))}
+													</ul>
+												</div>
+											</>
+										)
+									}
+								} /* else if (key === 'report') {
+																		const category =
+																			DATA[key as keyof MobilityData]
+												
+																		if (category.length > 0) {
+																			return (
+																				<div
+																					className="mt-2"
+																					key={index}
+																				>
+																					<span className="text-lg">Reports</span>
+																					<ul className="pl-1 pr-3">
+																						{category.map((item, index) => (
+																							<li
+																								key={index}
+																								className="flex w-full items-center justify-between gap-4 py-2"
+																							>
+																								<span className="text-white">
+																									{item.value == 'eu'
+																										? 'EU'
+																										: 'Non-EU'}
+																								</span>
+																								<span className="text-white">
+																									€ {item.price?.default}
+																								</span>
+																							</li>
+																						))}
+																					</ul>
+																				</div>
+																			)
+																		}
+																	} */ else if (
+									key === 'typeOfVehicleContract' ||
+									key === 'chargingStationsContract'
+								) {
+									if (
+										data[key as keyof AccountRecapType]
+											.length > 0
+									) {
+										return (
+											<>
+												<Hr style={dividerThin} />
+												<div key={index}>
+													<Text>
+														Type of Contract
+													</Text>
+													<ul>
+														{data[
+															key as keyof AccountRecapType
+														].map((item, index) => (
+															<li
+																key={index}
+																style={
+																	listItemContract
+																}
+															>
+																<Text>
+																	{item.label}
+																</Text>
+															</li>
+														))}
+													</ul>
+												</div>
+											</>
+										)
+									}
+								}
+							})}
 						</Section>
 
 						<Hr style={divider} />
@@ -301,30 +484,116 @@ const AccountRecapEmail = ({
 							</Row>
 						</Section>
 
-						{/* Footer */}
-						<Hr style={dividerThin} />
-						<Section>
-							<Text style={paragraph}>
-								<strong>
-									For additional questions or support, please
-									contact:{' '}
-								</strong>
-								<Link href="mailto:info@poeontap.com">
-									info@poeontap.com
-								</Link>
-							</Text>
-							<Text style={paragraph}>
-								You can find information on the full list of
-								support services we provide{' '}
-								<Link
-									href="https://timeandplaceconsulting.com/service/eu-funding-project-management"
-									style={{ textDecorationLine: 'underline' }}
-								>
-									here
-								</Link>
-								.
-							</Text>
+						<Section
+							/* style={ctaRow} */
+							className="cta-row"
+						>
+							{/* Centered inner table so buttons sit together in the middle on desktop */}
+							<table
+								role="presentation"
+								cellPadding={0}
+								cellSpacing={0}
+								border={0}
+								align="center"
+								style={{ margin: '16px auto 0' }}
+							>
+								<tbody>
+									<tr>
+										<td
+											className="cta-btn-td"
+											style={{
+												padding: '14px 8px',
+												textAlign: 'center',
+											}}
+										>
+											<Link
+												href="https://www.consultingontap.com/contact"
+												style={ctaButton}
+												target="_blank"
+												rel="noopener noreferrer"
+												className="cta-button"
+											>
+												{/* eslint-disable-next-line @next/next/no-img-element */}
+												<img
+													src={`${baseUrl}logos/lucide/mail-poe.png`}
+													alt="Contact Us"
+													style={ctaButtonIcon}
+												/>
+												CONTACT US
+											</Link>
+										</td>
+										<td
+											className="cta-btn-td"
+											style={{
+												padding: '14px 8px',
+												textAlign: 'center',
+											}}
+										></td>
+										<td
+											className="cta-btn-td"
+											style={{
+												padding: '14px 8px',
+												textAlign: 'center',
+											}}
+										>
+											<Link
+												href="https://www.consultingontap.com/services"
+												style={ctaButton}
+												target="_blank"
+												rel="noopener noreferrer"
+												className="cta-button"
+											>
+												{/* eslint-disable-next-line @next/next/no-img-element */}
+												<img
+													src={`${baseUrl}logos/lucide/book-open-text-poe.png`}
+													alt="Our Services"
+													style={ctaButtonIcon}
+												/>
+												OUR SERVICES
+											</Link>
+										</td>
+									</tr>
+								</tbody>
+							</table>
 						</Section>
+						{/* Footer (same as grants-email) */}
+						<Section style={footerSection}>
+							<Text style={footerLead}>
+								POE (Time&Place Consulting) Central Office Team:{' '}
+								<span
+									style={{
+										color: '#00334d',
+										fontWeight: 600,
+									}}
+								>
+									+32 (0) 485 28 22 21
+								</span>
+							</Text>
+							<Row style={footer}>
+								<Column style={footerColLeft}>
+									<Img
+										src={`${baseUrl}logos/poe-hero-logo-new.png`}
+										alt="Time & Place Consulting"
+										width={130}
+										height={26}
+										style={{ display: 'inline-block' }}
+										className="logo-img logo-left-img-footer"
+									/>
+								</Column>
+								<Column style={footerColRight}>
+									<Img
+										src={`${baseUrl}logos/consulting-logo-full.png`}
+										alt="Time & Place Consulting"
+										width={130}
+										height={34}
+										style={{ display: 'inline-block' }}
+										className="logo-img logo-right-img-footer"
+									/>
+								</Column>
+							</Row>
+						</Section>
+
+						{/* Footer */}
 					</Container>
 				</Container>
 			</Body>
@@ -336,69 +605,88 @@ export default AccountRecapEmail
 
 // Styles (reused from opportunities layout)
 const bodyStyle: React.CSSProperties = {
-	backgroundColor: '#f5f7fb',
-	color: '#27335a',
 	margin: 0,
 	padding: 0,
-}
-
-const containerOuter: React.CSSProperties = {
-	width: '640px',
-	margin: '0 auto',
 	backgroundColor: '#ffffff',
-	borderRadius: 8,
-	overflow: 'hidden',
-	boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+	width: '100%',
+	fontFamily: 'Josefin Sans, sans-serif',
+}
+const containerOuter: React.CSSProperties = {
+	background:
+		'linear-gradient(180deg, rgba(53,75,131,0.2) 0%, rgba(39,51,90,0.2) 100%)',
+	maxWidth: '600px',
+	width: '100%',
 }
 
 const containerInner: React.CSSProperties = {
-	padding: '20px 24px 28px',
+	width: '100%',
+	marginTop: '30px',
 }
-
 const topStrip: React.CSSProperties = {
-	backgroundColor: '#27335a',
+	backgroundColor: '#354B83',
 	color: '#ffffff',
-	fontSize: 12,
-	padding: '6px 12px',
-}
-
-const topStripLeft: React.CSSProperties = {
-	textAlign: 'left',
-}
-
-const gradientHeader: React.CSSProperties = {
-	background: 'linear-gradient(90deg, #009EC2, #27335a)',
-	color: '#ffffff',
-	padding: '12px 16px 0',
-}
-
-const logoLeftCol: React.CSSProperties = { padding: '6px 8px' }
-const logoRightCol: React.CSSProperties = { padding: '6px 8px' }
-const logoSpacerCol: React.CSSProperties = { width: 10 }
-
-const logoImg: React.CSSProperties = {
-	display: 'block',
-}
-
-const titleColWrapper: React.CSSProperties = {
-	padding: '6px 8px 0',
-}
-
-const centerTitle: React.CSSProperties = {
-	textAlign: 'center',
-	fontSize: 22,
+	fontSize: 11,
 	fontWeight: 700,
-	letterSpacing: 0.6,
-	margin: '6px 0 0',
-	color: '#ffffff',
+	textTransform: 'uppercase',
+	letterSpacing: '0.5px',
+	padding: 0,
 }
-
+const topStripLeft: React.CSSProperties = {
+	padding: '12px 18px',
+	textAlign: 'left' as const,
+}
+const gradientHeader: React.CSSProperties = {
+	background: 'linear-gradient(180deg,#354B83 0%, #27335A 100%)',
+	color: '#ffffff',
+	position: 'relative',
+	padding: '11px 0 0',
+}
+const logoLeftCol: React.CSSProperties = {
+	width: '33.33%',
+	padding: '4px 4px 0 12px',
+	textAlign: 'left' as const,
+	verticalAlign: 'top' as const,
+}
+const logoSpacerCol: React.CSSProperties = {
+	width: '33.33%',
+	padding: '0',
+	fontSize: 0,
+	lineHeight: 0,
+}
+const logoRightCol: React.CSSProperties = {
+	width: '33.33%',
+	padding: '4px 12px 0 4px',
+	textAlign: 'right' as const,
+	verticalAlign: 'top' as const,
+}
+const titleColWrapper: React.CSSProperties = {
+	width: '100%',
+	textAlign: 'center' as const,
+	padding: '14px 6px 0',
+}
+const logoImg: React.CSSProperties = { display: 'block', maxWidth: '100%' }
+const centerTitle: React.CSSProperties = {
+	fontSize: 20,
+	lineHeight: '26px',
+	fontWeight: 800,
+	letterSpacing: '.5px',
+	color: '#fff',
+	margin: '20px 0 0',
+}
 const waveWrapper: React.CSSProperties = {
+	position: 'relative',
+	height: '62px',
+	lineHeight: 0,
+	overflow: 'hidden',
 	width: '100%',
 }
 const waveInner: React.CSSProperties = {
+	position: 'absolute',
+	bottom: 0,
+	left: 0,
 	width: '100%',
-	marginTop: 4,
+	lineHeight: 0,
+	transform: 'rotate(180deg)',
 }
 
 const paragraph: React.CSSProperties = {
@@ -413,41 +701,116 @@ const fieldTitle: React.CSSProperties = {
 	marginTop: 8,
 }
 
-const fieldSubTitle: React.CSSProperties = {
+/* const fieldSubTitle: React.CSSProperties = {
 	fontSize: 14,
 	fontWeight: 600,
 	marginTop: 8,
-}
+} */
 
 const divider: React.CSSProperties = {
-	borderColor: '#e5e7eb',
-	margin: '16px 0',
+	border: 'none',
+	borderTop: '1px solid #27335A',
+	height: 0,
+	width: '80%',
+	display: 'block',
+	margin: '12px auto 40px',
 }
 const dividerThin: React.CSSProperties = {
-	borderColor: '#eef0f4',
-	margin: '10px 0',
+	border: 'none',
+	borderTop: '1px solid #27335A',
+	height: 0,
+	width: '50%',
+	display: 'block',
+	margin: '10px auto 10px',
 }
 
-const ulStyle: React.CSSProperties = { paddingLeft: 16, margin: '8px 0' }
+const list: React.CSSProperties = {
+	listStyleType: 'disc',
+}
+
+const listItemContract: React.CSSProperties = {
+	margin: '8px 0',
+}
+
+const listItemDiv: React.CSSProperties = {
+	display: 'flex',
+	justifyContent: 'space-between',
+	alignItems: 'start',
+	flexDirection: 'row',
+}
+
+/* const ulStyle: React.CSSProperties = { paddingLeft: 16, margin: '8px 0' }
 const liRow: React.CSSProperties = {
 	display: 'flex',
 	justifyContent: 'space-between',
 	gap: 8,
 }
 const nowrap: React.CSSProperties = { whiteSpace: 'nowrap' }
-
-const ctaButton: React.CSSProperties = {
-	backgroundColor: '#009EC2',
-	color: '#ffffff',
-	textDecoration: 'none',
-	padding: '10px 16px',
-	borderRadius: 6,
-	fontWeight: 600,
-	display: 'inline-block',
-}
+ */
 
 const totalLabel: React.CSSProperties = {
 	fontSize: 22,
 	fontWeight: 700,
 	color: '#27335a',
 }
+
+const ctaButton: React.CSSProperties = {
+	fontSize: 12,
+	lineHeight: '18px',
+	display: 'inline-flex',
+	fontWeight: 700,
+	color: '#ffffff',
+	textDecoration: 'none',
+	alignItems: 'center',
+	justifyContent: 'center',
+	width: 'auto',
+	gap: '6px',
+	padding: '8px 14px',
+	textTransform: 'uppercase',
+	backgroundColor: '#27335A',
+}
+const ctaButtonTop: React.CSSProperties = {
+	fontSize: 12,
+	lineHeight: '18px',
+	display: 'inline-flex',
+	fontWeight: 700,
+	color: '#ffffff',
+	textDecoration: 'none',
+	alignItems: 'center',
+	justifyContent: 'center',
+	width: 'auto',
+	gap: '6px',
+	padding: '8px 14px',
+	textTransform: 'uppercase',
+	backgroundColor: '#27335A',
+	margin: '0 auto 20px',
+}
+const ctaButtonIcon: React.CSSProperties = {
+	width: '16px',
+	height: '16px',
+	marginRight: '10px',
+	color: '#ffffff',
+}
+
+const footerSection: React.CSSProperties = {
+	fontSize: 11,
+	color: '#666666',
+	padding: '20px 34px 28px',
+	textAlign: 'center' as const,
+}
+const footerLead: React.CSSProperties = {
+	fontStyle: 'italic',
+	paddingBottom: 14,
+	margin: 0,
+}
+const footerColLeft: React.CSSProperties = {
+	textAlign: 'left' as const,
+	width: '50%',
+	paddingTop: 8,
+}
+const footerColRight: React.CSSProperties = {
+	textAlign: 'right' as const,
+	width: '50%',
+	paddingTop: 8,
+}
+const footer: React.CSSProperties = { marginTop: 30 }

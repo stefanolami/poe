@@ -182,9 +182,22 @@ export const createClientTemp = async (
 			pif: data.pif ?? [],
 			deployment: data.deployment ?? [],
 			project: data.project ?? [],
-			referrer: 'poe',
-			additional_emails: data.additional_emails ?? [],
+			referrer: 'charin',
 		}
+
+		// Safety: ensure no stray key sneaks in
+		const tmpInsert: Record<string, unknown> = clientInsertData as Record<
+			string,
+			unknown
+		>
+		if ('additional_emails' in tmpInsert) {
+			delete (tmpInsert as { [k: string]: unknown }).additional_emails
+		}
+
+		console.log(
+			'Inserting into clients_temp with keys:',
+			Object.keys(clientInsertData)
+		)
 
 		const { data: clientData, error } = await supabase
 			.from('clients_temp')
@@ -192,12 +205,16 @@ export const createClientTemp = async (
 			.select()
 			.single()
 		if (error) {
+			console.error('clients_temp insert payload:', clientInsertData)
 			throw new Error(`Client Temp creation failed: ${error.message}`)
 		}
 		console.log('Client Temp account created successfully')
 
 		await sendAccountRecap(data.email, emailData, total, clientData.id, {
 			brand: clientInsertData.referrer === 'charin' ? 'charin' : 'poe',
+			cc: Array.isArray(data.additional_emails)
+				? data.additional_emails.filter((e) => e && e.trim().length > 0)
+				: [],
 		})
 
 		return clientData
@@ -411,7 +428,6 @@ export const getClients = async () => {
 	}
 }
 
-// Fetch clients eligible for new subscription (no current active subscription)
 export const getClientsEligibleForSubscription = async () => {
 	try {
 		const supabase = await createClient()

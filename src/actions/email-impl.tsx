@@ -174,6 +174,53 @@ export async function sendGrantCharin(
 	}
 }
 
+export async function sendAccountRecap(
+	to: string,
+	data: AccountRecapType,
+	total: number,
+	id: string,
+	options?: { brand?: 'poe' | 'charin'; cc?: string[] }
+) {
+	const brand = options?.brand || 'poe'
+	const ccList = (options?.cc || []).filter(Boolean)
+
+	const emailHtml = await render(
+		brand === 'charin' ? (
+			<AccountRecapEmailCharin
+				data={data}
+				total={total}
+				id={id}
+			/>
+		) : (
+			<AccountRecapEmail
+				data={data}
+				total={total}
+				id={id}
+			/>
+		)
+	)
+
+	const fromSender =
+		brand === 'charin'
+			? new Sender('alerts@poeontap-charin.com', 'POE')
+			: new Sender('alerts@poeontap.com', 'POE')
+	const subject =
+		brand === 'charin'
+			? 'POE - Your Account Recap'
+			: 'POE - Your Account Recap'
+
+	const params = new EmailParams()
+		.setFrom(fromSender)
+		.setTo([new Recipient(to)])
+		.setCc(ccList.map((addr) => new Recipient(addr)))
+		.setSubject(subject)
+		.setHtml(emailHtml)
+
+	return brand === 'charin'
+		? await mailerSendCharIn.email.send(params)
+		: await mailerSend.email.send(params)
+}
+
 export async function sendTender(
 	to: string,
 	subject: string,
@@ -601,51 +648,3 @@ export async function sendInvestmentTailoredCharin(
 		return await mailerSendCharIn.email.send(emailParams)
 	}
 }
-
-export async function sendAccountRecap(
-	to: string,
-	data: AccountRecapType,
-	total: number,
-	id: string,
-	options?: { brand?: 'poe' | 'charin' }
-) {
-	const brand = options?.brand || 'poe'
-	const emailHtml = await render(
-		brand === 'charin' ? (
-			<AccountRecapEmailCharin
-				data={data}
-				total={total}
-				id={id}
-			/>
-		) : (
-			<AccountRecapEmail
-				data={data}
-				total={total}
-				id={id}
-			/>
-		)
-	)
-	const fromSender =
-		brand === 'charin'
-			? new Sender('alerts@poeontap-charin.com', 'POE')
-			: new Sender('alerts@poeontap.com', 'POE')
-	const subject =
-		brand === 'charin'
-			? 'CharIN by POE - Your Account Recap'
-			: 'POE - Your Account Recap'
-
-	const params = new EmailParams()
-		.setFrom(fromSender)
-		.setTo([new Recipient(to)])
-		.setSubject(subject)
-		.setHtml(emailHtml)
-
-	return brand === 'charin'
-		? await mailerSendCharIn.email.send(params)
-		: await mailerSend.email.send(params)
-}
-/**
- * Deprecated legacy file. Do not use.
- * All email logic moved to email.tsx
- */
-export {}

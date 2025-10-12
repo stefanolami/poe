@@ -644,7 +644,7 @@ const fieldValue: React.CSSProperties = {
 }
 const divider: React.CSSProperties = {
 	border: 'none',
-	borderTop: '1px solid #00374B',
+	borderTop: '1px solid #27335A',
 	height: 0,
 	width: '50%',
 	display: 'block',

@@ -32,7 +32,7 @@ export type InvestmentsEmailCharinProps = {
 	} | null
 }
 
-const baseUrl = 'https://www.poeontap.com/'
+const baseUrl = 'https://www.poeontap-charin.com/'
 
 const InvestmentsEmailCharin = ({
 	investment,
