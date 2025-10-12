@@ -24,6 +24,7 @@ import { useStore } from '@/store/store'
 import { useShallow } from 'zustand/shallow'
 import { createClientTemp } from '@/actions/clients'
 import { selectionArrayFromStoreToDB } from '@/lib/utils'
+import { FaTrashAlt } from 'react-icons/fa'
 
 type SendOfferType = {
 	email: string
@@ -254,7 +255,7 @@ const SendOfferForm = () => {
 														}}
 														className="shadow-md hover:shadow-xl hover:scale-[1.02] bg-white/5 hover:bg-white/5"
 													>
-														Remove
+														<FaTrashAlt className="h-4 w-4" />
 													</Button>
 												</div>
 											)
