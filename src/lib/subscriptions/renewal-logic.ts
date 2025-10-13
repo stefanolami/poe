@@ -67,11 +67,18 @@ export async function processDueRenewals() {
 				.update({
 					current_subscription: null,
 					account_status: 'pending',
+					pending_since: new Date().toISOString(),
 				})
 				.eq('id', sub.client_id)
 
-			// Notify client to pay (invoice/renewal email)
-			await sendAutoRenewInvoiceEmail(sub.client_id, sub.id)
+			// Notify client to pay (invoice/renewal email) and mark invoice_sent_at if not already set
+			if (!sub.invoice_sent_at) {
+				await sendAutoRenewInvoiceEmail(sub.client_id, sub.id)
+				await supabase
+					.from('subscriptions')
+					.update({ invoice_sent_at: new Date().toISOString() })
+					.eq('id', sub.id)
+			}
 			renewals.push(sub.id)
 			continue
 		}
@@ -101,35 +108,54 @@ export async function processPendingFreezes() {
 	const supabase = await createClient()
 	const today = new Date()
 
-	// Find clients in pending with no current subscription and created/pending_since older than 14 days
-	// We don't have a pending_since field; use created_at for initial accounts and period_end+1 for renewals is not tracked.
-	// As a simple heuristic: if client is pending AND has no subscriptions in the last 14 days, freeze.
-	// More robust: add a pending_since field later.
+	// Find clients in pending with no current subscription and pending_since older than 14 days
 
 	// Fetch pending clients (id, created_at)
 	const { data: clients, error } = await supabase
 		.from('clients')
-		.select('id, created_at, account_status, current_subscription')
+		.select(
+			'id, created_at, pending_since, account_status, current_subscription'
+		)
 		.eq('account_status', 'pending')
 		.is('current_subscription', null)
 	if (error) throw error
-	if (!clients || clients.length === 0) return { frozen: [] }
+	if (!clients || clients.length === 0)
+		return { frozen: [], pendingReminders: [] }
 
 	const frozen: string[] = []
-	for (const c of clients as { id: string; created_at: string }[]) {
-		const created = parseISO(c.created_at)
-		const deadline = addDays(created, 14)
+	const pendingReminders: string[] = []
+	for (const c of clients as {
+		id: string
+		created_at: string
+		pending_since?: string | null
+	}[]) {
+		const basis = c.pending_since
+			? parseISO(c.pending_since)
+			: parseISO(c.created_at)
+		const day7 = addDays(basis, 7)
+		const day12 = addDays(basis, 12)
+		const deadline = addDays(basis, 14)
+
+		// pending window reminders on exact day 7 and 12
+		if (isSameDay(today, day7)) {
+			await sendReminderEmail(c.id, 7)
+			pendingReminders.push(`${c.id}:7`)
+		}
+		if (isSameDay(today, day12)) {
+			await sendReminderEmail(c.id, 2)
+			pendingReminders.push(`${c.id}:2`)
+		}
 		if (today > deadline) {
 			await supabase
 				.from('clients')
-				.update({ account_status: 'frozen' })
+				.update({ account_status: 'frozen', pending_since: null })
 				.eq('id', c.id)
 			await sendFreezeEmail(c.id)
 			frozen.push(c.id)
 		}
 	}
 
-	return { frozen }
+	return { frozen, pendingReminders }
 }
 
 // Helpers removed (not used in pending-based flow)

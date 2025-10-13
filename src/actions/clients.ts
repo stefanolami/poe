@@ -64,6 +64,7 @@ export const signUpClient = async (data: CreateAccountType, id?: string) => {
 			referrer: 'poe',
 			additional_emails: data.additionalEmails ?? [],
 			account_status: 'pending',
+			pending_since: new Date().toISOString(),
 		}
 
 		// Create client record

@@ -56,6 +56,7 @@ export type Database = {
           id: string
           last_name: string
           org_name: string
+          pending_since: string | null
           pif: Json | null
           project: Json | null
           referrer: string | null
@@ -78,6 +79,7 @@ export type Database = {
           id: string
           last_name: string
           org_name: string
+          pending_since?: string | null
           pif?: Json | null
           project?: Json | null
           referrer?: string | null
@@ -100,6 +102,7 @@ export type Database = {
           id?: string
           last_name?: string
           org_name?: string
+          pending_since?: string | null
           pif?: Json | null
           project?: Json | null
           referrer?: string | null
