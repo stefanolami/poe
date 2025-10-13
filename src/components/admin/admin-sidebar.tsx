@@ -12,6 +12,7 @@ import {
 	Banknote,
 	LogOut,
 	CreditCard,
+	Diff,
 } from 'lucide-react'
 import {
 	Sidebar,
@@ -64,6 +65,11 @@ const ITEMS = [
 		title: 'Subscriptions',
 		url: '/admin/subscriptions',
 		icon: CreditCard,
+	},
+	{
+		title: 'Selection Changes',
+		url: '/admin/selection-changes',
+		icon: Diff,
 	},
 	{
 		title: 'Users',

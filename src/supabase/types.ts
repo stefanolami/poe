@@ -396,6 +396,65 @@ export type Database = {
           },
         ]
       }
+      selection_changes: {
+        Row: {
+          client_id: string
+          committed_at: string | null
+          created_at: string
+          diff_added: Json
+          diff_removed: Json
+          due_at: string
+          from_selection: Json
+          id: string
+          paid_at: string | null
+          pending_since: string
+          price_cents: number
+          rolled_back_at: string | null
+          status: Database["public"]["Enums"]["selection_change_status"]
+          to_selection: Json
+        }
+        Insert: {
+          client_id: string
+          committed_at?: string | null
+          created_at?: string
+          diff_added?: Json
+          diff_removed?: Json
+          due_at?: string
+          from_selection: Json
+          id?: string
+          paid_at?: string | null
+          pending_since?: string
+          price_cents: number
+          rolled_back_at?: string | null
+          status?: Database["public"]["Enums"]["selection_change_status"]
+          to_selection: Json
+        }
+        Update: {
+          client_id?: string
+          committed_at?: string | null
+          created_at?: string
+          diff_added?: Json
+          diff_removed?: Json
+          due_at?: string
+          from_selection?: Json
+          id?: string
+          paid_at?: string | null
+          pending_since?: string
+          price_cents?: number
+          rolled_back_at?: string | null
+          status?: Database["public"]["Enums"]["selection_change_status"]
+          to_selection?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "selection_changes_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscriptions: {
         Row: {
           auto_renew: boolean
@@ -597,6 +656,7 @@ export type Database = {
     }
     Enums: {
       AlertEntityType: "grant" | "tender" | "investment"
+      selection_change_status: "pending" | "committed" | "rolled_back"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -725,6 +785,7 @@ export const Constants = {
   public: {
     Enums: {
       AlertEntityType: ["grant", "tender", "investment"],
+      selection_change_status: ["pending", "committed", "rolled_back"],
     },
   },
 } as const
