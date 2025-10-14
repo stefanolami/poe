@@ -21,49 +21,23 @@ Coming soon:
 
 - Procurement Tenders and Investment Financing flows
 
-## Subscription Auto-Renewal
+## Subscriptions (Overview)
 
-Yearly subscription management has been added:
+The platform supports annual client subscriptions with optional auto‑renewal and a grace period for late payments. Account states (`active`, `pending`, `frozen`) govern access. Expired or unpaid accounts eventually freeze until a new subscription is recorded. Internal processing & schedules are documented privately.
 
-- Table: `subscriptions` with `period_start`, `period_end`, `auto_renew`, `status` (active | expired | frozen)
-- Client columns: `current_subscription`, `account_status` (active | frozen)
-- Cron endpoint: `GET /api/cron/subscription-renewal` (configure via Vercel Cron)
-    - If `auto_renew = true` and period_end = today: creates new period & triggers invoice email stub
-    - If `auto_renew = false`: reminder emails at -30, -7, -1 days; freezes after period_end
-- UI toggle: `AutoRenewToggle` component in account area
-- Guard: `ensureActiveAccount` throws for frozen accounts
-- Email stubs: `subscription-mails.ts` (implement real templates & sending)
+## Selection Changes (Overview)
 
-Example Vercel cron config:
+Clients can request configuration updates to their e‑mobility data scope. Differences are priced (only additions) and may require payment before activation. Unpaid requests eventually lapse. Detailed pricing, proration and lifecycle handling live in internal docs.
 
-```json
-{
-	"cron": [
-		{ "path": "/api/cron/subscription-renewal", "schedule": "0 5 * * *" }
-	]
-}
-```
+## Email Templates
 
-Next steps you can implement:
+Transactional emails (subscription lifecycle & selection changes) share a unified branded layout (header, wave, CTAs, support contact). Templates are implemented with React Email and kept minimal here for security; full matrix and operational triggers are internal.
 
-1. Replace email stubs with real React Email templates
-2. Add admin UI to manually create / extend subscriptions
-3. Add analytics around renewal conversion
-4. Add soft-grace period before freezing (e.g. 7 days)
+## Tech Stack Summary
 
-## Scheduling (Cron)
-
-To automate account lifecycle and selection change processing, add two Vercel Cron jobs (Project Settings → Cron Jobs):
-
-- Daily subscription lifecycle processing
-
-    - Path: `/api/cron/subscription-renewal`
-    - Schedule: `0 3 * * *` (daily at 03:00 UTC)
-    - Method: GET
-
-- Daily selection changes processing
-    - Path: `/api/cron/selection-changes`
-    - Schedule: `0 3 * * *` (daily at 03:00 UTC)
-    - Method: GET
-
-Adjust the schedule/timezone to your operations window as needed. Ensure the routes are publicly accessible or protected behind a token if required.
+- Next.js App Router (TypeScript)
+- Supabase (Auth + Postgres with RLS)
+- Tailwind CSS + shadcn/ui component primitives
+- Zustand for lightweight client state
+- Zod + React Hook Form for validation & forms
+- React Email for transactional template
