@@ -437,6 +437,7 @@ export const getClients = async () => {
 			org: client.org_name || '--',
 			email: client.email,
 			created_at: client.created_at,
+			account_status: client.account_status,
 		}))
 
 		return formattedData
