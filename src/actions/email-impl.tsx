@@ -18,6 +18,8 @@ import { fileToAttachment } from '../lib/utils'
 import type { AttachmentDescriptor } from '../lib/attachments'
 import AccountRecapEmail from '../components/emails/others/account-recap'
 import AccountRecapEmailCharin from '../components/emails/others/account-recap-charin'
+import WelcomeEmail from '../components/emails/others/welcome'
+import WelcomeEmailCharin from '../components/emails/others/welcome-charin'
 import { createAdminClient } from '../supabase/server'
 import type { AccountRecapType } from '../lib/types'
 import {
@@ -213,6 +215,58 @@ export async function sendAccountRecap(
 		.setFrom(fromSender)
 		.setTo([new Recipient(to)])
 		.setCc(ccList.map((addr) => new Recipient(addr)))
+		.setSubject(subject)
+		.setHtml(emailHtml)
+
+	return brand === 'charin'
+		? await mailerSendCharIn.email.send(params)
+		: await mailerSend.email.send(params)
+}
+
+// Welcome Email (post full signup)
+export async function sendWelcomeEmail(
+	to: string,
+	options?: {
+		brand?: 'poe' | 'charin'
+		org_name?: string | null
+		clientId?: string | null
+		paymentWindowDays?: number
+	}
+) {
+	const brand = options?.brand || 'poe'
+	const org_name = options?.org_name || null
+	const clientId = options?.clientId || undefined
+	const paymentWindowDays = options?.paymentWindowDays ?? 14
+	// Build magic link for convenience
+	const accountLink = await buildAccountMagicLink({ email: to })
+	const emailHtml = await render(
+		brand === 'charin' ? (
+			<WelcomeEmailCharin
+				clientId={clientId}
+				org_name={org_name}
+				paymentWindowDays={paymentWindowDays}
+				accountLink={accountLink || undefined}
+			/>
+		) : (
+			<WelcomeEmail
+				clientId={clientId}
+				org_name={org_name}
+				paymentWindowDays={paymentWindowDays}
+				accountLink={accountLink || undefined}
+			/>
+		)
+	)
+
+	const fromSender =
+		brand === 'charin'
+			? new Sender('alerts@poeontap-charin.com', 'POE')
+			: new Sender('alerts@poeontap.com', 'POE')
+
+	const subject = 'POE - Welcome (Account Active)'
+
+	const params = new EmailParams()
+		.setFrom(fromSender)
+		.setTo([new Recipient(to)])
 		.setSubject(subject)
 		.setHtml(emailHtml)
 

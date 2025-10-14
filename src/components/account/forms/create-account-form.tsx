@@ -118,8 +118,8 @@ const CreateAccountForm = () => {
 					variant: 'default',
 				})
 				setTimeout(() => {
-					router.push('/')
-				}, 1000)
+					router.push('/account')
+				}, 800)
 			}
 
 			console.log('response', response)

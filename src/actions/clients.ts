@@ -8,7 +8,7 @@ import {
 } from '@/lib/types'
 import { normalizeClientData } from '@/lib/utils'
 import { createAdminClient, createClient } from '@/supabase/server'
-import { sendAccountRecap } from './email'
+import { sendAccountRecap, sendWelcomeEmail } from './email'
 
 export const signUpClient = async (data: CreateAccountType, id?: string) => {
 	try {
@@ -77,6 +77,22 @@ export const signUpClient = async (data: CreateAccountType, id?: string) => {
 			throw new Error(`Client creation failed: ${clientError.message}`)
 		}
 		console.log('Client account created successfully')
+
+		// Fire welcome email asynchronously (non-blocking). Failure should not block signup.
+		;(async () => {
+			try {
+				await sendWelcomeEmail(data.email, {
+					brand:
+						clientInsertData.referrer === 'charin'
+							? 'charin'
+							: 'poe',
+					org_name: clientInsertData.org_name || null,
+					clientId: clientData.id,
+				})
+			} catch (e) {
+				console.error('WELCOME EMAIL ERROR:', e)
+			}
+		})()
 
 		// Delete client_temp if id is provided
 		if (id) {
