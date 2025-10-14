@@ -667,7 +667,7 @@ const linkCell: React.CSSProperties = {
 }
 
 const ctaButton: React.CSSProperties = {
-	fontSize: 12,
+	fontSize: 10,
 	lineHeight: '18px',
 	display: 'inline-flex',
 	fontWeight: 700,

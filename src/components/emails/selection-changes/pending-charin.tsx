@@ -11,22 +11,27 @@ import {
 	Text,
 	Img,
 	Link,
+	Hr,
 } from '@react-email/components'
 
 type Props = {
 	clientId: string
+	priceCents: number
 	org_name?: string | null
 	previewText?: string
 	accountLink?: string
 }
-const baseUrl = 'https://www.poeontap.com/'
 
-export default function FreezeNoticeEmail({
+const baseUrl = 'https://www.poeontap-charin.com/'
+
+export default function SelectionPendingEmail({
 	clientId,
+	priceCents,
 	org_name,
-	previewText = 'Account Frozen — Action Required',
+	previewText = 'POE Selection Change Pending',
 	accountLink,
 }: Props) {
+	const amount = (priceCents / 100).toFixed(2)
 	return (
 		<Html>
 			<Head>
@@ -43,15 +48,26 @@ export default function FreezeNoticeEmail({
 						.header-title { font-size: 18px !important; line-height: 28px !important; padding: 12px 8px 4px !important; }
 						.logo-left-img { width: 140px !important; height: auto !important; }
 						.logo-right-img { width: 55px !important; height: auto !important; }
+						.logo-left-img-footer { width: 110px !important; height: auto !important; }
+						.logo-right-img-footer { width: 110px !important; height: auto !important; }
 						.cta-col { padding: 8px 0 !important; }
 						.cta-row { padding: 0 12px 12px !important; text-align: center !important; }
 						.cta-button { display: flex !important; margin: auto !important; width: 200px !important; padding: 10px 12px !important; font-size: 12px !important; }
 						.cta-btn-td { display: block !important; width: 100% !important; padding: 6px 0 !important; }
 						.cta-btn-td .cta-button { width: 200px !important; margin: 2px auto !important; }
+						.stack-on-mobile { display: block !important; width: 100% !important; }
 					}
 				`}</style>
-				<style>{`@import url('https://fonts.googleapis.com/css2?family=Unna:wght@700&display=swap'); *{ font-family: 'Unna', serif; }`}</style>
-				<style>{`@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100..700&display=swap'); *{ font-family: 'Josefin Sans', sans-serif; }`}</style>
+				<style>
+					{`
+			@import url('https://fonts.googleapis.com/css2?family=Unna:wght@700&display=swap');
+			*{ font-family: 'Unna', serif; }`}
+				</style>
+				<style>
+					{`
+			@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100..700&display=swap');
+			*{ font-family: 'Josefin Sans', sans-serif; }`}
+				</style>
 			</Head>
 			<Preview>{previewText}</Preview>
 			<Body style={bodyStyle}>
@@ -59,6 +75,7 @@ export default function FreezeNoticeEmail({
 					style={containerOuter}
 					className="container"
 				>
+					{/* Top strip */}
 					<Section style={topStrip}>
 						<Row>
 							<Column style={topStripLeft}>
@@ -66,6 +83,8 @@ export default function FreezeNoticeEmail({
 							</Column>
 						</Row>
 					</Section>
+
+					{/* Header */}
 					<Section style={gradientHeader}>
 						<Row>
 							<Column
@@ -90,10 +109,10 @@ export default function FreezeNoticeEmail({
 								className="col-right"
 							>
 								<Img
-									src={`${baseUrl}logos/consulting-white.png`}
-									alt="Consulting Logo"
-									width={160}
-									height={42}
+									src={`${baseUrl}logos/charin-logo.png`}
+									alt="Charin Logo"
+									width={77}
+									height={60}
 									style={{
 										...logoImg,
 										marginRight: 0,
@@ -112,7 +131,7 @@ export default function FreezeNoticeEmail({
 									style={centerTitle}
 									className="header-title"
 								>
-									ACCOUNT FROZEN
+									SELECTION CHANGE PENDING
 								</Text>
 							</Column>
 						</Row>
@@ -136,6 +155,7 @@ export default function FreezeNoticeEmail({
 							</Column>
 						</Row>
 					</Section>
+
 					<Container
 						style={containerInner}
 						className="containerInner"
@@ -146,24 +166,45 @@ export default function FreezeNoticeEmail({
 								Member,
 							</Text>
 							<Text style={paragraph}>
-								Your account has been temporarily frozen due to
-								non-payment. To restore full access, please
-								complete the payment for your subscription. Once
-								payment is received, your account will be
-								reactivated automatically.
+								We’ve received your request to update your
+								selection. To apply these changes, please
+								complete the payment of € {amount}. Your request
+								will remain pending for up to 14 days. Once
+								payment is confirmed, we’ll automatically apply
+								the changes and notify you.
 							</Text>
 							<Text style={paragraph}>
-								If you believe this is a mistake or need help
-								with payment, please write to{' '}
+								If you need assistance, please write to{' '}
 								<Link
 									href={`mailto:info@poeontap.com`}
 									style={linkInline}
 								>
 									info@poeontap.com
 								</Link>{' '}
-								and our team will assist you promptly.
+								and our team will support you.
 							</Text>
 						</Section>
+
+						<Hr style={divider} />
+						<Section>
+							<Row>
+								<Column>
+									<Text style={totalLabel}>AMOUNT DUE</Text>
+								</Column>
+								<Column>
+									<Text
+										style={{
+											...totalLabel,
+											textAlign: 'right',
+										}}
+									>
+										€ {amount}
+									</Text>
+								</Column>
+							</Row>
+						</Section>
+
+						{/* CTAs */}
 						<Section className="cta-row">
 							<table
 								role="presentation"
@@ -183,7 +224,7 @@ export default function FreezeNoticeEmail({
 											}}
 										>
 											<Link
-												href="https://www.consultingontap.com/contact"
+												href="https://charin.net/contact/"
 												style={ctaButton}
 												target="_blank"
 												rel="noopener noreferrer"
@@ -230,16 +271,9 @@ export default function FreezeNoticeEmail({
 												padding: '14px 8px',
 												textAlign: 'center',
 											}}
-										></td>
-										<td
-											className="cta-btn-td"
-											style={{
-												padding: '14px 8px',
-												textAlign: 'center',
-											}}
 										>
 											<Link
-												href="https://www.consultingontap.com/services"
+												href="https://charin.net/"
 												style={ctaButton}
 												target="_blank"
 												rel="noopener noreferrer"
@@ -301,7 +335,7 @@ export default function FreezeNoticeEmail({
 	)
 }
 
-// Styles default
+// Styles cloned from account-recap-charin
 const bodyStyle: React.CSSProperties = {
 	margin: 0,
 	padding: 0,
@@ -311,13 +345,13 @@ const bodyStyle: React.CSSProperties = {
 }
 const containerOuter: React.CSSProperties = {
 	background:
-		'linear-gradient(180deg, rgba(53,75,131,0.2) 0%, rgba(39,51,90,0.2) 100%)',
+		'linear-gradient(180deg, rgba(170,210,120,0.12) 0%, rgba(0,55,75,0.12) 100%)',
 	maxWidth: '600px',
 	width: '100%',
 }
 const containerInner: React.CSSProperties = { width: '100%', marginTop: '30px' }
 const topStrip: React.CSSProperties = {
-	backgroundColor: '#354B83',
+	backgroundColor: '#00334d',
 	color: '#ffffff',
 	fontSize: 11,
 	fontWeight: 700,
@@ -330,7 +364,7 @@ const topStripLeft: React.CSSProperties = {
 	textAlign: 'left' as const,
 }
 const gradientHeader: React.CSSProperties = {
-	background: 'linear-gradient(180deg,#354B83 0%, #27335A 100%)',
+	background: 'linear-gradient(180deg,#00374B 0%,#6AA5B9 55%,#AAD278 100%)',
 	color: '#ffffff',
 	position: 'relative',
 	padding: '11px 0 0',
@@ -343,7 +377,7 @@ const logoLeftCol: React.CSSProperties = {
 }
 const logoSpacerCol: React.CSSProperties = {
 	width: '33.33%',
-	padding: 0,
+	padding: '0',
 	fontSize: 0,
 	lineHeight: 0,
 }
@@ -364,7 +398,7 @@ const centerTitle: React.CSSProperties = {
 	lineHeight: '26px',
 	fontWeight: 800,
 	letterSpacing: '.5px',
-	color: '#fff',
+	color: '#00334d',
 	margin: '20px 0 0',
 }
 const waveWrapper: React.CSSProperties = {
@@ -391,6 +425,19 @@ const linkInline: React.CSSProperties = {
 	color: '#00334d',
 	textDecoration: 'underline',
 }
+const divider: React.CSSProperties = {
+	border: 'none',
+	borderTop: '1px solid #00374B',
+	height: 0,
+	width: '80%',
+	display: 'block',
+	margin: '12px auto 20px',
+}
+const totalLabel: React.CSSProperties = {
+	fontSize: 16,
+	fontWeight: 700,
+	color: '#27335a',
+}
 const ctaButton: React.CSSProperties = {
 	fontSize: 10,
 	lineHeight: '18px',
@@ -404,7 +451,7 @@ const ctaButton: React.CSSProperties = {
 	gap: '6px',
 	padding: '8px 10px',
 	textTransform: 'uppercase',
-	backgroundColor: '#27335A',
+	backgroundColor: '#AAD278',
 }
 const ctaButtonIcon: React.CSSProperties = {
 	width: '16px',

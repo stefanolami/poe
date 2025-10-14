@@ -1,5 +1,5 @@
 import { createElement } from 'react'
-import { createClient } from '@/supabase/server'
+import { createClient, createAdminClient } from '@/supabase/server'
 import { MailerSend, EmailParams, Sender, Recipient } from 'mailersend'
 import { render } from '@react-email/components'
 import SelectionPendingEmail from '@/components/emails/selection-changes/pending'
@@ -10,24 +10,69 @@ import SelectionCommittedEmail from '@/components/emails/selection-changes/commi
 const mailer = new MailerSend({ apiKey: process.env.MAILERSEND_API_KEY || '' })
 const FROM = new Sender('alerts@poeontap.com', 'POE')
 
-async function getClientEmail(clientId: string): Promise<string | null> {
+type ClientContact = { email: string | null; org_name: string | null }
+
+async function getClientContact(clientId: string): Promise<ClientContact> {
 	const supabase = await createClient()
 	const { data } = await supabase
 		.from('clients')
-		.select('email')
+		.select('email, org_name')
 		.eq('id', clientId)
 		.single()
-	return data?.email ?? null
+	return {
+		email: data?.email ?? null,
+		org_name: (data?.org_name as string | null) ?? null,
+	}
+}
+
+async function generateAccountLink(email: string): Promise<string | null> {
+	try {
+		const supabase = await createAdminClient()
+		// Redirect to the account page after magic-link sign-in
+		const redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.poeontap.com'}/account`
+		const adminAny = (
+			supabase as unknown as {
+				auth: {
+					admin: {
+						generateLink: (
+							args: unknown
+						) => Promise<{ data: unknown; error: unknown }>
+					}
+				}
+			}
+		).auth.admin
+		const { data, error } = await adminAny.generateLink({
+			type: 'magiclink',
+			email,
+			options: { redirectTo },
+		})
+		if (error) return null
+		// supabase-js v2 returns data.properties.action_link
+		// Fallback to redirectTo if not present
+		const properties = (
+			data as unknown as { properties?: { action_link?: string } }
+		)?.properties
+		const link = properties?.action_link
+		return link || redirectTo
+	} catch {
+		return null
+	}
 }
 
 export async function sendSelectionPendingEmail(
 	clientId: string,
 	priceCents: number
 ) {
-	const to = await getClientEmail(clientId)
+	const { email: to, org_name } = await getClientContact(clientId)
 	if (!to) return
+	const accountLink = await generateAccountLink(to)
 	const html = await render(
-		createElement(SelectionPendingEmail, { clientId, priceCents })
+		createElement(SelectionPendingEmail, {
+			clientId,
+			priceCents,
+			org_name,
+			accountLink: accountLink || undefined,
+		})
 	)
 	const params = new EmailParams()
 		.setFrom(FROM)
@@ -41,10 +86,16 @@ export async function sendSelectionReminderEmail(
 	clientId: string,
 	days: number
 ) {
-	const to = await getClientEmail(clientId)
+	const { email: to, org_name } = await getClientContact(clientId)
 	if (!to) return
+	const accountLink = await generateAccountLink(to)
 	const html = await render(
-		createElement(SelectionReminderEmail, { clientId, days })
+		createElement(SelectionReminderEmail, {
+			clientId,
+			days,
+			org_name,
+			accountLink: accountLink || undefined,
+		})
 	)
 	const params = new EmailParams()
 		.setFrom(FROM)
@@ -55,10 +106,15 @@ export async function sendSelectionReminderEmail(
 }
 
 export async function sendSelectionRollbackEmail(clientId: string) {
-	const to = await getClientEmail(clientId)
+	const { email: to, org_name } = await getClientContact(clientId)
 	if (!to) return
+	const accountLink = await generateAccountLink(to)
 	const html = await render(
-		createElement(SelectionRollbackEmail, { clientId })
+		createElement(SelectionRollbackEmail, {
+			clientId,
+			org_name,
+			accountLink: accountLink || undefined,
+		})
 	)
 	const params = new EmailParams()
 		.setFrom(FROM)
@@ -69,10 +125,15 @@ export async function sendSelectionRollbackEmail(clientId: string) {
 }
 
 export async function sendSelectionCommittedEmail(clientId: string) {
-	const to = await getClientEmail(clientId)
+	const { email: to, org_name } = await getClientContact(clientId)
 	if (!to) return
+	const accountLink = await generateAccountLink(to)
 	const html = await render(
-		createElement(SelectionCommittedEmail, { clientId })
+		createElement(SelectionCommittedEmail, {
+			clientId,
+			org_name,
+			accountLink: accountLink || undefined,
+		})
 	)
 	const params = new EmailParams()
 		.setFrom(FROM)

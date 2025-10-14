@@ -194,120 +194,7 @@ const AccountRecapEmail = ({
 							</Row>
 						</Section>
 
-						{/* Items */}
-						{/* <Section>
-							{Object.keys(data).map((key, index) => {
-								if (
-									key !== 'typeOfVehicleContract' &&
-									key !== 'chargingStationsContract'
-								) {
-									const category =
-										selectionData.eMobility[
-											key as keyof typeof selectionData.eMobility
-										]
-									const items = data[
-										key as keyof AccountRecapType
-									] as PricedGeographicItem[]
-									if (items.length > 0) {
-										return (
-											<div key={index}>
-												{index > 0 && (
-													<Hr style={divider} />
-												)}
-												<Text style={fieldTitle}>
-													{key == 'deployment'
-														? 'Grants Deployment'
-														: key == 'project'
-															? 'Grants Innovative Projects'
-															: (category?.label as string)}
-												</Text>
-												<ul style={ulStyle}>
-													{items.map(
-														(
-															item: PricedGeographicItem,
-															i
-														) => (
-															<li
-																key={i}
-																style={liRow}
-															>
-																<span>
-																	{removeParenthesesContent(
-																		item.label
-																	)}{' '}
-																	{item.geographies &&
-																		item
-																			.geographies
-																			.length >
-																			0 && (
-																			<>
-																				(
-																				{item.geographies
-																					.map(
-																						(
-																							g
-																						) =>
-																							g.label
-																					)
-																					.join(
-																						', '
-																					)}
-
-																				)
-																			</>
-																		)}
-																</span>
-																{typeof item.price !==
-																	'undefined' && (
-																	<span
-																		style={
-																			nowrap
-																		}
-																	>
-																		€{' '}
-																		{
-																			item.price
-																		}{' '}
-																		/ year
-																	</span>
-																)}
-															</li>
-														)
-													)}
-												</ul>
-											</div>
-										)
-									}
-								} else {
-									const items = data[
-										key as keyof AccountRecapType
-									] as { label: string }[]
-									if (items.length > 0) {
-										return (
-											<div key={index}>
-												<Hr style={dividerThin} />
-												<Text style={fieldSubTitle}>
-													Type of Contract
-												</Text>
-												<ul style={ulStyle}>
-													{items.map((item, i) => (
-														<li
-															key={i}
-															style={liRow}
-														>
-															{item.label}
-														</li>
-													))}
-												</ul>
-											</div>
-										)
-									}
-								}
-								return null
-							})}
-						</Section>*/}
-
-						<Section /* style={section} */>
+						<Section>
 							{Object.keys(data).map((key, index) => {
 								if (
 									key !== 'typeOfVehicleContract' &&
@@ -393,38 +280,7 @@ const AccountRecapEmail = ({
 											</>
 										)
 									}
-								} /* else if (key === 'report') {
-																		const category =
-																			DATA[key as keyof MobilityData]
-												
-																		if (category.length > 0) {
-																			return (
-																				<div
-																					className="mt-2"
-																					key={index}
-																				>
-																					<span className="text-lg">Reports</span>
-																					<ul className="pl-1 pr-3">
-																						{category.map((item, index) => (
-																							<li
-																								key={index}
-																								className="flex w-full items-center justify-between gap-4 py-2"
-																							>
-																								<span className="text-white">
-																									{item.value == 'eu'
-																										? 'EU'
-																										: 'Non-EU'}
-																								</span>
-																								<span className="text-white">
-																									€ {item.price?.default}
-																								</span>
-																							</li>
-																						))}
-																					</ul>
-																				</div>
-																			)
-																		}
-																	} */ else if (
+								} else if (
 									key === 'typeOfVehicleContract' ||
 									key === 'chargingStationsContract'
 								) {
@@ -701,12 +557,6 @@ const fieldTitle: React.CSSProperties = {
 	marginTop: 8,
 }
 
-/* const fieldSubTitle: React.CSSProperties = {
-	fontSize: 14,
-	fontWeight: 600,
-	marginTop: 8,
-} */
-
 const divider: React.CSSProperties = {
 	border: 'none',
 	borderTop: '1px solid #00374B',
@@ -738,15 +588,6 @@ const listItemDiv: React.CSSProperties = {
 	alignItems: 'start',
 	flexDirection: 'row',
 }
-
-/* const ulStyle: React.CSSProperties = { paddingLeft: 16, margin: '8px 0' }
-const liRow: React.CSSProperties = {
-	display: 'flex',
-	justifyContent: 'space-between',
-	gap: 8,
-}
-const nowrap: React.CSSProperties = { whiteSpace: 'nowrap' }
- */
 
 const totalLabel: React.CSSProperties = {
 	fontSize: 22,
@@ -788,7 +629,7 @@ const ctaButtonTop: React.CSSProperties = {
 const ctaButtonIcon: React.CSSProperties = {
 	width: '16px',
 	height: '16px',
-	marginRight: '10px',
+	marginRight: '4px',
 	color: '#ffffff',
 }
 

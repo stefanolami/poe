@@ -19,7 +19,7 @@ type Props = {
 	previewText?: string
 	accountLink?: string
 }
-const baseUrl = 'https://www.poeontap.com/'
+const baseUrl = 'https://www.poeontap-charin.com/'
 
 export default function FreezeNoticeEmail({
 	clientId,
@@ -90,10 +90,10 @@ export default function FreezeNoticeEmail({
 								className="col-right"
 							>
 								<Img
-									src={`${baseUrl}logos/consulting-white.png`}
-									alt="Consulting Logo"
-									width={160}
-									height={42}
+									src={`${baseUrl}logos/charin-logo.png`}
+									alt="Charin Logo"
+									width={77}
+									height={60}
 									style={{
 										...logoImg,
 										marginRight: 0,
@@ -183,7 +183,7 @@ export default function FreezeNoticeEmail({
 											}}
 										>
 											<Link
-												href="https://www.consultingontap.com/contact"
+												href="https://charin.net/contact/"
 												style={ctaButton}
 												target="_blank"
 												rel="noopener noreferrer"
@@ -239,7 +239,7 @@ export default function FreezeNoticeEmail({
 											}}
 										>
 											<Link
-												href="https://www.consultingontap.com/services"
+												href="https://charin.net/"
 												style={ctaButton}
 												target="_blank"
 												rel="noopener noreferrer"
@@ -301,7 +301,7 @@ export default function FreezeNoticeEmail({
 	)
 }
 
-// Styles default
+// Styles charin
 const bodyStyle: React.CSSProperties = {
 	margin: 0,
 	padding: 0,
@@ -311,13 +311,13 @@ const bodyStyle: React.CSSProperties = {
 }
 const containerOuter: React.CSSProperties = {
 	background:
-		'linear-gradient(180deg, rgba(53,75,131,0.2) 0%, rgba(39,51,90,0.2) 100%)',
+		'linear-gradient(180deg, rgba(170,210,120,0.12) 0%, rgba(0,55,75,0.12) 100%)',
 	maxWidth: '600px',
 	width: '100%',
 }
 const containerInner: React.CSSProperties = { width: '100%', marginTop: '30px' }
 const topStrip: React.CSSProperties = {
-	backgroundColor: '#354B83',
+	backgroundColor: '#00334d',
 	color: '#ffffff',
 	fontSize: 11,
 	fontWeight: 700,
@@ -330,7 +330,7 @@ const topStripLeft: React.CSSProperties = {
 	textAlign: 'left' as const,
 }
 const gradientHeader: React.CSSProperties = {
-	background: 'linear-gradient(180deg,#354B83 0%, #27335A 100%)',
+	background: 'linear-gradient(180deg,#00374B 0%,#6AA5B9 55%,#AAD278 100%)',
 	color: '#ffffff',
 	position: 'relative',
 	padding: '11px 0 0',
@@ -364,7 +364,7 @@ const centerTitle: React.CSSProperties = {
 	lineHeight: '26px',
 	fontWeight: 800,
 	letterSpacing: '.5px',
-	color: '#fff',
+	color: '#00334d',
 	margin: '20px 0 0',
 }
 const waveWrapper: React.CSSProperties = {
@@ -404,7 +404,7 @@ const ctaButton: React.CSSProperties = {
 	gap: '6px',
 	padding: '8px 10px',
 	textTransform: 'uppercase',
-	backgroundColor: '#27335A',
+	backgroundColor: '#AAD278',
 }
 const ctaButtonIcon: React.CSSProperties = {
 	width: '16px',

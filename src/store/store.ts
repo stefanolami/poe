@@ -81,7 +81,16 @@ export const useStore = create<StoreState>()(
 						const targetItem = state.data.eMobility[category].find(
 							(el) => el.value === item.value
 						)
-						if (targetItem) targetItem.geographies?.push(geography)
+						if (targetItem) {
+							if (!targetItem.geographies)
+								targetItem.geographies = []
+							const exists = targetItem.geographies.some(
+								(g) => g.value === geography.value
+							)
+							if (!exists) {
+								targetItem.geographies.push(geography)
+							}
+						}
 					})
 				)
 			},
@@ -128,9 +137,10 @@ export const useStore = create<StoreState>()(
 								).push(item)
 							}
 						} else {
+							// Important: clone geographies so each item maintains its own selection
 							const newItem = {
 								...item,
-								geographies: state.geographies,
+								geographies: [...state.geographies],
 							}
 							;(
 								state.data.eMobility[

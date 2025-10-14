@@ -1,5 +1,5 @@
 import { createElement } from 'react'
-import { createClient } from '@/supabase/server'
+import { createClient, createAdminClient } from '@/supabase/server'
 import { MailerSend, EmailParams, Sender, Recipient } from 'mailersend'
 import { render } from '@react-email/components'
 import AutoRenewInvoiceEmail from '@/components/emails/subscriptions/auto-renew-invoice'
@@ -9,26 +9,65 @@ import PendingReminderEmail from '@/components/emails/subscriptions/pending-remi
 const mailer = new MailerSend({ apiKey: process.env.MAILERSEND_API_KEY || '' })
 const FROM = new Sender('alerts@poeontap.com', 'POE')
 
-async function getClientEmail(clientId: string): Promise<string | null> {
+type ClientContact = { email: string | null; org_name: string | null }
+
+async function getClientContact(clientId: string): Promise<ClientContact> {
 	const supabase = await createClient()
 	const { data } = await supabase
 		.from('clients')
-		.select('email')
+		.select('email, org_name')
 		.eq('id', clientId)
 		.single()
-	return data?.email ?? null
+	return {
+		email: data?.email ?? null,
+		org_name: (data?.org_name as string | null) ?? null,
+	}
+}
+
+async function generateAccountLink(email: string): Promise<string | null> {
+	try {
+		const supabase = await createAdminClient()
+		const redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.poeontap.com'}/account`
+		const adminAny = (
+			supabase as unknown as {
+				auth: {
+					admin: {
+						generateLink: (
+							args: unknown
+						) => Promise<{ data: unknown; error: unknown }>
+					}
+				}
+			}
+		).auth.admin
+		const { data, error } = await adminAny.generateLink({
+			type: 'magiclink',
+			email,
+			options: { redirectTo },
+		})
+		if (error) return null
+		const properties = (
+			data as unknown as { properties?: { action_link?: string } }
+		)?.properties
+		const link = properties?.action_link
+		return link || redirectTo
+	} catch {
+		return null
+	}
 }
 
 export async function sendAutoRenewInvoiceEmail(
 	clientId: string,
 	previousSubscriptionId: string
 ): Promise<void> {
-	const to = await getClientEmail(clientId)
+	const { email: to, org_name } = await getClientContact(clientId)
 	if (!to) return
+	const accountLink = await generateAccountLink(to)
 	const html = await render(
 		createElement(AutoRenewInvoiceEmail, {
 			clientId,
 			subscriptionId: previousSubscriptionId,
+			org_name,
+			accountLink: accountLink || undefined,
 		})
 	)
 	const params = new EmailParams()
@@ -40,9 +79,16 @@ export async function sendAutoRenewInvoiceEmail(
 }
 
 export async function sendFreezeEmail(clientId: string): Promise<void> {
-	const to = await getClientEmail(clientId)
+	const { email: to, org_name } = await getClientContact(clientId)
 	if (!to) return
-	const html = await render(createElement(FreezeNoticeEmail, { clientId }))
+	const accountLink = await generateAccountLink(to)
+	const html = await render(
+		createElement(FreezeNoticeEmail, {
+			clientId,
+			org_name,
+			accountLink: accountLink || undefined,
+		})
+	)
 	const params = new EmailParams()
 		.setFrom(FROM)
 		.setTo([new Recipient(to)])
@@ -55,10 +101,16 @@ export async function sendReminderEmail(
 	clientId: string,
 	days: number
 ): Promise<void> {
-	const to = await getClientEmail(clientId)
+	const { email: to, org_name } = await getClientContact(clientId)
 	if (!to) return
+	const accountLink = await generateAccountLink(to)
 	const html = await render(
-		createElement(PendingReminderEmail, { clientId, days })
+		createElement(PendingReminderEmail, {
+			clientId,
+			days,
+			org_name,
+			accountLink: accountLink || undefined,
+		})
 	)
 	const params = new EmailParams()
 		.setFrom(FROM)

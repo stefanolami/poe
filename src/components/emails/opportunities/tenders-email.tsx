@@ -679,7 +679,7 @@ const linkCell: React.CSSProperties = {
 
 /* const ctaRow: React.CSSProperties = { padding: '0 34px 12px' } */
 const ctaButton: React.CSSProperties = {
-	fontSize: 12,
+	fontSize: 10,
 	lineHeight: '18px',
 	display: 'inline-flex',
 	fontWeight: 700,

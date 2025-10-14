@@ -79,7 +79,8 @@ export default function SelectionEdit({
 						selectionData.eMobility[category] as CategoryData
 					)?.fields.find((f) => f.value === item.value)?.label ||
 					item.value,
-				geographies: item.geographies,
+				// Clone geographies to ensure each item maintains its own array reference
+				geographies: item.geographies ? [...item.geographies] : [],
 			}))
 		}
 
@@ -225,7 +226,7 @@ export default function SelectionEdit({
 	return (
 		<div className="space-y-4">
 			<div className="flex flex-col lg:flex-row gap-4">
-				<div className="lg:w-[380px]">
+				<div className="lg:w-[380px] lg:hidden">
 					<GeographyModifier />
 				</div>
 				<div className="flex-1" />
@@ -275,6 +276,7 @@ export default function SelectionEdit({
 				</div>
 				<div className="lg:sticky top-6 self-start">
 					<div className="hidden lg:block">
+						<GeographyModifier />
 						<SummaryDesktopEdit
 							onRequest={handleSubmit}
 							submitting={submitting}
