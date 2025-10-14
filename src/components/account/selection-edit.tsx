@@ -203,7 +203,7 @@ export default function SelectionEdit({
 			toast({
 				title: 'Request submitted',
 				description:
-					'Your selection change request has been sent. We\'ll notify you by email.',
+					"Your selection change request has been sent. We'll notify you by email.",
 				variant: 'default',
 			})
 			onClose?.()
@@ -286,7 +286,6 @@ export default function SelectionEdit({
 							submitting={submitting}
 						/>
 					</div>
-
 				</div>
 			</div>
 		</div>
