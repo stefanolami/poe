@@ -12,6 +12,7 @@ export type Client = {
 	org: string | null
 	email: string
 	created_at: string
+	account_status?: string | null
 }
 
 export const columns: ColumnDef<Client>[] = [
@@ -89,5 +90,36 @@ export const columns: ColumnDef<Client>[] = [
 					: 'N/A'}
 			</span>
 		),
+	},
+	{
+		accessorKey: 'account_status',
+		header: ({ column }) => (
+			<Button
+				variant="ghost"
+				onClick={() =>
+					column.toggleSorting(column.getIsSorted() === 'asc')
+				}
+				className="px-0"
+			>
+				Account Status
+				<ArrowUpDown className="ml-2 h-4 w-4" />
+			</Button>
+		),
+		cell: ({ getValue }) => {
+			const v = String(getValue() || '—').toLowerCase()
+			const color =
+				v === 'active'
+					? 'text-green-600'
+					: v === 'pending'
+						? 'text-amber-500'
+						: v === 'frozen'
+							? 'text-red-500'
+							: 'text-white'
+			return (
+				<span className={`uppercase font-semibold ${color}`}>
+					{v === '—' ? '—' : v}
+				</span>
+			)
+		},
 	},
 ]

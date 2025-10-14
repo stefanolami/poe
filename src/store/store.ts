@@ -19,6 +19,8 @@ export const useStore = create<StoreState>()(
 			sector: {},
 			geographies: [],
 			languages: [],
+			initialPlan: null,
+			subscriptionRemainingDays: 365,
 			data: {
 				eMobility: {
 					typeOfVehicle: [],
@@ -30,11 +32,57 @@ export const useStore = create<StoreState>()(
 					project: [],
 				},
 			},
+			// Sanitize any duplicated entries in persisted arrays on first access
+			__sanitize: () => {
+				set(
+					produce((state: StoreState) => {
+						state.geographies = state.geographies.filter(
+							(g, i, arr) =>
+								arr.findIndex((x) => x.value === g.value) === i
+						)
+						state.languages = state.languages.filter(
+							(l, i, arr) =>
+								arr.findIndex((x) => x.value === l.value) === i
+						)
+						// Also ensure each item's geographies are unique
+						Object.keys(state.data.eMobility).forEach((cat) => {
+							;(
+								state.data.eMobility[
+									cat as keyof MobilityData
+								] || []
+							).forEach((item) => {
+								item.geographies = item.geographies?.filter(
+									(g, i, arr) =>
+										arr.findIndex(
+											(x) => x.value === g.value
+										) === i
+								)
+							})
+						})
+					})
+				)
+			},
+			captureInitialPlan: () => {
+				// Deep clone current plan to allow diffing later
+				const snapshot: MobilityData = JSON.parse(
+					JSON.stringify(get().data.eMobility)
+				)
+				set({ initialPlan: snapshot })
+			},
+			resetInitialPlan: () => set({ initialPlan: null }),
+			setSubscriptionRemainingDays: (days: number) =>
+				set({ subscriptionRemainingDays: days }),
 			changeSector: (newSector) => set(() => ({ sector: newSector })),
 			addGeography: (newGeography) => {
-				set((state) => ({
-					geographies: [...state.geographies, newGeography],
-				}))
+				set((state) => {
+					// ensure uniqueness by value
+					const exists = state.geographies.some(
+						(g) => g.value === newGeography.value
+					)
+					return exists
+						? { geographies: state.geographies }
+						: { geographies: [...state.geographies, newGeography] }
+				})
 				Object.keys(get().data.eMobility).forEach((category) => {
 					if (
 						![
@@ -111,9 +159,14 @@ export const useStore = create<StoreState>()(
 				)
 			},
 			addLanguage: (newLanguage) =>
-				set((state) => ({
-					languages: [...state.languages, newLanguage],
-				})),
+				set((state) => {
+					const exists = state.languages.some(
+						(l) => l.value === newLanguage.value
+					)
+					return exists
+						? { languages: state.languages }
+						: { languages: [...state.languages, newLanguage] }
+				}),
 			removeLanguage: (languageToRemove) =>
 				set((state) => ({
 					languages: state.languages.filter(
@@ -138,9 +191,17 @@ export const useStore = create<StoreState>()(
 							}
 						} else {
 							// Important: clone geographies so each item maintains its own selection
+							const uniqueGlobalGeos = state.geographies.filter(
+								(g, idx, arr) =>
+									arr.findIndex(
+										(x) => x.value === g.value
+									) === idx
+							)
 							const newItem = {
 								...item,
-								geographies: [...state.geographies],
+								geographies: uniqueGlobalGeos.map((g) => ({
+									...g,
+								})),
 							}
 							;(
 								state.data.eMobility[
@@ -308,6 +369,149 @@ export const useStore = create<StoreState>()(
 				}
 
 				return total
+			},
+			getAddedItems: () => {
+				const initial = get().initialPlan
+				if (!initial)
+					return [] as {
+						category: keyof MobilityData
+						item: SelectableItem
+						annualPrice: number
+					}[]
+				const added: {
+					category: keyof MobilityData
+					item: SelectableItem
+					annualPrice: number
+				}[] = []
+				;(
+					Object.keys(get().data.eMobility) as (keyof MobilityData)[]
+				).forEach((category: keyof MobilityData) => {
+					if (
+						(
+							[
+								'typeOfVehicleContract',
+								'chargingStationsContract',
+							] as (keyof MobilityData | string)[]
+						).includes(category)
+					)
+						return
+					const currentItems: SelectableItem[] =
+						get().data.eMobility[category] || []
+					const initialItems: SelectableItem[] =
+						initial[category] || []
+					currentItems.forEach((item: SelectableItem) => {
+						const existed = initialItems.find(
+							(i: SelectableItem) => i.value === item.value
+						)
+						if (!existed) {
+							const annualPrice = get().getModalSinglePrice(
+								category,
+								item
+							)
+							added.push({ category, item, annualPrice })
+						} else {
+							const newGeos = (item.geographies || []).filter(
+								(g: SelectableItem) =>
+									!existed.geographies?.some(
+										(eg: SelectableItem) =>
+											eg.value === g.value
+									)
+							)
+							if (newGeos.length > 0) {
+								const incremental: SelectableItem = {
+									...item,
+									geographies: newGeos,
+								}
+								const annualPrice = get().getModalSinglePrice(
+									category,
+									incremental
+								)
+								added.push({
+									category,
+									item: incremental,
+									annualPrice,
+								})
+							}
+						}
+					})
+				})
+				return added
+			},
+			getRemovedItems: () => {
+				const initial = get().initialPlan
+				if (!initial)
+					return [] as {
+						category: keyof MobilityData
+						item: SelectableItem
+					}[]
+				const removed: {
+					category: keyof MobilityData
+					item: SelectableItem
+				}[] = []
+				;(Object.keys(initial) as (keyof MobilityData)[]).forEach(
+					(category: keyof MobilityData) => {
+						if (
+							(
+								[
+									'typeOfVehicleContract',
+									'chargingStationsContract',
+								] as (keyof MobilityData | string)[]
+							).includes(category)
+						)
+							return
+						const initialItems: SelectableItem[] =
+							initial[category] || []
+						const currentItems: SelectableItem[] =
+							get().data.eMobility[category] || []
+						initialItems.forEach((item: SelectableItem) => {
+							const exists = currentItems.find(
+								(ci: SelectableItem) => ci.value === item.value
+							)
+							if (!exists) {
+								removed.push({ category, item })
+							} else {
+								const removedGeos = (
+									item.geographies || []
+								).filter(
+									(g: SelectableItem) =>
+										!exists.geographies?.some(
+											(cg: SelectableItem) =>
+												cg.value === g.value
+										)
+								)
+								if (removedGeos.length > 0) {
+									removed.push({
+										category,
+										item: {
+											...item,
+											geographies: removedGeos,
+										},
+									})
+								}
+							}
+						})
+					}
+				)
+				return removed
+			},
+			getAddedItemsAnnualTotal: () => {
+				const added = get().getAddedItems()
+				let total = added.reduce((sum, row) => sum + row.annualPrice, 0)
+				const languageCount = get().languages.length
+				if (languageCount > 0) {
+					const increment = languageCount * 0.25
+					total *= 1 + increment
+				}
+				return total
+			},
+			getAddedItemsProratedTotal: () => {
+				const annual = get().getAddedItemsAnnualTotal()
+				const remaining = get().subscriptionRemainingDays
+				// Fallback to annual if remaining not set or invalid
+				if (!remaining || remaining <= 0 || remaining > 365) {
+					return Math.round(annual)
+				}
+				return Math.round((annual * remaining) / 365)
 			},
 			/* getTotalPriceFromDB: (
 				clientSelection: { [key: string]: string[] },

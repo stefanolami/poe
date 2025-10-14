@@ -9,6 +9,7 @@ import GrantsSection from '@/components/e-mobility/grants-section'
 import GeographyModifier from '@/components/geography-modifier'
 import SummaryDesktopEdit from '@/components/account/summary-desktop-edit'
 import SummaryMobileEdit from '@/components/account/summary-mobile-edit'
+import { SubscriptionRemainingSync } from '@/components/account/subscription-remaining-sync'
 import type { ClientSelectionType, ClientDataJsonType } from '@/lib/types'
 import { SelectableItem, CategoryData } from '@/store/store.types'
 import { useToast } from '@/hooks/use-toast'
@@ -17,22 +18,23 @@ type Props = {
 	clientId: string
 	initialSelection: ClientSelectionType
 	onClose?: () => void
+	subscriptionPeriodEnd?: string | null // ISO date (yyyy-mm-dd) for current subscription end
 }
 
 /**
- * SelectionEdit allows a client to edit their current selection based on the same
- * UI patterns used in the public e-mobility selector. On submit, it calls the
- * selection change API to create a pending selection change.
+ * SelectionEdit allows a client to edit their current selection based on the
+ * public e-mobility selector UI. On submit it sends a selection change request.
  */
 export default function SelectionEdit({
 	clientId,
 	initialSelection,
 	onClose,
+	subscriptionPeriodEnd,
 }: Props) {
 	const [submitting, setSubmitting] = useState(false)
 	const { toast } = useToast()
 
-	// Pull store actions and state, similar to e-mobility flow
+	// Pull store actions and state
 	const { storeData, changeSector, addGeography } = useStore(
 		useShallow((state) => ({
 			storeData: state.data,
@@ -41,11 +43,9 @@ export default function SelectionEdit({
 		}))
 	)
 
-	// On mount, seed the store with initial selection
+	// Seed selection into store on mount
 	useEffect(() => {
-		// Ensure sector is set to eMobility for pricing utils used by sections
 		changeSector({ value: 'eMobility', label: 'E-Mobility' })
-		// Seed geographies from existing selection so item prices display correctly
 		const geoMap = new Map<string, { value: string; label: string }>()
 		const collect = (items?: ClientDataJsonType[] | null) => {
 			items?.forEach((it) => {
@@ -61,7 +61,7 @@ export default function SelectionEdit({
 		collect(initialSelection.project)
 		//eslint-disable-next-line
 		Array.from(geoMap.values()).forEach((g) => addGeography(g as any))
-		// Build mapped items and hydrate the store via setState (no direct mutation)
+
 		type SelectionDataCategory =
 			| 'typeOfVehicle'
 			| 'chargingStations'
@@ -79,7 +79,6 @@ export default function SelectionEdit({
 						selectionData.eMobility[category] as CategoryData
 					)?.fields.find((f) => f.value === item.value)?.label ||
 					item.value,
-				// Clone geographies to ensure each item maintains its own array reference
 				geographies: item.geographies ? [...item.geographies] : [],
 			}))
 		}
@@ -159,14 +158,12 @@ export default function SelectionEdit({
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ clientId, toSelection }),
 			})
-			// Try to parse JSON by content type; if not JSON, fall back to plain text to avoid parse errors
 			type ApiResponse = { ok: boolean; error?: string; change?: unknown }
 			const isJson =
 				res.headers.get('content-type')?.includes('application/json') ??
 				false
 			let json: ApiResponse | null = null
 			let rawText: string | undefined
-			// Handle auth redirects or unauthorized upfront for clearer UX
 			if (res.redirected && res.url.includes('/login')) {
 				throw new Error('Please log in to request a selection change.')
 			}
@@ -177,21 +174,12 @@ export default function SelectionEdit({
 				try {
 					json = (await res.json()) as ApiResponse
 				} catch (err) {
-					// If JSON parsing fails unexpectedly, try to read as text once
 					rawText = await res.text()
-					console.error(
-						'Selection change request response parse error:',
-						err,
-						'\nRaw:',
-						rawText
-					)
+					console.error('Selection change parse error:', err, rawText)
 				}
 			} else {
 				rawText = await res.text()
-				console.error(
-					'Selection change request non-JSON response:',
-					rawText
-				)
+				console.error('Selection change non-JSON response:', rawText)
 			}
 			if (!res.ok || !(json && json.ok)) {
 				const message =
@@ -225,6 +213,7 @@ export default function SelectionEdit({
 
 	return (
 		<div className="space-y-4">
+			<SubscriptionRemainingSync periodEnd={subscriptionPeriodEnd} />
 			<div className="flex flex-col lg:flex-row gap-4">
 				<div className="lg:w-[380px] lg:hidden">
 					<GeographyModifier />

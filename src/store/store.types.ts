@@ -39,9 +39,17 @@ export interface StoreState {
 	sector: Sector | Record<string, never>
 	geographies: SelectableItem[]
 	languages: SelectableItem[]
+	/** Internal one-time cleanup to deduplicate persisted arrays */
+	__sanitize?: () => void
+	/** Snapshot of the plan when entering edit mode (used for change summaries) */
+	initialPlan?: MobilityData | null
+	/** Remaining subscription days used for prorated calculations */
+	subscriptionRemainingDays: number
 	data: {
 		eMobility: MobilityData
 	}
+	captureInitialPlan: () => void
+	resetInitialPlan: () => void
 	changeSector: (newSector: Sector) => void
 	addGeography: (newGeography: SelectableItem) => void
 	removeGeography: (geographyToRemove: SelectableItem) => void
@@ -78,6 +86,22 @@ export interface StoreState {
 	getSubTotalPrice: (category: keyof MobilityData) => number
 	getTotalPrice: () => number
 	getTotalPriceFromDB: (clientSelection: ClientSelectionType) => number
+	/** Items newly added compared to initialPlan */
+	getAddedItems: () => {
+		category: keyof MobilityData
+		item: SelectableItem
+		annualPrice: number
+	}[]
+	/** Items removed compared to initialPlan */
+	getRemovedItems: () => {
+		category: keyof MobilityData
+		item: SelectableItem
+	}[]
+	/** Annual total of added items only (language multiplier applied) */
+	getAddedItemsAnnualTotal: () => number
+	/** Prorated total for added items based on remaining subscription days */
+	getAddedItemsProratedTotal: () => number
+	setSubscriptionRemainingDays: (days: number) => void
 }
 
 export interface User {

@@ -1,10 +1,12 @@
 import Footer from '@/components/footer'
 import Header from '@/components/header/header'
 import HashErrorListener from '@/components/auth/hash-error-listener'
+import { SanitizerRunner } from '@/components/sanitizer-runner'
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<>
+			<SanitizerRunner />
 			<HashErrorListener />
 			<Header />
 			<div className="h-16 lg:h-24"></div>

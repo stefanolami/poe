@@ -8,7 +8,6 @@ export type AdminSubscription = {
 	id: string
 	client_id: string | null
 	client_email?: string | null
-	client_account_status?: string | null
 	client_pending_since?: string | null
 	period_start: string
 	period_end: string
@@ -46,26 +45,6 @@ export const columns: ColumnDef<AdminSubscription>[] = [
 		}, */
 	},
 	{
-		accessorKey: 'client_account_status',
-		header: 'Account Status',
-		cell: ({ getValue }) => {
-			const v = String(getValue() || '—').toLowerCase()
-			const color =
-				v === 'active'
-					? 'text-green-600'
-					: v === 'pending'
-						? 'text-amber-500'
-						: v === 'frozen'
-							? 'text-red-500'
-							: 'text-white'
-			return (
-				<span className={`uppercase font-semibold ${color}`}>
-					{v === '—' ? '—' : v}
-				</span>
-			)
-		},
-	},
-	{
 		accessorKey: 'client_pending_since',
 		header: 'Pending Since',
 		cell: ({ getValue }) => (
@@ -90,8 +69,13 @@ export const columns: ColumnDef<AdminSubscription>[] = [
 				<ArrowUpDown className="ml-2 h-4 w-4" />
 			</Button>
 		),
+		// Standardize all dates to dd/MM/yyyy (en-GB)
 		cell: ({ getValue }) => (
-			<span>{new Date(String(getValue())).toLocaleDateString()}</span>
+			<span>
+				{getValue()
+					? new Date(String(getValue())).toLocaleDateString('en-GB')
+					: '—'}
+			</span>
 		),
 	},
 	{
@@ -109,7 +93,11 @@ export const columns: ColumnDef<AdminSubscription>[] = [
 			</Button>
 		),
 		cell: ({ getValue }) => (
-			<span>{new Date(String(getValue())).toLocaleDateString()}</span>
+			<span>
+				{getValue()
+					? new Date(String(getValue())).toLocaleDateString('en-GB')
+					: '—'}
+			</span>
 		),
 	},
 	{

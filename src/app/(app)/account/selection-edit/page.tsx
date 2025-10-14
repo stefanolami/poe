@@ -4,22 +4,28 @@ export const metadata: Metadata = {
 	description: 'Modify your E-Mobility selection.',
 }
 
-import { getClient } from '@/actions/clients'
+import { getClientWithSubscription } from '@/actions/clients'
 import SelectionEdit from '@/components/account/selection-edit'
 
 export default async function SelectionEditPage() {
-	const clientData = await getClient()
-	if (!clientData) return null
+	const result = await getClientWithSubscription()
+	if (!result || !result.client) return null
 
+	const { client, subscription } = result
 	const clientSelection = {
-		typeOfVehicle: clientData.vehicles_type || [],
-		typeOfVehicleContract: clientData.vehicles_contract || [],
-		chargingStations: clientData.charging_stations_type || [],
-		chargingStationsContract: clientData.charging_stations_contract || [],
-		pif: clientData.pif || [],
-		deployment: clientData.deployment || [],
-		project: clientData.project || [],
+		typeOfVehicle: client.vehicles_type || [],
+		typeOfVehicleContract: client.vehicles_contract || [],
+		chargingStations: client.charging_stations_type || [],
+		chargingStationsContract: client.charging_stations_contract || [],
+		pif: client.pif || [],
+		deployment: client.deployment || [],
+		project: client.project || [],
 	}
+
+	// Extract ISO date (yyyy-mm-dd) from subscription.period_end if present
+	const subscriptionPeriodEnd = subscription?.period_end
+		? subscription.period_end.slice(0, 10)
+		: null
 
 	return (
 		<div className="w-full px-4 md:px-8 mx-auto max-w-6xl text-primary mb-16 lg:mb-20">
@@ -27,8 +33,9 @@ export default async function SelectionEditPage() {
 				Edit Selection
 			</h1>
 			<SelectionEdit
-				clientId={clientData.id}
+				clientId={client.id}
 				initialSelection={clientSelection}
+				subscriptionPeriodEnd={subscriptionPeriodEnd}
 			/>
 		</div>
 	)
