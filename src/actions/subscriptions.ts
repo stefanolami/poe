@@ -57,7 +57,11 @@ export async function createInitialSubscription({
 
 	await supabase
 		.from('clients')
-		.update({ current_subscription: data.id, account_status: 'active' })
+		.update({
+			current_subscription: data.id,
+			account_status: 'active',
+			pending_since: null,
+		})
 		.eq('id', clientId)
 
 	return data
@@ -89,6 +93,8 @@ export interface AdminSubscriptionWithClient extends AdminSubscriptionRow {
 	client_email: string | null
 	client_first_name: string | null
 	client_last_name: string | null
+	client_account_status: string | null
+	client_pending_since: string | null
 }
 
 export async function fetchSubscriptionsWithClients(): Promise<
@@ -98,7 +104,7 @@ export async function fetchSubscriptionsWithClients(): Promise<
 	const { data, error } = await supabase
 		.from('subscriptions')
 		.select(
-			'id, client_id, period_start, period_end, auto_renew, status, created_at, clients:client_id ( email, first_name, last_name )'
+			'id, client_id, period_start, period_end, auto_renew, status, created_at, clients:client_id ( email, first_name, last_name, account_status, pending_since )'
 		)
 		.order('created_at', { ascending: false })
 	if (error) throw error
@@ -107,6 +113,8 @@ export async function fetchSubscriptionsWithClients(): Promise<
 			email: string | null
 			first_name: string | null
 			last_name: string | null
+			account_status: string | null
+			pending_since: string | null
 		}
 	}
 	return (data as RawRow[]).map((row) => ({
@@ -120,6 +128,8 @@ export async function fetchSubscriptionsWithClients(): Promise<
 		client_email: row.clients?.email ?? null,
 		client_first_name: row.clients?.first_name ?? null,
 		client_last_name: row.clients?.last_name ?? null,
+		client_account_status: row.clients?.account_status ?? null,
+		client_pending_since: row.clients?.pending_since ?? null,
 	}))
 }
 
@@ -210,7 +220,11 @@ export async function createSubscription(params: {
 	if (status === 'active' && today >= periodStart && today <= periodEnd) {
 		await supabase
 			.from('clients')
-			.update({ current_subscription: data.id, account_status: 'active' })
+			.update({
+				current_subscription: data.id,
+				account_status: 'active',
+				pending_since: null,
+			})
 			.eq('id', clientId)
 	}
 

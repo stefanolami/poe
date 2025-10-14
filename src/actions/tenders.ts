@@ -418,9 +418,10 @@ export const sendTenderAlert = async (tenderId: string) => {
 		const { data: clientsData, error: clientsError } = await supabase
 			.from('clients')
 			.select(
-				`id,email,referrer,org_name,additional_emails,vehicles_type,charging_stations_type,deployment,project,pif`
+				`id,email,referrer,org_name,additional_emails,vehicles_type,charging_stations_type,deployment,project,pif,account_status`
 			)
 			.in('id', matchedClients as string[])
+			.in('account_status', ['active', 'pending'])
 		if (clientsError || !clientsData)
 			throw new Error(clientsError?.message || 'Error fetching clients')
 

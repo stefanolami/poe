@@ -1,6 +1,7 @@
 'use client'
 
 import { selectionData } from '@/data/data'
+import Link from 'next/link'
 import { ClientDataJsonType, ClientSelectionType } from '@/lib/types'
 import {
 	getSelectionItemContractLabel,
@@ -18,9 +19,12 @@ import {
 
 const AccountSummaryFromDB = ({
 	clientSelection,
+	enableEditing = true,
 }: {
 	clientSelection: ClientSelectionType
+	enableEditing?: boolean
 }) => {
+	// full-page edit now; no local state needed
 	const { getTotalPriceFromDB, getSinglePrice } = useStore(
 		useShallow((state) => ({
 			getTotalPriceFromDB: state.getTotalPriceFromDB,
@@ -33,6 +37,16 @@ const AccountSummaryFromDB = ({
 			<h2 className="text-lg md:text-xl lg:text-3xl mb-4 lg:mb-10">
 				Your Plan
 			</h2>
+			{enableEditing && (
+				<div className="flex justify-end mb-2">
+					<Link
+						href="/account/selection-edit"
+						className="text-xs md:text-sm bg-primary-light text-white hover:bg-primary-light/90 shadow-sm hover:shadow transition-transform hover:scale-[1.02] px-4 py-2"
+					>
+						Edit selection
+					</Link>
+				</div>
+			)}
 			<div className="my-4">
 				{Object.keys(clientSelection).map((key, index) => {
 					// Skip contract types initially

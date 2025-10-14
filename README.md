@@ -50,3 +50,20 @@ Next steps you can implement:
 2. Add admin UI to manually create / extend subscriptions
 3. Add analytics around renewal conversion
 4. Add soft-grace period before freezing (e.g. 7 days)
+
+## Scheduling (Cron)
+
+To automate account lifecycle and selection change processing, add two Vercel Cron jobs (Project Settings → Cron Jobs):
+
+- Daily subscription lifecycle processing
+
+    - Path: `/api/cron/subscription-renewal`
+    - Schedule: `0 3 * * *` (daily at 03:00 UTC)
+    - Method: GET
+
+- Daily selection changes processing
+    - Path: `/api/cron/selection-changes`
+    - Schedule: `0 3 * * *` (daily at 03:00 UTC)
+    - Method: GET
+
+Adjust the schedule/timezone to your operations window as needed. Ensure the routes are publicly accessible or protected behind a token if required.
