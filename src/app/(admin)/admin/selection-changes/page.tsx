@@ -14,6 +14,7 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 type Row = {
 	id: string
@@ -79,7 +80,12 @@ export default async function Page() {
 						<TableRow key={r.id}>
 							<TableCell>
 								<div className="flex flex-col">
-									<span>{r.clients?.org_name || '—'}</span>
+									<Link
+										className="text-blue-600 underline"
+										href={`/admin/selection-changes/${r.id}`}
+									>
+										{r.clients?.org_name || '—'}
+									</Link>
 									<span className="text-xs text-muted-foreground">
 										{r.clients?.email}
 									</span>

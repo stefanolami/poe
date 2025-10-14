@@ -21,7 +21,7 @@ export async function requestSelectionChange(
 	const { data: client, error: clientErr } = await supabase
 		.from('clients')
 		.select(
-			'id, vehicles_type, vehicles_contract, charging_stations_type, charging_stations_contract, pif, deployment, project'
+			'id, current_subscription, vehicles_type, vehicles_contract, charging_stations_type, charging_stations_contract, pif, deployment, project'
 		)
 		.eq('id', clientId)
 		.single()
@@ -44,8 +44,54 @@ export async function requestSelectionChange(
 	})
 	const { added, removed } = diffSelections(fromSelection, toSelection)
 	// Price only the additions, not removals, using selectionData pricing
-	const price_cents =
-		added.reduce((sum, x) => sum + priceSingle(x.category, x.item), 0) * 100
+	const baseAdditionsEuros = added.reduce(
+		(sum, x) => sum + priceSingle(x.category, x.item),
+		0
+	)
+
+	// Pro-rate by remaining time in the current subscription period if present and active
+	let prorationFactor = 1
+	try {
+		// Fetch current subscription dates if available
+		if (client.current_subscription) {
+			const { data: sub } = await supabase
+				.from('subscriptions')
+				.select('period_start, period_end, status')
+				.eq('id', client.current_subscription)
+				.single()
+			if (sub && sub.period_start && sub.period_end) {
+				const today = new Date()
+				const start = new Date(sub.period_start)
+				const end = new Date(sub.period_end)
+				// If today is outside the period, charge full price (factor=1)
+				if (today >= start && today <= end) {
+					// Compute inclusive day counts
+					const msPerDay = 24 * 60 * 60 * 1000
+					const totalDays =
+						Math.floor(
+							(end.getTime() - start.getTime()) / msPerDay
+						) + 1
+					const remainingDays =
+						Math.floor(
+							(end.getTime() - today.setHours(0, 0, 0, 0)) /
+								msPerDay
+						) + 1
+					if (totalDays > 0) {
+						prorationFactor = Math.min(
+							1,
+							Math.max(0, remainingDays / totalDays)
+						)
+					}
+				}
+			}
+		}
+	} catch {
+		// If anything goes wrong computing proration, fall back to full price
+		prorationFactor = 1
+	}
+
+	// Convert to cents and apply proration
+	const price_cents = Math.round(baseAdditionsEuros * 100 * prorationFactor)
 
 	// Insert selection change pending (14d default due handled by DB default)
 	const { data: change, error: insErr } = await supabase
