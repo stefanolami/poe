@@ -13,6 +13,7 @@ import { SubscriptionRemainingSync } from '@/components/account/subscription-rem
 import type { ClientSelectionType, ClientDataJsonType } from '@/lib/types'
 import { SelectableItem, CategoryData } from '@/store/store.types'
 import { useToast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
 
 type Props = {
 	clientId: string
@@ -33,6 +34,7 @@ export default function SelectionEdit({
 }: Props) {
 	const [submitting, setSubmitting] = useState(false)
 	const { toast } = useToast()
+	const router = useRouter()
 
 	// Pull store actions and state
 	const { storeData, changeSector, addGeography } = useStore(
@@ -196,6 +198,9 @@ export default function SelectionEdit({
 				variant: 'default',
 			})
 			onClose?.()
+			setTimeout(() => {
+				router.push('/account')
+			}, 1000)
 		} catch (e) {
 			const description =
 				e instanceof Error

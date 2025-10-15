@@ -53,7 +53,7 @@ export default function AuthComponent() {
 			storeSetUserRole(userRole)
 
 			if (userRole === 'client') {
-				router.push('/')
+				router.push('/account')
 			}
 			if (
 				userRole === 'admin' ||
