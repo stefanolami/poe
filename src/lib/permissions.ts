@@ -22,5 +22,7 @@ export const canSendAlert = (currentUserRole: string | null): boolean => {
 		return false
 	}
 
-	return ['super-admin', 'admin', 'supervisor'].includes(currentUserRole)
+	return ['super-admin', 'admin', 'supervisor', 'consultant'].includes(
+		currentUserRole
+	)
 }
