@@ -62,7 +62,7 @@ export default async function Page() {
 	const rows = (data || []) as unknown as Row[]
 
 	return (
-		<div className="p-6 space-y-6">
+		<div className="p-6 space-y-6 text-white">
 			<h1 className="text-2xl font-semibold">Selection Changes</h1>
 			<Table>
 				<TableHeader>
