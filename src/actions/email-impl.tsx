@@ -39,12 +39,17 @@ const mailerSendCharIn = new MailerSend({
 	apiKey: process.env.MAILERSEND_CHARIN_API_KEY || '',
 })
 
-async function buildAccountMagicLink(client?: { email?: string | null }) {
+async function buildAccountMagicLink(
+	client?: { email?: string | null },
+	brand?: string
+) {
 	try {
 		if (!client?.email) return null
 		const supabase = await createAdminClient()
 		const base =
-			process.env.NEXT_PUBLIC_SITE_URL || 'https://www.poeontap.com'
+			brand === 'charin'
+				? 'https://www.poeontap-charin.com'
+				: 'https://www.poeontap.com'
 		const redirectTo = `${base}/auth/callback?next=%2Faccount`
 		const { data, error } = await supabase.auth.admin.generateLink({
 			type: 'magiclink',
@@ -80,7 +85,7 @@ export async function sendGrant(
 		next_steps?: string | null
 	} | null
 ) {
-	const accountLink = await buildAccountMagicLink(client)
+	const accountLink = await buildAccountMagicLink(client, 'poe')
 	const emailHtml = await render(
 		<GrantsEmail
 			grant={normalizeGrant(grant, !!assessment, assessment)}
@@ -136,7 +141,7 @@ export async function sendGrantCharin(
 		next_steps?: string | null
 	} | null
 ) {
-	const accountLink = await buildAccountMagicLink(client)
+	const accountLink = await buildAccountMagicLink(client, 'charin')
 	const emailHtml = await render(
 		<GrantsEmailCharin
 			grant={normalizeGrant(grant, !!assessment, assessment)}
@@ -238,7 +243,7 @@ export async function sendWelcomeEmail(
 	const clientId = options?.clientId || undefined
 	const paymentWindowDays = options?.paymentWindowDays ?? 14
 	// Build magic link for convenience
-	const accountLink = await buildAccountMagicLink({ email: to })
+	const accountLink = await buildAccountMagicLink({ email: to }, brand)
 	const emailHtml = await render(
 		brand === 'charin' ? (
 			<WelcomeEmailCharin
@@ -287,7 +292,7 @@ export async function sendTender(
 		email?: string | null
 	}
 ) {
-	const accountLink = await buildAccountMagicLink(client)
+	const accountLink = await buildAccountMagicLink(client, 'poe')
 	const emailHtml = await render(
 		<TendersEmail
 			tender={normalizeTender(tender as RawTender, false, undefined)}
@@ -338,7 +343,7 @@ export async function sendTenderCharin(
 		email?: string | null
 	}
 ) {
-	const accountLink = await buildAccountMagicLink(client)
+	const accountLink = await buildAccountMagicLink(client, 'charin')
 	const emailHtml = await render(
 		<TendersEmailCharin
 			tender={normalizeTender(tender as RawTender, false, undefined)}
@@ -393,7 +398,7 @@ export async function sendTenderTailored(
 		email?: string | null
 	}
 ) {
-	const accountLink = await buildAccountMagicLink(client)
+	const accountLink = await buildAccountMagicLink(client, 'poe')
 	const emailHtml = await render(
 		<TendersEmail
 			tender={normalizeTender(tender as RawTender, true, assessment)}
@@ -449,7 +454,7 @@ export async function sendTenderTailoredCharin(
 		email?: string | null
 	}
 ) {
-	const accountLink = await buildAccountMagicLink(client)
+	const accountLink = await buildAccountMagicLink(client, 'charin')
 	const emailHtml = await render(
 		<TendersEmailCharin
 			tender={normalizeTender(tender as RawTender, true, assessment)}
@@ -501,7 +506,7 @@ export async function sendInvestment(
 		email?: string | null
 	}
 ) {
-	const accountLink = await buildAccountMagicLink(client)
+	const accountLink = await buildAccountMagicLink(client, 'poe')
 	const emailHtml = await render(
 		<InvestmentsEmail
 			investment={normalizeInvestment(investment, false, undefined)}
@@ -552,7 +557,7 @@ export async function sendInvestmentCharin(
 		email?: string | null
 	}
 ) {
-	const accountLink = await buildAccountMagicLink(client)
+	const accountLink = await buildAccountMagicLink(client, 'charin')
 	const emailHtml = await render(
 		<InvestmentsEmailCharin
 			investment={normalizeInvestment(investment, false, undefined)}
@@ -607,7 +612,7 @@ export async function sendInvestmentTailored(
 		email?: string | null
 	}
 ) {
-	const accountLink = await buildAccountMagicLink(client)
+	const accountLink = await buildAccountMagicLink(client, 'poe')
 	const emailHtml = await render(
 		<InvestmentsEmail
 			investment={normalizeInvestment(investment, true, assessment)}
@@ -663,7 +668,7 @@ export async function sendInvestmentTailoredCharin(
 		email?: string | null
 	}
 ) {
-	const accountLink = await buildAccountMagicLink(client)
+	const accountLink = await buildAccountMagicLink(client, 'charin')
 	const emailHtml = await render(
 		<InvestmentsEmailCharin
 			investment={normalizeInvestment(investment, true, assessment)}
