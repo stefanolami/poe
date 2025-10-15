@@ -114,7 +114,8 @@ const CreateAccountForm = () => {
 				setUserRole('client')
 				toast({
 					title: 'Thank You!',
-					description: 'Account created successfully',
+					description:
+						"Account created successfully. We've sent you an email with further instructions.",
 					variant: 'default',
 				})
 				setTimeout(() => {

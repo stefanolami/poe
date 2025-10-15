@@ -24,7 +24,6 @@ import { useStore } from '@/store/store'
 import { useShallow } from 'zustand/shallow'
 import { createClientTemp } from '@/actions/clients'
 import { selectionArrayFromStoreToDB } from '@/lib/utils'
-import { FaTrashAlt } from 'react-icons/fa'
 
 type SendOfferType = {
 	email: string
@@ -204,7 +203,7 @@ const SendOfferForm = () => {
 						)}
 					/>
 					{/* Additional Emails (dynamic) */}
-					<FormField
+					{/* <FormField
 						control={form.control}
 						name="additionalEmails"
 						render={({ field }) => (
@@ -280,7 +279,7 @@ const SendOfferForm = () => {
 								<FormMessage className="text-red-500 text-sm md:text-base" />
 							</FormItem>
 						)}
-					/>
+					/> */}
 					<Button
 						disabled={isSubmitting}
 						type="submit"
