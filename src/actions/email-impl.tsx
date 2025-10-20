@@ -267,7 +267,7 @@ export async function sendWelcomeEmail(
 			? new Sender('alerts@poeontap-charin.com', 'POE')
 			: new Sender('alerts@poeontap.com', 'POE')
 
-	const subject = 'POE - Welcome (Account Active)'
+	const subject = 'POE - Welcome'
 
 	const params = new EmailParams()
 		.setFrom(fromSender)

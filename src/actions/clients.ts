@@ -79,20 +79,14 @@ export const signUpClient = async (data: CreateAccountType, id?: string) => {
 		console.log('Client account created successfully')
 
 		// Fire welcome email asynchronously (non-blocking). Failure should not block signup.
-		;(async () => {
-			try {
-				await sendWelcomeEmail(data.email, {
-					brand:
-						clientInsertData.referrer === 'charin'
-							? 'charin'
-							: 'poe',
-					org_name: clientInsertData.org_name || null,
-					clientId: clientData.id,
-				})
-			} catch (e) {
-				console.error('WELCOME EMAIL ERROR:', e)
-			}
-		})()
+
+		await sendWelcomeEmail(data.email, {
+			brand: clientInsertData.referrer === 'charin' ? 'charin' : 'poe',
+			org_name: clientInsertData.org_name || null,
+			clientId: clientData.id,
+		})
+
+		console.log('Welcome email sent successfully')
 
 		// Delete client_temp if id is provided
 		if (id) {
