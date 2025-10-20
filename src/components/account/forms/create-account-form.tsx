@@ -114,13 +114,12 @@ const CreateAccountForm = () => {
 				setUserRole('client')
 				toast({
 					title: 'Thank You!',
-					description:
-						"Account created successfully. We've sent you an email with further instructions.",
+					description: 'Account created successfully.',
 					variant: 'default',
 				})
 				setTimeout(() => {
-					router.push('/account')
-				}, 800)
+					router.push('/account/created')
+				}, 1000)
 			}
 
 			console.log('response', response)
