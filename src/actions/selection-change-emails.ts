@@ -1,35 +1,55 @@
 import { createElement } from 'react'
 import { createClient, createAdminClient } from '@/supabase/server'
 import { MailerSend, EmailParams, Sender, Recipient } from 'mailersend'
+import { resolveBrand, brandSiteBase, brandEmailAddress } from '@/lib/utils'
 import { render } from '@react-email/components'
 import SelectionPendingEmail from '@/components/emails/selection-changes/pending'
 import SelectionReminderEmail from '@/components/emails/selection-changes/reminder'
 import SelectionRollbackEmail from '@/components/emails/selection-changes/rollback'
 import SelectionCommittedEmail from '@/components/emails/selection-changes/committed'
 
-const mailer = new MailerSend({ apiKey: process.env.MAILERSEND_API_KEY || '' })
-const FROM = new Sender('alerts@poeontap.com', 'POE')
+const mailerPOE = new MailerSend({
+	apiKey: process.env.MAILERSEND_API_KEY || '',
+})
+const mailerCharin = new MailerSend({
+	apiKey: process.env.MAILERSEND_CHARIN_API_KEY || '',
+})
 
-type ClientContact = { email: string | null; org_name: string | null }
+// brand helpers now imported from utils
+
+function pickMailer(brand: 'poe' | 'charin') {
+	return brand === 'charin' ? mailerCharin : mailerPOE
+}
+
+type ClientContact = {
+	email: string | null
+	org_name: string | null
+	referrer?: string | null
+}
 
 async function getClientContact(clientId: string): Promise<ClientContact> {
 	const supabase = await createClient()
 	const { data } = await supabase
 		.from('clients')
-		.select('email, org_name')
+		.select('email, org_name, referrer')
 		.eq('id', clientId)
 		.single()
 	return {
 		email: data?.email ?? null,
 		org_name: (data?.org_name as string | null) ?? null,
+		referrer: (data?.referrer as string | null) ?? null,
 	}
 }
 
-async function generateAccountLink(email: string): Promise<string | null> {
+async function generateAccountLink(
+	email: string,
+	brand: 'poe' | 'charin'
+): Promise<string | null> {
 	try {
 		const supabase = await createAdminClient()
 		// Redirect to the account page after magic-link sign-in
-		const redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.poeontap.com'}/account`
+		const siteBase = brandSiteBase(brand)
+		const redirectTo = `${siteBase}/account`
 		const adminAny = (
 			supabase as unknown as {
 				auth: {
@@ -63,9 +83,10 @@ export async function sendSelectionPendingEmail(
 	clientId: string,
 	priceCents: number
 ) {
-	const { email: to, org_name } = await getClientContact(clientId)
+	const { email: to, org_name, referrer } = await getClientContact(clientId)
 	if (!to) return
-	const accountLink = await generateAccountLink(to)
+	const brand = resolveBrand(referrer)
+	const accountLink = await generateAccountLink(to, brand)
 	const html = await render(
 		createElement(SelectionPendingEmail, {
 			clientId,
@@ -75,20 +96,21 @@ export async function sendSelectionPendingEmail(
 		})
 	)
 	const params = new EmailParams()
-		.setFrom(FROM)
+		.setFrom(new Sender(brandEmailAddress(brand, 'noreply'), 'POE'))
 		.setTo([new Recipient(to)])
 		.setSubject('POE Selection Change - Pending')
 		.setHtml(html)
-	await mailer.email.send(params)
+	await pickMailer(brand).email.send(params)
 }
 
 export async function sendSelectionReminderEmail(
 	clientId: string,
 	days: number
 ) {
-	const { email: to, org_name } = await getClientContact(clientId)
+	const { email: to, org_name, referrer } = await getClientContact(clientId)
 	if (!to) return
-	const accountLink = await generateAccountLink(to)
+	const brand = resolveBrand(referrer)
+	const accountLink = await generateAccountLink(to, brand)
 	const html = await render(
 		createElement(SelectionReminderEmail, {
 			clientId,
@@ -98,17 +120,18 @@ export async function sendSelectionReminderEmail(
 		})
 	)
 	const params = new EmailParams()
-		.setFrom(FROM)
+		.setFrom(new Sender(brandEmailAddress(brand, 'noreply'), 'POE'))
 		.setTo([new Recipient(to)])
 		.setSubject('POE Selection Change - Reminder')
 		.setHtml(html)
-	await mailer.email.send(params)
+	await pickMailer(brand).email.send(params)
 }
 
 export async function sendSelectionRollbackEmail(clientId: string) {
-	const { email: to, org_name } = await getClientContact(clientId)
+	const { email: to, org_name, referrer } = await getClientContact(clientId)
 	if (!to) return
-	const accountLink = await generateAccountLink(to)
+	const brand = resolveBrand(referrer)
+	const accountLink = await generateAccountLink(to, brand)
 	const html = await render(
 		createElement(SelectionRollbackEmail, {
 			clientId,
@@ -117,17 +140,18 @@ export async function sendSelectionRollbackEmail(clientId: string) {
 		})
 	)
 	const params = new EmailParams()
-		.setFrom(FROM)
+		.setFrom(new Sender(brandEmailAddress(brand, 'noreply'), 'POE'))
 		.setTo([new Recipient(to)])
 		.setSubject('POE Selection Change - Rolled Back')
 		.setHtml(html)
-	await mailer.email.send(params)
+	await pickMailer(brand).email.send(params)
 }
 
 export async function sendSelectionCommittedEmail(clientId: string) {
-	const { email: to, org_name } = await getClientContact(clientId)
+	const { email: to, org_name, referrer } = await getClientContact(clientId)
 	if (!to) return
-	const accountLink = await generateAccountLink(to)
+	const brand = resolveBrand(referrer)
+	const accountLink = await generateAccountLink(to, brand)
 	const html = await render(
 		createElement(SelectionCommittedEmail, {
 			clientId,
@@ -136,9 +160,9 @@ export async function sendSelectionCommittedEmail(clientId: string) {
 		})
 	)
 	const params = new EmailParams()
-		.setFrom(FROM)
+		.setFrom(new Sender(brandEmailAddress(brand, 'noreply'), 'POE'))
 		.setTo([new Recipient(to)])
 		.setSubject('POE Selection Change - Committed')
 		.setHtml(html)
-	await mailer.email.send(params)
+	await pickMailer(brand).email.send(params)
 }

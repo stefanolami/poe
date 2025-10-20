@@ -325,3 +325,27 @@ export function buildInvestmentEmailSubject(
 	parts.push(title)
 	return parts.join(' - ')
 }
+
+// ===== Brand helpers (POE / CharIN) =====
+export type Brand = 'poe' | 'charin'
+
+// Decide brand from optional referrer field
+export function resolveBrand(referrer?: string | null): Brand {
+	return referrer === 'charin' ? 'charin' : 'poe'
+}
+
+// Base site URL by brand (POE can be overridden by NEXT_PUBLIC_SITE_URL)
+export function brandSiteBase(brand: Brand): string {
+	if (brand === 'charin') return 'https://www.poeontap-charin.com'
+	return process.env.NEXT_PUBLIC_SITE_URL || 'https://www.poeontap.com'
+}
+
+// Sender email address for a given brand and role (noreply or alerts)
+export function brandEmailAddress(
+	brand: Brand,
+	role: 'noreply' | 'alerts'
+): string {
+	const domain = brand === 'charin' ? 'poeontap-charin.com' : 'poeontap.com'
+	const local = role === 'alerts' ? 'alerts' : 'noreply'
+	return `${local}@${domain}`
+}

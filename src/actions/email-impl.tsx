@@ -14,7 +14,12 @@ import TendersEmailCharin from '../components/emails/opportunities/tenders-email
 import InvestmentsEmail from '../components/emails/opportunities/investments-email'
 import InvestmentsEmailCharin from '../components/emails/opportunities/investments-email-charin'
 import { render } from '@react-email/components'
-import { fileToAttachment } from '../lib/utils'
+import {
+	fileToAttachment,
+	brandSiteBase,
+	brandEmailAddress,
+	type Brand,
+} from '@/lib/utils'
 import type { AttachmentDescriptor } from '../lib/attachments'
 import AccountRecapEmail from '../components/emails/others/account-recap'
 import AccountRecapEmailCharin from '../components/emails/others/account-recap-charin'
@@ -41,15 +46,12 @@ const mailerSendCharIn = new MailerSend({
 
 async function buildAccountMagicLink(
 	client?: { email?: string | null },
-	brand?: string
+	brand?: Brand
 ) {
 	try {
 		if (!client?.email) return null
 		const supabase = await createAdminClient()
-		const base =
-			brand === 'charin'
-				? 'https://www.poeontap-charin.com'
-				: 'https://www.poeontap.com'
+		const base = brandSiteBase(brand || 'poe')
 		const redirectTo = `${base}/auth/callback?next=%2Faccount`
 		const { data, error } = await supabase.auth.admin.generateLink({
 			type: 'magiclink',
@@ -107,7 +109,7 @@ export async function sendGrant(
 			})
 		)
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('poe', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -116,7 +118,7 @@ export async function sendGrant(
 		return await mailerSend.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('poe', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -163,7 +165,7 @@ export async function sendGrantCharin(
 			})
 		)
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('charin', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -172,7 +174,7 @@ export async function sendGrantCharin(
 		return await mailerSendCharIn.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('charin', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -209,12 +211,10 @@ export async function sendAccountRecap(
 
 	const fromSender =
 		brand === 'charin'
-			? new Sender('alerts@poeontap-charin.com', 'POE')
-			: new Sender('alerts@poeontap.com', 'POE')
+			? new Sender(brandEmailAddress('charin', 'noreply'), 'POE')
+			: new Sender(brandEmailAddress('poe', 'noreply'), 'POE')
 	const subject =
-		brand === 'charin'
-			? 'POE - Your Account Recap'
-			: 'POE - Your Account Recap'
+		brand === 'charin' ? 'POE - Your Offer Recap' : 'POE - Your Offer Recap'
 
 	const params = new EmailParams()
 		.setFrom(fromSender)
@@ -264,8 +264,8 @@ export async function sendWelcomeEmail(
 
 	const fromSender =
 		brand === 'charin'
-			? new Sender('alerts@poeontap-charin.com', 'POE')
-			: new Sender('alerts@poeontap.com', 'POE')
+			? new Sender(brandEmailAddress('charin', 'noreply'), 'POE')
+			: new Sender(brandEmailAddress('poe', 'noreply'), 'POE')
 
 	const subject = 'POE - Welcome'
 
@@ -313,7 +313,7 @@ export async function sendTender(
 			})
 		)
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('poe', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -322,7 +322,7 @@ export async function sendTender(
 		return await mailerSend.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('poe', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -364,7 +364,7 @@ export async function sendTenderCharin(
 			})
 		)
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('charin', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -373,7 +373,7 @@ export async function sendTenderCharin(
 		return await mailerSendCharIn.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('charin', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -420,7 +420,7 @@ export async function sendTenderTailored(
 			})
 		)
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('poe', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -429,7 +429,7 @@ export async function sendTenderTailored(
 		return await mailerSend.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('poe', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -476,7 +476,7 @@ export async function sendTenderTailoredCharin(
 			})
 		)
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('charin', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -485,7 +485,7 @@ export async function sendTenderTailoredCharin(
 		return await mailerSendCharIn.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('charin', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -527,7 +527,7 @@ export async function sendInvestment(
 			})
 		)
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('poe', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -536,7 +536,7 @@ export async function sendInvestment(
 		return await mailerSend.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('poe', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -578,7 +578,7 @@ export async function sendInvestmentCharin(
 			})
 		)
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('charin', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -587,7 +587,7 @@ export async function sendInvestmentCharin(
 		return await mailerSendCharIn.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('charin', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -634,7 +634,7 @@ export async function sendInvestmentTailored(
 			})
 		)
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('poe', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -643,7 +643,7 @@ export async function sendInvestmentTailored(
 		return await mailerSend.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('poe', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -690,7 +690,7 @@ export async function sendInvestmentTailoredCharin(
 			})
 		)
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('charin', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)
@@ -699,7 +699,7 @@ export async function sendInvestmentTailoredCharin(
 		return await mailerSendCharIn.email.send(emailParams)
 	} else {
 		const emailParams = new EmailParams()
-			.setFrom(new Sender('alerts@poeontap-charin.com', 'POE'))
+			.setFrom(new Sender(brandEmailAddress('charin', 'alerts'), 'POE'))
 			.setTo([new Recipient(to)])
 			.setCc((cc || []).map((addr) => new Recipient(addr)))
 			.setSubject(subject)

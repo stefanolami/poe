@@ -30,7 +30,7 @@ const AccountRecapEmail = ({
 	data,
 	total,
 	id,
-	previewText = 'Your Account Recap from POE',
+	previewText = 'Your Offer Recap from POE',
 }: Props) => {
 	return (
 		<Html>
@@ -141,7 +141,7 @@ const AccountRecapEmail = ({
 									style={centerTitle}
 									className="header-title"
 								>
-									ACCOUNT RECAP
+									OFFER RECAP
 								</Text>
 							</Column>
 						</Row>
@@ -188,7 +188,7 @@ const AccountRecapEmail = ({
 										href={`${baseUrl}confirm-account/${id}`}
 										style={ctaButtonTop}
 									>
-										Confirm Account
+										Create Account
 									</Link>
 								</Column>
 							</Row>
