@@ -73,39 +73,6 @@ export const selectionData = {
 						CH: '1300',
 						GB: '2300',
 					},
-					/* price: {
-						AT: 1200,
-						BE: 1300,
-						BG: 900,
-						CY: 900,
-						HR: 1200,
-						CZ: 1200,
-						DK: 1300,
-						EE: 900,
-						FI: 1300,
-						FR: 2500,
-						DE: 2500,
-						GR: 1300,
-						HU: 900,
-						IE: 1300,
-						IT: 2300,
-						LV: 900,
-						LT: 900,
-						LU: 900,
-						MT: 900,
-						NL: 1300,
-						PL: 2100,
-						PT: 1300,
-						RO: 1300,
-						SK: 1300,
-						SI: 900,
-						ES: 2100,
-						SE: 1300,
-						euAdmin: 1100,
-						NO: 1300,
-						CH: 1300,
-						GB: 2300,
-					}, */
 				},
 				{
 					value: 'buses',
@@ -1158,105 +1125,7 @@ export const selectionData = {
 				},
 			],
 		},
-		/* grants: {
-			label: 'Public Grants',
-			subTitle:
-				'Non-repayable funds for project development and implementation at all TRL & CRL levels (apart from public procurement).',
-			fields: [
-				{
-					label: 'Support for infrastructure deployment in accordance with the policies of the geography. At first, you will receive a full report on the current state of affairs in opportunities and a handbook on the various relevant grant pockets. Thereafter, you will receive ad hoc alerts on developments as well as relevant updates to the handbook. Please chose your sector(s) of interest.',
-					value: 'deployment',
-					subFields: [
-						{
-							label: 'Road Transport (2-/3-/4- wheelers)',
-							value: '234Wheelers',
-						},
-						{
-							label: 'Road Transport (HDVs)',
-							value: 'hdvs',
-						},
-						{
-							label: 'Maritime',
-							value: 'maritime',
-						},
-						{
-							label: 'Aviation (including airports and drones)',
-							value: 'aviation',
-						},
-						{
-							label: 'Rail',
-							value: 'rail',
-						},
-					],
-				},
-				{
-					label: 'Innovation-driven projects for charging infrastructure eco-system – from grid to vehicle. At first, you will receive a full report on the current state of affairs in opportunities and a handbook on the various relevant grant pockets. Thereafter, you will receive ad hoc alerts on developments as well as relevant updates to the handbook. Please chose your sector(s) of interest.',
-					value: 'project',
-					subFields: [
-						{
-							label: 'Road Transport (2-/3-/4- wheelers)',
-							value: '234Wheelers',
-						},
-						{
-							label: 'Road Transport (HDVs)',
-							value: 'hdvs',
-						},
-						{
-							label: 'Maritime',
-							value: 'maritime',
-						},
-						{
-							label: 'Aviation (including airports and drones)',
-							value: 'aviation',
-						},
-						{
-							label: 'Rail',
-							value: 'rail',
-						},
-					],
-				},
-			],
-		}, */
 	},
-
-	/* language: [
-		{
-			value: 'german',
-			label: 'German',
-		},
-		{
-			value: 'french',
-			label: 'French',
-		},
-		{
-			value: 'portuguese',
-			label: 'Portuguese',
-		},
-		{
-			value: 'danish',
-			label: 'Danish',
-		},
-		{
-			value: 'polish',
-			label: 'Polish',
-		},
-		{
-			value: 'italian',
-			label: 'Italian',
-		},
-		{
-			value: 'spanish',
-			label: 'Spanish',
-		},
-		{
-			value: 'greek',
-			label: 'Greek',
-		},
-		{
-			value: 'netherlands',
-			label: 'Netherlands',
-		},
-	], */
 }
 
 export const geographiesArray = [

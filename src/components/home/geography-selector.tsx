@@ -111,7 +111,7 @@ export default function GeographySelector() {
 										>
 											<ExpandableGeography
 												title={group.label}
-												defaultOpen={true}
+												defaultOpen={false}
 											>
 												<div
 													className={`pl-4 ${group.value === 'eu27' ? 'grid grid-cols-2 gap-x-4 gap-y-2' : 'space-y-2'}`}
@@ -393,7 +393,7 @@ export default function GeographySelector() {
 								return (
 									<ExpandableGeography
 										title={eu27.label}
-										defaultOpen={true}
+										defaultOpen={false}
 									>
 										<div className="pl-4 pt-1 grid grid-cols-2 gap-x-4 gap-y-2">
 											{(() => {
@@ -516,7 +516,7 @@ export default function GeographySelector() {
 								return (
 									<ExpandableGeography
 										title={other.label}
-										defaultOpen={true}
+										defaultOpen={false}
 									>
 										<div className="pl-4 pt-1 space-y-2">
 											{(() => {
@@ -636,7 +636,7 @@ export default function GeographySelector() {
 							onClick={() => setIsExpanded(false)}
 							className="px-8 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-base font-medium"
 						>
-							Done selecting
+							Done
 						</button>
 					</div>
 				</div>
